@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:portfolio_management/services/AuthenticationService.dart';
 import 'package:provider/provider.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:http/http.dart' as http;
+// import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+// import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   @override

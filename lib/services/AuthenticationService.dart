@@ -6,7 +6,7 @@ import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 // import 'package:provider/provider.dart';
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,15 +32,21 @@ class AuthenticationService {
   /// Firebase Google sign-in
   Future<String> signInWithGoogle() async {
     try {
+      print("google sign in service 1");
       final GoogleSignInAccount googleSignInAccount =
           await googleSignIn.signIn();
+      print("google sign in service 2");
       final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount.authentication;
+      print("google sign in service 3");
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
-      await firebaseAuth.signInWithCredential(credential);
+      print("google sign in service 4");
+      final googleCredential =
+          await firebaseAuth.signInWithCredential(credential);
+      print("google sign in userinfo: ${googleCredential.additionalUserInfo}");
       return "Signed in";
     } catch (e) {
       return e.message;

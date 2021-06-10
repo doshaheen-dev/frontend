@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import './basic_player_page.dart';
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -8,6 +10,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text("Home"));
+    return Center(child: BasicPlayerPage());
   }
 }
