@@ -13,7 +13,7 @@ class WavyHeader extends StatelessWidget {
             gradient: new LinearGradient(
                 colors: [
                   ThemeColor.greenColor,
-                   ThemeColor.greenColor,
+                  ThemeColor.greenColor,
                 ],
                 begin: const FractionalOffset(0.0, 0.0),
                 end: const FractionalOffset(0.9, 0.0),
@@ -52,4 +52,49 @@ class BottomWaveClipper extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
+
+class AppBarTitle extends StatelessWidget {
+  final String title;
+
+  AppBarTitle(this.title);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Stack(
+        children: [
+          Container(
+            height: 100.0,
+            decoration: new BoxDecoration(
+                //   shape: BoxShape.circle,
+                gradient: new LinearGradient(
+                    colors: [
+                      ThemeColor.greenColor,
+                      ThemeColor.greenColor,
+                    ],
+                    begin: const FractionalOffset(0.0, 0.0),
+                    end: const FractionalOffset(0.9, 0.0),
+                    stops: [0.0, 0.9],
+                    tileMode: TileMode.clamp)),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 40.0,
+              left: 10.0,
+            ),
+            child: Align(
+                alignment: Alignment.topCenter,
+                child: Text(
+                  title,
+                  style: TextStyle(
+                      color: Color(0xFFFCFCFC),
+                      fontSize: 30,
+                      fontFamily: 'Poppin'),
+                )),
+          )
+        ],
+      ),
+    );
+  }
 }
