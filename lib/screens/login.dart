@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:portfolio_management/screens/signup.dart';
 import 'package:portfolio_management/services/AuthenticationService.dart';
 import 'package:provider/provider.dart';
 // import 'package:sign_in_with_apple/sign_in_with_apple.dart';
@@ -46,7 +47,8 @@ class _LoginState extends State<Login> {
                   Container(
                     height: 130,
                     width: 130,
-                    child: FlutterLogo(),
+                    child: Image.asset(
+                        "assets/images/company_logo/doshaheenlogo.png"),
                   ),
                   Text(
                     "Welcome to Portfolio Management",
@@ -135,7 +137,12 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => SignUp()),
+                      );
+                    },
                     child: Align(
                       alignment: Alignment.center,
                       child: Padding(
@@ -143,14 +150,14 @@ class _LoginState extends State<Login> {
                         child: InkWell(
                           child: RichText(
                             text: TextSpan(
-                                text: "Do you have an account ? ",
+                                text: "Don't have an account ? ",
                                 style: TextStyle(
                                     color: Colors.grey[500],
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500),
                                 children: [
                                   TextSpan(
-                                    text: "Sign in",
+                                    text: "Sign up",
                                     style: TextStyle(
                                         color: colorGreen,
                                         fontWeight: FontWeight.w600,
