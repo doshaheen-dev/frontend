@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:portfolio_management/screens/signup.dart';
+import 'package:portfolio_management/screens/login.dart';
 import 'package:portfolio_management/services/AuthenticationService.dart';
 import 'package:provider/provider.dart';
 
-class Login extends StatefulWidget {
+class SignUp extends StatefulWidget {
   @override
-  _LoginState createState() => _LoginState();
+  _SignUpState createState() => _SignUpState();
 }
 
-class _LoginState extends State<Login> {
+class _SignUpState extends State<SignUp> {
   Color colorGreen = Color(0xff00A699);
   bool _inscription = true;
 
@@ -85,28 +85,23 @@ class _LoginState extends State<Login> {
                           )),
                     ),
                   ),
-                  Visibility(
-                    visible: _inscription,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 30),
-                      child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            "Forgot password ?",
-                            style: TextStyle(color: colorGreen, fontSize: 12),
-                          )),
-                    ),
-                  ),
                   SizedBox(
-                    height: _inscription ? 30 : 0,
+                    height: 30,
                   ),
                   InkWell(
                     borderRadius: BorderRadius.circular(20),
-                    onTap: () {
-                      context.read<AuthenticationService>().signIn(
+                    onTap: () async {
+                      final dynamic result = await context
+                          .read<AuthenticationService>()
+                          .signUpWithEmailAndPassword(
                             email: emailController.text.trim(),
                             password: passwordController.text.trim(),
                           );
+
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => Login()),
+                      );
                     },
                     splashColor: Colors.white,
                     hoverColor: colorGreen,
@@ -127,96 +122,16 @@ class _LoginState extends State<Login> {
                       ),
                       child: Center(
                           child: Text(
-                        "Login",
+                        "Sign Up",
                         style: TextStyle(
                             fontWeight: FontWeight.w600, color: Colors.white),
                       )),
                     ),
                   ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => SignUp()),
-                      );
-                    },
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: EdgeInsets.all(20),
-                        child: InkWell(
-                          child: RichText(
-                            text: TextSpan(
-                                text: "Don't have an account ? ",
-                                style: TextStyle(
-                                    color: Colors.grey[500],
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
-                                children: [
-                                  TextSpan(
-                                    text: "Sign up",
-                                    style: TextStyle(
-                                        color: colorGreen,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 14),
-                                  )
-                                ]),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "Or continue with ",
-                    style: TextStyle(
-                        color: Colors.grey[500],
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ContinueWith(
-                          "assets/images/social_media/google.png", "google"),
-                      ContinueWith(
-                          "assets/images/social_media/apple.png", "apple"),
-                    ],
-                  )
                 ],
               ),
             ),
           ),
         ));
-  }
-
-  InkWell ContinueWith(String image, String type) {
-    return InkWell(
-      onTap: () {
-        if (type == 'google') {
-          context.read<AuthenticationService>().signInWithGoogle();
-        } else if (type == 'apple') {
-          context.read<AuthenticationService>().signInWithApple();
-        }
-      },
-      child: Container(
-        padding: EdgeInsets.all(15),
-        height: 50,
-        decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(offset: Offset(0, 3), color: Colors.grey, blurRadius: 5)
-            ]),
-        child: Image.asset(
-          image,
-        ),
-      ),
-    );
   }
 }
