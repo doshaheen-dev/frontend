@@ -25,46 +25,41 @@ class ServiceItem extends StatelessWidget {
     return InkWell(
       onTap: () => selectService(context),
       child: Card(
+        color: ThemeColor.greenColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
         elevation: 4,
-        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        margin: EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           children: [
+            SizedBox(height: 8),
             ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
-              ),
+              borderRadius: BorderRadius.all(Radius.circular(8)),
               child: Image.asset(
                 imageUrl,
-                height: 60,
-                width: 60,
+                width: 70,
+                height: 70,
                 fit: BoxFit.cover,
               ),
             ),
-            const SizedBox(height: 8),
-            Positioned(
-              bottom: 0,
-              right: 200,
+            Expanded(
               child: Container(
-                width: 180,
-                height: 60,
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(
-                  vertical: 5,
-                  horizontal: 20,
-                ),
-                child: Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: ThemeColor.greenColor,
-                  ),
-                  softWrap: true,
-                  overflow: TextOverflow.fade,
+                padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                      softWrap: true,
+                      overflow: TextOverflow.fade,
+                    ),
+                  ],
                 ),
               ),
             ),

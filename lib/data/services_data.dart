@@ -33,4 +33,20 @@ const DUMMY_SERVICES = const [
     title: "Others",
     imageUrl: "assets/images/raise_capital/debt.png",
   ),
+  Service(
+    title: "Fund Manager 2",
+    imageUrl: "assets/images/investment_solutions/fund_manager.png",
+  ),
+  Service(
+    title: "Portfolio Manager 2",
+    imageUrl: "assets/images/investment_solutions/portfolio_manager.png",
+  ),
+  Service(
+    title: "Wealth Manager 2",
+    imageUrl: "assets/images/investment_solutions/wealth_manager.png",
+  ),
+  Service(
+    title: "Others 2",
+    imageUrl: "assets/images/raise_capital/debt.png",
+  ),
 ];

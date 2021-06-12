@@ -29,21 +29,6 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget buildContainer(Widget child) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      margin: EdgeInsets.all(10),
-      padding: EdgeInsets.all(10),
-      height: 600,
-      width: 100,
-      child: child,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,14 +42,26 @@ class _ProfilePageState extends State<ProfilePage> {
                   aspectRatio: 16 / 9,
                   child: BetterPlayer.network(
                     VideoPlayerConstants.forBiggerBlazesUrl,
+                    betterPlayerConfiguration: BetterPlayerConfiguration(
+                      autoPlay: true,
+                      looping: true,
+                      controlsConfiguration: BetterPlayerControlsConfiguration(
+                          showControls: false),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 8),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    "Services",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Services",
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -75,7 +72,7 @@ class _ProfilePageState extends State<ProfilePage> {
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: 240,
               childAspectRatio: 3 / 2,
-              crossAxisSpacing: 20,
+              crossAxisSpacing: 4,
               mainAxisSpacing: 20,
             ),
             delegate: SliverChildListDelegate(
@@ -90,16 +87,6 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
         ],
-
-        // const SizedBox(height: 8),
-        // Padding(
-        //   padding: const EdgeInsets.symmetric(horizontal: 16),
-        //   child: Text(
-        //     "Services",
-        //     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        //   ),
-        // ),
-        // const SizedBox(height: 8),
       ),
     );
   }
