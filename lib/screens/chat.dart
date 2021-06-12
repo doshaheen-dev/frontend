@@ -38,9 +38,8 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
   List<Map> messageList = List();
 
   void response(query) async {
-    AuthGoogle authGoogle = await AuthGoogle(
-            fileJson: "assets/amicorp.json")
-        .build();
+    AuthGoogle authGoogle =
+        await AuthGoogle(fileJson: "assets/amicorp.json").build();
     DialogFlow dialogFlow = DialogFlow(authGoogle: authGoogle, language: "en");
     AIResponse response = await dialogFlow.detectIntent(query);
     setState(() {
