@@ -22,6 +22,17 @@ class AuthenticationService {
     }
   }
 
+  Future<dynamic> signUpWithEmailAndPassword(
+      {String email, String password}) async {
+    try {
+      final result = await firebaseAuth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      return result;
+    } on FirebaseAuthException catch (e) {
+      return e.message;
+    }
+  }
+
   /// Firebase Google sign-in
   Future<String> signInWithGoogle() async {
     try {
