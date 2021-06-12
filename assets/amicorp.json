@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "amicorp-316604",
+  "private_key_id": "d588926bb85400a7cab79633ffc71784c5b3b400",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQDdH5ZPcFTC/5AD\nZ1i/FopdW1ONfcQOGSLReoEChxMSDwywXpZ7kq5QLahIynjfgO/cJLNa1C8nxyTn\nrGGbx9uBsMUJsy6yxkz5TauWbStbg00wZZbyFYHo3xBiajkq0sHcXrwMy9g6QLpu\nlsH3izAqnNxU1ljpLrv7HYR7PyMTi+W0HeZqntNfw9lqCIDJbqoMyxL8iz7CiokC\nAtUMehwPusWtA6Ib+5RelvMCFiERzZL9S7Hg1twfHA3wKazeVBI0BABB1FbIaObt\nuFFHVRS33tTo80h7JwpIJk5WktLqpnFLu6RhUhmz/QHrU4Eex8iaAaDT0KpIhVLS\nXuyHZpO7AgMBAAECgf8iZ/J7adRxLagQNNnE4eelnxA2c9s4VluUkfsrlC44y8lY\nUrTCMDtEk9YbfWWmtpPxLRoQh/N5EljWXibR68cRPEVsZ5+x3Ckd9s08GsB5p3SF\n6J4UDO9Ud2DqmfH14n/ySiCjMmnypnUGasQY6w9o51S2iU5MT3lFxCdZBfnvOwtE\ninqESV8GC7DNYvTbyPMk92vQRtaPy/AoTNOJxIY+6bojt0mNwVWSdyGRFmCE4ETs\nW5pToa95mjXFld+pfXcqSLYgnH0qNHF0CYqwgGoHduxKsdVmK5PMPCzMvlT3kSeR\nWIDxPlbG+8Y/ih+juo4mU+ZkWi1CJ06nSUMC9nECgYEA9WJs+dHxckBZPsWph96O\nr77nt70aTX+c32vwYU4MofmtdjiK7eAei1HmfVJDnckCoGhH4ZASotdq0sljG7h3\nElPXS9RFLxHWFrH/SAbF8AYAZE5nqjS+NSPGPFsaJ6GwxjMAVxY6Ek1DHRqpiEqf\n2BZFmB30BmShOdyccLW12PECgYEA5rB5yODhg4wiiFbA7KGOu4/D31bOOhDKUPpM\nZcmbIirOScMHom8BGjnktb+OUmY6ondHIIkZ1g0Sle9R8ywYKbkU3KEKqJ3DZBqk\nt3XWPjRBSom43wLnYJgxHYp0nAHX91oRmrSeQRvRIGFkGfQq+MsuU1kx43Je2wDx\nFkpbV2sCgYEAtU1hwztRL99HkU+uMMtJlaRxxJod4wDUwWcZFmv6fXripSSl0Zf0\nOW/r4tBzUROBs08ZPRmcC2Eqdk+BwKuMnqf/vPE7pMmC6wXc3jTS7sMgavxbL7EE\nkHK8N0AAlSOsXuSz7aRoh7k6Szi15hNtAtWB2iDXehnD3eKYW9aGY6ECgYBaoQxH\nWene92f9ri9/B31+vF1UWdMNRtlk9OCcwJac1rpSijdunjONrR7oNEhioNz6ROgB\npTssN9iMZQgKA9G+WoMSpoX8dnZz1m/Nz5KKv5bDBNZHbumdrkzlcSacv7Cr8Yum\n/ryJkbcYBIsCE0XqllAt2IXb+GvBmF4exrmZ3wKBgBjlNXrvY+y2/CzhWbn4NYjN\n6cjgpu5OLyH8vwoZPesv67Qw1eKhr0lRioV3qG9uAe2ZVRAale3a5ZXh2UFpCM4N\nt0XITqMoSPGsm2D1i6sylQ1Z8slJzDPNG8mB+eDrBy5G/nAb72wcv5JvesXIY2fH\nU40k2dq7D8b7rCTQjzlJ\n-----END PRIVATE KEY-----\n",
+  "client_email": "amicorp@amicorp-316604.iam.gserviceaccount.com",
+  "client_id": "108142778992935029508",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/amicorp%40amicorp-316604.iam.gserviceaccount.com"
+}
