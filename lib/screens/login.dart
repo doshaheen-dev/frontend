@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:portfolio_management/screens/signup.dart';
 import 'package:portfolio_management/services/AuthenticationService.dart';
 import 'package:provider/provider.dart';
+// import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+// import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   @override
@@ -54,7 +58,7 @@ class _LoginState extends State<Login> {
                     height: 25,
                   ),
                   Container(
-                    margin: EdgeInsets.only(bottom: 20),
+                    margin: const EdgeInsets.only(bottom: 20),
                     decoration: customDecoration(),
                     child: TextField(
                       controller: emailController,
@@ -70,7 +74,7 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(bottom: 10),
+                    margin: const EdgeInsets.only(bottom: 10),
                     decoration: customDecoration(),
                     child: TextField(
                       controller: passwordController,
@@ -111,7 +115,6 @@ class _LoginState extends State<Login> {
                     splashColor: Colors.white,
                     hoverColor: colorGreen,
                     child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20),
                       height: 50,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
@@ -179,15 +182,61 @@ class _LoginState extends State<Login> {
                   SizedBox(
                     height: 15,
                   ),
+                  // InkWell(
+                  //   onTap: () {},
+                  //   child: Container(
+                  //     height: 50,
+                  //     child: SignInWithAppleButton(onPressed: () async {
+                  //       final credential =
+                  //           await SignInWithApple.getAppleIDCredential(
+                  //         scopes: [
+                  //           AppleIDAuthorizationScopes.email,
+                  //           AppleIDAuthorizationScopes.fullName,
+                  //         ],
+                  //         webAuthenticationOptions: WebAuthenticationOptions(
+                  //           clientId:
+                  //               'com.doshaheen.portfoliomanagementservice',
+                  //           redirectUri: Uri.parse(
+                  //             'https://portfolio-management.glitch.me/callbacks/sign_in_with_apple',
+                  //           ),
+                  //         ),
+                  //       );
+                  //       print(credential);
+                  //       final signInWithAppleEndpoint = Uri(
+                  //         scheme: 'https',
+                  //         host: 'portfolio-management.glitch.me',
+                  //         path: '/sign_in_with_apple',
+                  //         queryParameters: <String, String>{
+                  //           'code': credential.authorizationCode,
+                  //           if (credential.givenName != null)
+                  //             'firstName': credential.givenName,
+                  //           if (credential.familyName != null)
+                  //             'lastName': credential.familyName,
+                  //           'useBundleId': Platform.isIOS || Platform.isMacOS
+                  //               ? 'true'
+                  //               : 'false',
+                  //           if (credential.state != null)
+                  //             'state': credential.state,
+                  //         },
+                  //       );
+
+                  //       final session = await http.Client().post(
+                  //         signInWithAppleEndpoint,
+                  //       );
+                  //       print(session);
+                  //     }),
+                  //   ),
+                  // ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ContinueWith(
                           "assets/images/social_media/google.png", "google"),
-                      ContinueWith(
-                          "assets/images/social_media/apple.png", "apple"),
+                      if (Platform.isIOS)
+                        ContinueWith(
+                            "assets/images/social_media/apple.png", "apple"),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),

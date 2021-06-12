@@ -14,6 +14,7 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -27,8 +28,10 @@ class MyApp extends StatelessWidget {
           initialData: null,
         )
       ],
-      child:
-          MaterialApp(debugShowCheckedModeBanner: false, home: MyLoginPage()),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: MyLoginPage(),
+      ),
     );
   }
 }
@@ -41,6 +44,5 @@ class MyLoginPage extends StatelessWidget {
       return Home();
     }
     return Login();
-    // }
   }
 }

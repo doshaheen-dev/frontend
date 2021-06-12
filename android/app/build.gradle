@@ -64,6 +64,7 @@ dependencies {
     //firebase config
     implementation platform('com.google.firebase:firebase-bom:28.1.0')
     implementation 'com.google.firebase:firebase-analytics'
-
+    implementation 'com.google.guava:guava:27.0.1-android'
+    // implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
 
 }
