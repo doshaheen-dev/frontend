@@ -60,6 +60,7 @@ flutter:
    - assets/images/company_logo/
    - assets/images/raise_capital/
    - assets/images/investment_solutions/
+   - assets/images/dummy/
    - assets/images/chat/
    - assets/amicorp.json
 

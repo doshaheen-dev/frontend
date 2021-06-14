@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:portfolio_management/screens/chat.dart';
 import 'package:portfolio_management/screens/requests/request_recieved.dart';
 import 'package:portfolio_management/screens/requests/request_sent.dart';
 
@@ -26,13 +25,14 @@ class _RequestState extends State<Requests>
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xff00A699)));
     return new Scaffold(
       body: MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: DefaultTabController(
           length: 2,
           child: Scaffold(
             appBar: AppBar(
               leading: IconButton(
                 icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () => {},
               ),
               backgroundColor: Color(0xff00A699),
               title: Text(
@@ -76,13 +76,6 @@ class _RequestState extends State<Requests>
             ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.chat),
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => ChatBot()));
-        },
       ),
     );
   }
