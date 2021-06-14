@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio_management/constants/theme_colors.dart';
+import 'package:portfolio_management/screens/chat.dart';
 import 'package:portfolio_management/screens/explore.dart';
+import 'package:portfolio_management/screens/requests/requests.dart';
 import '../data/services_data.dart';
 import '../screens/profile_page.dart';
 import '../models/service.dart';
@@ -15,14 +17,8 @@ class _HomeState extends State<Home> {
 
   List<Widget> _children = [
     Explore(),
-    Center(
-      child: Text(
-        "Request",
-      ),
-    ),
-    Center(
-      child: Text("Chat"),
-    ),
+    Requests(),
+    ChatBot(),
     ProfilePage(DUMMY_SERVICES),
   ];
 
