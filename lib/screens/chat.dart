@@ -20,7 +20,7 @@ class _ChatBotState extends State<ChatBot> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Colors.blue,
+        primaryColor: Color(0xff00A699),
         primarySwatch: Colors.blue,
       ),
       home: ChatBotScreen(),
@@ -127,7 +127,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
       padding: EdgeInsets.all(10.0),
       child: Bubble(
         radius: Radius.circular(15.0),
-        color: data == 0 ? Colors.blue : Colors.grey[350],
+        color: data == 0 ? Color(0xff00A699) : Colors.grey[350],
         elevation: 0.0,
         alignment: data == 0 ? Alignment.topLeft : Alignment.topRight,
         nip: data == 0 ? BubbleNip.leftBottom : BubbleNip.rightTop,
