@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio_management/constants/theme_colors.dart';
 import 'package:portfolio_management/screens/explore.dart';
+import '../data/services_data.dart';
+import '../screens/profile_page.dart';
+import '../models/service.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -9,6 +12,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _currentTab = 0;
+
   List<Widget> _children = [
     Explore(),
     Center(
@@ -19,9 +23,7 @@ class _HomeState extends State<Home> {
     Center(
       child: Text("Chat"),
     ),
-    Center(
-      child: Text("Profile"),
-    )
+    ProfilePage(DUMMY_SERVICES),
   ];
 
   @override
