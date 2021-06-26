@@ -1,11 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:portfolio_management/screens/signup.dart';
-import 'package:portfolio_management/services/AuthenticationService.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-// import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-// import 'package:http/http.dart' as http;
+import 'package:portfolio_management/services/AuthenticationService.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -13,259 +9,334 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  Color colorGreen = Color(0xff00A699);
-  bool _inscription = true;
+  bool _isHidden = true;
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  BoxDecoration customDecoration() {
+
+  @override
+  Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
+    return Scaffold(
+      body: SafeArea(
+        maintainBottomViewPadding: true,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                margin: const EdgeInsets.only(top: 20.0, left: 20.0),
+                child: Icon(
+                  Icons.arrow_back,
+                  size: 30,
+                ),
+              ),
+              Material(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      margin: const EdgeInsets.only(top: 10.0, left: 25.0),
+                      child: Text(
+                        "Personal Details",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 28.0,
+                            fontFamily: 'Poppins-Regular'),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 5.0, left: 25.0),
+                      child: Text(
+                        "Please fill out your personal details.",
+                        style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 18.0,
+                            fontFamily: 'Poppins-Regular'),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(
+                          top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+                      decoration: customDecoration(),
+                      child: inputTextField("Fullname", null),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(
+                          top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+                      decoration: customDecoration(),
+                      child: inputTextField("E-mail", emailController),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(
+                          top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+                      decoration: customDecoration(),
+                      child: passwordTextField("Password", passwordController),
+                    ),
+                    //LOGIN BUTTON
+                    Container(
+                      margin: const EdgeInsets.only(
+                          top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(40),
+                        onTap: () {
+                          context.read<AuthenticationService>().signIn(
+                                email: emailController.text.trim(),
+                                password: passwordController.text.trim(),
+                              );
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 60,
+                          decoration: gradientButton(),
+                          child: Center(
+                              child: Text(
+                            "Sign up",
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          )),
+                        ),
+                      ),
+                    ),
+                    // OR Text
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          "or",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.0,
+                              fontFamily: 'Poppins-Regular'),
+                        ),
+                      ],
+                    ),
+                    // Apple Login
+                    Container(
+                        margin: const EdgeInsets.only(
+                            top: 15.0, left: 25.0, bottom: 5, right: 25.0),
+                        child: createButton("Connect with Apple", "Apple")),
+                    //Google Button
+                    Container(
+                      margin: const EdgeInsets.only(
+                          top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+                      child: createButton("Connect with Google", "Google"),
+                    ),
+                    // TERMS AND CONDITIONS
+                    Align(
+                      alignment: Alignment.center,
+                      child: RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                            text: "By signing in, I agree with ",
+                            style: setTextStyle(Colors.grey[500]),
+                            children: [
+                              TextSpan(
+                                text: "Terms of Use ",
+                                style: setTextStyle(Colors.black),
+                              ),
+                              TextSpan(
+                                text: "\n and ",
+                                style: setTextStyle(Colors.grey[500]),
+                              ),
+                              TextSpan(
+                                text: "Privacy Poicy",
+                                style: setTextStyle(Colors.black),
+                              )
+                            ]),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  TextStyle setTextStyle(colors) {
+    return TextStyle(color: colors, fontSize: 14, fontWeight: FontWeight.w500);
+  }
+
+  InkWell createButton(text, type) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(40),
+      onTap: () {
+        if (type == "Apple") {
+          context.read<AuthenticationService>().signInWithApple();
+        } else if (type == "Google") {
+          context.read<AuthenticationService>().signInWithGoogle();
+        }
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 60,
+        decoration: BoxDecoration(
+            color: _setButtonBg(type),
+            borderRadius: BorderRadius.all(
+              const Radius.circular(15.0),
+            ),
+            border: Border.all(color: Colors.black87)),
+        child: Center(
+            child: Row(
+          children: [
+            Padding(padding: EdgeInsets.all(10.0)),
+            Image.asset(
+              _setImage(type),
+              color: _setIconColorBg(type),
+              height: 25.0,
+            ),
+            SizedBox(
+              width: 60,
+            ),
+            Center(
+              child: Text(
+                text,
+                style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                    color: _setTextColorBg(type)),
+              ),
+            )
+          ],
+        )),
+      ),
+    );
+  }
+
+  // ignore: missing_return
+  Color _setButtonBg(type) {
+    if (type == "Apple") {
+      return Colors.black87;
+    }
+  }
+
+  // ignore: missing_return
+  Color _setIconColorBg(type) {
+    if (type == "Apple") {
+      return Colors.white;
+    }
+  }
+
+  // ignore: missing_return
+  Color _setTextColorBg(type) {
+    if (type == "Apple") {
+      return Colors.white;
+    } else if (type == "Google") {
+      return Colors.black;
+    }
+  }
+
+  // ignore: missing_return
+  String _setImage(type) {
+    if (type == "Apple") {
+      return "assets/images/social_media/apple.png";
+    } else if (type == "Google") {
+      return "assets/images/social_media/google.png";
+    }
+  }
+
+  BoxDecoration gradientButton() {
     return BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(8),
       boxShadow: [
         BoxShadow(
           offset: Offset(0, 2),
-          color: Colors.grey[300],
+          color: Colors.grey,
           blurRadius: 5,
+        )
+      ],
+      borderRadius: BorderRadius.all(
+        const Radius.circular(15.0),
+      ),
+      gradient: LinearGradient(
+        colors: [Colors.deepOrange[600], Colors.deepOrange[300]],
+        begin: FractionalOffset.centerLeft,
+        end: FractionalOffset.centerRight,
+      ),
+    );
+  }
+
+  BoxDecoration customDecoration() {
+    return BoxDecoration(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.all(const Radius.circular(10.0)),
+      boxShadow: [
+        BoxShadow(
+          offset: Offset(0, 2),
+          color: Colors.grey[200],
         )
       ],
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          maintainBottomViewPadding: true,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 40),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    height: 130,
-                    width: 130,
-                    child: Image.asset(
-                        "assets/images/company_logo/doshaheenlogo.png"),
-                  ),
-                  Text(
-                    "Welcome to Portfolio Management",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                  ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 20),
-                    decoration: customDecoration(),
-                    child: TextField(
-                      controller: emailController,
-                      decoration: InputDecoration(
-                        hintText: "Email",
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(color: Colors.grey),
-                        prefixIcon: Icon(
-                          Icons.mail_outline,
-                          color: colorGreen,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 10),
-                    decoration: customDecoration(),
-                    child: TextField(
-                      controller: passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                          hintText: "Password",
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(color: Colors.grey),
-                          prefixIcon: Icon(
-                            Icons.lock_outline,
-                            color: colorGreen,
-                          )),
-                    ),
-                  ),
-                  Visibility(
-                    visible: _inscription,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 30),
-                      child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            "Forgot password ?",
-                            style: TextStyle(color: colorGreen, fontSize: 12),
-                          )),
-                    ),
-                  ),
-                  SizedBox(
-                    height: _inscription ? 30 : 0,
-                  ),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(20),
-                    onTap: () {
-                      context.read<AuthenticationService>().signIn(
-                            email: emailController.text.trim(),
-                            password: passwordController.text.trim(),
-                          );
-                    },
-                    splashColor: Colors.white,
-                    hoverColor: colorGreen,
-                    child: Container(
-                      height: 50,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: colorGreen,
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          BoxShadow(
-                            offset: Offset(0, 2),
-                            color: Colors.grey,
-                            blurRadius: 5,
-                          )
-                        ],
-                      ),
-                      child: Center(
-                          child: Text(
-                        "Login",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, color: Colors.white),
-                      )),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => SignUp()),
-                      );
-                    },
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: EdgeInsets.all(20),
-                        child: InkWell(
-                          child: RichText(
-                            text: TextSpan(
-                                text: "Don't have an account ? ",
-                                style: TextStyle(
-                                    color: Colors.grey[500],
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
-                                children: [
-                                  TextSpan(
-                                    text: "Sign up",
-                                    style: TextStyle(
-                                        color: colorGreen,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 14),
-                                  )
-                                ]),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "Or continue with ",
-                    style: TextStyle(
-                        color: Colors.grey[500],
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  // InkWell(
-                  //   onTap: () {},
-                  //   child: Container(
-                  //     height: 50,
-                  //     child: SignInWithAppleButton(onPressed: () async {
-                  //       final credential =
-                  //           await SignInWithApple.getAppleIDCredential(
-                  //         scopes: [
-                  //           AppleIDAuthorizationScopes.email,
-                  //           AppleIDAuthorizationScopes.fullName,
-                  //         ],
-                  //         webAuthenticationOptions: WebAuthenticationOptions(
-                  //           clientId:
-                  //               'com.doshaheen.portfoliomanagementservice',
-                  //           redirectUri: Uri.parse(
-                  //             'https://portfolio-management.glitch.me/callbacks/sign_in_with_apple',
-                  //           ),
-                  //         ),
-                  //       );
-                  //       print(credential);
-                  //       final signInWithAppleEndpoint = Uri(
-                  //         scheme: 'https',
-                  //         host: 'portfolio-management.glitch.me',
-                  //         path: '/sign_in_with_apple',
-                  //         queryParameters: <String, String>{
-                  //           'code': credential.authorizationCode,
-                  //           if (credential.givenName != null)
-                  //             'firstName': credential.givenName,
-                  //           if (credential.familyName != null)
-                  //             'lastName': credential.familyName,
-                  //           'useBundleId': Platform.isIOS || Platform.isMacOS
-                  //               ? 'true'
-                  //               : 'false',
-                  //           if (credential.state != null)
-                  //             'state': credential.state,
-                  //         },
-                  //       );
-
-                  //       final session = await http.Client().post(
-                  //         signInWithAppleEndpoint,
-                  //       );
-                  //       print(session);
-                  //     }),
-                  //   ),
-                  // ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ContinueWith(
-                          "assets/images/social_media/google.png", "google"),
-                      if (Platform.isIOS)
-                        ContinueWith(
-                            "assets/images/social_media/apple.png", "apple"),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+  TextField passwordTextField(text, controller) {
+    return TextField(
+      style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.normal,
+          fontSize: 14.0,
+          fontFamily: 'Poppins-Regular'),
+      controller: controller,
+      obscureText: _isHidden,
+      decoration: new InputDecoration(
+        contentPadding: EdgeInsets.all(10.0),
+        labelText: text,
+        suffix: InkWell(
+          onTap: _togglePasswordView,
+          child: Icon(
+            _isHidden ? Icons.visibility : Icons.visibility_off,
+            color: Colors.grey[400],
           ),
-        ));
-  }
-
-  InkWell ContinueWith(String image, String type) {
-    return InkWell(
-      onTap: () {
-        if (type == 'google') {
-          context.read<AuthenticationService>().signInWithGoogle();
-        } else if (type == 'apple') {
-          context.read<AuthenticationService>().signInWithApple();
-        }
-      },
-      child: Container(
-        padding: EdgeInsets.all(15),
-        height: 50,
-        decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(offset: Offset(0, 3), color: Colors.grey, blurRadius: 5)
-            ]),
-        child: Image.asset(
-          image,
+        ),
+        labelStyle: new TextStyle(color: Colors.black),
+        border: InputBorder.none,
+        focusedBorder: UnderlineInputBorder(
+          borderSide: const BorderSide(color: Colors.transparent, width: 2.0),
+          borderRadius: BorderRadius.all(
+            const Radius.circular(10.0),
+          ),
         ),
       ),
     );
+  }
+
+  TextField inputTextField(text, controller) {
+    return TextField(
+      style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.normal,
+          fontSize: 16.0,
+          fontFamily: 'Poppins-Regular'),
+      controller: controller,
+      decoration: new InputDecoration(
+        contentPadding: EdgeInsets.all(10.0),
+        labelText: text,
+        labelStyle: new TextStyle(color: Colors.black),
+        border: InputBorder.none,
+        focusedBorder: UnderlineInputBorder(
+          borderSide: const BorderSide(color: Colors.transparent, width: 2.0),
+          borderRadius: BorderRadius.all(
+            const Radius.circular(10.0),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _togglePasswordView() {
+    setState(() {
+      _isHidden = !_isHidden;
+    });
   }
 }
