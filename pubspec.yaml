@@ -40,6 +40,8 @@ dependencies:
   # for chat
   dialogflow_flutter: ^0.0.3
   bubble: ^1.1.9+1
+  # For OTP text field
+  pin_code_fields: ^7.2.0 
  
 
 dev_dependencies:

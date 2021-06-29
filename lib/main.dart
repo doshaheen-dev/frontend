@@ -3,6 +3,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:portfolio_management/screens/home.dart';
 import 'package:portfolio_management/screens/login.dart';
+
+import 'package:portfolio_management/screens/common/onboarding.dart';
+
+import 'package:portfolio_management/screens/signup_otp.dart';
+import 'package:portfolio_management/screens/common/user_type.dart';
 import 'package:portfolio_management/services/AuthenticationService.dart';
 import 'package:provider/provider.dart';
 
@@ -30,7 +35,8 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: MyLoginPage(),
+        //home: MyLoginPage(),
+        home: OnBoardingCircle(),
       ),
     );
   }
