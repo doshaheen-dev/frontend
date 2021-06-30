@@ -35,7 +35,7 @@ class ChatBotScreen extends StatefulWidget {
 
 class _ChatBotScreenState extends State<ChatBotScreen> {
   final message = TextEditingController();
-  List<Map> messageList = List();
+  List<Map> messageList = [];
 
   void response(query) async {
     AuthGoogle authGoogle =

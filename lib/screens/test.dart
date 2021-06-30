@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:portfolio_management/services/AuthenticationService.dart';
 
-import 'common/utilites/ui_widgets.dart';
+import 'package:portfolio_management/utilites/ui_widgets.dart';
 
 class SignUpEmail extends StatefulWidget {
   @override

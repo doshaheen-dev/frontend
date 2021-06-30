@@ -5,7 +5,6 @@ import 'package:portfolio_management/screens/explore.dart';
 import 'package:portfolio_management/screens/requests/requests.dart';
 import '../data/services_data.dart';
 import '../screens/profile_page.dart';
-import '../models/service.dart';
 
 class Home extends StatefulWidget {
   @override

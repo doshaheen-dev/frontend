@@ -1,11 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:portfolio_management/screens/common/user_type.dart';
-import 'package:portfolio_management/screens/common/utilites/app_colors.dart';
-import 'package:portfolio_management/screens/common/utilites/ui_widgets.dart';
+import 'package:portfolio_management/utilites/app_colors.dart';
+import 'package:portfolio_management/utilites/ui_widgets.dart';
 
 class OnBoardingCircle extends StatefulWidget {
   @override
@@ -50,7 +48,7 @@ class _OnBoardingCircleState extends State<OnBoardingCircle> {
             child: Stack(
               children: [
                 Image.asset(
-                  'assets/images/onboarding_first.png',
+                  'assets/images/onboarding/onboarding_first.png',
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
                   fit: BoxFit.fill,
@@ -79,7 +77,7 @@ class _OnBoardingCircleState extends State<OnBoardingCircle> {
             child: Stack(
               children: [
                 Image.asset(
-                  'assets/images/onboarding_second.png',
+                  'assets/images/onboarding/onboarding_second.png',
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
                   fit: BoxFit.fill,
@@ -108,7 +106,7 @@ class _OnBoardingCircleState extends State<OnBoardingCircle> {
             child: Stack(
               children: [
                 Image.asset(
-                  'assets/images/onboarding_third.png',
+                  'assets/images/onboarding/onboarding_third.png',
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
                   fit: BoxFit.fill,
@@ -134,109 +132,115 @@ class _OnBoardingCircleState extends State<OnBoardingCircle> {
       ),
     ];
 
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Slider View
-            Expanded(
-              child: Container(
-                child: Stack(
-                  alignment: AlignmentDirectional.bottomCenter,
-                  children: <Widget>[
-                    PageView.builder(
-                      physics: BouncingScrollPhysics(),
-                      itemCount: introWidgetsList.length,
-                      onPageChanged: (int page) {
-                        getChangedPageAndMoveBar(page);
-                      },
-                      controller: controller,
-                      itemBuilder: (context, index) {
-                        return introWidgetsList[index];
-                      },
-                    ),
-                    Stack(
-                      alignment: AlignmentDirectional.topCenter,
+    return MaterialApp(
+        theme: ThemeData(backgroundColor: Colors.white),
+        home: Scaffold(
+          body: SafeArea(
+            child: Column(
+              children: [
+                // Slider View
+                Expanded(
+                  child: Container(
+                    child: Stack(
+                      alignment: AlignmentDirectional.bottomCenter,
                       children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(top: 5),
-                          child: Divider(color: Colors.white70),
+                        PageView.builder(
+                          physics: BouncingScrollPhysics(),
+                          itemCount: introWidgetsList.length,
+                          onPageChanged: (int page) {
+                            getChangedPageAndMoveBar(page);
+                          },
+                          controller: controller,
+                          itemBuilder: (context, index) {
+                            return introWidgetsList[index];
+                          },
                         ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 100),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              for (int i = 0; i < introWidgetsList.length; i++)
-                                if (i == currentPageValue) ...[
-                                  circleBar(true, i)
-                                ] else
-                                  circleBar(false, i),
-                            ],
-                          ),
+                        Stack(
+                          alignment: AlignmentDirectional.topCenter,
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.only(top: 5),
+                              child: Divider(color: Colors.white70),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(bottom: 100),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  for (int i = 0;
+                                      i < introWidgetsList.length;
+                                      i++)
+                                    if (i == currentPageValue) ...[
+                                      circleBar(true, i)
+                                    ] else
+                                      circleBar(false, i),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-            // Bottom view
-            Container(
-              color: kDarkGrey,
-              height: 150,
-              child: Column(
-                children: [
-                  InkWell(
-                    borderRadius: BorderRadius.circular(40),
-                    onTap: () {
-                      // Open  view
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => UserType()));
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.only(
-                          top: 20.0, left: 25.0, right: 25.0),
-                      height: 60,
-                      decoration: appColorButton(),
-                      child: Center(
-                          child: Text(
-                        "Join our community",
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            fontFamily: 'Poppins-Regular',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      )),
-                    ),
+                // Bottom view
+                Container(
+                  color: kDarkGrey,
+                  height: 150,
+                  child: Column(
+                    children: [
+                      InkWell(
+                        borderRadius: BorderRadius.circular(40),
+                        onTap: () {
+                          // Open  view
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => UserType()));
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(
+                              top: 20.0, left: 25.0, right: 25.0),
+                          height: 60,
+                          decoration: appColorButton(),
+                          child: Center(
+                              child: Text(
+                            "Join our community",
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                fontFamily: 'Poppins-Regular',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          )),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 20.0),
+                        alignment: Alignment.center,
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                              text: "Already a member? ",
+                              style: setTextStyle(textDarkOrange),
+                              children: [
+                                TextSpan(
+                                    text: 'Sign In',
+                                    style: setTextStyle(kDarkOrange),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        print('Privacy Policy"');
+                                      }),
+                              ]),
+                        ),
+                      ),
+                    ],
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 20.0),
-                    alignment: Alignment.center,
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                          text: "Already a member? ",
-                          style: setTextStyle(Colors.white),
-                          children: [
-                            TextSpan(
-                                text: 'Sign In',
-                                style: setTextStyle(kDarkOrange),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    print('Privacy Policy"');
-                                  }),
-                          ]),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 
   Widget circleBar(bool isActive, int currentPageValue) {

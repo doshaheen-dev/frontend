@@ -10,7 +10,6 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   Color colorGreen = Color(0xff00A699);
-  bool _inscription = true;
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();

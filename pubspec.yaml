@@ -63,6 +63,8 @@ flutter:
   assets:
    - assets/
    - assets/images/
+   - assets/images/onboarding/
+   - assets/images/investor/
    - assets/images/social_media/
    - assets/images/company_logo/
    - assets/images/raise_capital/

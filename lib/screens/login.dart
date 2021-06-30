@@ -230,10 +230,10 @@ class _LoginState extends State<Login> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      ContinueWith(
+                      continueWith(
                           "assets/images/social_media/google.png", "google"),
                       if (Platform.isIOS)
-                        ContinueWith(
+                        continueWith(
                             "assets/images/social_media/apple.png", "apple"),
                     ],
                   ),
@@ -245,7 +245,7 @@ class _LoginState extends State<Login> {
   }
 
   // ignore: missing_return
-  InkWell ContinueWith(String image, String type) {
+  InkWell continueWith(String image, String type) {
     return InkWell(
       onTap: () {
         if (type == 'google') {
