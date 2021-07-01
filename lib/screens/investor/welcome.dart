@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:portfolio_management/screens/investor/found_us.dart';
 import 'package:portfolio_management/utilites/app_colors.dart';
 import 'package:portfolio_management/utilites/ui_widgets.dart';
 
@@ -78,6 +79,10 @@ class _WelcomeInvestorState extends State<WelcomeInvestor> {
                       borderRadius: BorderRadius.circular(40),
                       onTap: () {
                         // on click
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => InvestorSearchInfo()));
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
