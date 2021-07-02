@@ -37,7 +37,7 @@ class _UserTypeState extends State<UserType> {
                       children: <Widget>[
                         Container(
                           color: Colors.white,
-                          margin: const EdgeInsets.only(top: 20.0, left: 25.0),
+                          margin: const EdgeInsets.only(top: 120.0, left: 25.0),
                           child: Text(
                             "I am a",
                             style: TextStyle(
@@ -86,8 +86,8 @@ class _UserTypeState extends State<UserType> {
         },
         child: Container(
           margin: const EdgeInsets.only(top: 50.0),
-          width: 180,
-          height: 180,
+          width: 160,
+          height: 160,
           decoration: BoxDecoration(
             color: selectedCategory.contains(investor)
                 ? Colors.orange[600]
@@ -102,8 +102,8 @@ class _UserTypeState extends State<UserType> {
               children: [
                 Image.asset(
                   "assets/images/investor_user.png",
-                  width: 100.0,
-                  height: 100.0,
+                  width: 80.0,
+                  height: 80.0,
                 ),
                 SizedBox(
                   height: 10.0,
@@ -138,9 +138,9 @@ class _UserTypeState extends State<UserType> {
           });
         },
         child: Container(
-          margin: const EdgeInsets.only(top: 50.0),
-          width: 180,
-          height: 180,
+          margin: const EdgeInsets.only(top: 30.0),
+          width: 160,
+          height: 160,
           decoration: BoxDecoration(
             color: selectedCategory.contains(fundraiser)
                 ? selectedOrange
@@ -155,8 +155,8 @@ class _UserTypeState extends State<UserType> {
               children: [
                 Image.asset(
                   "assets/images/fund_raiser.png",
-                  width: 100.0,
-                  height: 100.0,
+                  width: 80.0,
+                  height: 80.0,
                 ),
                 SizedBox(
                   height: 10.0,

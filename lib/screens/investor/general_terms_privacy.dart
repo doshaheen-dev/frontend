@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:portfolio_management/screens/investor/thank_you.dart';
 
 import 'package:portfolio_management/utilites/app_colors.dart';
+import 'package:portfolio_management/utilites/hex_color.dart';
 import 'package:portfolio_management/utilites/ui_widgets.dart';
 import 'package:readmore/readmore.dart';
 
@@ -119,6 +121,74 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                     height: 20,
                   ),
 
+                  //CAPTCHA
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 25.0,
+                        bottom: 20.0,
+                        right: 25.0,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Captcha",
+                            style: TextStyle(
+                                color: headingBlack,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.0,
+                                fontFamily: 'Poppins-Light'),
+                          ),
+                          SizedBox(
+                            height: 20.0,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    margin: EdgeInsets.only(right: 10.0),
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                        color: HexColor('E5E5E5'),
+                                        borderRadius: BorderRadius.all(
+                                          const Radius.circular(20.0),
+                                        )),
+                                    child: Center(
+                                        child: Text(
+                                      "10 + 2",
+                                      style: TextStyle(
+                                          fontSize: 18.0, color: Colors.black),
+                                    )),
+                                  )),
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  margin: EdgeInsets.only(left: 10.0),
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(
+                                      const Radius.circular(20.0),
+                                    ),
+                                    shape: BoxShape.rectangle,
+                                    border: Border.all(
+                                      color: HexColor('E5E5E5'),
+                                      width: 2,
+                                    ),
+                                  ),
+                                  child: inputTextField(),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+
                   //NEXT BUTTON
                   Container(
                     margin: const EdgeInsets.only(
@@ -127,6 +197,10 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                       borderRadius: BorderRadius.circular(40),
                       onTap: () {
                         // on click
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ThankYouInvestor()));
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
@@ -169,6 +243,31 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
           offset: Offset(0, 2),
           color: Colors.grey[200],
         )
+      ],
+    );
+  }
+
+  TextField inputTextField() {
+    return TextField(
+      style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.normal,
+          fontSize: 18.0,
+          fontFamily: 'Poppins-Regular'),
+      decoration: new InputDecoration(
+        contentPadding: EdgeInsets.all(15.0),
+        border: InputBorder.none,
+        focusedBorder: UnderlineInputBorder(
+          borderSide: const BorderSide(color: Colors.transparent, width: 2.0),
+          borderRadius: BorderRadius.all(
+            const Radius.circular(10.0),
+          ),
+        ),
+      ),
+      keyboardType: TextInputType.number,
+      inputFormatters: <TextInputFormatter>[
+        FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(10),
       ],
     );
   }
