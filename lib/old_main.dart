@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         //home: MyLoginPage(),
-        home: OnBoardingCircle(),
+        home: OnBoarding(),
       ),
     );
   }

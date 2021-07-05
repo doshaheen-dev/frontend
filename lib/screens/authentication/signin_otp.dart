@@ -1,27 +1,18 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hb_check_code/hb_check_code.dart';
-import 'package:portfolio_management/screens/authentication/signup_verify_otp.dart';
+import 'package:portfolio_management/screens/authentication/signin_verify_otp.dart';
 import 'package:portfolio_management/utilites/app_colors.dart';
-import 'package:portfolio_management/utilites/hex_color.dart';
 
 import 'package:portfolio_management/utilites/ui_widgets.dart';
 
-class SignUpOTP extends StatefulWidget {
+class SignInOTP extends StatefulWidget {
   @override
-  _SignUpOTPState createState() => _SignUpOTPState();
+  _SignInOTPState createState() => _SignInOTPState();
 }
 
-class _SignUpOTPState extends State<SignUpOTP> {
+class _SignInOTPState extends State<SignInOTP> {
   @override
   Widget build(BuildContext context) {
-    String code = "";
-    for (var i = 0; i < 6; i++) {
-      code = code + Random().nextInt(9).toString();
-    }
-
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
     return Scaffold(
@@ -45,7 +36,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
                   Container(
                     margin: const EdgeInsets.only(top: 10.0, left: 25.0),
                     child: Text(
-                      "Let's start here",
+                      "Login here",
                       style: TextStyle(
                           color: headingBlack,
                           fontWeight: FontWeight.bold,
@@ -56,7 +47,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
                   Container(
                     margin: const EdgeInsets.only(top: 5.0, left: 25.0),
                     child: Text(
-                      "Let's verify your mobile number",
+                      "You can easily login via mobile number.",
                       style: TextStyle(
                           color: textGrey,
                           fontWeight: FontWeight.normal,
@@ -84,85 +75,13 @@ class _SignUpOTPState extends State<SignUpOTP> {
                           margin: const EdgeInsets.only(
                               top: 5.0, bottom: 20, right: 25.0),
                           decoration: customDecoration(),
-                          child: labelTextField("Mobile Number", null),
+                          child: inputTextField("Mobile Number", null),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  //CAPTCHA
-                  Container(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 25.0,
-                        bottom: 20.0,
-                        right: 25.0,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Captcha",
-                            style: TextStyle(
-                                color: headingBlack,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20.0,
-                                fontFamily: 'Poppins-Light'),
-                          ),
-                          SizedBox(
-                            height: 20.0,
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                    margin: EdgeInsets.only(right: 10.0),
-                                    height: 60,
-                                    decoration: BoxDecoration(
-                                        color: HexColor('E5E5E5'),
-                                        borderRadius: BorderRadius.all(
-                                          const Radius.circular(20.0),
-                                        )),
-                                    child: Container(
-                                        alignment: Alignment.center,
-                                        child: GestureDetector(
-                                            behavior: HitTestBehavior.opaque,
-                                            onTap: () => setState(() {}),
-                                            child: HBCheckCode(
-                                              code: code,
-                                            ))),
-                                  )),
-                              Expanded(
-                                flex: 1,
-                                child: Container(
-                                  margin: EdgeInsets.only(left: 10.0),
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 60,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.all(
-                                      const Radius.circular(20.0),
-                                    ),
-                                    shape: BoxShape.rectangle,
-                                    border: Border.all(
-                                      color: HexColor('E5E5E5'),
-                                      width: 2,
-                                    ),
-                                  ),
-                                  child: inputTextField(),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
 
-                  //SIGN UP BUTTON
+                  //SIGN IN BUTTON
                   Container(
                     margin: const EdgeInsets.only(
                         top: 5.0, left: 25.0, bottom: 20, right: 25.0),
@@ -170,7 +89,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
                       borderRadius: BorderRadius.circular(40),
                       onTap: () {
                         // Open otp view
-                        openSignUpVerifyOTP();
+                        openSignInVerifyOTP();
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
@@ -244,32 +163,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
     );
   }
 
-  TextField inputTextField() {
-    return TextField(
-      style: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.normal,
-          fontSize: 18.0,
-          fontFamily: 'Poppins-Regular'),
-      decoration: new InputDecoration(
-        contentPadding: EdgeInsets.all(15.0),
-        border: InputBorder.none,
-        focusedBorder: UnderlineInputBorder(
-          borderSide: const BorderSide(color: Colors.transparent, width: 2.0),
-          borderRadius: BorderRadius.all(
-            const Radius.circular(10.0),
-          ),
-        ),
-      ),
-      keyboardType: TextInputType.number,
-      inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.digitsOnly,
-        LengthLimitingTextInputFormatter(10),
-      ],
-    );
-  }
-
-  TextField labelTextField(text, controller) {
+  TextField inputTextField(text, controller) {
     return TextField(
       style: TextStyle(
           color: Colors.black,
@@ -297,10 +191,10 @@ class _SignUpOTPState extends State<SignUpOTP> {
     );
   }
 
-  void openSignUpVerifyOTP() {
+  void openSignInVerifyOTP() {
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) {
-          return SignUpVerifyOTP();
+          return SignInVerifyOTP();
         },
         transitionDuration: Duration(milliseconds: 2000),
         transitionsBuilder: (context, animation, anotherAnimation, child) {

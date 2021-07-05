@@ -1,53 +1,23 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:portfolio_management/screens/investor/thank_you.dart';
 import 'package:portfolio_management/screens/investor/welcome.dart';
-import 'package:portfolio_management/services/NewAuthenticationService.dart';
 import 'package:portfolio_management/utilites/app_colors.dart';
 import 'package:portfolio_management/utilites/ui_widgets.dart';
 
-class SignUpDetails extends StatefulWidget {
-  final User _user;
-  const SignUpDetails({Key key, User user})
-      : _user = user,
-        super(key: key);
-
+class SignUpPanDetails extends StatefulWidget {
   @override
-  _SignUpDetailsState createState() => _SignUpDetailsState();
+  _SignUpPanDetailsState createState() => _SignUpPanDetailsState();
 }
 
-class _SignUpDetailsState extends State<SignUpDetails> {
-  User _user;
-  String firstname = "";
-  String lastname = "";
-  String email = "";
-  String country = "";
-  String address = "";
-
-  @override
-  void initState() {
-    _user = widget._user;
-    super.initState();
-  }
+class _SignUpPanDetailsState extends State<SignUpPanDetails> {
+  String panNumber = "";
+  String dob = "";
 
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
-
-    final firstNameController = TextEditingController();
-    final lastnameController = TextEditingController();
-    final emailController = TextEditingController();
-    print("info, ${_user}");
-    if (_user != null) {
-      int idx = _user.displayName.indexOf(" ");
-      // Or check if appState.username != null or what ever your use case is.
-      firstNameController.text =
-          _user.displayName.substring(0, idx).trim() ?? '';
-      lastnameController.text =
-          _user.displayName.substring(idx + 1).trim() ?? '';
-      emailController.text = _user.email ?? '';
-    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -59,10 +29,7 @@ class _SignUpDetailsState extends State<SignUpDetails> {
               Container(
                 child: IconButton(
                   icon: Icon(Icons.arrow_back, size: 30),
-                  onPressed: () {
-                    Authentication.signOut();
-                    Navigator.pop(context);
-                  },
+                  onPressed: () => {Navigator.pop(context)},
                 ),
               ),
               Column(
@@ -71,12 +38,23 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                   Container(
                     margin: const EdgeInsets.only(top: 10.0, left: 25.0),
                     child: Text(
-                      "Personal details here",
+                      "Enter Your PAN",
                       style: TextStyle(
                           color: headingBlack,
                           fontWeight: FontWeight.bold,
                           fontSize: 28.0,
                           fontFamily: 'Poppins-Light'),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 5.0, left: 25.0),
+                    child: Text(
+                      "Please enter your PAN details",
+                      style: TextStyle(
+                          color: textGrey,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 20.0,
+                          fontFamily: 'Poppins-Regular'),
                     ),
                   ),
 
@@ -89,9 +67,8 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                     decoration: customDecoration(),
                     child: TextField(
                       style: _setTextFieldStyle(),
-                      controller: firstNameController,
-                      onChanged: (value) => {firstname = value},
-                      decoration: _setTextFieldDecoration("Firstname"),
+                      onChanged: (value) => panNumber = value,
+                      decoration: _setTextFieldDecoration("PAN Number"),
                     ),
                   ),
                   Container(
@@ -99,48 +76,12 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                         top: 5.0, left: 25.0, bottom: 20, right: 25.0),
                     decoration: customDecoration(),
                     child: TextField(
-                      controller: lastnameController,
                       style: _setTextFieldStyle(),
-                      onChanged: (value) => lastname = value,
-                      decoration: _setTextFieldDecoration("Lastname"),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(
-                        top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                    decoration: customDecoration(),
-                    child: TextField(
-                      controller: emailController,
-                      style: _setTextFieldStyle(),
-                      onChanged: (value) => email = value,
-                      decoration: _setTextFieldDecoration("E-mail"),
+                      onChanged: (value) => dob = value,
+                      decoration: _setTextFieldDecoration("Date Of Birth"),
                     ),
                   ),
 
-                  Container(
-                    margin: const EdgeInsets.only(
-                        top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                    decoration: customDecoration(),
-                    child: TextField(
-                      style: _setTextFieldStyle(),
-                      onChanged: (value) => country = value,
-                      decoration: _setTextFieldDecoration("Country"),
-                    ),
-                  ),
-
-                  Container(
-                    margin: const EdgeInsets.only(
-                        top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                    decoration: customDecoration(),
-                    child: TextField(
-                      style: _setTextFieldStyle(),
-                      onChanged: (value) => address = value,
-                      decoration: _setTextFieldDecoration("Address 1"),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 50,
-                  ),
                   //NEXT BUTTON
                   Container(
                     margin: const EdgeInsets.only(
@@ -149,7 +90,10 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                       borderRadius: BorderRadius.circular(40),
                       onTap: () {
                         // on click
-                        openWelcomeInvestor();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ThankYouInvestor()));
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
@@ -157,12 +101,65 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                         decoration: appColorButton(),
                         child: Center(
                             child: Text(
-                          "Next",
+                          "Complete Process",
                           style: TextStyle(
                               fontSize: 18.0,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                         )),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Card(
+                    color: unselectedGray,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0)),
+                    margin: EdgeInsets.only(
+                        right: 25.0, top: 10.0, bottom: 10.0, left: 25.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 20.0,
+                                  left: 10.0,
+                                  bottom: 20.0,
+                                  right: 10.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Why we need your PAN details?",
+                                    style: setBoldTextStyle(headingBlack),
+                                  ),
+                                  SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  Text(
+                                    "Investments - Providing PAN details is mandatory for investing in mutual funds as per the governmentregulations. Loan - we will check our systems to provide any pre-approved offer you are eligible for",
+                                    style: setTextStyle(textGrey),
+                                  ),
+                                  SizedBox(
+                                    height: 20.0,
+                                  ),
+                                  Text(
+                                    "Worried about the safety of your details",
+                                    style: setBoldTextStyle(headingBlack),
+                                  ),
+                                  SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  Text(
+                                    "We have bank level encrypted systems for all the information you provide to us. Be rest assured, your details are absolutely safe with us.",
+                                    style: setTextStyle(textGrey),
+                                  ),
+                                ],
+                              )),
+                        ],
                       ),
                     ),
                   ),
@@ -177,6 +174,10 @@ class _SignUpDetailsState extends State<SignUpDetails> {
 
   TextStyle setTextStyle(colors) {
     return TextStyle(color: colors, fontSize: 14, fontWeight: FontWeight.w500);
+  }
+
+  TextStyle setBoldTextStyle(colors) {
+    return TextStyle(color: colors, fontSize: 16, fontWeight: FontWeight.bold);
   }
 
   BoxDecoration customDecoration() {
@@ -235,22 +236,5 @@ class _SignUpDetailsState extends State<SignUpDetails> {
         ),
       ),
     );
-  }
-
-  void openWelcomeInvestor() {
-    Navigator.of(context).push(PageRouteBuilder(
-        pageBuilder: (context, animation, anotherAnimation) {
-          return WelcomeInvestor();
-        },
-        transitionDuration: Duration(milliseconds: 2000),
-        transitionsBuilder: (context, animation, anotherAnimation, child) {
-          animation = CurvedAnimation(
-              curve: Curves.fastLinearToSlowEaseIn, parent: animation);
-          return SlideTransition(
-            position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-                .animate(animation),
-            child: child,
-          );
-        }));
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:portfolio_management/screens/authentication/signup_pan_details.dart';
 import 'package:portfolio_management/screens/investor/thank_you.dart';
 
 import 'package:portfolio_management/utilites/app_colors.dart';
@@ -121,73 +122,73 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                     height: 20,
                   ),
 
-                  //CAPTCHA
-                  Container(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 25.0,
-                        bottom: 20.0,
-                        right: 25.0,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Captcha",
-                            style: TextStyle(
-                                color: headingBlack,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20.0,
-                                fontFamily: 'Poppins-Light'),
-                          ),
-                          SizedBox(
-                            height: 20.0,
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                    margin: EdgeInsets.only(right: 10.0),
-                                    height: 60,
-                                    decoration: BoxDecoration(
-                                        color: HexColor('E5E5E5'),
-                                        borderRadius: BorderRadius.all(
-                                          const Radius.circular(20.0),
-                                        )),
-                                    child: Center(
-                                        child: Text(
-                                      "10 + 2",
-                                      style: TextStyle(
-                                          fontSize: 18.0, color: Colors.black),
-                                    )),
-                                  )),
-                              Expanded(
-                                flex: 1,
-                                child: Container(
-                                  margin: EdgeInsets.only(left: 10.0),
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 60,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.all(
-                                      const Radius.circular(20.0),
-                                    ),
-                                    shape: BoxShape.rectangle,
-                                    border: Border.all(
-                                      color: HexColor('E5E5E5'),
-                                      width: 2,
-                                    ),
-                                  ),
-                                  child: inputTextField(),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
+                  // //CAPTCHA
+                  // Container(
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.only(
+                  //       left: 25.0,
+                  //       bottom: 20.0,
+                  //       right: 25.0,
+                  //     ),
+                  //     child: Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //       children: [
+                  //         Text(
+                  //           "Captcha",
+                  //           style: TextStyle(
+                  //               color: headingBlack,
+                  //               fontWeight: FontWeight.bold,
+                  //               fontSize: 20.0,
+                  //               fontFamily: 'Poppins-Light'),
+                  //         ),
+                  //         SizedBox(
+                  //           height: 20.0,
+                  //         ),
+                  //         Row(
+                  //           children: [
+                  //             Expanded(
+                  //                 flex: 1,
+                  //                 child: Container(
+                  //                   margin: EdgeInsets.only(right: 10.0),
+                  //                   height: 60,
+                  //                   decoration: BoxDecoration(
+                  //                       color: HexColor('E5E5E5'),
+                  //                       borderRadius: BorderRadius.all(
+                  //                         const Radius.circular(20.0),
+                  //                       )),
+                  //                   child: Center(
+                  //                       child: Text(
+                  //                     "10 + 2",
+                  //                     style: TextStyle(
+                  //                         fontSize: 18.0, color: Colors.black),
+                  //                   )),
+                  //                 )),
+                  //             Expanded(
+                  //               flex: 1,
+                  //               child: Container(
+                  //                 margin: EdgeInsets.only(left: 10.0),
+                  //                 width: MediaQuery.of(context).size.width,
+                  //                 height: 60,
+                  //                 decoration: BoxDecoration(
+                  //                   color: Colors.white,
+                  //                   borderRadius: BorderRadius.all(
+                  //                     const Radius.circular(20.0),
+                  //                   ),
+                  //                   shape: BoxShape.rectangle,
+                  //                   border: Border.all(
+                  //                     color: HexColor('E5E5E5'),
+                  //                     width: 2,
+                  //                   ),
+                  //                 ),
+                  //                 child: inputTextField(),
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         )
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
 
                   //NEXT BUTTON
                   Container(
@@ -197,10 +198,7 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                       borderRadius: BorderRadius.circular(40),
                       onTap: () {
                         // on click
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ThankYouInvestor()));
+                        openNextScreen();
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
@@ -270,5 +268,22 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
         LengthLimitingTextInputFormatter(10),
       ],
     );
+  }
+
+  void openNextScreen() {
+    Navigator.of(context).push(PageRouteBuilder(
+        pageBuilder: (context, animation, anotherAnimation) {
+          return ThankYouInvestor();
+        },
+        transitionDuration: Duration(milliseconds: 2000),
+        transitionsBuilder: (context, animation, anotherAnimation, child) {
+          animation = CurvedAnimation(
+              curve: Curves.fastLinearToSlowEaseIn, parent: animation);
+          return SlideTransition(
+            position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                .animate(animation),
+            child: child,
+          );
+        }));
   }
 }

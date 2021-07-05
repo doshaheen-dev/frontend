@@ -1,11 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:portfolio_management/screens/authentication/signup_details.dart';
-import 'package:portfolio_management/utilites/app_colors.dart';
-import 'package:provider/provider.dart';
 import 'package:portfolio_management/services/AuthenticationService.dart';
-
+import 'package:portfolio_management/services/NewAuthenticationService.dart';
+import 'package:portfolio_management/utilites/app_colors.dart';
 import 'package:portfolio_management/utilites/ui_widgets.dart';
+import 'package:provider/provider.dart';
 
 class QuickSignUp extends StatefulWidget {
   @override
@@ -105,10 +106,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
                       borderRadius: BorderRadius.circular(40),
                       onTap: () {
                         // on sign up click
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SignUpDetails()));
+                        openSignUpDetails(null);
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
@@ -163,13 +161,15 @@ class _QuickSignUpState extends State<QuickSignUp> {
   }
 
   InkWell createButton(type) {
+    print(type);
     return InkWell(
       borderRadius: BorderRadius.circular(40),
-      onTap: () {
+      onTap: () async {
         if (type == "Apple") {
           context.read<AuthenticationService>().signInWithApple();
         } else if (type == "Google") {
-          context.read<AuthenticationService>().signInWithGoogle();
+          await signInGoogle();
+          // context.read<AuthenticationService>().signInWithGoogle();
         }
       },
       child: Container(
@@ -185,6 +185,31 @@ class _QuickSignUpState extends State<QuickSignUp> {
         )),
       ),
     );
+  }
+
+  Future<void> signInGoogle() async {
+    User user = await Authentication.signInWithGoogle(context: context);
+    if (user != null) {
+      openSignUpDetails(user);
+
+      // Navigator.of(context).push(MaterialPageRoute(
+      //     builder: (context) => SignUpDetails(
+      //           user: user,
+      //         )));
+    } else {
+      final snackBar = SnackBar(
+        content: Text('Something went wrong. Try again!!'),
+        action: SnackBarAction(
+          label: 'Ok',
+          onPressed: () {},
+        ),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Authentication.signOut();
+    }
+    print("Google => $user");
+    // context.read<AuthenticationService>().signInWithGoogle();
   }
 
   // ignore: missing_return
@@ -208,5 +233,22 @@ class _QuickSignUpState extends State<QuickSignUp> {
         )
       ],
     );
+  }
+
+  void openSignUpDetails(User user) {
+    Navigator.of(context).push(PageRouteBuilder(
+        pageBuilder: (context, animation, anotherAnimation) {
+          return SignUpDetails(user: user);
+        },
+        transitionDuration: Duration(milliseconds: 2000),
+        transitionsBuilder: (context, animation, anotherAnimation, child) {
+          animation = CurvedAnimation(
+              curve: Curves.fastLinearToSlowEaseIn, parent: animation);
+          return SlideTransition(
+            position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                .animate(animation),
+            child: child,
+          );
+        }));
   }
 }

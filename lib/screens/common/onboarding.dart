@@ -1,16 +1,18 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:portfolio_management/screens/authentication/signin_otp.dart';
 import 'package:portfolio_management/screens/common/user_type.dart';
 import 'package:portfolio_management/utilites/app_colors.dart';
 import 'package:portfolio_management/utilites/ui_widgets.dart';
 
-class OnBoardingCircle extends StatefulWidget {
+class OnBoarding extends StatefulWidget {
   @override
-  _OnBoardingCircleState createState() => _OnBoardingCircleState();
+  _OnBoardingState createState() => _OnBoardingState();
 }
 
-class _OnBoardingCircleState extends State<OnBoardingCircle> {
+class _OnBoardingState extends State<OnBoarding> {
   int currentPageValue = 0;
   int previousPageValue = 0;
   PageController controller;
@@ -194,10 +196,25 @@ class _OnBoardingCircleState extends State<OnBoardingCircle> {
                         borderRadius: BorderRadius.circular(40),
                         onTap: () {
                           // Open  view
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => UserType()));
+                          Navigator.of(context).push(PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, anotherAnimation) {
+                                return UserType();
+                              },
+                              transitionDuration: Duration(milliseconds: 2000),
+                              transitionsBuilder: (context, animation,
+                                  anotherAnimation, child) {
+                                animation = CurvedAnimation(
+                                    curve: Curves.fastLinearToSlowEaseIn,
+                                    parent: animation);
+                                return SlideTransition(
+                                  position: Tween(
+                                          begin: Offset(1.0, 0.0),
+                                          end: Offset(0.0, 0.0))
+                                      .animate(animation),
+                                  child: child,
+                                );
+                              }));
                         },
                         child: Container(
                           margin: const EdgeInsets.only(
@@ -229,7 +246,33 @@ class _OnBoardingCircleState extends State<OnBoardingCircle> {
                                     style: setTextStyle(kDarkOrange),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
-                                        print('Privacy Policy"');
+                                        Navigator.of(context).push(
+                                            PageRouteBuilder(
+                                                pageBuilder: (context,
+                                                    animation,
+                                                    anotherAnimation) {
+                                                  return SignInOTP();
+                                                },
+                                                transitionDuration: Duration(
+                                                    milliseconds: 2000),
+                                                transitionsBuilder: (context,
+                                                    animation,
+                                                    anotherAnimation,
+                                                    child) {
+                                                  animation = CurvedAnimation(
+                                                      curve: Curves
+                                                          .fastLinearToSlowEaseIn,
+                                                      parent: animation);
+                                                  return SlideTransition(
+                                                    position: Tween(
+                                                            begin: Offset(
+                                                                1.0, 0.0),
+                                                            end: Offset(
+                                                                0.0, 0.0))
+                                                        .animate(animation),
+                                                    child: child,
+                                                  );
+                                                }));
                                       }),
                               ]),
                         ),

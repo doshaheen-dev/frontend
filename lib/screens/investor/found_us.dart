@@ -84,8 +84,7 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
         infoItemList = [];
         infoItemList.add(infoItem[_index].header);
         setState(() {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => InvestmentLimit()));
+          openInvestmentLimit();
         });
       },
       child: Container(
@@ -137,6 +136,23 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
         )
       ],
     );
+  }
+
+  void openInvestmentLimit() {
+    Navigator.of(context).push(PageRouteBuilder(
+        pageBuilder: (context, animation, anotherAnimation) {
+          return InvestmentLimit();
+        },
+        transitionDuration: Duration(milliseconds: 2000),
+        transitionsBuilder: (context, animation, anotherAnimation, child) {
+          animation = CurvedAnimation(
+              curve: Curves.fastLinearToSlowEaseIn, parent: animation);
+          return SlideTransition(
+            position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                .animate(animation),
+            child: child,
+          );
+        }));
   }
 }
 

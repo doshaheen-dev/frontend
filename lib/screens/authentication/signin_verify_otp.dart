@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:portfolio_management/screens/authentication/signup_quick.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:portfolio_management/screens/home.dart';
 import 'package:portfolio_management/utilites/app_colors.dart';
 
 import 'package:portfolio_management/utilites/ui_widgets.dart';
 
-class SignUpVerifyOTP extends StatefulWidget {
+class SignInVerifyOTP extends StatefulWidget {
   @override
-  _SignUpVerifyOTPState createState() => _SignUpVerifyOTPState();
+  _SignInVerifyOTPState createState() => _SignInVerifyOTPState();
 }
 
-class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
+class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
   String currentText = "";
   bool hasError = false;
 
@@ -49,7 +49,7 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                   Container(
                     margin: const EdgeInsets.only(top: 5.0, left: 25.0),
                     child: Text(
-                      "Enter the OTP sent to your mobile",
+                      "Enter the OTP sent to your mobile/email",
                       style: TextStyle(
                           color: textGrey,
                           fontWeight: FontWeight.normal,
@@ -112,7 +112,7 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                       onTap: () {
                         print("Completed " + currentText);
                         //Open new view
-                        openQuickSignUp();
+                        openHome();
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
@@ -138,10 +138,10 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
     );
   }
 
-  void openQuickSignUp() {
+  void openHome() {
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) {
-          return QuickSignUp();
+          return Home();
         },
         transitionDuration: Duration(milliseconds: 2000),
         transitionsBuilder: (context, animation, anotherAnimation, child) {

@@ -91,11 +91,7 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                           borderRadius: BorderRadius.circular(40),
                           onTap: () {
                             // on click
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        GeneralTermsPrivacy()));
+                            openGeneralTermsPrivacy();
                           },
                           child: Container(
                             width: MediaQuery.of(context).size.width,
@@ -439,6 +435,23 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
         )
       ],
     );
+  }
+
+  void openGeneralTermsPrivacy() {
+    Navigator.of(context).push(PageRouteBuilder(
+        pageBuilder: (context, animation, anotherAnimation) {
+          return GeneralTermsPrivacy();
+        },
+        transitionDuration: Duration(milliseconds: 2000),
+        transitionsBuilder: (context, animation, anotherAnimation, child) {
+          animation = CurvedAnimation(
+              curve: Curves.fastLinearToSlowEaseIn, parent: animation);
+          return SlideTransition(
+            position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                .animate(animation),
+            child: child,
+          );
+        }));
   }
 }
 

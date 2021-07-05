@@ -43,6 +43,8 @@ dependencies:
   # For OTP text field
   pin_code_fields: ^7.2.0 
   readmore: ^2.1.0
+  hb_check_code: ^0.0.2 
+
  
 
 dev_dependencies:
