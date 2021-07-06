@@ -2,35 +2,35 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleIdentifier</key>
-	<string></string>
 	<key>CLIENT_ID</key>
-	<string>99767968971-p591qischjtp3a20ckq3fqubqcumnmt5.apps.googleusercontent.com</string>
+	<string>955568098911-3lse8gdebe8cdf0qbu5ktgb9jms72g24.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.99767968971-p591qischjtp3a20ckq3fqubqcumnmt5</string>
+	<string>com.googleusercontent.apps.955568098911-3lse8gdebe8cdf0qbu5ktgb9jms72g24</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>955568098911-eb0limrat0pv73oh4q07usenmur0kieq.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAOq5QvjDhEqsKS0J4X3ftyZMzz_35XrLM</string>
+	<string>AIzaSyB3D_j130JzPKQ_sL21ib6UNp5JrXlgcMM</string>
 	<key>GCM_SENDER_ID</key>
-	<string>99767968971</string>
+	<string>955568098911</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.doshaheen.portfoliomanagement</string>
 	<key>PROJECT_ID</key>
-	<string>amicorp-316604</string>
+	<string>portfoliomanagement-7d9f3</string>
 	<key>STORAGE_BUCKET</key>
-	<string>amicorp-316604.appspot.com</string>
+	<string>portfoliomanagement-7d9f3.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:99767968971:ios:a0f41860fc2a8cc1f8674e</string>
+	<string>1:955568098911:ios:87a5d9707d10f6a72cd5ea</string>
 </dict>
 </plist>

@@ -70,12 +70,11 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
                         color: Colors.grey,
                         fontWeight: FontWeight.normal,
                       ),
-                      length: 4,
+                      length: 6,
                       animationType: AnimationType.none,
                       pinTheme: PinTheme(
                         shape: PinCodeFieldShape.underline,
                         selectedColor: Colors.grey,
-                        fieldWidth: 60,
                         inactiveColor: Colors.grey,
                         activeColor: Colors.orange,
                         activeFillColor: Colors.orange,

@@ -71,7 +71,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
                     height: 25,
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -101,74 +101,74 @@ class _SignUpOTPState extends State<SignUpOTP> {
                     height: 30.0,
                   ),
                   //CAPTCHA
-                  Container(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 25.0,
-                        bottom: 20.0,
-                        right: 25.0,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Captcha",
-                            style: TextStyle(
-                                color: headingBlack,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20.0,
-                                fontFamily: 'Poppins-Light'),
-                          ),
-                          SizedBox(
-                            height: 20.0,
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                    margin: EdgeInsets.only(right: 10.0),
-                                    height: 60,
-                                    decoration: BoxDecoration(
-                                        color: HexColor('E5E5E5'),
-                                        borderRadius: BorderRadius.all(
-                                          const Radius.circular(20.0),
-                                        )),
-                                    child: Container(
-                                        alignment: Alignment.center,
-                                        child: GestureDetector(
-                                            behavior: HitTestBehavior.opaque,
-                                            onTap: () => setState(() {}),
-                                            child: HBCheckCode(
-                                              code: code,
-                                            ))),
-                                  )),
-                              Expanded(
-                                flex: 1,
-                                child: Container(
-                                  margin: EdgeInsets.only(left: 10.0),
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 60,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.all(
-                                      const Radius.circular(20.0),
-                                    ),
-                                    shape: BoxShape.rectangle,
-                                    border: Border.all(
-                                      color: HexColor('E5E5E5'),
-                                      width: 2,
-                                    ),
-                                  ),
-                                  child: inputTextField(),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.only(
+                  //       left: 25.0,
+                  //       bottom: 20.0,
+                  //       right: 25.0,
+                  //     ),
+                  //     child: Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //       children: [
+                  //         Text(
+                  //           "Captcha",
+                  //           style: TextStyle(
+                  //               color: headingBlack,
+                  //               fontWeight: FontWeight.bold,
+                  //               fontSize: 20.0,
+                  //               fontFamily: 'Poppins-Light'),
+                  //         ),
+                  //         SizedBox(
+                  //           height: 20.0,
+                  //         ),
+                  //         Row(
+                  //           children: [
+                  //             Expanded(
+                  //                 flex: 1,
+                  //                 child: Container(
+                  //                   margin: EdgeInsets.only(right: 10.0),
+                  //                   height: 60,
+                  //                   decoration: BoxDecoration(
+                  //                       color: HexColor('E5E5E5'),
+                  //                       borderRadius: BorderRadius.all(
+                  //                         const Radius.circular(20.0),
+                  //                       )),
+                  //                   child: Container(
+                  //                       alignment: Alignment.center,
+                  //                       child: GestureDetector(
+                  //                           behavior: HitTestBehavior.opaque,
+                  //                           onTap: () => setState(() {}),
+                  //                           child: HBCheckCode(
+                  //                             code: code,
+                  //                           ))),
+                  //                 )),
+                  //             Expanded(
+                  //               flex: 1,
+                  //               child: Container(
+                  //                 margin: EdgeInsets.only(left: 10.0),
+                  //                 width: MediaQuery.of(context).size.width,
+                  //                 height: 60,
+                  //                 decoration: BoxDecoration(
+                  //                   color: Colors.white,
+                  //                   borderRadius: BorderRadius.all(
+                  //                     const Radius.circular(20.0),
+                  //                   ),
+                  //                   shape: BoxShape.rectangle,
+                  //                   border: Border.all(
+                  //                     color: HexColor('E5E5E5'),
+                  //                     width: 2,
+                  //                   ),
+                  //                 ),
+                  //                 child: inputTextField(),
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         )
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
 
                   //SIGN UP BUTTON
                   Container(
@@ -178,7 +178,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
                       borderRadius: BorderRadius.circular(40),
                       onTap: () {
                         // Open otp view
-                        _submitPhoneNumber(phoneController.text);
+                        _submitPhoneNumber("9826043285"); //phoneController.text
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
@@ -354,7 +354,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
     }
 
     void codeSent(String verificationId, [int code]) {
-      print('codeSent');
+      print('codeSent -> ${code.toString()}');
       this._verificationId = verificationId;
       print(verificationId);
       this._code = code;

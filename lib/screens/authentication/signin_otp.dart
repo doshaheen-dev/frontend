@@ -15,7 +15,8 @@ class _SignInOTPState extends State<SignInOTP> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
-    return Scaffold(
+    return MaterialApp(
+        home: Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -59,7 +60,7 @@ class _SignInOTPState extends State<SignInOTP> {
                     height: 25,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
                           flex: 1,
@@ -69,8 +70,11 @@ class _SignInOTPState extends State<SignInOTP> {
                             decoration: customDecoration(),
                             child: dropdownField(),
                           )),
+                      Container(
+                        width: 1,
+                      ),
                       Expanded(
-                        flex: 3,
+                        flex: 2,
                         child: Container(
                           margin: const EdgeInsets.only(
                               top: 5.0, bottom: 20, right: 25.0),
@@ -113,7 +117,7 @@ class _SignInOTPState extends State<SignInOTP> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   BoxDecoration customDecoration() {

@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:portfolio_management/screens/common/onboarding.dart';
-import 'package:portfolio_management/services/AuthenticationService.dart';
+import 'package:portfolio_management/services/NewAuthenticationService.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -19,12 +19,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<AuthenticationService>(
-          create: (_) => AuthenticationService(FirebaseAuth.instance),
+        Provider<Authentication>(
+          create: (_) => Authentication(FirebaseAuth.instance),
         ),
         StreamProvider(
-          create: (context) =>
-              context.read<AuthenticationService>().authStateChanges,
+          create: (context) => context.read<Authentication>().authStateChanges,
           initialData: null,
         )
       ],

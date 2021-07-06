@@ -37,7 +37,7 @@ class _UserTypeState extends State<UserType> {
                       children: <Widget>[
                         Container(
                           color: Colors.white,
-                          margin: const EdgeInsets.only(top: 120.0, left: 25.0),
+                          margin: const EdgeInsets.only(top: 80.0, left: 25.0),
                           child: Text(
                             "I am a",
                             style: TextStyle(

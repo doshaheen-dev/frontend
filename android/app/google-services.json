@@ -1,34 +1,57 @@
 {
   "project_info": {
-    "project_number": "99767968971",
-    "project_id": "amicorp-316604",
-    "storage_bucket": "amicorp-316604.appspot.com"
+    "project_number": "955568098911",
+    "project_id": "portfoliomanagement-7d9f3",
+    "storage_bucket": "portfoliomanagement-7d9f3.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:99767968971:android:7505e95ddb20cf11f8674e",
+        "mobilesdk_app_id": "1:955568098911:android:e5a66ff4f055fd562cd5ea",
         "android_client_info": {
           "package_name": "com.doshaheen.portfoliomanagement"
         }
       },
       "oauth_client": [
         {
-          "client_id": "99767968971-191q9pdtapot2d387cfgos5eakp1qmnc.apps.googleusercontent.com",
+          "client_id": "955568098911-gh6mv8djdgefikm7o6pfi8kn6gu260jf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.doshaheen.portfoliomanagement",
+            "certificate_hash": "14e5194f050c3e17acb3af2715e9463a044e63b0"
+          }
+        },
+        {
+          "client_id": "955568098911-uq0lp66acq3tpopkhapjmlpd35l4jb6c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.doshaheen.portfoliomanagement",
+            "certificate_hash": "a50efadd38997eb70d99bc22e729a20786a9eb7d"
+          }
+        },
+        {
+          "client_id": "955568098911-fjbv9ku16n2e53ccekarl71a7s5h1j23.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA8HphdI9zRj8Kc-m8ZsS1ZX2Er7CuQTXw"
+          "current_key": "AIzaSyD3x5tEBz41s-e7V226pAYvZarvqW4XPOQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "99767968971-191q9pdtapot2d387cfgos5eakp1qmnc.apps.googleusercontent.com",
+              "client_id": "955568098911-fjbv9ku16n2e53ccekarl71a7s5h1j23.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "955568098911-3lse8gdebe8cdf0qbu5ktgb9jms72g24.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.doshaheen.portfoliomanagement"
+              }
             }
           ]
         }

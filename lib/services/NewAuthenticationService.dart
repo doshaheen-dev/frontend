@@ -6,6 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class Authentication {
+  final FirebaseAuth firebaseAuth;
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+  Authentication(this.firebaseAuth);
+
+  /// Changed to idTokenChanges as it updates depending on more cases.
+  Stream<User> get authStateChanges => firebaseAuth.idTokenChanges();
+
   static Future<FirebaseApp> initializeFirebase() async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
     return firebaseApp;
