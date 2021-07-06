@@ -178,7 +178,8 @@ class _SignUpOTPState extends State<SignUpOTP> {
                       borderRadius: BorderRadius.circular(40),
                       onTap: () {
                         // Open otp view
-                        _submitPhoneNumber("9826043285"); //phoneController.text
+                        _submitPhoneNumber(phoneController.text); //phoneController.text
+                       // openSignUpVerifyOTP();
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,

@@ -166,7 +166,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
       borderRadius: BorderRadius.circular(40),
       onTap: () async {
         if (type == "Apple") {
-          context.read<AuthenticationService>().signInWithApple();
+          await context.read<Authentication>().signInWithApple();
         } else if (type == "Google") {
           await signInGoogle();
           // context.read<AuthenticationService>().signInWithGoogle();
