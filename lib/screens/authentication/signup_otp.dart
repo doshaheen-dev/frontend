@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hb_check_code/hb_check_code.dart';
@@ -15,6 +16,8 @@ class SignUpOTP extends StatefulWidget {
 }
 
 class _SignUpOTPState extends State<SignUpOTP> {
+  TextEditingController phoneController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     String code = "";
@@ -67,28 +70,33 @@ class _SignUpOTPState extends State<SignUpOTP> {
                   SizedBox(
                     height: 25,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                          flex: 1,
+                  Container(
+                    width: MediaQuery.of(context).size.height,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                            flex: 1,
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                  top: 5.0, left: 25.0, bottom: 20, right: 5.0),
+                              decoration: customDecoration(),
+                              child: dropdownField(),
+                            )),
+                        Expanded(
+                          flex: 2,
                           child: Container(
                             margin: const EdgeInsets.only(
-                                top: 5.0, left: 25.0, bottom: 20, right: 5.0),
+                                top: 5.0, bottom: 20, right: 25.0),
                             decoration: customDecoration(),
-                            child: dropdownField(),
-                          )),
-                      Expanded(
-                        flex: 3,
-                        child: Container(
-                          margin: const EdgeInsets.only(
-                              top: 5.0, bottom: 20, right: 25.0),
-                          decoration: customDecoration(),
-                          child: labelTextField("Mobile Number", null),
+                            child: labelTextField(
+                                "Mobile Number", phoneController),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
+
                   SizedBox(
                     height: 30.0,
                   ),
@@ -170,7 +178,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
                       borderRadius: BorderRadius.circular(40),
                       onTap: () {
                         // Open otp view
-                        openSignUpVerifyOTP();
+                        _submitPhoneNumber(phoneController.text);
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
@@ -312,5 +320,74 @@ class _SignUpOTPState extends State<SignUpOTP> {
             child: child,
           );
         }));
+  }
+
+  AuthCredential _phoneAuthCredential;
+  String _verificationId;
+  int _code;
+
+  Future<void> _submitPhoneNumber(String text) async {
+    /// NOTE: Either append your phone number country code or add in the code itself
+    /// Since I'm in India we use "+91 " as prefix `phoneNumber`
+    String phoneNumber = "+91 " + text.toString().trim();
+    print(phoneNumber);
+
+    /// The below functions are the callbacks, separated so as to make code more redable
+    void verificationCompleted(AuthCredential phoneAuthCredential) {
+      print('verificationCompleted');
+
+      this._phoneAuthCredential = phoneAuthCredential;
+      print(phoneAuthCredential);
+    }
+
+    void verificationFailed(FirebaseAuthException error) {
+      print('verificationFailed ${error}');
+      final snackBar = SnackBar(
+        content: Text('Something went wrong. Try again!!'),
+        action: SnackBarAction(
+          label: 'Ok',
+          onPressed: () {},
+        ),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+
+    void codeSent(String verificationId, [int code]) {
+      print('codeSent');
+      this._verificationId = verificationId;
+      print(verificationId);
+      this._code = code;
+      print("Code sent ${code.toString()}");
+
+      openSignUpVerifyOTP();
+    }
+
+    void codeAutoRetrievalTimeout(String verificationId) {
+      print('codeAutoRetrievalTimeout');
+      print(verificationId);
+    }
+
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      /// Make sure to prefix with your country code
+      phoneNumber: phoneNumber,
+
+      /// `seconds` didn't work. The underlying implementation code only reads in `millisenconds`
+      timeout: Duration(milliseconds: 10000),
+
+      /// If the SIM (with phoneNumber) is in the current device this function is called.
+      /// This function gives `AuthCredential`. Moreover `login` function can be called from this callback
+      /// When this function is called there is no need to enter the OTP, you can click on Login button to sigin directly as the device is now verified
+      verificationCompleted: verificationCompleted,
+
+      /// Called when the verification is failed
+      verificationFailed: verificationFailed,
+
+      /// This is called after the OTP is sent. Gives a `verificationId` and `code`
+      codeSent: codeSent,
+
+      /// After automatic code retrival `tmeout` this function is called
+      codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
+    ); // All the callbacks are above
   }
 }

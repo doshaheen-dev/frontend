@@ -41,17 +41,17 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-<!-- Google Sign-in Section -->
-<key>CFBundleURLTypes</key>
-<array>
-	<dict>
-		<key>CFBundleTypeRole</key>
-		<string>Editor</string>
-		<key>CFBundleURLSchemes</key>
-		<array>
-			<string>com.googleusercontent.apps.955568098911-3lse8gdebe8cdf0qbu5ktgb9jms72g24</string>
-		</array>
-	</dict>
-</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.955568098911-3lse8gdebe8cdf0qbu5ktgb9jms72g24</string>
+				<string>app-1-99767968971-ios-a0f41860fc2a8cc1f8674e</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

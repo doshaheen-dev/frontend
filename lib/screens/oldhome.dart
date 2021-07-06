@@ -18,7 +18,7 @@ class _HomeState extends State<Home> {
     Explore(),
     Requests(),
     ChatBot(),
-    ProfilePage(DUMMY_SERVICES),
+    //ProfilePage(DUMMY_SERVICES),
   ];
 
   @override

@@ -36,7 +36,7 @@ dependencies:
   http: ^0.13.3
   crypto: ^3.0.1
   shared_preferences: ^2.0.6
-  better_player: ^0.0.69
+  #better_player: ^0.0.69
   # for chat
   dialogflow_flutter: ^0.0.3
   bubble: ^1.1.9+1
