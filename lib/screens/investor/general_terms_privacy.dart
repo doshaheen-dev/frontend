@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:portfolio_management/screens/authentication/signup_pan_details.dart';
 import 'package:portfolio_management/screens/investor/thank_you.dart';
 
 import 'package:portfolio_management/utilites/app_colors.dart';
-import 'package:portfolio_management/utilites/hex_color.dart';
 import 'package:portfolio_management/utilites/ui_widgets.dart';
 import 'package:readmore/readmore.dart';
 
@@ -28,6 +26,12 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 0,
+        elevation: 0.0,
+        backgroundColor: Color(0xffffffff),
+      ),
+      bottomNavigationBar: BottomAppBar(),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(

@@ -19,4 +19,7 @@ final textDarkOrange = HexColor('FCFCFC');
 final kDarkOrange = HexColor('f97156');
 final kLightOrange = HexColor('fc8e53');
 
+final kHomeOrange = HexColor('FFAB94');
+final kHomeOrange1 = HexColor('FF7D59');
+
 final kIndicatorInactive = HexColor('404040');

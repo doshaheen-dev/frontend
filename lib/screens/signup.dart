@@ -90,17 +90,17 @@ class _SignUpState extends State<SignUp> {
                   InkWell(
                     borderRadius: BorderRadius.circular(20),
                     onTap: () async {
-                      final dynamic result = await context
-                          .read<AuthenticationService>()
-                          .signUpWithEmailAndPassword(
-                            email: emailController.text.trim(),
-                            password: passwordController.text.trim(),
-                          );
+                      // final dynamic result = await context
+                      //     .read<AuthenticationService>()
+                      //     .signUpWithEmailAndPassword(
+                      //       email: emailController.text.trim(),
+                      //       password: passwordController.text.trim(),
+                      //     );
 
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => Login()),
-                      );
+                      // Navigator.pushReplacement(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => Login()),
+                      // );
                     },
                     splashColor: Colors.white,
                     hoverColor: colorGreen,

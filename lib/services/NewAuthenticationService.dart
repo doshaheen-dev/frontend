@@ -137,6 +137,34 @@ class Authentication {
     }
   }
 
+  // Apple sign for Android
+  Future<void> appleAuthenticationAndroid() async {
+    final appleIdCredential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+      webAuthenticationOptions: WebAuthenticationOptions(
+        clientId: 'com.doshaheen.portfoliomanagementservice',
+        redirectUri: Uri.parse(''),
+      ),
+    );
+    // 'intent://callback?${name}#Intent;package=com.doshaheen.portfoliomanagement;scheme=signinwithapple;end',
+
+    // 'https://portfoliomanagement-7d9f3.firebaseapp.com/__/auth/handler',
+
+    final oAuthCredential = OAuthProvider('apple.com').credential(
+      idToken: appleIdCredential.identityToken,
+      accessToken: appleIdCredential.authorizationCode,
+    );
+
+// Use the OAuthCredential to sign in to Firebase.
+    final userCredential =
+        await FirebaseAuth.instance.signInWithCredential(oAuthCredential);
+
+    print("Apple Android:- ${userCredential}");
+  }
+
   static Future<void> signOut() async {
     print("logged out");
     await FirebaseAuth.instance.signOut();

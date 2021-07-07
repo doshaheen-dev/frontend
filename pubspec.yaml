@@ -43,7 +43,10 @@ dependencies:
   # For OTP text field
   pin_code_fields: ^7.2.0 
   readmore: ^2.1.0
+  # Captcha
   hb_check_code: ^0.0.2 
+  # Progress Indicator
+  flutter_progress_hud: ^2.0.0
 
  
 
@@ -67,6 +70,7 @@ flutter:
    - assets/
    - assets/images/
    - assets/images/onboarding/
+   - assets/images/dashboard/
    - assets/images/investor/
    - assets/images/social_media/
    - assets/images/company_logo/

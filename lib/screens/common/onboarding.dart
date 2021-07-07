@@ -18,6 +18,8 @@ class _OnBoardingState extends State<OnBoarding> {
   PageController controller;
   double _moveBar = 0.0;
 
+  Color statusBarColor;
+
   @override
   void initState() {
     super.initState();
@@ -31,15 +33,19 @@ class _OnBoardingState extends State<OnBoarding> {
   @override
   Widget build(BuildContext context) {
     if (currentPageValue == 0) {
+      statusBarColor = statusGrey;
       SystemChrome.setSystemUIOverlayStyle(
           SystemUiOverlayStyle.dark.copyWith(statusBarColor: statusGrey));
     } else if (currentPageValue == 1) {
+      statusBarColor = statusGrey1;
       SystemChrome.setSystemUIOverlayStyle(
           SystemUiOverlayStyle.dark.copyWith(statusBarColor: statusGrey1));
     } else if (currentPageValue == 2) {
+      statusBarColor = statusGrey2;
       SystemChrome.setSystemUIOverlayStyle(
           SystemUiOverlayStyle.dark.copyWith(statusBarColor: statusGrey2));
     } else {
+      statusBarColor = statusGrey;
       SystemChrome.setSystemUIOverlayStyle(
           SystemUiOverlayStyle.dark.copyWith(statusBarColor: statusGrey));
     }
@@ -137,6 +143,12 @@ class _OnBoardingState extends State<OnBoarding> {
     return MaterialApp(
         theme: ThemeData(backgroundColor: Colors.white),
         home: Scaffold(
+          appBar: AppBar(
+            toolbarHeight: 0,
+            elevation: 0.0,
+            backgroundColor: (statusBarColor),
+          ),
+          bottomNavigationBar: BottomAppBar(),
           body: SafeArea(
             child: Column(
               children: [
@@ -246,33 +258,7 @@ class _OnBoardingState extends State<OnBoarding> {
                                     style: setTextStyle(kDarkOrange),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
-                                        Navigator.of(context).push(
-                                            PageRouteBuilder(
-                                                pageBuilder: (context,
-                                                    animation,
-                                                    anotherAnimation) {
-                                                  return SignInOTP();
-                                                },
-                                                transitionDuration: Duration(
-                                                    milliseconds: 2000),
-                                                transitionsBuilder: (context,
-                                                    animation,
-                                                    anotherAnimation,
-                                                    child) {
-                                                  animation = CurvedAnimation(
-                                                      curve: Curves
-                                                          .fastLinearToSlowEaseIn,
-                                                      parent: animation);
-                                                  return SlideTransition(
-                                                    position: Tween(
-                                                            begin: Offset(
-                                                                1.0, 0.0),
-                                                            end: Offset(
-                                                                0.0, 0.0))
-                                                        .animate(animation),
-                                                    child: child,
-                                                  );
-                                                }));
+                                        openSignIn(context);
                                       }),
                               ]),
                         ),
@@ -284,6 +270,23 @@ class _OnBoardingState extends State<OnBoarding> {
             ),
           ),
         ));
+  }
+
+  void openSignIn(BuildContext context) {
+    Navigator.of(context).push(PageRouteBuilder(
+        pageBuilder: (context, animation, anotherAnimation) {
+          return SignInOTP();
+        },
+        transitionDuration: Duration(milliseconds: 1000),
+        transitionsBuilder: (context, animation, anotherAnimation, child) {
+          animation = CurvedAnimation(
+              curve: Curves.fastLinearToSlowEaseIn, parent: animation);
+          return SlideTransition(
+            position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                .animate(animation),
+            child: child,
+          );
+        }));
   }
 
   Widget circleBar(bool isActive, int currentPageValue) {

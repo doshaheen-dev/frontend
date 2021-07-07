@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:portfolio_management/screens/signup.dart';
 import 'package:portfolio_management/services/AuthenticationService.dart';
+import 'package:portfolio_management/services/NewAuthenticationService.dart';
 import 'package:provider/provider.dart';
 // import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 // import 'package:http/http.dart' as http;
@@ -107,10 +108,10 @@ class _LoginState extends State<Login> {
                   InkWell(
                     borderRadius: BorderRadius.circular(20),
                     onTap: () {
-                      context.read<AuthenticationService>().signIn(
-                            email: emailController.text.trim(),
-                            password: passwordController.text.trim(),
-                          );
+                      // context.read<Authentication>().signIn(
+                      //       email: emailController.text.trim(),
+                      //       password: passwordController.text.trim(),
+                      //     );
                     },
                     splashColor: Colors.white,
                     hoverColor: colorGreen,
@@ -249,10 +250,7 @@ class _LoginState extends State<Login> {
     return InkWell(
       onTap: () {
         if (type == 'google') {
-          context.read<AuthenticationService>().signInWithGoogle();
-        } else if (type == 'apple') {
-          context.read<AuthenticationService>().signInWithApple();
-        }
+        } else if (type == 'apple') {}
       },
       child: Container(
         padding: EdgeInsets.all(15),

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:portfolio_management/screens/explore.dart';
 import 'package:portfolio_management/screens/requests/requests.dart';
 import 'package:portfolio_management/utilites/app_colors.dart';
+import 'package:portfolio_management/utilites/hex_color.dart';
+
+import '../chat.dart';
+import '../explore.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -10,55 +13,226 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  int _currentTab = 0;
+
+  List<Widget> _children = [
+    Explore(),
+    Requests(),
+    ChatBot(),
+    Explore(),
+    Requests(),
+  ];
+
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Header"),
-      ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: Container(
-              alignment: Alignment.center,
-              child: Text("Hello"),
+      backgroundColor: Colors.white,
+      body: _children[_currentTab],
+      bottomNavigationBar: Container(
+        height: 56,
+        margin: EdgeInsets.symmetric(vertical: 24, horizontal: 12),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: Container(
+                margin: EdgeInsets.only(left: 10.0, right: 10.0),
+                child: Image.asset('assets/images/dashboard/home.png'),
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [kHomeOrange, kHomeOrange1],
+                    begin: FractionalOffset.centerLeft,
+                    end: FractionalOffset.centerRight,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: HexColor('#C3C8CD'),
+                      offset: Offset(-4.0, -2.0),
+                      blurRadius: 16.0,
+                    ),
+                    BoxShadow(
+                      color: HexColor('#50000000'),
+                      offset: Offset(4.0, 4.0),
+                      blurRadius: 18.0,
+                    ),
+                  ],
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+              ),
             ),
-          ),
-          Container(
-            height: 50,
-            width: double.maxFinite,
-            decoration: BoxDecoration(
-                color: Colors.deepOrange,
-                borderRadius:
-                    BorderRadius.vertical(top: Radius.circular(20.0))),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.arrow_forward),
-                  onPressed: () {},
+            Expanded(
+              flex: 1,
+              child: Container(
+                margin: EdgeInsets.only(left: 10.0, right: 10.0),
+                child: Image.asset('assets/images/dashboard/suitcase.png'),
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [kHomeOrange, kHomeOrange1],
+                    begin: FractionalOffset.centerLeft,
+                    end: FractionalOffset.centerRight,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: HexColor('#C3C8CD'),
+                      offset: Offset(-4.0, -2.0),
+                      blurRadius: 16.0,
+                    ),
+                    BoxShadow(
+                      color: HexColor('#50000000'),
+                      offset: Offset(4.0, 4.0),
+                      blurRadius: 18.0,
+                    ),
+                  ],
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16.0),
                 ),
-                IconButton(
-                  icon: Icon(Icons.arrow_downward),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: Icon(Icons.arrow_left),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: Icon(Icons.arrow_upward),
-                  onPressed: () {},
-                ),
-              ],
+              ),
             ),
-          )
-        ],
+            Expanded(
+              flex: 1,
+              child: Container(
+                margin: EdgeInsets.only(left: 10.0, right: 10.0),
+                child: Image.asset('assets/images/dashboard/money_home.png'),
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [kHomeOrange, kHomeOrange1],
+                    begin: FractionalOffset.centerLeft,
+                    end: FractionalOffset.centerRight,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: HexColor('#C3C8CD'),
+                      offset: Offset(-4.0, -2.0),
+                      blurRadius: 16.0,
+                    ),
+                    BoxShadow(
+                      color: HexColor('#50000000'),
+                      offset: Offset(4.0, 4.0),
+                      blurRadius: 18.0,
+                    ),
+                  ],
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                margin: EdgeInsets.only(left: 10.0, right: 10.0),
+                child: Image.asset('assets/images/dashboard/thumbs_up.png'),
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [kHomeOrange, kHomeOrange1],
+                    begin: FractionalOffset.centerLeft,
+                    end: FractionalOffset.centerRight,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: HexColor('#C3C8CD'),
+                      offset: Offset(-4.0, -2.0),
+                      blurRadius: 16.0,
+                    ),
+                    BoxShadow(
+                      color: HexColor('#50000000'),
+                      offset: Offset(4.0, 4.0),
+                      blurRadius: 18.0,
+                    ),
+                  ],
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                margin: EdgeInsets.only(left: 10.0, right: 10.0),
+                child: Image.asset('assets/images/dashboard/profile.png'),
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [kHomeOrange, kHomeOrange1],
+                    begin: FractionalOffset.centerLeft,
+                    end: FractionalOffset.centerRight,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: HexColor('#C3C8CD'),
+                      offset: Offset(-4.0, -2.0),
+                      blurRadius: 16.0,
+                    ),
+                    BoxShadow(
+                      color: HexColor('#50000000'),
+                      offset: Offset(4.0, 4.0),
+                      blurRadius: 18.0,
+                    ),
+                  ],
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
+
+// Column(
+//         children: <Widget>[
+//           Expanded(
+//             child: Container(
+//               alignment: Alignment.center,
+//               child: Text("Hello"),
+//             ),
+//           ),
+//           Container(
+//             height: 50,
+//             width: double.maxFinite,
+//             decoration: BoxDecoration(
+//                 color: Colors.deepOrange,
+//                 borderRadius:
+//                     BorderRadius.vertical(top: Radius.circular(20.0))),
+//             child: Row(
+//               mainAxisSize: MainAxisSize.max,
+//               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//               children: <Widget>[
+//                 IconButton(
+//                   icon: Icon(Icons.arrow_forward),
+//                   onPressed: () {},
+//                 ),
+//                 IconButton(
+//                   icon: Icon(Icons.arrow_downward),
+//                   onPressed: () {},
+//                 ),
+//                 IconButton(
+//                   icon: Icon(Icons.arrow_left),
+//                   onPressed: () {},
+//                 ),
+//                 IconButton(
+//                   icon: Icon(Icons.arrow_upward),
+//                   onPressed: () {},
+//                 ),
+//               ],
+//             ),
+//           )
+//         ],
+//       ),
 //   @override
 //   Widget build(BuildContext context) {
 //     int _currentTab = 0;

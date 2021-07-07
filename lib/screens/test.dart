@@ -86,12 +86,7 @@ class _SignUpEmailState extends State<SignUpEmail> {
                           top: 5.0, left: 25.0, bottom: 20, right: 25.0),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(40),
-                        onTap: () {
-                          context.read<AuthenticationService>().signIn(
-                                email: emailController.text.trim(),
-                                password: passwordController.text.trim(),
-                              );
-                        },
+                        onTap: () {},
                         child: Container(
                           width: MediaQuery.of(context).size.width,
                           height: 60,
@@ -175,10 +170,7 @@ class _SignUpEmailState extends State<SignUpEmail> {
       borderRadius: BorderRadius.circular(40),
       onTap: () {
         if (type == "Apple") {
-          context.read<AuthenticationService>().signInWithApple();
-        } else if (type == "Google") {
-          context.read<AuthenticationService>().signInWithGoogle();
-        }
+        } else if (type == "Google") {}
       },
       child: Container(
         width: MediaQuery.of(context).size.width,
