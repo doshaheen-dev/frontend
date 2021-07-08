@@ -348,10 +348,10 @@ class _SignUpOTPState extends State<SignUpOTP> {
     );
   }
 
-  void openSignUpVerifyOTP() {
+  void openSignUpVerifyOTP([String verificationId]) {
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) {
-          return SignUpVerifyOTP();
+          return SignUpVerifyOTP(verificationId: verificationId);
         },
         transitionDuration: Duration(milliseconds: 2000),
         transitionsBuilder: (context, animation, anotherAnimation, child) {
@@ -391,7 +391,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
       progress?.showWithText('OTP Sent Successfully...');
       Future.delayed(Duration(milliseconds: 2), () {
         progress.dismiss();
-        openSignUpVerifyOTP();
+        openSignUpVerifyOTP(verificationId);
       });
     }
 
