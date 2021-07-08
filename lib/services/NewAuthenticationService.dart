@@ -113,23 +113,21 @@ class Authentication {
       final authResult =
           await firebaseAuth.signInWithCredential(oauthCredential);
 
-      final displayName =
-          '${appleCredential.givenName} ${appleCredential.familyName}';
-      final userEmail = '${appleCredential.email}';
+      final displayName = '${authResult.user.displayName}';
+      final userEmail = '${authResult.user.email}';
       print("Name: $displayName");
       print("Email: $userEmail");
 
+      final User firebaseUser = authResult.user;
       final prefs = await SharedPreferences.getInstance();
       if (displayName != null) {
         prefs.setString("displayName", displayName);
+        await firebaseUser.updateProfile(displayName: displayName);
       }
       if (userEmail != null) {
         prefs.setString("userEmail", userEmail);
+        await firebaseUser.updateEmail(userEmail);
       }
-
-      final User firebaseUser = authResult.user;
-      await firebaseUser.updateProfile(displayName: displayName);
-      await firebaseUser.updateEmail(userEmail);
 
       return firebaseUser;
     } catch (exception) {
@@ -138,31 +136,52 @@ class Authentication {
   }
 
   // Apple sign for Android
-  Future<void> appleAuthenticationAndroid() async {
-    final appleIdCredential = await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,
-      ],
-      webAuthenticationOptions: WebAuthenticationOptions(
-        clientId: 'com.doshaheen.portfoliomanagementservice',
-        redirectUri: Uri.parse(''),
-      ),
-    );
-    // 'intent://callback?${name}#Intent;package=com.doshaheen.portfoliomanagement;scheme=signinwithapple;end',
+  Future<User> appleAuthenticationAndroid() async {
+    try {
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        webAuthenticationOptions: WebAuthenticationOptions(
+          clientId: 'com.doshaheen.portfoliomanagementservice',
+          redirectUri: Uri.parse(
+            'https://fern-protective-smash.glitch.me/callbacks/sign_in_with_apple',
+          ),
+        ),
+      );
 
-    // 'https://portfoliomanagement-7d9f3.firebaseapp.com/__/auth/handler',
-
-    final oAuthCredential = OAuthProvider('apple.com').credential(
-      idToken: appleIdCredential.identityToken,
-      accessToken: appleIdCredential.authorizationCode,
-    );
+      final oAuthCredential = OAuthProvider('apple.com').credential(
+        idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
+      );
 
 // Use the OAuthCredential to sign in to Firebase.
-    final userCredential =
-        await FirebaseAuth.instance.signInWithCredential(oAuthCredential);
+      final authResult =
+          await FirebaseAuth.instance.signInWithCredential(oAuthCredential);
 
-    print("Apple Android:- ${userCredential}");
+      // print("Apple Android:- $authResult");
+
+      final displayName = '${authResult.user.displayName}';
+      final userEmail = '${authResult.user.email}';
+      // print("Name: $displayName");
+      // print("Email: $userEmail");
+
+      final User firebaseUser = authResult.user;
+      final prefs = await SharedPreferences.getInstance();
+      if (displayName != null) {
+        prefs.setString("displayName", displayName);
+        await firebaseUser.updateProfile(displayName: displayName);
+      }
+      if (userEmail != null) {
+        prefs.setString("userEmail", userEmail);
+        await firebaseUser.updateEmail(userEmail);
+      }
+
+      return firebaseUser;
+    } catch (exception) {
+      print(exception);
+    }
   }
 
   static Future<void> signOut() async {
