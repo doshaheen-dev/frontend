@@ -47,6 +47,7 @@ dependencies:
   hb_check_code: ^0.0.2 
   # Progress Indicator
   flutter_progress_hud: ^2.0.0
+  encrypt: ^5.0.0
 
  
 
