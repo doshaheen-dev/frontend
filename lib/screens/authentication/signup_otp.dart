@@ -213,6 +213,9 @@ class _SignUpOTPState extends State<SignUpOTP> {
                               progress = ProgressHUD.of(context);
                               // progress?.show();
                               progress?.showWithText('Sending OTP...');
+                              String phoneNumber = "+91 " +
+                                  phoneController.text.toString().trim();
+                              //  openSignUpVerifyOTP("", phoneNumber);
                               _submitPhoneNumber(phoneController.text);
                             },
                             style: ElevatedButton.styleFrom(
@@ -348,10 +351,11 @@ class _SignUpOTPState extends State<SignUpOTP> {
     );
   }
 
-  void openSignUpVerifyOTP([String verificationId]) {
+  void openSignUpVerifyOTP([String verificationId, String phoneNumber]) {
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) {
-          return SignUpVerifyOTP(verificationId: verificationId);
+          return SignUpVerifyOTP(
+              verificationId: verificationId, phoneNumber: phoneNumber);
         },
         transitionDuration: Duration(milliseconds: 2000),
         transitionsBuilder: (context, animation, anotherAnimation, child) {

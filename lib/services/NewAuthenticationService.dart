@@ -7,6 +7,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
+import 'package:portfolio_management/services/authentication/verify_phone.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -188,5 +191,44 @@ class Authentication {
     print("logged out");
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
+  }
+
+  static String baseUrl =
+      "http://ec2-65-2-69-222.ap-south-1.compute.amazonaws.com:3000/api/sign-up";
+  var client = new http.Client();
+
+  static Future<VerifyPhoneNumber> verifyPhoneNumber(
+      String token, String mobileNumber) async {
+    Uri url = Uri.parse("$baseUrl/verify/firebase/mobile_no");
+    final Response response = await http.post(
+      url,
+      body: jsonEncode(<String, dynamic>{
+        'idToken': token,
+        'mobile_no': mobileNumber,
+      }),
+    );
+
+    print("Json:- ${jsonDecode(response.body)}");
+    VerifyPhoneNumber userDetails =
+        VerifyPhoneNumber.fromJson(jsonDecode(response.body));
+    print("userDetails => ${userDetails.message}");
+
+    // print("statusCode: ${response.statusCode}");
+    // print("Body: ${response.body}");
+    // if (response.statusCode == 200 || response.statusCode == 400) {
+    //   var data = json.decode(response.body);
+    //   var rest = data["verifyPhoneNumber"];
+    //   print(rest);
+    //   var list = rest
+    //       .map<VerifyPhoneNumber>((json) => VerifyPhoneNumber.fromJson(json));
+    //   print(list);
+    // }
+    // if (response.statusCode == 200) {
+    //   return verifyPhoneNumber;
+    // } else if (response.statusCode == 400) {
+    //   return verifyPhoneNumber;
+    // }
+
+    return null;
   }
 }

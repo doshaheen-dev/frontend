@@ -10,8 +10,10 @@ import 'package:portfolio_management/utilites/ui_widgets.dart';
 
 class SignUpVerifyOTP extends StatefulWidget {
   final String _verificationId;
-  const SignUpVerifyOTP({Key key, String verificationId})
+  final String _phoneNumber;
+  const SignUpVerifyOTP({Key key, String verificationId, String phoneNumber})
       : _verificationId = verificationId,
+        _phoneNumber = phoneNumber,
         super(key: key);
 
   @override
@@ -22,12 +24,14 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
   String currentText = "";
   bool hasError = false;
   String _verificationId;
+  String _phoneNumber;
   TextEditingController otpController = new TextEditingController();
   var progress;
 
   @override
   void initState() {
     _verificationId = widget._verificationId;
+    _phoneNumber = widget._phoneNumber;
     super.initState();
   }
 
@@ -134,8 +138,8 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                           child: ElevatedButton(
                             onPressed: () {
                               if (otpController.text.isEmpty) {
-                                showSnackBar(
-                                    context, "Please enter phone number.");
+                                showSnackBar(context,
+                                    "Please enter OTP sent to your mobile number.");
                                 return;
                               }
                               FocusScope.of(context).requestFocus(FocusNode());
@@ -143,8 +147,8 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                               progress = ProgressHUD.of(context);
                               // progress?.show();
                               progress?.showWithText('Verifying OTP...');
-                              _verifyPhoneOTP(
-                                  otpController.text, _verificationId);
+                              _verifyPhoneOTP(otpController.text,
+                                  _verificationId, _phoneNumber);
                             },
                             style: ElevatedButton.styleFrom(
                                 padding: EdgeInsets.all(0.0),
@@ -225,7 +229,8 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
   AuthCredential _phoneAuthCredential;
   User _firebaseUser;
 
-  Future<void> _verifyPhoneOTP(String text, [String verificationId]) async {
+  Future<void> _verifyPhoneOTP(
+      String text, String verificationId, String phoneNumber) async {
     String smsCode = text.toString().trim();
 
     /// when used different phoneNumber other than the current (running) device
@@ -251,6 +256,7 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
     // }
 
     try {
+      progress.dismiss();
       final AuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationId,
         smsCode: smsCode,
@@ -261,10 +267,13 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
       if (currentUser != null) {
         currentUser.getIdToken().then((token) {
           print("Token -> ${token.toString()}");
+          // open next view
+          //openQuickSignUp();
         });
       }
       print("User => ${currentUser.toString()}");
     } catch (e) {
+      progress.dismiss();
       print("Error -> ${e.toString()}");
     }
   }
