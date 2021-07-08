@@ -14,3 +14,15 @@ BoxDecoration appColorButton() {
     ),
   );
 }
+
+void showSnackBar(BuildContext _context, String message) {
+  final snackBar = SnackBar(
+    content: Text(message),
+    action: SnackBarAction(
+      label: 'Ok',
+      onPressed: () {},
+    ),
+  );
+
+  ScaffoldMessenger.of(_context).showSnackBar(snackBar);
+}

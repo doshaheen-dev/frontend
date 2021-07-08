@@ -24,15 +24,6 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
     });
   }
 
-  // void showDescription() {
-  //   setState(() {
-  //     _isVisible = true;
-  //     if (infoItemList.isEmpty) {
-  //       _isVisible = false;
-  //     }
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(

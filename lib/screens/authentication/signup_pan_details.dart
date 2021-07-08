@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:portfolio_management/screens/investor/thank_you.dart';
-import 'package:portfolio_management/screens/investor/welcome.dart';
 import 'package:portfolio_management/utilites/app_colors.dart';
 import 'package:portfolio_management/utilites/ui_widgets.dart';
 
@@ -20,6 +19,12 @@ class _SignUpPanDetailsState extends State<SignUpPanDetails> {
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 0,
+        elevation: 0.0,
+        backgroundColor: Color(0xffffffff),
+      ),
+      bottomNavigationBar: BottomAppBar(),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(

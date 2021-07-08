@@ -1,12 +1,12 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hb_check_code/hb_check_code.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:portfolio_management/screens/authentication/signup_verify_otp.dart';
 import 'package:portfolio_management/utilites/app_colors.dart';
-import 'package:portfolio_management/utilites/hex_color.dart';
 
 import 'package:portfolio_management/utilites/ui_widgets.dart';
 
@@ -16,7 +16,22 @@ class SignUpOTP extends StatefulWidget {
 }
 
 class _SignUpOTPState extends State<SignUpOTP> {
+  bool visible = false;
+
+  loadProgress() {
+    if (visible == true) {
+      setState(() {
+        visible = false;
+      });
+    } else {
+      setState(() {
+        visible = true;
+      });
+    }
+  }
+
   TextEditingController phoneController = new TextEditingController();
+  var progress;
 
   @override
   Widget build(BuildContext context) {
@@ -28,182 +43,209 @@ class _SignUpOTPState extends State<SignUpOTP> {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                width: 60,
-                height: 60,
-                child: IconButton(
-                  icon: Icon(Icons.arrow_back, size: 30),
-                  onPressed: () => {Navigator.pop(context)},
-                ),
-              ),
-              Column(
+        appBar: AppBar(
+          toolbarHeight: 0,
+          elevation: 0.0,
+          backgroundColor: Color(0xffffffff),
+        ),
+        bottomNavigationBar: BottomAppBar(),
+        backgroundColor: Colors.white,
+        body: ProgressHUD(
+            child: Builder(
+          builder: (context) => SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    margin: const EdgeInsets.only(top: 10.0, left: 25.0),
-                    child: Text(
-                      "Let's start here",
-                      style: TextStyle(
-                          color: headingBlack,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 28.0,
-                          fontFamily: 'Poppins-Regular'),
+                    width: 60,
+                    height: 60,
+                    child: IconButton(
+                      icon: Icon(Icons.arrow_back, size: 30),
+                      onPressed: () => {Navigator.of(context).maybePop()},
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 5.0, left: 25.0),
-                    child: Text(
-                      "Let's verify your mobile number",
-                      style: TextStyle(
-                          color: textGrey,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 20.0,
-                          fontFamily: 'Poppins-Regular'),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                            flex: 1,
-                            child: Container(
-                              margin: const EdgeInsets.only(
-                                  top: 5.0, left: 25.0, bottom: 20, right: 5.0),
-                              decoration: customDecoration(),
-                              child: dropdownField(),
-                            )),
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                            margin: const EdgeInsets.only(
-                                top: 5.0, bottom: 20, right: 25.0),
-                            decoration: customDecoration(),
-                            child: labelTextField(
-                                "Mobile Number", phoneController),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  //CAPTCHA
-                  // Container(
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.only(
-                  //       left: 25.0,
-                  //       bottom: 20.0,
-                  //       right: 25.0,
-                  //     ),
-                  //     child: Column(
-                  //       crossAxisAlignment: CrossAxisAlignment.start,
-                  //       children: [
-                  //         Text(
-                  //           "Captcha",
-                  //           style: TextStyle(
-                  //               color: headingBlack,
-                  //               fontWeight: FontWeight.bold,
-                  //               fontSize: 20.0,
-                  //               fontFamily: 'Poppins-Light'),
-                  //         ),
-                  //         SizedBox(
-                  //           height: 20.0,
-                  //         ),
-                  //         Row(
-                  //           children: [
-                  //             Expanded(
-                  //                 flex: 1,
-                  //                 child: Container(
-                  //                   margin: EdgeInsets.only(right: 10.0),
-                  //                   height: 60,
-                  //                   decoration: BoxDecoration(
-                  //                       color: HexColor('E5E5E5'),
-                  //                       borderRadius: BorderRadius.all(
-                  //                         const Radius.circular(20.0),
-                  //                       )),
-                  //                   child: Container(
-                  //                       alignment: Alignment.center,
-                  //                       child: GestureDetector(
-                  //                           behavior: HitTestBehavior.opaque,
-                  //                           onTap: () => setState(() {}),
-                  //                           child: HBCheckCode(
-                  //                             code: code,
-                  //                           ))),
-                  //                 )),
-                  //             Expanded(
-                  //               flex: 1,
-                  //               child: Container(
-                  //                 margin: EdgeInsets.only(left: 10.0),
-                  //                 width: MediaQuery.of(context).size.width,
-                  //                 height: 60,
-                  //                 decoration: BoxDecoration(
-                  //                   color: Colors.white,
-                  //                   borderRadius: BorderRadius.all(
-                  //                     const Radius.circular(20.0),
-                  //                   ),
-                  //                   shape: BoxShape.rectangle,
-                  //                   border: Border.all(
-                  //                     color: HexColor('E5E5E5'),
-                  //                     width: 2,
-                  //                   ),
-                  //                 ),
-                  //                 child: inputTextField(),
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         )
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-
-                  //SIGN UP BUTTON
-                  Container(
-                    margin: const EdgeInsets.only(
-                        top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(40),
-                      onTap: () {
-                        // Open otp view
-                        _submitPhoneNumber(phoneController.text); //phoneController.text
-                       // openSignUpVerifyOTP();
-                      },
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 60,
-                        decoration: appColorButton(),
-                        child: Center(
-                            child: Text(
-                          "Send OTP",
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        margin: const EdgeInsets.only(top: 10.0, left: 25.0),
+                        child: Text(
+                          "Let's start here",
                           style: TextStyle(
-                              fontSize: 18.0,
-                              fontFamily: 'Poppins-Regular',
+                              color: headingBlack,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        )),
+                              fontSize: 28.0,
+                              fontFamily: 'Poppins-Regular'),
+                        ),
                       ),
-                    ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 5.0, left: 25.0),
+                        child: Text(
+                          "Let's verify your mobile number",
+                          style: TextStyle(
+                              color: textGrey,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 20.0,
+                              fontFamily: 'Poppins-Regular'),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                                flex: 1,
+                                child: Container(
+                                  margin: const EdgeInsets.only(
+                                      top: 5.0,
+                                      left: 25.0,
+                                      bottom: 20,
+                                      right: 5.0),
+                                  decoration: customDecoration(),
+                                  child: dropdownField(),
+                                )),
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                    top: 5.0, bottom: 20, right: 25.0),
+                                decoration: customDecoration(),
+                                child: labelTextField(
+                                    "Mobile Number", phoneController),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: 30.0,
+                      ),
+                      //CAPTCHA
+                      // Container(
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.only(
+                      //       left: 25.0,
+                      //       bottom: 20.0,
+                      //       right: 25.0,
+                      //     ),
+                      //     child: Column(
+                      //       crossAxisAlignment: CrossAxisAlignment.start,
+                      //       children: [
+                      //         Text(
+                      //           "Captcha",
+                      //           style: TextStyle(
+                      //               color: headingBlack,
+                      //               fontWeight: FontWeight.bold,
+                      //               fontSize: 20.0,
+                      //               fontFamily: 'Poppins-Light'),
+                      //         ),
+                      //         SizedBox(
+                      //           height: 20.0,
+                      //         ),
+                      //         Row(
+                      //           children: [
+                      //             Expanded(
+                      //                 flex: 1,
+                      //                 child: Container(
+                      //                   margin: EdgeInsets.only(right: 10.0),
+                      //                   height: 60,
+                      //                   decoration: BoxDecoration(
+                      //                       color: HexColor('E5E5E5'),
+                      //                       borderRadius: BorderRadius.all(
+                      //                         const Radius.circular(20.0),
+                      //                       )),
+                      //                   child: Container(
+                      //                       alignment: Alignment.center,
+                      //                       child: GestureDetector(
+                      //                           behavior: HitTestBehavior.opaque,
+                      //                           onTap: () => setState(() {}),
+                      //                           child: HBCheckCode(
+                      //                             code: code,
+                      //                           ))),
+                      //                 )),
+                      //             Expanded(
+                      //               flex: 1,
+                      //               child: Container(
+                      //                 margin: EdgeInsets.only(left: 10.0),
+                      //                 width: MediaQuery.of(context).size.width,
+                      //                 height: 60,
+                      //                 decoration: BoxDecoration(
+                      //                   color: Colors.white,
+                      //                   borderRadius: BorderRadius.all(
+                      //                     const Radius.circular(20.0),
+                      //                   ),
+                      //                   shape: BoxShape.rectangle,
+                      //                   border: Border.all(
+                      //                     color: HexColor('E5E5E5'),
+                      //                     width: 2,
+                      //                   ),
+                      //                 ),
+                      //                 child: inputTextField(),
+                      //               ),
+                      //             ),
+                      //           ],
+                      //         )
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
+
+                      //SIGN UP BUTTON
+
+                      Container(
+                          margin: const EdgeInsets.only(
+                              top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (phoneController.text.isEmpty) {
+                                showSnackBar(
+                                    context, "Please enter phone number.");
+                                return;
+                              }
+                              FocusScope.of(context).requestFocus(FocusNode());
+
+                              progress = ProgressHUD.of(context);
+                              // progress?.show();
+                              progress?.showWithText('Sending OTP...');
+                              _submitPhoneNumber(phoneController.text);
+                            },
+                            style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(0.0),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18))),
+                            child: Ink(
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                      colors: [kDarkOrange, kLightOrange]),
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: 60,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  'Send OTP',
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontFamily: 'Poppins-Regular',
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ))
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        )));
   }
 
   BoxDecoration customDecoration() {
@@ -306,10 +348,10 @@ class _SignUpOTPState extends State<SignUpOTP> {
     );
   }
 
-  void openSignUpVerifyOTP() {
+  void openSignUpVerifyOTP([String verificationId]) {
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) {
-          return SignUpVerifyOTP();
+          return SignUpVerifyOTP(verificationId: verificationId);
         },
         transitionDuration: Duration(milliseconds: 2000),
         transitionsBuilder: (context, animation, anotherAnimation, child) {
@@ -323,10 +365,6 @@ class _SignUpOTPState extends State<SignUpOTP> {
         }));
   }
 
-  AuthCredential _phoneAuthCredential;
-  String _verificationId;
-  int _code;
-
   Future<void> _submitPhoneNumber(String text) async {
     /// NOTE: Either append your phone number country code or add in the code itself
     /// Since I'm in India we use "+91 " as prefix `phoneNumber`
@@ -335,36 +373,30 @@ class _SignUpOTPState extends State<SignUpOTP> {
 
     /// The below functions are the callbacks, separated so as to make code more redable
     void verificationCompleted(AuthCredential phoneAuthCredential) {
+      progress.dismiss();
       print('verificationCompleted');
 
-      this._phoneAuthCredential = phoneAuthCredential;
-      print(phoneAuthCredential);
+      print(" token :- ${phoneAuthCredential.token}");
     }
 
     void verificationFailed(FirebaseAuthException error) {
+      progress.dismiss();
+      showSnackBar(context, "Something went wrong. Try again!!");
       print('verificationFailed ${error}');
-      final snackBar = SnackBar(
-        content: Text('Something went wrong. Try again!!'),
-        action: SnackBarAction(
-          label: 'Ok',
-          onPressed: () {},
-        ),
-      );
-
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
 
     void codeSent(String verificationId, [int code]) {
-      print('codeSent -> ${code.toString()}');
-      this._verificationId = verificationId;
       print(verificationId);
-      this._code = code;
       print("Code sent ${code.toString()}");
-
-      openSignUpVerifyOTP();
+      progress?.showWithText('OTP Sent Successfully...');
+      Future.delayed(Duration(milliseconds: 2), () {
+        progress.dismiss();
+        openSignUpVerifyOTP(verificationId);
+      });
     }
 
     void codeAutoRetrievalTimeout(String verificationId) {
+      progress.dismiss();
       print('codeAutoRetrievalTimeout');
       print(verificationId);
     }

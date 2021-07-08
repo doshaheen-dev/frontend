@@ -1,8 +1,9 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:portfolio_management/screens/authentication/signup_details.dart';
-import 'package:portfolio_management/services/AuthenticationService.dart';
 import 'package:portfolio_management/services/NewAuthenticationService.dart';
 import 'package:portfolio_management/utilites/app_colors.dart';
 import 'package:portfolio_management/utilites/ui_widgets.dart';
@@ -19,6 +20,12 @@ class _QuickSignUpState extends State<QuickSignUp> {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 0,
+        elevation: 0.0,
+        backgroundColor: Color(0xffffffff),
+      ),
+      bottomNavigationBar: BottomAppBar(),
       backgroundColor: Color(0xffffffff),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -98,6 +105,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
                   SizedBox(
                     height: 10.0,
                   ),
+
                   //SIGN UP BUTTON
                   Container(
                     margin: const EdgeInsets.only(
@@ -166,7 +174,15 @@ class _QuickSignUpState extends State<QuickSignUp> {
       borderRadius: BorderRadius.circular(40),
       onTap: () async {
         if (type == "Apple") {
-          await context.read<Authentication>().signInWithApple();
+          if (Platform.isAndroid) {
+            print("ANDROID");
+            // Android-specific code
+            await context.read<Authentication>().appleAuthenticationAndroid();
+          } else if (Platform.isIOS) {
+            print("IOS");
+            await context.read<Authentication>().signInWithApple();
+            // iOS-specific code
+          }
         } else if (type == "Google") {
           await signInGoogle();
           // context.read<AuthenticationService>().signInWithGoogle();

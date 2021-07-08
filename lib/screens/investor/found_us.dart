@@ -15,6 +15,12 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 0,
+        elevation: 0.0,
+        backgroundColor: Color(0xffffffff),
+      ),
+      bottomNavigationBar: BottomAppBar(),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
