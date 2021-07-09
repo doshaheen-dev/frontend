@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
+import 'package:portfolio_management/models/profile/basic_details.dart';
 import 'package:portfolio_management/screens/investor/welcome.dart';
 import 'package:portfolio_management/services/NewAuthenticationService.dart';
+import 'package:portfolio_management/services/ProfileService.dart';
 import 'package:portfolio_management/utilites/app_colors.dart';
 import 'package:portfolio_management/utilites/ui_widgets.dart';
 
@@ -21,8 +24,10 @@ class _SignUpDetailsState extends State<SignUpDetails> {
   String firstname = "";
   String lastname = "";
   String email = "";
-  String country = "";
+  String country = 'IND';
   String address = "";
+
+  var progress;
 
   @override
   void initState() {
@@ -38,6 +43,7 @@ class _SignUpDetailsState extends State<SignUpDetails> {
     final firstNameController = TextEditingController();
     final lastnameController = TextEditingController();
     final emailController = TextEditingController();
+    final addressController = TextEditingController();
     print("info, ${_user}");
     if (_user != null) {
       int idx = _user.displayName.indexOf(" ");
@@ -57,124 +63,178 @@ class _SignUpDetailsState extends State<SignUpDetails> {
       ),
       bottomNavigationBar: BottomAppBar(),
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                child: IconButton(
-                  icon: Icon(Icons.arrow_back, size: 30),
-                  onPressed: () {
-                    Authentication.signOut();
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-              Column(
+      body: ProgressHUD(
+        child: Builder(
+          builder: (context) => SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    margin: const EdgeInsets.only(top: 10.0, left: 25.0),
-                    child: Text(
-                      "Personal details here",
-                      style: TextStyle(
-                          color: headingBlack,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 28.0,
-                          fontFamily: 'Poppins-Light'),
-                    ),
-                  ),
-
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(
-                        top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                    decoration: customDecoration(),
-                    child: TextField(
-                      style: _setTextFieldStyle(),
-                      controller: firstNameController,
-                      onChanged: (value) => {firstname = value},
-                      decoration: _setTextFieldDecoration("Firstname"),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(
-                        top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                    decoration: customDecoration(),
-                    child: TextField(
-                      controller: lastnameController,
-                      style: _setTextFieldStyle(),
-                      onChanged: (value) => lastname = value,
-                      decoration: _setTextFieldDecoration("Lastname"),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(
-                        top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                    decoration: customDecoration(),
-                    child: TextField(
-                      controller: emailController,
-                      style: _setTextFieldStyle(),
-                      onChanged: (value) => email = value,
-                      decoration: _setTextFieldDecoration("E-mail"),
-                    ),
-                  ),
-
-                  Container(
-                    margin: const EdgeInsets.only(
-                        top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                    decoration: customDecoration(),
-                    child: TextField(
-                      style: _setTextFieldStyle(),
-                      onChanged: (value) => country = value,
-                      decoration: _setTextFieldDecoration("Country"),
-                    ),
-                  ),
-
-                  Container(
-                    margin: const EdgeInsets.only(
-                        top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                    decoration: customDecoration(),
-                    child: TextField(
-                      style: _setTextFieldStyle(),
-                      onChanged: (value) => address = value,
-                      decoration: _setTextFieldDecoration("Address 1"),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 50,
-                  ),
-                  //NEXT BUTTON
-                  Container(
-                    margin: const EdgeInsets.only(
-                        top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(40),
-                      onTap: () {
-                        // on click
-                        openWelcomeInvestor();
+                    child: IconButton(
+                      icon: Icon(Icons.arrow_back, size: 30),
+                      onPressed: () {
+                        Authentication.signOut();
+                        Navigator.pop(context);
                       },
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 60,
-                        decoration: appColorButton(),
-                        child: Center(
-                            child: Text(
-                          "Next",
-                          style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        )),
-                      ),
                     ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        margin: const EdgeInsets.only(top: 10.0, left: 25.0),
+                        child: Text(
+                          "Personal details here",
+                          style: TextStyle(
+                              color: headingBlack,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 28.0,
+                              fontFamily: 'Poppins-Light'),
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(
+                            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+                        decoration: customDecoration(),
+                        child: TextField(
+                          style: _setTextFieldStyle(),
+                          controller: firstNameController,
+                          onChanged: (value) => {firstname = value},
+                          decoration: _setTextFieldDecoration("Firstname"),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(
+                            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+                        decoration: customDecoration(),
+                        child: TextField(
+                          controller: lastnameController,
+                          style: _setTextFieldStyle(),
+                          onChanged: (value) => lastname = value,
+                          decoration: _setTextFieldDecoration("Lastname"),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(
+                            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+                        decoration: customDecoration(),
+                        child: TextField(
+                          controller: emailController,
+                          style: _setTextFieldStyle(),
+                          onChanged: (value) => email = value,
+                          decoration: _setTextFieldDecoration("E-mail"),
+                        ),
+                      ),
+
+                      Container(
+                        margin: const EdgeInsets.only(
+                            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+                        decoration: customDecoration(),
+                        child: DropdownButtonFormField(
+                            decoration: InputDecoration(
+                                labelText: 'Code',
+                                labelStyle:
+                                    new TextStyle(color: Colors.grey[600]),
+                                enabledBorder: UnderlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                        const Radius.circular(10.0)),
+                                    borderSide:
+                                        BorderSide(color: Colors.transparent))),
+                            value: country,
+                            items: [
+                              DropdownMenuItem(
+                                child: Text("INDIA"),
+                                value: 'IND',
+                              ),
+                              DropdownMenuItem(
+                                child: Text("DUBAI"),
+                                value: 'UAE',
+                              ),
+                              DropdownMenuItem(
+                                child: Text("SINGAPORE"),
+                                value: 'SGP',
+                              ),
+                            ],
+                            onChanged: (value) {
+                              setState(() {
+                                country = value;
+                              });
+                            }),
+                      ),
+
+                      Container(
+                        margin: const EdgeInsets.only(
+                            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+                        decoration: customDecoration(),
+                        child: TextField(
+                          style: _setTextFieldStyle(),
+                          controller: addressController,
+                          onChanged: (value) => address = value,
+                          decoration: _setTextFieldDecoration("Address 1"),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      //NEXT BUTTON
+                      Container(
+                        margin: const EdgeInsets.only(
+                            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(40),
+                          onTap: () {
+                            // on click
+                            if (firstNameController.text.isEmpty) {
+                              showSnackBar(
+                                  context, "Please enter the Firstname.");
+                              return;
+                            }
+                            if (lastnameController.text.isEmpty) {
+                              showSnackBar(
+                                  context, "Please enter the Lastname.");
+                              return;
+                            }
+                            if (emailController.text.isEmpty) {
+                              showSnackBar(
+                                  context, "Please enter the email id.");
+                              return;
+                            }
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            progress = ProgressHUD.of(context);
+                            progress?.showWithText('Uploading Details...');
+                            submitDetails(
+                              firstNameController.text.trim(),
+                              lastnameController.text.trim(),
+                              emailController.text.trim(),
+                              country,
+                              addressController.text,
+                            );
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 60,
+                            decoration: appColorButton(),
+                            child: Center(
+                                child: Text(
+                              "Next",
+                              style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            )),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -241,6 +301,26 @@ class _SignUpDetailsState extends State<SignUpDetails> {
         ),
       ),
     );
+  }
+
+  Future<void> submitDetails(
+    String firstName,
+    String lastName,
+    String emailId,
+    String countryCode,
+    String address,
+  ) async {
+    UpdateBasicDetails basicDetails = await ProfileService.updateBasicDetails(
+        firstName, lastName, emailId, countryCode, address);
+    print('BD type: ${basicDetails.type}');
+    print('BD status: ${basicDetails.status}');
+    print('BD message: ${basicDetails.message}');
+    progress.dismiss();
+    if (basicDetails.type == "success") {
+      openWelcomeInvestor();
+    } else {
+      showSnackBar(context, "Something went wrong");
+    }
   }
 
   void openWelcomeInvestor() {

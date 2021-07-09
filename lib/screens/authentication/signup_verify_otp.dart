@@ -11,6 +11,7 @@ import 'package:portfolio_management/services/NewAuthenticationService.dart';
 import 'package:portfolio_management/utilites/app_colors.dart';
 
 import 'package:portfolio_management/utilites/ui_widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpVerifyOTP extends StatefulWidget {
   final String _verificationId;
@@ -213,6 +214,8 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
         await Authentication.verifyUser(token, phoneNumber);
     progress.dismiss();
     if (verifyPhoneNumber.status == 200) {
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setInt("userId", verifyPhoneNumber.data.id);
       openQuickSignUp();
     } else {
       _openDialog(context, verifyPhoneNumber.message);
