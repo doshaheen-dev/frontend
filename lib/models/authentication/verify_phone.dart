@@ -1,5 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonSerializable(nullable: false)
 class VerifyPhoneNumber {
-  final bool type;
+  final String type;
   final int status;
   final String message;
   final PhoneData data;
@@ -10,12 +13,13 @@ class VerifyPhoneNumber {
     this.message,
     this.data,
   });
+
   factory VerifyPhoneNumber.fromMap(Map<String, dynamic> json) {
     return VerifyPhoneNumber(
       type: json["type"],
       status: json["status"],
       message: json["message"],
-      data: json["data"],
+      data: PhoneData.fromJson(json["data"]),
     );
   }
 
@@ -24,7 +28,16 @@ class VerifyPhoneNumber {
       type: json["type"],
       status: json["status"],
       message: json["message"],
-      data: json["data"],
+      data: PhoneData.fromJson(json["data"]),
+    );
+  }
+
+  static VerifyPhoneNumber from(Map valueMap) {
+    return VerifyPhoneNumber(
+      type: valueMap["type"],
+      status: valueMap["status"],
+      message: valueMap["message"],
+      data: PhoneData.fromJson(valueMap["data"]),
     );
   }
 }
@@ -32,12 +45,17 @@ class VerifyPhoneNumber {
 class PhoneData {
   final int id;
 
-  PhoneData(this.id);
+  PhoneData({this.id});
 
   factory PhoneData.fromMap(Map<String, dynamic> json) {
-    return PhoneData(json['id']);
+    return PhoneData(
+      id: json["id"],
+    );
   }
+
   factory PhoneData.fromJson(Map<String, dynamic> json) {
-    return PhoneData(json['id']);
+    return PhoneData(
+      id: json["id"],
+    );
   }
 }

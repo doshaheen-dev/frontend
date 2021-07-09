@@ -215,7 +215,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
                               progress?.showWithText('Sending OTP...');
                               String phoneNumber = "+91 " +
                                   phoneController.text.toString().trim();
-                              //  openSignUpVerifyOTP("", phoneNumber);
+                              // openSignUpVerifyOTP("", phoneNumber);
                               _submitPhoneNumber(phoneController.text);
                             },
                             style: ElevatedButton.styleFrom(
@@ -379,30 +379,23 @@ class _SignUpOTPState extends State<SignUpOTP> {
     void verificationCompleted(AuthCredential phoneAuthCredential) {
       progress.dismiss();
       print('verificationCompleted');
-
-      print(" token :- ${phoneAuthCredential.token}");
     }
 
     void verificationFailed(FirebaseAuthException error) {
       progress.dismiss();
-      showSnackBar(context, "Something went wrong. Try again!!");
-      print('verificationFailed ${error}');
+      showSnackBar(context, "${error.toString()}");
     }
 
     void codeSent(String verificationId, [int code]) {
-      print(verificationId);
-      print("Code sent ${code.toString()}");
       progress?.showWithText('OTP Sent Successfully...');
       Future.delayed(Duration(milliseconds: 2), () {
         progress.dismiss();
-        openSignUpVerifyOTP(verificationId);
+        openSignUpVerifyOTP(verificationId, phoneNumber);
       });
     }
 
     void codeAutoRetrievalTimeout(String verificationId) {
       progress.dismiss();
-      print('codeAutoRetrievalTimeout');
-      print(verificationId);
     }
 
     await FirebaseAuth.instance.verifyPhoneNumber(
