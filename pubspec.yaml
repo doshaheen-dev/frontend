@@ -48,7 +48,6 @@ dependencies:
   # Progress Indicator
   flutter_progress_hud: ^2.0.0
   encrypt: ^5.0.0
-
  
 
 dev_dependencies:
