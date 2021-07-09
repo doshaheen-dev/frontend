@@ -2,7 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
+import 'package:portfolio_management/models/authentication/verify_phone_signin.dart';
 import 'package:portfolio_management/screens/authentication/signin_verify_otp.dart';
+import 'package:portfolio_management/services/NewAuthenticationService.dart';
 import 'package:portfolio_management/utilites/app_colors.dart';
 
 import 'package:portfolio_management/utilites/ui_widgets.dart';
@@ -144,15 +146,32 @@ class _SignInOTPState extends State<SignInOTP> {
                                         if (isPhone(phoneController.text)) {
                                           print("mobile");
                                           progress = ProgressHUD.of(context);
-                                          progress?.show();
+
                                           progress
                                               ?.showWithText('Sending OTP...');
-                                          openSignInVerifyOTP();
-                                          // _submitPhoneNumber(
-                                          //     phoneController.text);
+                                          // openSignInVerifyOTP();
+                                          //FIREBASE
+                                          _submitPhoneNumber(
+                                              phoneController.text);
+
+                                          // TWILLO
+                                          // sendOTPServer(phoneController.text,
+                                          //     "twilio", "mobile");
                                         } else if (emailValid(
                                             phoneController.text)) {
+                                          progress = ProgressHUD.of(context);
+
+                                          progress
+                                              ?.showWithText('Sending OTP...');
                                           print("email");
+
+                                          //FIREBASE
+                                          sendOTPServer(phoneController.text,
+                                              "firebase", "email");
+
+                                          // TWILLO
+                                          // sendOTPServer(phoneController.text,
+                                          //     "twilio", "email");
                                         } else {
                                           showSnackBar(context,
                                               "Please enter correct mobile number or email");
@@ -280,10 +299,17 @@ class _SignInOTPState extends State<SignInOTP> {
     );
   }
 
-  void openSignInVerifyOTP() {
+  void openSignInVerifyOTP(String verificationId, String phoneNumber,
+      String otpType, String requesterType) {
+    print("SIGN IN => $otpType, requesterType => $requesterType");
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) {
-          return SignInVerifyOTP();
+          return SignInVerifyOTP(
+            verificationId: verificationId,
+            phoneNumber: phoneNumber,
+            otpType: otpType,
+            requesterType: requesterType,
+          );
         },
         transitionDuration: Duration(milliseconds: 2000),
         transitionsBuilder: (context, animation, anotherAnimation, child) {
@@ -307,13 +333,12 @@ class _SignInOTPState extends State<SignInOTP> {
     void verificationCompleted(AuthCredential phoneAuthCredential) {
       progress.dismiss();
       print('verificationCompleted');
-
       print(" token :- ${phoneAuthCredential.token}");
     }
 
     void verificationFailed(FirebaseAuthException error) {
       progress.dismiss();
-      showSnackBar(context, "Something went wrong. Try again!!");
+      showSnackBar(context, "$error");
       print('verificationFailed ${error}');
     }
 
@@ -323,7 +348,7 @@ class _SignInOTPState extends State<SignInOTP> {
       progress?.showWithText('OTP Sent Successfully...');
       Future.delayed(Duration(milliseconds: 2), () {
         progress.dismiss();
-        openSignInVerifyOTP();
+        openSignInVerifyOTP(verificationId, phoneNumber, "mobile", "firebase");
       });
     }
 
@@ -354,5 +379,30 @@ class _SignInOTPState extends State<SignInOTP> {
       /// After automatic code retrival `tmeout` this function is called
       codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
     ); // All the callbacks are above
+  }
+
+  Future<void> sendOTPServer(
+      String text, String requesterType, String osType) async {
+    String getOtpPlatform = "";
+    print("osType => $osType");
+    if (osType == "email") {
+      getOtpPlatform = text.toString().trim();
+    } else {
+      getOtpPlatform = "+91" + text.toString().trim();
+    }
+
+    print("sendOTPServer:=> $getOtpPlatform");
+    VerificationIdSignIn verificationIdSignIn =
+        await Authentication.getVerificationFromTwillio(
+            getOtpPlatform, osType, requesterType);
+    print(verificationIdSignIn.verificationId);
+
+    progress.dismiss();
+    if (verificationIdSignIn.verificationId != "") {
+      openSignInVerifyOTP(verificationIdSignIn.verificationId, getOtpPlatform,
+          osType, requesterType);
+    } else {
+      showSnackBar(context, "Something went wrong");
+    }
   }
 }

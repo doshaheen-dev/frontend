@@ -26,3 +26,11 @@ void showSnackBar(BuildContext _context, String message) {
 
   ScaffoldMessenger.of(_context).showSnackBar(snackBar);
 }
+
+void showSnackBarWithoutButton(BuildContext _context, String message) {
+  final snackBar = SnackBar(
+    content: Text(message),
+  );
+
+  ScaffoldMessenger.of(_context).showSnackBar(snackBar);
+}
