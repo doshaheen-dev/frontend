@@ -1,9 +1,13 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
+import 'package:portfolio_management/models/authentication/verify_phone.dart';
 import 'package:portfolio_management/screens/authentication/signup_quick.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:portfolio_management/services/NewAuthenticationService.dart';
 import 'package:portfolio_management/utilites/app_colors.dart';
 
 import 'package:portfolio_management/utilites/ui_widgets.dart';
@@ -145,8 +149,9 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                               FocusScope.of(context).requestFocus(FocusNode());
 
                               progress = ProgressHUD.of(context);
-                              // progress?.show();
                               progress?.showWithText('Verifying OTP...');
+                              // verifyUser(otpController.text, _verificationId,
+                              //     _phoneNumber);
                               _verifyPhoneOTP(otpController.text,
                                   _verificationId, _phoneNumber);
                             },
@@ -174,32 +179,6 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                               ),
                             ),
                           ))
-
-                      // Container(
-                      //   margin: const EdgeInsets.only(
-                      //       top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                      //   child: InkWell(
-                      //     borderRadius: BorderRadius.circular(40),
-                      //     onTap: () {
-                      //       print("Completed " + currentText);
-                      //       //Open new view
-                      //       openQuickSignUp();
-                      //     },
-                      //     child: Container(
-                      //       width: MediaQuery.of(context).size.width,
-                      //       height: 60,
-                      //       decoration: appColorButton(),
-                      //       child: Center(
-                      //           child: Text(
-                      //         "Verify OTP",
-                      //         style: TextStyle(
-                      //             fontSize: 18.0,
-                      //             fontWeight: FontWeight.bold,
-                      //             color: Colors.white),
-                      //       )),
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   ),
                 ],
@@ -210,24 +189,35 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
   }
 
   void openQuickSignUp() {
-    Navigator.of(context).push(PageRouteBuilder(
-        pageBuilder: (context, animation, anotherAnimation) {
-          return QuickSignUp();
-        },
-        transitionDuration: Duration(milliseconds: 2000),
-        transitionsBuilder: (context, animation, anotherAnimation, child) {
-          animation = CurvedAnimation(
-              curve: Curves.fastLinearToSlowEaseIn, parent: animation);
-          return SlideTransition(
-            position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-                .animate(animation),
-            child: child,
-          );
-        }));
+    Navigator.of(context).pushAndRemoveUntil(
+        PageRouteBuilder(
+            pageBuilder: (context, animation, anotherAnimation) {
+              return QuickSignUp();
+            },
+            transitionDuration: Duration(milliseconds: 2000),
+            transitionsBuilder: (context, animation, anotherAnimation, child) {
+              animation = CurvedAnimation(
+                  curve: Curves.fastLinearToSlowEaseIn, parent: animation);
+              return SlideTransition(
+                position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                    .animate(animation),
+                child: child,
+              );
+            }),
+        (Route<dynamic> route) => false);
   }
 
-  AuthCredential _phoneAuthCredential;
-  User _firebaseUser;
+  Future<void> verifyUser(String token, String phoneNumber) async {
+    print("Token: $token, phoneNumber -> $phoneNumber");
+    VerifyPhoneNumber verifyPhoneNumber =
+        await Authentication.verifyUser(token, phoneNumber);
+    progress.dismiss();
+    if (verifyPhoneNumber.status == 200) {
+      openQuickSignUp();
+    } else {
+      _openDialog(context, verifyPhoneNumber.message);
+    }
+  }
 
   Future<void> _verifyPhoneOTP(
       String text, String verificationId, String phoneNumber) async {
@@ -235,46 +225,63 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
 
     /// when used different phoneNumber other than the current (running) device
     /// we need to use OTP to get `phoneAuthCredential` which is inturn used to signIn/login
-    this._phoneAuthCredential = PhoneAuthProvider.credential(
+    AuthCredential _phoneAuthCredential = PhoneAuthProvider.credential(
         verificationId: this._verificationId, smsCode: smsCode);
 
-    // try {
-    //   await FirebaseAuth.instance
-    //       .signInWithCredential(this._phoneAuthCredential)
-    //       .then((UserCredential authRes) async {
-    //     _firebaseUser = authRes.user;
-    //     final User currentUser = await authRes.user;
-    //     print(_firebaseUser.toString());
-    //     print(currentUser.toString());
-    //     progress.dismiss();
-    //   }).catchError((e) => print(e));
-    //   setState(() {
-    //   //  print('Signed In\n');
-    //   });
-    // } catch (e) {
-    //  // print(e);
-    // }
-
     try {
-      progress.dismiss();
       final AuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationId,
         smsCode: smsCode,
       );
       final UserCredential userResult =
           await FirebaseAuth.instance.signInWithCredential(credential);
+      print("userResult -> ${userResult.toString()}");
       final User currentUser = await FirebaseAuth.instance.currentUser;
-      if (currentUser != null) {
-        currentUser.getIdToken().then((token) {
-          print("Token -> ${token.toString()}");
-          // open next view
-          //openQuickSignUp();
-        });
-      }
       print("User => ${currentUser.toString()}");
+      if (currentUser != null) {
+        currentUser.getIdToken().then((token) async {
+          //verify number
+          print("Token: $token, phoneNumber -> $phoneNumber");
+          verifyUser(token.toString(), phoneNumber);
+        });
+      } else {
+        progress.dismiss();
+        showSnackBar(context, "Something went wrong");
+      }
     } catch (e) {
       progress.dismiss();
       print("Error -> ${e.toString()}");
     }
+  }
+
+  _openDialog(BuildContext context, String message) {
+    // set up the buttons
+    Widget positiveButton = TextButton(
+      onPressed: () {
+        Navigator.pop(context);
+      },
+      child: Text("Ok",
+          style: TextStyle(
+              fontWeight: FontWeight.w800,
+              color: Color(0xff00A699),
+              fontSize: 16.0,
+              fontFamily: 'Poppins-Regular')),
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: Text(message),
+      actions: [
+        positiveButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }
