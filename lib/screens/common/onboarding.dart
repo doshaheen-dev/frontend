@@ -141,6 +141,7 @@ class _OnBoardingState extends State<OnBoarding> {
     ];
 
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(backgroundColor: Colors.white),
         home: Scaffold(
           appBar: AppBar(

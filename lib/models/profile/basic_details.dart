@@ -42,7 +42,7 @@ class UpdateBasicDetails {
 }
 
 class ResponseData {
-  final String id;
+  final int id;
 
   ResponseData(this.id);
 

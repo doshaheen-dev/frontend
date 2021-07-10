@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:portfolio_management/screens/investor/investment_limit.dart';
 import 'package:portfolio_management/utilites/app_colors.dart';
+import 'package:portfolio_management/utilites/ui_widgets.dart';
 
 class InvestorSearchInfo extends StatefulWidget {
   @override
@@ -11,6 +12,9 @@ class InvestorSearchInfo extends StatefulWidget {
 class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
   @override
   Widget build(BuildContext context) {
+    String firstname = "";
+    final firstNameController = TextEditingController();
+
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
@@ -63,10 +67,73 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                           return _createCell(index);
                         })),
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(
+                        top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+                    decoration: customDecoration(),
+                    child: TextField(
+                      style: _setTextFieldStyle(),
+                      controller: firstNameController,
+                      onChanged: (value) => {firstname = value},
+                      decoration: _setTextFieldDecoration("Name of the person"),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                      margin: const EdgeInsets.only(
+                          top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(40),
+                        onTap: () {
+                          // on click
+                          openInvestmentLimit();
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 60,
+                          decoration: appColorButton(),
+                          child: Center(
+                              child: Text(
+                            "Next",
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          )),
+                        ),
+                      )),
                 ],
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  TextStyle _setTextFieldStyle() {
+    return TextStyle(
+        color: Colors.black,
+        fontWeight: FontWeight.normal,
+        fontSize: 18.0,
+        fontFamily: 'Poppins-Regular');
+  }
+
+  InputDecoration _setTextFieldDecoration(_text) {
+    return InputDecoration(
+      contentPadding: EdgeInsets.all(10.0),
+      labelText: _text,
+      labelStyle: new TextStyle(color: Colors.grey[600]),
+      border: InputBorder.none,
+      focusedBorder: UnderlineInputBorder(
+        borderSide: const BorderSide(color: Colors.transparent, width: 2.0),
+        borderRadius: BorderRadius.all(
+          const Radius.circular(10.0),
         ),
       ),
     );
@@ -90,7 +157,7 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
         infoItemList = [];
         infoItemList.add(infoItem[_index].header);
         setState(() {
-          openInvestmentLimit();
+          // openInvestmentLimit();
         });
       },
       child: Container(

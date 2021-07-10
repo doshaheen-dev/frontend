@@ -150,13 +150,14 @@ class _SignInOTPState extends State<SignInOTP> {
                                           progress
                                               ?.showWithText('Sending OTP...');
                                           // openSignInVerifyOTP();
-                                          //FIREBASE
-                                          _submitPhoneNumber(
-                                              phoneController.text);
 
-                                          // TWILLO
-                                          // sendOTPServer(phoneController.text,
-                                          //     "twilio", "mobile");
+                                          //FIREBASE
+                                          // _submitPhoneNumber(
+                                          //     phoneController.text);
+
+                                          // TWILIO
+                                          sendOTPServer(phoneController.text,
+                                              "twilio", "mobile");
                                         } else if (emailValid(
                                             phoneController.text)) {
                                           progress = ProgressHUD.of(context);
@@ -166,12 +167,12 @@ class _SignInOTPState extends State<SignInOTP> {
                                           print("email");
 
                                           //FIREBASE
-                                          sendOTPServer(phoneController.text,
-                                              "firebase", "email");
-
-                                          // TWILLO
                                           // sendOTPServer(phoneController.text,
-                                          //     "twilio", "email");
+                                          //     "firebase", "email");
+
+                                          // TWILIO
+                                          sendOTPServer(phoneController.text,
+                                              "twilio", "email");
                                         } else {
                                           showSnackBar(context,
                                               "Please enter correct mobile number or email");
@@ -395,14 +396,14 @@ class _SignInOTPState extends State<SignInOTP> {
     VerificationIdSignIn verificationIdSignIn =
         await Authentication.getVerificationFromTwillio(
             getOtpPlatform, osType, requesterType);
-    print(verificationIdSignIn.verificationId);
+    print("verificationId ${verificationIdSignIn.data.verificationId}");
 
     progress.dismiss();
-    if (verificationIdSignIn.verificationId != "") {
-      openSignInVerifyOTP(verificationIdSignIn.verificationId, getOtpPlatform,
-          osType, requesterType);
+    if (verificationIdSignIn.type == "success") {
+      openSignInVerifyOTP(verificationIdSignIn.data.verificationId,
+          getOtpPlatform, osType, requesterType);
     } else {
-      showSnackBar(context, "Something went wrong");
+      showSnackBar(context, verificationIdSignIn.message);
     }
   }
 }

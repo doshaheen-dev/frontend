@@ -251,6 +251,7 @@ class Authentication {
 
     // make POST request
     final response = await post(url, headers: headers, body: _body);
+    print("Body:${response}");
 
     // check the status code for the result
     //final statusCode = response.statusCode;

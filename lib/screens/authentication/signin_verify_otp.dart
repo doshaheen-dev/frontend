@@ -260,12 +260,14 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
       );
       final UserCredential userResult =
           await FirebaseAuth.instance.signInWithCredential(credential);
+      print("verificationId => ${verificationId}");
       print("userResult -> ${userResult.toString()}");
       final User currentUser = await FirebaseAuth.instance.currentUser;
       print("User => ${currentUser.toString()}");
       if (currentUser != null) {
         currentUser.getIdToken().then((token) async {
           //verify number
+          print("VERIFY");
           verifyPhoneUser(token.toString(), phoneNumber, otpType, smsCode,
               verificationId, requesterType);
         });
@@ -285,6 +287,10 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
         await Authentication.verifyUserByServer(token, phoneNumber,
             verificationId, smsCode, otpType, requesterType);
     progress.dismiss();
+    print("veriyPhone :- ${verifyPhoneNumber.type}");
+    print("veriyPhone :- ${verifyPhoneNumber.status}");
+    print("veriyPhone :- ${verifyPhoneNumber.message}");
+    print("veriyPhone :- ${verifyPhoneNumber.data}");
     if (verifyPhoneNumber.type == "success") {
       showSnackBarWithoutButton(context, verifyPhoneNumber.message);
       openHome();
