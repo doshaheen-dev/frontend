@@ -134,37 +134,42 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                       Container(
                         margin: const EdgeInsets.only(
                             top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+                        width: MediaQuery.of(context).size.width,
+                        height: 80,
                         decoration: customDecoration(),
-                        child: DropdownButtonFormField(
-                            decoration: InputDecoration(
-                                labelText: 'Code',
-                                labelStyle:
-                                    new TextStyle(color: Colors.grey[600]),
-                                enabledBorder: UnderlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                        const Radius.circular(10.0)),
-                                    borderSide:
-                                        BorderSide(color: Colors.transparent))),
-                            value: country,
-                            items: [
-                              DropdownMenuItem(
-                                child: Text("INDIA"),
-                                value: 'IND',
-                              ),
-                              DropdownMenuItem(
-                                child: Text("DUBAI"),
-                                value: 'UAE',
-                              ),
-                              DropdownMenuItem(
-                                child: Text("SINGAPORE"),
-                                value: 'SGP',
-                              ),
-                            ],
-                            onChanged: (value) {
-                              setState(() {
-                                country = value;
-                              });
-                            }),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                  labelText: 'Country',
+                                  labelStyle:
+                                      new TextStyle(color: Colors.grey[600]),
+                                  enabledBorder: UnderlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                          const Radius.circular(10.0)),
+                                      borderSide: BorderSide(
+                                          color: Colors.transparent))),
+                              value: country,
+                              items: [
+                                DropdownMenuItem(
+                                  child: Text("INDIA"),
+                                  value: 'IND',
+                                ),
+                                DropdownMenuItem(
+                                  child: Text("DUBAI"),
+                                  value: 'UAE',
+                                ),
+                                DropdownMenuItem(
+                                  child: Text("SINGAPORE"),
+                                  value: 'SGP',
+                                ),
+                              ],
+                              onChanged: (value) {
+                                setState(() {
+                                  country = value;
+                                });
+                              }),
+                        ),
                       ),
 
                       Container(

@@ -23,13 +23,20 @@ class ProfileService {
     final url = Uri.parse(
         "${ApiServices.baseUrl}/sign-up/basic_detail/${prefs.getInt("userId")}");
     final headers = {"Content-type": "application/json"};
-    final _body =
-        '{"first_name": "$firstName", "last_name": "$lastName", "email_id": "$emailId", "country_code": "$countryCode", "address": "$address"}';
+    final _body = {
+      "first_name": firstName,
+      "last_name": lastName,
+      "email_id": emailId,
+      "country_code": countryCode,
+      "address": address,
+    };
+    final jsonBody = jsonEncode(_body);
+
     print('URL: $url');
-    print("Body:$_body");
+    print("Body:$jsonBody");
 
     // make PUT request
-    final response = await http.put(url, headers: headers, body: _body);
+    final response = await http.put(url, headers: headers, body: jsonBody);
     // this API passes back the id of the user after updating the details
     final responseBody = response.body;
     Map valueMap = jsonDecode(responseBody);
