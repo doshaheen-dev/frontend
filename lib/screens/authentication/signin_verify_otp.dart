@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:portfolio_management/models/authentication/verify_phone_signin.dart';
-import 'package:portfolio_management/screens/dashboard/home.dart';
-import 'package:portfolio_management/services/NewAuthenticationService.dart';
+import 'package:portfolio_management/screens/investor/dashboard/investor_dashboard.dart';
+import 'package:portfolio_management/services/OtpService.dart';
 import 'package:portfolio_management/utilites/app_colors.dart';
 
 import 'package:portfolio_management/utilites/ui_widgets.dart';
@@ -229,7 +229,7 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
     Navigator.of(context).pushAndRemoveUntil(
         PageRouteBuilder(
             pageBuilder: (context, animation, anotherAnimation) {
-              return Home();
+              return InvestorDashboard();
             },
             transitionDuration: Duration(milliseconds: 2000),
             transitionsBuilder: (context, animation, anotherAnimation, child) {
@@ -284,8 +284,8 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
   Future<void> verifyPhoneUser(String token, String phoneNumber, String otpType,
       String smsCode, String verificationId, String requesterType) async {
     VerifyPhoneNumberSignIn verifyPhoneNumber =
-        await Authentication.verifyUserByServer(token, phoneNumber,
-            verificationId, smsCode, otpType, requesterType);
+        await OtpService.verifyUserByServer(token, phoneNumber, verificationId,
+            smsCode, otpType, requesterType);
     progress.dismiss();
     print("veriyPhone :- ${verifyPhoneNumber.type}");
     print("veriyPhone :- ${verifyPhoneNumber.status}");

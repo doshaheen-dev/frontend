@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:portfolio_management/models/authentication/verify_phone_signin.dart';
 import 'package:portfolio_management/screens/authentication/signin_verify_otp.dart';
-import 'package:portfolio_management/services/NewAuthenticationService.dart';
+import 'package:portfolio_management/services/OtpService.dart';
 import 'package:portfolio_management/utilites/app_colors.dart';
 
 import 'package:portfolio_management/utilites/ui_widgets.dart';
@@ -167,12 +167,12 @@ class _SignInOTPState extends State<SignInOTP> {
                                           print("email");
 
                                           //FIREBASE
-                                          // sendOTPServer(phoneController.text,
-                                          //     "firebase", "email");
+                                          sendOTPServer(phoneController.text,
+                                              "firebase", "email");
 
                                           // TWILIO
-                                          sendOTPServer(phoneController.text,
-                                              "twilio", "email");
+                                          // sendOTPServer(phoneController.text,
+                                          //     "twilio", "email");
                                         } else {
                                           showSnackBar(context,
                                               "Please enter correct mobile number or email");
@@ -394,7 +394,7 @@ class _SignInOTPState extends State<SignInOTP> {
 
     print("sendOTPServer:=> $getOtpPlatform");
     VerificationIdSignIn verificationIdSignIn =
-        await Authentication.getVerificationFromTwillio(
+        await OtpService.getVerificationFromTwillio(
             getOtpPlatform, osType, requesterType);
     print("verificationId ${verificationIdSignIn.data.verificationId}");
 

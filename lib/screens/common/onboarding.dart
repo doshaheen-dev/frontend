@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:portfolio_management/screens/authentication/signin_otp.dart';
 import 'package:portfolio_management/screens/common/user_type.dart';
+import 'package:portfolio_management/screens/investor/dashboard/investor_dashboard.dart';
 import 'package:portfolio_management/utilites/app_colors.dart';
 import 'package:portfolio_management/utilites/ui_widgets.dart';
 
@@ -277,6 +278,7 @@ class _OnBoardingState extends State<OnBoarding> {
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) {
           return SignInOTP();
+          //return InvestorDashboard();
         },
         transitionDuration: Duration(milliseconds: 1000),
         transitionsBuilder: (context, animation, anotherAnimation, child) {

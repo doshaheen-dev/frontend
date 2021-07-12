@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,7 +5,7 @@ import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:portfolio_management/models/authentication/verify_phone.dart';
 import 'package:portfolio_management/screens/authentication/signup_quick.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:portfolio_management/services/NewAuthenticationService.dart';
+import 'package:portfolio_management/services/OtpService.dart';
 import 'package:portfolio_management/utilites/app_colors.dart';
 
 import 'package:portfolio_management/utilites/ui_widgets.dart';
@@ -211,7 +209,7 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
   Future<void> verifyUser(String token, String phoneNumber) async {
     print("Token: $token, phoneNumber -> $phoneNumber");
     VerifyPhoneNumber verifyPhoneNumber =
-        await Authentication.verifyUser(token, phoneNumber);
+        await OtpService.verifyUser(token, phoneNumber);
     progress.dismiss();
     if (verifyPhoneNumber.status == 200) {
       final prefs = await SharedPreferences.getInstance();

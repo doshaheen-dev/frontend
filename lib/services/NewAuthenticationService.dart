@@ -7,10 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
-import 'package:portfolio_management/models/authentication/verify_phone.dart';
-import 'package:portfolio_management/models/authentication/verify_phone_signin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -192,107 +188,5 @@ class Authentication {
     print("logged out");
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
-  }
-
-  static String baseUrl =
-      "http://ec2-65-2-69-222.ap-south-1.compute.amazonaws.com:3000/api";
-  var client = new http.Client();
-
-  // Verify user with phone number - SIGN UP For Investor
-  static Future<VerifyPhoneNumber> verifyUser(
-      String token, String phoneNumber) async {
-    // set up POST request arguments
-    final url = Uri.parse("$baseUrl/sign-up/verify/firebase/mobile_no");
-    final headers = {"Content-type": "application/json"};
-    final _body = '{"mobile_no": "$phoneNumber", "idToken": "$token"}';
-    print("Body:${_body}");
-
-    // make POST request
-    final response = await post(url, headers: headers, body: _body);
-
-    // check the status code for the result
-    //final statusCode = response.statusCode;
-
-    // this API passes back the id of the new item added to the body
-    final responseBody = response.body;
-    Map valueMap = jsonDecode(responseBody);
-    VerifyPhoneNumber userDetails = VerifyPhoneNumber.from(valueMap);
-    return userDetails;
-  }
-
-  // Get otp from backend
-  static Future<VerifyPhoneNumberSignIn> verifyUserByServer(
-      String token,
-      String phoneNumber,
-      String verificationId,
-      String smsCode,
-      String inputType,
-      String requesterType) async {
-    // print("Header => $inputType, token => $token");
-    // print("requesterType => $requesterType");
-    // print(
-    //     "phoneNumber => $phoneNumber, verificationId => $verificationId, smsCode => $smsCode");
-
-    // set up POST request arguments
-    final url = Uri.parse("$baseUrl/sign-in/verify_otp");
-    final headers = {
-      "Content-type": "application/json",
-      "x-auth-service-type": "$requesterType"
-    };
-    var _body;
-    if (inputType == "email") {
-      _body =
-          '{"email_id": "$phoneNumber", "idToken": "$token","verificationId": "$verificationId", "smsCode": "$smsCode"}';
-    } else {
-      _body =
-          '{"mobile_no": "$phoneNumber", "idToken": "$token","verificationId": "$verificationId", "smsCode": "$smsCode"}';
-    }
-    print("Body:${_body}");
-
-    // make POST request
-    final response = await post(url, headers: headers, body: _body);
-    print("Body:${response}");
-
-    // check the status code for the result
-    //final statusCode = response.statusCode;
-
-    // this API passes back the id of the new item added to the body
-    final responseBody = response.body;
-    Map valueMap = jsonDecode(responseBody);
-    VerifyPhoneNumberSignIn userDetails =
-        VerifyPhoneNumberSignIn.from(valueMap);
-    return userDetails;
-  }
-
-  // Get otp from backend
-  static Future<VerificationIdSignIn> getVerificationFromTwillio(
-      String phoneNumber, String inputType, String requesterType) async {
-    // print("Header => $inputType, phoneNumber => $phoneNumber");
-    // set up POST request arguments
-    final url = Uri.parse("$baseUrl/sign-in/send_otp");
-    final headers = {
-      "Content-type": "application/json",
-      "x-auth-service-type": "$requesterType"
-    };
-    var _body;
-    if (inputType == "mobile") {
-      _body = '{"mobile_no": "$phoneNumber"}';
-    } else {
-      _body = '{"email_id": "$phoneNumber"}';
-    }
-
-    print("Body:${_body}, requesterType => $requesterType");
-
-    // make POST request
-    final response = await post(url, headers: headers, body: _body);
-
-    // check the status code for the result
-    //final statusCode = response.statusCode;
-
-    // this API passes back the id of the new item added to the body
-    final responseBody = response.body;
-    Map valueMap = jsonDecode(responseBody);
-    VerificationIdSignIn userDetails = VerificationIdSignIn.from(valueMap);
-    return userDetails;
   }
 }

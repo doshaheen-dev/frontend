@@ -10,6 +10,29 @@ class InvestorSearchInfo extends StatefulWidget {
 }
 
 class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
+  bool _isNameVisible = false;
+  bool _isNextVisible = false;
+
+  void showNameField() {
+    setState(() {
+      _isNameVisible = false;
+      print("infoItemList => $infoItemList");
+      if (infoItemList.contains("Referral")) {
+        _isNameVisible = true;
+      }
+    });
+  }
+
+  void showNextButton() {
+    setState(() {
+      _isNextVisible = true;
+      print("infoItemList => $infoItemList");
+      if (infoItemList == null) {
+        _isNextVisible = false;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     String firstname = "";
@@ -67,46 +90,63 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                           return _createCell(index);
                         })),
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(
-                        top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                    decoration: customDecoration(),
-                    child: TextField(
-                      style: _setTextFieldStyle(),
-                      controller: firstNameController,
-                      onChanged: (value) => {firstname = value},
-                      decoration: _setTextFieldDecoration("Name of the person"),
+                  Visibility(
+                    visible: _isNameVisible,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(
+                              top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+                          decoration: customDecoration(),
+                          child: TextField(
+                            style: _setTextFieldStyle(),
+                            controller: firstNameController,
+                            onChanged: (value) => {firstname = value},
+                            decoration:
+                                _setTextFieldDecoration("Name of the person"),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                      margin: const EdgeInsets.only(
-                          top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(40),
-                        onTap: () {
-                          // on click
-                          openInvestmentLimit();
-                        },
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 60,
-                          decoration: appColorButton(),
-                          child: Center(
-                              child: Text(
-                            "Next",
-                            style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          )),
-                        ),
-                      )),
+                  Visibility(
+                      visible: _isNextVisible,
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                              margin: const EdgeInsets.only(
+                                  top: 5.0,
+                                  left: 25.0,
+                                  bottom: 20,
+                                  right: 25.0),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(40),
+                                onTap: () {
+                                  // on click
+                                  openInvestmentLimit();
+                                },
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 60,
+                                  decoration: appColorButton(),
+                                  child: Center(
+                                      child: Text(
+                                    "Next",
+                                    style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                  )),
+                                ),
+                              )),
+                        ],
+                      ))
                 ],
               ),
             ],
@@ -157,6 +197,8 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
         infoItemList = [];
         infoItemList.add(infoItem[_index].header);
         setState(() {
+          showNameField();
+          showNextButton();
           // openInvestmentLimit();
         });
       },
