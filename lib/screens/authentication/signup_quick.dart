@@ -174,15 +174,19 @@ class _QuickSignUpState extends State<QuickSignUp> {
       borderRadius: BorderRadius.circular(40),
       onTap: () async {
         if (type == "Apple") {
+          User user;
           if (Platform.isAndroid) {
             print("ANDROID");
             // Android-specific code
-            await context.read<Authentication>().appleAuthenticationAndroid();
+            user = await context
+                .read<Authentication>()
+                .appleAuthenticationAndroid();
           } else if (Platform.isIOS) {
             print("IOS");
-            await context.read<Authentication>().signInWithApple();
+            user = await context.read<Authentication>().signInWithApple();
             // iOS-specific code
           }
+          checkUserAndNavigate(user);
         } else if (type == "Google") {
           await signInGoogle();
           // context.read<AuthenticationService>().signInWithGoogle();
@@ -205,13 +209,14 @@ class _QuickSignUpState extends State<QuickSignUp> {
 
   Future<void> signInGoogle() async {
     User user = await Authentication.signInWithGoogle(context: context);
+    checkUserAndNavigate(user);
+    print("Google => $user");
+    // context.read<AuthenticationService>().signInWithGoogle();
+  }
+
+  void checkUserAndNavigate(User user) {
     if (user != null) {
       openSignUpDetails(user);
-
-      // Navigator.of(context).push(MaterialPageRoute(
-      //     builder: (context) => SignUpDetails(
-      //           user: user,
-      //         )));
     } else {
       final snackBar = SnackBar(
         content: Text('Something went wrong. Try again!!'),
@@ -224,8 +229,6 @@ class _QuickSignUpState extends State<QuickSignUp> {
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       Authentication.signOut();
     }
-    print("Google => $user");
-    // context.read<AuthenticationService>().signInWithGoogle();
   }
 
   // ignore: missing_return
@@ -254,7 +257,10 @@ class _QuickSignUpState extends State<QuickSignUp> {
   void openSignUpDetails(User user) {
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) {
-          return SignUpDetails(user: user);
+          return SignUpDetails(
+            user: user,
+            userAvatar: user != null ? user.photoURL : '',
+          );
         },
         transitionDuration: Duration(milliseconds: 2000),
         transitionsBuilder: (context, animation, anotherAnimation, child) {

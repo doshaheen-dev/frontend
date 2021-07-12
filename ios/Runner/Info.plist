@@ -32,6 +32,13 @@
 			</array>
 		</dict>
 	</array>
+	<!-- Camera Access -->
+	<key>NSCameraUsageDescription</key>
+	<string>The application needs access to the phone camera to capture documents and profile picture</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Allow access to microphone</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>The application needs access to the phone library to upload documents and profile picture</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
