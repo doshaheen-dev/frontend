@@ -17,29 +17,30 @@ class _InvestorHomeState extends State<InvestorHome> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          Container(
-              margin: const EdgeInsets.only(top: 20.0, left: 15.0, right: 25.0),
-              child: Column(children: [
-                Text("Your Recommendations",
-                    style: TextStyle(
-                      color: headingBlack,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
-                      fontFamily: 'Poppins-Light',
-                    )),
-                Text(
-                    "Here are investment products specially curated for you based on your preferences",
-                    style: TextStyle(
-                      color: textGrey,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0,
-                      fontFamily: 'Poppins-Light',
-                    )),
-              ])),
-        ],
-      ),
+      body: Container(
+          margin: const EdgeInsets.only(top: 20.0, left: 25.0, right: 25.0),
+          alignment: Alignment.topLeft,
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text("Your Recommendations",
+                style: TextStyle(
+                  color: headingBlack,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0,
+                  fontFamily: 'Poppins-Light',
+                )),
+            SizedBox(
+              height: 10.0,
+            ),
+            Text(
+                "Here are investment products specially curated for you based on your preferences",
+                style: TextStyle(
+                  color: textGrey,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 16.0,
+                  fontFamily: 'Poppins-Light',
+                )),
+          ])),
     );
   }
 }
