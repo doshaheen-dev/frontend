@@ -277,8 +277,8 @@ class _OnBoardingState extends State<OnBoarding> {
   void openSignIn(BuildContext context) {
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) {
-          return SignInOTP();
-          //return InvestorDashboard();
+          //return SignInOTP();
+          return InvestorDashboard();
         },
         transitionDuration: Duration(milliseconds: 1000),
         transitionsBuilder: (context, animation, anotherAnimation, child) {
