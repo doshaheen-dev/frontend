@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:portfolio_management/screens/investor/thank_you.dart';
-import 'package:portfolio_management/utilites/app_colors.dart';
-import 'package:portfolio_management/utilites/ui_widgets.dart';
+import 'package:acc/screens/investor/thank_you.dart';
+import 'package:acc/utilites/app_colors.dart';
+import 'package:acc/utilites/ui_widgets.dart';
 
 class SignUpPanDetails extends StatefulWidget {
   @override

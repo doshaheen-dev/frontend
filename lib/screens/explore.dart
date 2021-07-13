@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:portfolio_management/constants/caterories_type.dart';
-import 'package:portfolio_management/widgets/categories.dart';
-import 'package:portfolio_management/widgets/wavy_header.dart';
+import 'package:acc/constants/caterories_type.dart';
+import 'package:acc/widgets/categories.dart';
+import 'package:acc/widgets/wavy_header.dart';
 
 class Explore extends StatefulWidget {
   @override

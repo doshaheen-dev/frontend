@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.doshaheen.portfoliomanagement">
+    package="com.amicorp.acc">
    <application
+        
         android:label="Amicorp Capital Connect"
         android:icon="@mipmap/ic_launcher">
         <activity

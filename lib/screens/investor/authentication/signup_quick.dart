@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:portfolio_management/screens/authentication/signup_details.dart';
-import 'package:portfolio_management/services/NewAuthenticationService.dart';
-import 'package:portfolio_management/utilites/app_colors.dart';
-import 'package:portfolio_management/utilites/ui_widgets.dart';
+import 'package:acc/screens/investor/authentication/signup_details.dart';
+import 'package:acc/services/NewAuthenticationService.dart';
+import 'package:acc/utilites/app_colors.dart';
+import 'package:acc/utilites/ui_widgets.dart';
 import 'package:provider/provider.dart';
 
 class QuickSignUp extends StatefulWidget {

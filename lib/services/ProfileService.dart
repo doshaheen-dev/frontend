@@ -5,8 +5,8 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:portfolio_management/models/profile/basic_details.dart';
-import 'package:portfolio_management/services/http_service.dart';
+import 'package:acc/models/profile/basic_details.dart';
+import 'package:acc/services/http_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileService {

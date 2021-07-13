@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
-import 'package:portfolio_management/models/authentication/verify_phone.dart';
-import 'package:portfolio_management/models/authentication/verify_phone_signin.dart';
+import 'package:acc/models/authentication/verify_phone.dart';
+import 'package:acc/models/authentication/verify_phone_signin.dart';
 
 import 'http_service.dart';
 

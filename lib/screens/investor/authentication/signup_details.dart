@@ -4,12 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
-import 'package:portfolio_management/models/profile/basic_details.dart';
-import 'package:portfolio_management/screens/investor/welcome.dart';
-import 'package:portfolio_management/services/NewAuthenticationService.dart';
-import 'package:portfolio_management/services/ProfileService.dart';
-import 'package:portfolio_management/utilites/app_colors.dart';
-import 'package:portfolio_management/utilites/ui_widgets.dart';
+import 'package:acc/models/profile/basic_details.dart';
+import 'package:acc/screens/investor/welcome.dart';
+import 'package:acc/services/NewAuthenticationService.dart';
+import 'package:acc/services/ProfileService.dart';
+import 'package:acc/utilites/app_colors.dart';
+import 'package:acc/utilites/ui_widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SignUpDetails extends StatefulWidget {

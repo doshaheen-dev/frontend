@@ -2,12 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
-import 'package:portfolio_management/models/authentication/verify_phone_signin.dart';
-import 'package:portfolio_management/screens/authentication/signin_verify_otp.dart';
-import 'package:portfolio_management/services/OtpService.dart';
-import 'package:portfolio_management/utilites/app_colors.dart';
+import 'package:acc/models/authentication/verify_phone_signin.dart';
+import 'package:acc/screens/common/authentication/signin_verify_otp.dart';
+import 'package:acc/services/OtpService.dart';
+import 'package:acc/utilites/app_colors.dart';
+import 'package:acc/utilites/app_strings.dart';
+import 'package:acc/utilites/text_style.dart';
 
-import 'package:portfolio_management/utilites/ui_widgets.dart';
+import 'package:acc/utilites/ui_widgets.dart';
 
 class SignInOTP extends StatefulWidget {
   @override
@@ -66,26 +68,14 @@ class _SignInOTPState extends State<SignInOTP> {
                                 Container(
                                   margin: const EdgeInsets.only(
                                       top: 10.0, left: 25.0),
-                                  child: Text(
-                                    "Login here",
-                                    style: TextStyle(
-                                        color: headingBlack,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 28.0,
-                                        fontFamily: 'Poppins-Regular'),
-                                  ),
+                                  child: Text(loginHeader,
+                                      style: textBold28(headingBlack)),
                                 ),
                                 Container(
                                   margin: const EdgeInsets.only(
-                                      top: 5.0, left: 25.0),
-                                  child: Text(
-                                    "You can easily login via mobile number.",
-                                    style: TextStyle(
-                                        color: textGrey,
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 20.0,
-                                        fontFamily: 'Poppins-Regular'),
-                                  ),
+                                      top: 5.0, left: 25.0, right: 25.0),
+                                  child: Text(loginVia,
+                                      style: textNormal16(textGrey)),
                                 ),
                                 SizedBox(
                                   height: 25,
@@ -120,8 +110,7 @@ class _SignInOTPState extends State<SignInOTP> {
                                             right: 25.0),
                                         decoration: customDecoration(),
                                         child: inputTextField(
-                                            "Mobile Number or Email Id",
-                                            phoneController),
+                                            mobileEmailLabel, phoneController),
                                       ),
                                     ),
                                   ],
@@ -135,94 +124,84 @@ class _SignInOTPState extends State<SignInOTP> {
                                         bottom: 20,
                                         right: 25.0),
                                     child: ElevatedButton(
-                                      onPressed: () {
-                                        FocusScope.of(context)
-                                            .requestFocus(FocusNode());
-                                        if (phoneController.text.isEmpty) {
-                                          showSnackBar(context,
-                                              "Please enter mobile number or email.");
-                                          return;
-                                        }
-                                        if (isPhone(phoneController.text)) {
-                                          print("mobile");
-                                          progress = ProgressHUD.of(context);
+                                        onPressed: () {
+                                          FocusScope.of(context)
+                                              .requestFocus(FocusNode());
+                                          if (phoneController.text.isEmpty) {
+                                            showSnackBar(
+                                                context, correctEmailMobile);
+                                            return;
+                                          }
+                                          if (isPhone(phoneController.text)) {
+                                            print("mobile");
+                                            progress = ProgressHUD.of(context);
 
-                                          progress
-                                              ?.showWithText('Sending OTP...');
-                                          // openSignInVerifyOTP();
+                                            progress?.showWithText(sendingOtp);
 
-                                          //FIREBASE
-                                          // _submitPhoneNumber(
-                                          //     phoneController.text);
+                                            //FIREBASE
+                                            // _submitPhoneNumber(
+                                            //     phoneController.text);
 
-                                          // TWILIO
-                                          sendOTPServer(phoneController.text,
-                                              "twilio", "mobile");
-                                        } else if (emailValid(
-                                            phoneController.text)) {
-                                          progress = ProgressHUD.of(context);
+                                            // TWILIO
+                                            sendOTPServer(phoneController.text,
+                                                "twilio", "mobile");
+                                          } else if (emailValid(
+                                              phoneController.text)) {
+                                            progress = ProgressHUD.of(context);
 
-                                          progress
-                                              ?.showWithText('Sending OTP...');
-                                          print("email");
+                                            progress?.showWithText(sendingOtp);
+                                            print("email");
 
-                                          //FIREBASE
-                                          sendOTPServer(phoneController.text,
-                                              "firebase", "email");
+                                            //FIREBASE
+                                            // sendOTPServer(phoneController.text,
+                                            //     "firebase", "email");
 
-                                          // TWILIO
-                                          // sendOTPServer(phoneController.text,
-                                          //     "twilio", "email");
-                                        } else {
-                                          showSnackBar(context,
-                                              "Please enter correct mobile number or email");
-                                          return;
-                                        }
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                          padding: EdgeInsets.all(0.0),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(18))),
-                                      child: Ink(
-                                        decoration: BoxDecoration(
-                                            gradient: LinearGradient(colors: [
-                                              kDarkOrange,
-                                              kLightOrange
-                                            ]),
-                                            borderRadius:
-                                                BorderRadius.circular(15)),
-                                        child: Container(
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          height: 60,
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            'Send OTP',
-                                            style: TextStyle(
-                                                fontSize: 18.0,
-                                                fontFamily: 'Poppins-Regular',
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white),
-                                          ),
-                                        ),
-                                      ),
-                                    ))
+                                            // TWILIO
+                                            sendOTPServer(phoneController.text,
+                                                "twilio", "email");
+                                          } else {
+                                            showSnackBar(
+                                                context, warningEmailMobile);
+                                            return;
+                                          }
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            padding: EdgeInsets.all(0.0),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(18))),
+                                        child: Ink(
+                                            decoration: BoxDecoration(
+                                                gradient: LinearGradient(
+                                                    colors: [
+                                                      kDarkOrange,
+                                                      kLightOrange
+                                                    ]),
+                                                borderRadius:
+                                                    BorderRadius.circular(15)),
+                                            child: Container(
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              height: 60,
+                                              alignment: Alignment.center,
+                                              child: Text(sendOtp,
+                                                  style: textWhiteBold18()),
+                                            ))))
                               ])
                         ]))))));
   }
 
   BoxDecoration customDecoration() {
     return BoxDecoration(
-      color: Colors.transparent,
-      borderRadius: BorderRadius.all(const Radius.circular(10.0)),
-      boxShadow: [
-        BoxShadow(
-          offset: Offset(0, 2),
-          color: Colors.grey[200],
-        ),
-      ],
-    );
+        color: Colors.transparent,
+        borderRadius: BorderRadius.all(const Radius.circular(10.0)),
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(0, 2),
+            color: Colors.grey[200],
+          )
+        ]);
   }
 
   String _value = '+91';
@@ -251,7 +230,7 @@ class _SignInOTPState extends State<SignInOTP> {
             DropdownMenuItem(
               child: Text("+852"),
               value: '+852',
-            ),
+            )
           ],
           onChanged: (value) {
             setState(() {
@@ -263,46 +242,39 @@ class _SignInOTPState extends State<SignInOTP> {
 
   TextField inputTextField(text, controller) {
     return TextField(
-      onChanged: (text) {
-        print(text);
-        if (emailValid(text)) {
-          setState(() {
-            _isButtonVisible = false;
-          });
-        } else if (text == null) {
-          setState(() {
-            _isButtonVisible = true;
-          });
-        } else {
-          setState(() {
-            _isButtonVisible = true;
-          });
-        }
-      },
-      style: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.normal,
-          fontSize: 16.0,
-          fontFamily: 'Poppins-Regular'),
-      controller: controller,
-      decoration: new InputDecoration(
-        contentPadding: EdgeInsets.all(15.0),
-        labelText: text,
-        labelStyle: new TextStyle(color: Colors.grey[600]),
-        border: InputBorder.none,
-        focusedBorder: UnderlineInputBorder(
-          borderSide: const BorderSide(color: Colors.transparent, width: 2.0),
-          borderRadius: BorderRadius.all(
-            const Radius.circular(10.0),
-          ),
-        ),
-      ),
-    );
+        onChanged: (text) {
+          print(text);
+          if (emailValid(text)) {
+            setState(() {
+              _isButtonVisible = false;
+            });
+          } else if (text == null) {
+            setState(() {
+              _isButtonVisible = true;
+            });
+          } else {
+            setState(() {
+              _isButtonVisible = true;
+            });
+          }
+        },
+        style: textBlackNormal16(),
+        controller: controller,
+        decoration: new InputDecoration(
+            contentPadding: EdgeInsets.all(15.0),
+            labelText: text,
+            labelStyle: new TextStyle(color: Colors.grey[600]),
+            border: InputBorder.none,
+            focusedBorder: UnderlineInputBorder(
+                borderSide:
+                    const BorderSide(color: Colors.transparent, width: 2.0),
+                borderRadius: BorderRadius.all(
+                  const Radius.circular(10.0),
+                ))));
   }
 
   void openSignInVerifyOTP(String verificationId, String phoneNumber,
       String otpType, String requesterType) {
-    print("SIGN IN => $otpType, requesterType => $requesterType");
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) {
           return SignInVerifyOTP(
@@ -333,20 +305,15 @@ class _SignInOTPState extends State<SignInOTP> {
     /// The below functions are the callbacks, separated so as to make code more redable
     void verificationCompleted(AuthCredential phoneAuthCredential) {
       progress.dismiss();
-      print('verificationCompleted');
-      print(" token :- ${phoneAuthCredential.token}");
     }
 
     void verificationFailed(FirebaseAuthException error) {
       progress.dismiss();
       showSnackBar(context, "$error");
-      print('verificationFailed ${error}');
     }
 
     void codeSent(String verificationId, [int code]) {
-      print(verificationId);
-      print("Code sent ${code.toString()}");
-      progress?.showWithText('OTP Sent Successfully...');
+      progress?.showWithText(successOTP);
       Future.delayed(Duration(milliseconds: 2), () {
         progress.dismiss();
         openSignInVerifyOTP(verificationId, phoneNumber, "mobile", "firebase");
@@ -355,8 +322,6 @@ class _SignInOTPState extends State<SignInOTP> {
 
     void codeAutoRetrievalTimeout(String verificationId) {
       progress.dismiss();
-      print('codeAutoRetrievalTimeout');
-      print(verificationId);
     }
 
     await FirebaseAuth.instance.verifyPhoneNumber(

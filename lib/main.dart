@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-import 'package:portfolio_management/screens/common/onboarding.dart';
-import 'package:portfolio_management/services/NewAuthenticationService.dart';
+import 'package:acc/screens/common/onboarding.dart';
+import 'package:acc/services/NewAuthenticationService.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {

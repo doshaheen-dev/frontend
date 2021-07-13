@@ -2,45 +2,33 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
+import 'package:acc/models/authentication/verify_phone.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:portfolio_management/models/authentication/verify_phone_signin.dart';
-import 'package:portfolio_management/screens/investor/dashboard/investor_dashboard.dart';
-import 'package:portfolio_management/services/OtpService.dart';
-import 'package:portfolio_management/utilites/app_colors.dart';
+import 'package:acc/screens/fundraiser/authentication/signup_corporate_details.dart';
+import 'package:acc/services/OtpService.dart';
+import 'package:acc/utilites/app_colors.dart';
 
-import 'package:portfolio_management/utilites/ui_widgets.dart';
+import 'package:acc/utilites/ui_widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class SignInVerifyOTP extends StatefulWidget {
+class SignUpVerifyFundraiser extends StatefulWidget {
   final String _verificationId;
   final String _phoneNumber;
-  final String _otpType;
-  final String _requesterType;
-
-  const SignInVerifyOTP(
-      {Key key,
-      String verificationId,
-      String phoneNumber,
-      String otpType,
-      String requesterType})
+  const SignUpVerifyFundraiser(
+      {Key key, String verificationId, String phoneNumber})
       : _verificationId = verificationId,
         _phoneNumber = phoneNumber,
-        _otpType = otpType,
-        _requesterType = requesterType,
         super(key: key);
 
   @override
-  _SignInVerifyOTPState createState() => _SignInVerifyOTPState();
+  _SignUpVerifyFundraiserState createState() => _SignUpVerifyFundraiserState();
 }
 
-class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
+class _SignUpVerifyFundraiserState extends State<SignUpVerifyFundraiser> {
   String currentText = "";
   bool hasError = false;
-
   String _verificationId;
   String _phoneNumber;
-  String _otpType;
-  String _requesterType;
-
   TextEditingController otpController = new TextEditingController();
   var progress;
 
@@ -48,8 +36,6 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
   void initState() {
     _verificationId = widget._verificationId;
     _phoneNumber = widget._phoneNumber;
-    _otpType = widget._otpType;
-    _requesterType = widget._requesterType;
     super.initState();
   }
 
@@ -95,7 +81,7 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
                       Container(
                         margin: const EdgeInsets.only(top: 5.0, left: 25.0),
                         child: Text(
-                          "Enter the OTP sent to your mobile/email",
+                          "Enter the OTP sent to your mobile",
                           style: TextStyle(
                               color: textGrey,
                               fontWeight: FontWeight.normal,
@@ -140,9 +126,7 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
                           },
                           beforeTextPaste: (text) {
                             print("Allowing to paste $text");
-                            //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                            //but you can show anything you want here, like your pop up saying wrong paste format or etc
-                            return true;
+                            return false;
                           },
                         ),
                       ),
@@ -161,36 +145,12 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
                                 return;
                               }
                               FocusScope.of(context).requestFocus(FocusNode());
+                              openCorporateDetails();
+                              // progress = ProgressHUD.of(context);
+                              // progress?.showWithText('Verifying OTP...');
 
-                              progress = ProgressHUD.of(context);
-                              progress?.showWithText('Verifying OTP...');
-                              // verifyUser(otpController.text, _verificationId,
-                              //     _phoneNumber);
-
-                              //mobile
-                              print(
-                                  "---> $_otpType _requesterType => $_requesterType");
-                              if (_otpType == "mobile" &&
-                                  _requesterType == "firebase") {
-                                _verifyOtpByFirebase(
-                                    otpController.text,
-                                    _verificationId,
-                                    _phoneNumber,
-                                    _otpType,
-                                    _requesterType);
-                              } else {
-                                // 1. email using firebase or
-                                // 2. email mobile using twillo
-                                print(
-                                    "SIGNIN Header => $_otpType, phoneNumber => $_phoneNumber, verificationId => $_verificationId, smsCode => ${otpController.text}");
-                                verifyPhoneUser(
-                                    "",
-                                    _phoneNumber,
-                                    _otpType,
-                                    otpController.text.trim().toString(),
-                                    _verificationId,
-                                    _requesterType);
-                              }
+                              // _verifyPhoneOTP(otpController.text,
+                              //     _verificationId, _phoneNumber);
                             },
                             style: ElevatedButton.styleFrom(
                                 padding: EdgeInsets.all(0.0),
@@ -215,7 +175,7 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
                                 ),
                               ),
                             ),
-                          )),
+                          ))
                     ],
                   ),
                 ],
@@ -225,11 +185,11 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
         )));
   }
 
-  void openHome() {
+  void openCorporateDetails() {
     Navigator.of(context).pushAndRemoveUntil(
         PageRouteBuilder(
             pageBuilder: (context, animation, anotherAnimation) {
-              return InvestorDashboard();
+              return CorporateDetails();
             },
             transitionDuration: Duration(milliseconds: 2000),
             transitionsBuilder: (context, animation, anotherAnimation, child) {
@@ -244,8 +204,22 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
         (Route<dynamic> route) => false);
   }
 
-  Future<void> _verifyOtpByFirebase(String text, String verificationId,
-      String phoneNumber, String otpType, String requesterType) async {
+  Future<void> verifyUser(String token, String phoneNumber) async {
+    print("Token: $token, phoneNumber -> $phoneNumber");
+    VerifyPhoneNumber verifyPhoneNumber =
+        await OtpService.verifyUser(token, phoneNumber);
+    progress.dismiss();
+    if (verifyPhoneNumber.status == 200) {
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setInt("userId", verifyPhoneNumber.data.id);
+      openCorporateDetails();
+    } else {
+      _openDialog(context, verifyPhoneNumber.message);
+    }
+  }
+
+  Future<void> _verifyPhoneOTP(
+      String text, String verificationId, String phoneNumber) async {
     String smsCode = text.toString().trim();
 
     /// when used different phoneNumber other than the current (running) device
@@ -260,16 +234,14 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
       );
       final UserCredential userResult =
           await FirebaseAuth.instance.signInWithCredential(credential);
-      print("verificationId => ${verificationId}");
       print("userResult -> ${userResult.toString()}");
       final User currentUser = await FirebaseAuth.instance.currentUser;
       print("User => ${currentUser.toString()}");
       if (currentUser != null) {
         currentUser.getIdToken().then((token) async {
           //verify number
-          print("VERIFY");
-          verifyPhoneUser(token.toString(), phoneNumber, otpType, smsCode,
-              verificationId, requesterType);
+          print("Token: $token, phoneNumber -> $phoneNumber");
+          verifyUser(token.toString(), phoneNumber);
         });
       } else {
         progress.dismiss();
@@ -278,24 +250,6 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
     } catch (e) {
       progress.dismiss();
       print("Error -> ${e.toString()}");
-    }
-  }
-
-  Future<void> verifyPhoneUser(String token, String phoneNumber, String otpType,
-      String smsCode, String verificationId, String requesterType) async {
-    VerifyPhoneNumberSignIn verifyPhoneNumber =
-        await OtpService.verifyUserByServer(token, phoneNumber, verificationId,
-            smsCode, otpType, requesterType);
-    progress.dismiss();
-    print("veriyPhone :- ${verifyPhoneNumber.type}");
-    print("veriyPhone :- ${verifyPhoneNumber.status}");
-    print("veriyPhone :- ${verifyPhoneNumber.message}");
-    print("veriyPhone :- ${verifyPhoneNumber.data}");
-    if (verifyPhoneNumber.type == "success") {
-      showSnackBarWithoutButton(context, verifyPhoneNumber.message);
-      openHome();
-    } else {
-      _openDialog(context, verifyPhoneNumber.message);
     }
   }
 

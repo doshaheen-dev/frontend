@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:portfolio_management/screens/authentication/signin_otp.dart';
-import 'package:portfolio_management/screens/common/user_type.dart';
-import 'package:portfolio_management/screens/investor/dashboard/investor_dashboard.dart';
-import 'package:portfolio_management/utilites/app_colors.dart';
-import 'package:portfolio_management/utilites/ui_widgets.dart';
+import 'package:acc/screens/common/authentication/signin_otp.dart';
+import 'package:acc/screens/common/user_type.dart';
+import 'package:acc/screens/fundraiser/dashboard/fundraiser_dashboard.dart';
+import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
+import 'package:acc/utilites/app_colors.dart';
+import 'package:acc/utilites/text_style.dart';
+import 'package:acc/utilites/ui_widgets.dart';
 
 class OnBoarding extends StatefulWidget {
   @override
@@ -50,163 +52,127 @@ class _OnBoardingState extends State<OnBoarding> {
       SystemChrome.setSystemUIOverlayStyle(
           SystemUiOverlayStyle.dark.copyWith(statusBarColor: statusGrey));
     }
+
     final List<Widget> introWidgetsList = <Widget>[
-      Stack(
-        children: [
-          Container(
-            child: Stack(
-              children: [
-                Image.asset(
-                  'assets/images/onboarding/onboarding_first.png',
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  fit: BoxFit.fill,
-                ),
-                _addLogo(),
-              ],
-            ),
+      Stack(children: [
+        Container(
+            child: Stack(children: [
+          Image.asset(
+            'assets/images/onboarding/onboarding_first.png',
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            fit: BoxFit.fill,
           ),
-          Container(
+          _addLogo(),
+        ])),
+        Container(
             alignment: Alignment.bottomCenter,
             padding: EdgeInsets.all(25.0),
             child: Text(
               "Find an investment opportunity\nthat's right for you.",
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 18.0,
-                  color: Colors.white,
-                  fontFamily: 'Poppins-Regular'),
-            ),
-          )
-        ],
-      ),
-      Stack(
-        children: [
-          Container(
-            child: Stack(
-              children: [
-                Image.asset(
-                  'assets/images/onboarding/onboarding_second.png',
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  fit: BoxFit.fill,
-                ),
-                _addLogo(),
-              ],
-            ),
+              style: textWhiteNormal18(),
+            ))
+      ]),
+      Stack(children: [
+        Container(
+            child: Stack(children: [
+          Image.asset(
+            'assets/images/onboarding/onboarding_second.png',
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            fit: BoxFit.fill,
           ),
-          Container(
+          _addLogo(),
+        ])),
+        Container(
             alignment: Alignment.bottomCenter,
             padding: EdgeInsets.all(25.0),
             child: Text(
               "Looking for an investor?\nWe will find it for you!",
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 18.0,
-                  color: Colors.white,
-                  fontFamily: 'Poppins-Regular'),
-            ),
-          )
-        ],
-      ),
-      Stack(
-        children: [
-          Container(
-            child: Stack(
-              children: [
-                Image.asset(
-                  'assets/images/onboarding/onboarding_third.png',
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  fit: BoxFit.fill,
-                ),
-                _addLogo(),
-              ],
-            ),
+              style: textWhiteNormal18(),
+            ))
+      ]),
+      Stack(children: [
+        Container(
+            child: Stack(children: [
+          Image.asset(
+            'assets/images/onboarding/onboarding_third.png',
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            fit: BoxFit.fill,
           ),
-          Container(
+          _addLogo(),
+        ])),
+        Container(
             alignment: Alignment.bottomCenter,
             padding: EdgeInsets.all(25.0),
             child: Text(
               "Increase your capital gains? Let \nus take the risk",
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontFamily: 'Poppins-Regular'),
-            ),
-          )
-        ],
-      ),
+              style: textWhiteNormal18(),
+            ))
+      ])
     ];
 
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(backgroundColor: Colors.white),
         home: Scaffold(
-          appBar: AppBar(
-            toolbarHeight: 0,
-            elevation: 0.0,
-            backgroundColor: (statusBarColor),
-          ),
-          bottomNavigationBar: BottomAppBar(),
-          body: SafeArea(
-            child: Column(
-              children: [
-                // Slider View
-                Expanded(
+            appBar: AppBar(
+              toolbarHeight: 0,
+              elevation: 0.0,
+              backgroundColor: (statusBarColor),
+            ),
+            bottomNavigationBar: BottomAppBar(),
+            body: SafeArea(
+                child: Column(children: [
+              // Slider View
+              Expanded(
                   child: Container(
-                    child: Stack(
-                      alignment: AlignmentDirectional.bottomCenter,
-                      children: <Widget>[
-                        PageView.builder(
-                          physics: BouncingScrollPhysics(),
-                          itemCount: introWidgetsList.length,
-                          onPageChanged: (int page) {
-                            getChangedPageAndMoveBar(page);
-                          },
-                          controller: controller,
-                          itemBuilder: (context, index) {
-                            return introWidgetsList[index];
-                          },
-                        ),
-                        Stack(
-                          alignment: AlignmentDirectional.topCenter,
+                      child: Stack(
+                          alignment: AlignmentDirectional.bottomCenter,
                           children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.only(top: 5),
-                              child: Divider(color: Colors.white70),
-                            ),
-                            Container(
+                    PageView.builder(
+                        physics: BouncingScrollPhysics(),
+                        itemCount: introWidgetsList.length,
+                        onPageChanged: (int page) {
+                          getChangedPageAndMoveBar(page);
+                        },
+                        controller: controller,
+                        itemBuilder: (context, index) {
+                          return introWidgetsList[index];
+                        }),
+                    Stack(
+                        alignment: AlignmentDirectional.topCenter,
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(top: 5),
+                            child: Divider(color: Colors.white70),
+                          ),
+                          Container(
                               margin: EdgeInsets.only(bottom: 100),
                               child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  for (int i = 0;
-                                      i < introWidgetsList.length;
-                                      i++)
-                                    if (i == currentPageValue) ...[
-                                      circleBar(true, i)
-                                    ] else
-                                      circleBar(false, i),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                // Bottom view
-                Container(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    for (int i = 0;
+                                        i < introWidgetsList.length;
+                                        i++)
+                                      if (i == currentPageValue) ...[
+                                        circleBar(true, i)
+                                      ] else
+                                        circleBar(false, i),
+                                  ]))
+                        ])
+                  ]))),
+              // Bottom view
+              Container(
                   color: kDarkGrey,
                   height: 150,
-                  child: Column(
-                    children: [
-                      InkWell(
+                  child: Column(children: [
+                    InkWell(
                         borderRadius: BorderRadius.circular(40),
                         onTap: () {
                           // Open  view
@@ -231,54 +197,42 @@ class _OnBoardingState extends State<OnBoarding> {
                               }));
                         },
                         child: Container(
-                          margin: const EdgeInsets.only(
-                              top: 20.0, left: 25.0, right: 25.0),
-                          height: 60,
-                          decoration: appColorButton(),
-                          child: Center(
-                              child: Text(
-                            "Join our community",
-                            style: TextStyle(
-                                fontSize: 18.0,
-                                fontFamily: 'Poppins-Regular',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          )),
-                        ),
-                      ),
-                      Container(
+                            margin: const EdgeInsets.only(
+                                top: 20.0, left: 25.0, right: 25.0),
+                            height: 60,
+                            decoration: appColorButton(),
+                            child: Center(
+                                child: Text(
+                              "Join our community",
+                              style: textWhiteBold18(),
+                            )))),
+                    Container(
                         margin: const EdgeInsets.only(top: 20.0),
                         alignment: Alignment.center,
                         child: RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                              text: "Already a member? ",
-                              style: setTextStyle(textDarkOrange),
-                              children: [
-                                TextSpan(
-                                    text: 'Sign In',
-                                    style: setTextStyle(kDarkOrange),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () {
-                                        openSignIn(context);
-                                      }),
-                              ]),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ));
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                                text: "Already a member? ",
+                                style: textNormal16(textDarkOrange),
+                                children: [
+                                  TextSpan(
+                                      text: 'Sign In',
+                                      style: textNormal16(kDarkOrange),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          openSignIn(context);
+                                        })
+                                ])))
+                  ]))
+            ]))));
   }
 
   void openSignIn(BuildContext context) {
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) {
-          //return SignInOTP();
-          return InvestorDashboard();
+          return SignInOTP();
+          //return InvestorDashboard();
+          //return FundraiserDashboard();
         },
         transitionDuration: Duration(milliseconds: 1000),
         transitionsBuilder: (context, animation, anotherAnimation, child) {
@@ -338,10 +292,6 @@ class _OnBoardingState extends State<OnBoarding> {
       }
     }
     setState(() {});
-  }
-
-  TextStyle setTextStyle(colors) {
-    return TextStyle(color: colors, fontSize: 16, fontWeight: FontWeight.w500);
   }
 
   Widget _addLogo() {

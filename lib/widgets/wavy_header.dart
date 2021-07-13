@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:portfolio_management/constants/theme_colors.dart';
+import 'package:acc/constants/theme_colors.dart';
 
 class WavyHeader extends StatelessWidget {
   @override

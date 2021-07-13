@@ -5,17 +5,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
-import 'package:portfolio_management/screens/authentication/signup_verify_otp.dart';
-import 'package:portfolio_management/utilites/app_colors.dart';
+import 'package:acc/screens/fundraiser/authentication/signup_verify_fundraiser.dart';
+import 'package:acc/utilites/app_colors.dart';
 
-import 'package:portfolio_management/utilites/ui_widgets.dart';
+import 'package:acc/utilites/ui_widgets.dart';
 
-class SignUpOTP extends StatefulWidget {
+class SignUpFundraiserOTP extends StatefulWidget {
   @override
-  _SignUpOTPState createState() => _SignUpOTPState();
+  _SignUpFundraiserOTPState createState() => _SignUpFundraiserOTPState();
 }
 
-class _SignUpOTPState extends State<SignUpOTP> {
+class _SignUpFundraiserOTPState extends State<SignUpFundraiserOTP> {
   bool visible = false;
 
   loadProgress() {
@@ -126,75 +126,6 @@ class _SignUpOTPState extends State<SignUpOTP> {
                       SizedBox(
                         height: 30.0,
                       ),
-                      //CAPTCHA
-                      // Container(
-                      //   child: Padding(
-                      //     padding: const EdgeInsets.only(
-                      //       left: 25.0,
-                      //       bottom: 20.0,
-                      //       right: 25.0,
-                      //     ),
-                      //     child: Column(
-                      //       crossAxisAlignment: CrossAxisAlignment.start,
-                      //       children: [
-                      //         Text(
-                      //           "Captcha",
-                      //           style: TextStyle(
-                      //               color: headingBlack,
-                      //               fontWeight: FontWeight.bold,
-                      //               fontSize: 20.0,
-                      //               fontFamily: 'Poppins-Light'),
-                      //         ),
-                      //         SizedBox(
-                      //           height: 20.0,
-                      //         ),
-                      //         Row(
-                      //           children: [
-                      //             Expanded(
-                      //                 flex: 1,
-                      //                 child: Container(
-                      //                   margin: EdgeInsets.only(right: 10.0),
-                      //                   height: 60,
-                      //                   decoration: BoxDecoration(
-                      //                       color: HexColor('E5E5E5'),
-                      //                       borderRadius: BorderRadius.all(
-                      //                         const Radius.circular(20.0),
-                      //                       )),
-                      //                   child: Container(
-                      //                       alignment: Alignment.center,
-                      //                       child: GestureDetector(
-                      //                           behavior: HitTestBehavior.opaque,
-                      //                           onTap: () => setState(() {}),
-                      //                           child: HBCheckCode(
-                      //                             code: code,
-                      //                           ))),
-                      //                 )),
-                      //             Expanded(
-                      //               flex: 1,
-                      //               child: Container(
-                      //                 margin: EdgeInsets.only(left: 10.0),
-                      //                 width: MediaQuery.of(context).size.width,
-                      //                 height: 60,
-                      //                 decoration: BoxDecoration(
-                      //                   color: Colors.white,
-                      //                   borderRadius: BorderRadius.all(
-                      //                     const Radius.circular(20.0),
-                      //                   ),
-                      //                   shape: BoxShape.rectangle,
-                      //                   border: Border.all(
-                      //                     color: HexColor('E5E5E5'),
-                      //                     width: 2,
-                      //                   ),
-                      //                 ),
-                      //                 child: inputTextField(),
-                      //               ),
-                      //             ),
-                      //           ],
-                      //         )
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
 
                       //SIGN UP BUTTON
 
@@ -209,14 +140,14 @@ class _SignUpOTPState extends State<SignUpOTP> {
                                 return;
                               }
                               FocusScope.of(context).requestFocus(FocusNode());
-
-                              progress = ProgressHUD.of(context);
-                              // progress?.show();
-                              progress?.showWithText('Sending OTP...');
-                              String phoneNumber = "+91 " +
-                                  phoneController.text.toString().trim();
-                              // openSignUpVerifyOTP("", phoneNumber);
-                              _submitPhoneNumber(phoneController.text);
+                              openSignUpVerifyOTP("", phoneController.text);
+                              // progress = ProgressHUD.of(context);
+                              // // progress?.show();
+                              // progress?.showWithText('Sending OTP...');
+                              // String phoneNumber = "+91 " +
+                              //     phoneController.text.toString().trim();
+                              // // openSignUpVerifyOTP("", phoneNumber);
+                              // _submitPhoneNumber(phoneController.text);
                             },
                             style: ElevatedButton.styleFrom(
                                 padding: EdgeInsets.all(0.0),
@@ -354,7 +285,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
   void openSignUpVerifyOTP([String verificationId, String phoneNumber]) {
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) {
-          return SignUpVerifyOTP(
+          return SignUpVerifyFundraiser(
               verificationId: verificationId, phoneNumber: phoneNumber);
         },
         transitionDuration: Duration(milliseconds: 2000),

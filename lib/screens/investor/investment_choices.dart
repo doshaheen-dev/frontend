@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:portfolio_management/screens/investor/general_terms_privacy.dart';
-import 'package:portfolio_management/utilites/app_colors.dart';
-import 'package:portfolio_management/utilites/ui_widgets.dart';
+import 'package:acc/screens/investor/general_terms_privacy.dart';
+import 'package:acc/utilites/app_colors.dart';
+import 'package:acc/utilites/ui_widgets.dart';
 
 class InvestmentChoices extends StatefulWidget {
   @override

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:portfolio_management/screens/investor/investment_limit.dart';
-import 'package:portfolio_management/utilites/app_colors.dart';
-import 'package:portfolio_management/utilites/ui_widgets.dart';
+import 'package:acc/screens/investor/investment_limit.dart';
+import 'package:acc/utilites/app_colors.dart';
+import 'package:acc/utilites/ui_widgets.dart';
 
 class InvestorSearchInfo extends StatefulWidget {
   @override

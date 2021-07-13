@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>portfolio_management</string>
+	<string>acc</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -27,22 +27,21 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.955568098911-3lse8gdebe8cdf0qbu5ktgb9jms72g24</string>
+				<string>com.googleusercontent.apps.257378514008-eclfdj3o2g86t0tfbk6q0363h31vmdc3</string>
 				<string>app-1-99767968971-ios-a0f41860fc2a8cc1f8674e</string>
 			</array>
 		</dict>
 	</array>
-	<!-- Camera Access -->
+	<key>CFBundleVersion</key>
+	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>The application needs access to the phone camera to capture documents and profile picture</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Allow access to microphone</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>The application needs access to the phone library to upload documents and profile picture</string>
-	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

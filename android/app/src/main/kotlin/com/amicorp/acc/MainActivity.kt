@@ -1,4 +1,4 @@
-package com.doshaheen.portfoliomanagement
+package com.amicorp.acc
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:portfolio_management/screens/authentication/signup_otp.dart';
-import 'package:portfolio_management/utilites/app_colors.dart';
+import 'package:acc/screens/fundraiser/authentication/signup_fundraiser.dart';
+import 'package:acc/screens/investor/authentication/signup_otp.dart';
+import 'package:acc/utilites/app_colors.dart';
 
 class UserType extends StatefulWidget {
   @override
@@ -80,7 +81,7 @@ class _UserTypeState extends State<UserType> {
           selectedCategory = [];
           selectedCategory.add(investor);
           setState(() {
-            openSignUpOtp();
+            openInvestorSignUp();
           });
         },
         child: Container(
@@ -132,8 +133,7 @@ class _UserTypeState extends State<UserType> {
           selectedCategory = [];
           selectedCategory.add(fundraiser);
           setState(() {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => SignUpOTP()));
+            openFundRaiserSignUp();
           });
         },
         child: Container(
@@ -175,10 +175,27 @@ class _UserTypeState extends State<UserType> {
     ]);
   }
 
-  void openSignUpOtp() {
+  void openInvestorSignUp() {
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) {
           return SignUpOTP();
+        },
+        transitionDuration: Duration(milliseconds: 2000),
+        transitionsBuilder: (context, animation, anotherAnimation, child) {
+          animation = CurvedAnimation(
+              curve: Curves.fastLinearToSlowEaseIn, parent: animation);
+          return SlideTransition(
+            position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                .animate(animation),
+            child: child,
+          );
+        }));
+  }
+
+  void openFundRaiserSignUp() {
+    Navigator.of(context).push(PageRouteBuilder(
+        pageBuilder: (context, animation, anotherAnimation) {
+          return SignUpFundraiserOTP();
         },
         transitionDuration: Duration(milliseconds: 2000),
         transitionsBuilder: (context, animation, anotherAnimation, child) {

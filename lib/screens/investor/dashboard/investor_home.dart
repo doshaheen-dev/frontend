@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:portfolio_management/utilites/app_colors.dart';
+import 'package:acc/utilites/app_colors.dart';
 
 class InvestorHome extends StatefulWidget {
   InvestorHome({Key key}) : super(key: key);

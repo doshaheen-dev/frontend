@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/investor/dashboard/investor_home.dart';
+import 'package:acc/utilites/app_colors.dart';
+import 'package:acc/utilites/text_style.dart';
 
-class InvestorDashboard extends StatefulWidget {
-  InvestorDashboard({Key key}) : super(key: key);
+import 'fundraiser_home.dart';
+
+class FundraiserDashboard extends StatefulWidget {
+  FundraiserDashboard({Key key}) : super(key: key);
 
   @override
-  _InvestorDashboardState createState() => _InvestorDashboardState();
+  _FundraiserDashboardState createState() => _FundraiserDashboardState();
 }
 
-class _InvestorDashboardState extends State<InvestorDashboard> {
+class _FundraiserDashboardState extends State<FundraiserDashboard> {
   int bottomSelectedIndex = 0;
 
   @override
@@ -31,11 +35,8 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                     SizedBox(width: 10.0),
                     Expanded(
                         child: Text(
-                      'Hello Investor',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 28.0,
-                          fontFamily: 'Poppins-Light'),
+                      'Hello Entrepreneur',
+                      style: textBold28(headingBlack),
                     )),
                     Image.asset('assets/images/investor/icon_investor.png'),
                   ],
@@ -112,7 +113,7 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
         pageChanged(index);
       },
       children: <Widget>[
-        InvestorHome(),
+        FundraiserHome(),
         Blue(),
         Yellow(),
         Red(),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:portfolio_management/screens/requests/request_recieved.dart';
-import 'package:portfolio_management/screens/requests/request_sent.dart';
+import 'package:acc/screens/requests/request_recieved.dart';
+import 'package:acc/screens/requests/request_sent.dart';
 
 class Requests extends StatefulWidget {
   @override
