@@ -1,4 +1,4 @@
-# acc
+# Amicorp Capital Connect
 
 A new Flutter project.
 
