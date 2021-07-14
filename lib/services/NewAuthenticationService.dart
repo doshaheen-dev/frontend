@@ -144,9 +144,9 @@ class Authentication {
           AppleIDAuthorizationScopes.fullName,
         ],
         webAuthenticationOptions: WebAuthenticationOptions(
-          clientId: 'com.doshaheen.portfoliomanagementservice',
+          clientId: 'com.amicorp.accservice',
           redirectUri: Uri.parse(
-            'https://fern-protective-smash.glitch.me/callbacks/sign_in_with_apple',
+            'https://citrine-grand-veterinarian.glitch.me/callbacks/sign_in_with_apple',
           ),
         ),
       );
