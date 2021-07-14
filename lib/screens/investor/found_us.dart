@@ -1,3 +1,4 @@
+import 'package:acc/models/investor/hearaboutus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/investor/investment_limit.dart';
@@ -5,6 +6,12 @@ import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 
 class InvestorSearchInfo extends StatefulWidget {
+  final HearAboutUs _hearAboutUs;
+
+  const InvestorSearchInfo({Key key, HearAboutUs data})
+      : _hearAboutUs = data,
+        super(key: key);
+
   @override
   _InvestorSearchInfoState createState() => _InvestorSearchInfoState();
 }
@@ -12,6 +19,8 @@ class InvestorSearchInfo extends StatefulWidget {
 class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
   bool _isNameVisible = false;
   bool _isNextVisible = false;
+  List<String> infoItemList = [];
+  List<Options> hearAboutUsList = [];
 
   void showNameField() {
     setState(() {
@@ -31,6 +40,16 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
         _isNextVisible = false;
       }
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    print("Data:- ${widget._hearAboutUs}");
+    print("Options:- ${widget._hearAboutUs.data.options.length}");
+
+    hearAboutUsList.addAll(widget._hearAboutUs.data.options);
+    print("Size: ${this.hearAboutUsList.length}");
   }
 
   @override
@@ -86,7 +105,8 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                         crossAxisSpacing: 10.0,
                         mainAxisSpacing: 10.0,
                         shrinkWrap: true,
-                        children: List.generate(infoItem.length, (index) {
+                        children:
+                            List.generate(hearAboutUsList.length, (index) {
                           return _createCell(index);
                         })),
                   ),
@@ -179,23 +199,22 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
     );
   }
 
-  List<String> infoItemList = [];
-  List<InfoItem> infoItem = [
-    InfoItem("Internet Search", "assets/images/investor/internet_search.png"),
-    InfoItem(
-        "Internet Browsing", "assets/images/investor/internet_browsing.png"),
-    InfoItem("Referral", "assets/images/investor/referral.png"),
-    InfoItem("Social Media", "assets/images/investor/social_media.png"),
-  ];
+  // List<InfoItem> infoItem = [
+  //   InfoItem("Internet Search", "assets/images/investor/internet_search.png"),
+  //   InfoItem(
+  //       "Internet Browsing", "assets/images/investor/internet_browsing.png"),
+  //   InfoItem("Referral", "assets/images/investor/referral.png"),
+  //   InfoItem("Social Media", "assets/images/investor/social_media.png"),
+  // ];
 
   InkWell _createCell(int _index) {
     return InkWell(
       highlightColor: Colors.transparent,
       borderRadius: BorderRadius.circular(40),
       onTap: () {
-        print(infoItem[_index].header);
+        print(this.hearAboutUsList[_index].name);
         infoItemList = [];
-        infoItemList.add(infoItem[_index].header);
+        infoItemList.add(this.hearAboutUsList[_index].name);
         setState(() {
           showNameField();
           showNextButton();
@@ -206,7 +225,7 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
         width: 200,
         height: 200,
         decoration: BoxDecoration(
-          color: infoItemList.contains(infoItem[_index].header)
+          color: infoItemList.contains(this.hearAboutUsList[_index].name)
               ? selectedOrange
               : unselectedGray,
           borderRadius: BorderRadius.all(
@@ -217,13 +236,23 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(infoItem[_index].icon, width: 100.0, height: 100.0),
+              Image(
+                image: this.hearAboutUsList[_index].imageUrl != null
+                    ? NetworkImage(
+                        "http://${this.hearAboutUsList[_index].imageUrl}")
+                    : AssetImage("assets/images/UserProfile.png"),
+
+                width: 100,
+                height: 100,
+                // fit: BoxFit.cover,
+              ),
               SizedBox(
                 height: 10.0,
               ),
-              Text(infoItem[_index].header,
+              Text(this.hearAboutUsList[_index].name,
                   style: TextStyle(
-                      color: infoItemList.contains(infoItem[_index].header)
+                      color: infoItemList
+                              .contains(this.hearAboutUsList[_index].name)
                           ? Colors.white
                           : Colors.black,
                       fontWeight: FontWeight.normal,
@@ -271,9 +300,9 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
   }
 }
 
-class InfoItem {
-  final String header;
-  final String icon;
+// class InfoItem {
+//   final String header;
+//   final String icon;
 
-  InfoItem(this.header, this.icon);
-}
+//   InfoItem(this.header, this.icon);
+// }

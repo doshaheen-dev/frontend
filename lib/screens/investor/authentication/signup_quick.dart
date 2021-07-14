@@ -1,10 +1,11 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/investor/authentication/signup_details.dart';
-import 'package:acc/services/NewAuthenticationService.dart';
+import 'package:acc/services/AuthenticationService.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 import 'package:provider/provider.dart';
@@ -141,17 +142,23 @@ class _QuickSignUpState extends State<QuickSignUp> {
                           style: setTextStyle(textLightGrey),
                           children: [
                             TextSpan(
-                              text: "Terms of Use ",
-                              style: setTextStyle(Colors.black),
-                            ),
+                                text: "Terms of Use ",
+                                style: setTextStyle(Colors.black),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    //openSignIn(context);
+                                  }),
                             TextSpan(
                               text: "\n and ",
                               style: setTextStyle(textLightGrey),
                             ),
                             TextSpan(
-                              text: "Privacy Poicy",
-                              style: setTextStyle(Colors.black),
-                            )
+                                text: "Privacy Poicy",
+                                style: setTextStyle(Colors.black),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    //openSignIn(context);
+                                  })
                           ]),
                     ),
                   ),

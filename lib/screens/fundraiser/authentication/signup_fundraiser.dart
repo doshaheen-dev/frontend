@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:acc/utilites/app_strings.dart';
+import 'package:acc/utilites/hex_color.dart';
+import 'package:acc/utilites/text_style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +12,7 @@ import 'package:acc/screens/fundraiser/authentication/signup_verify_fundraiser.d
 import 'package:acc/utilites/app_colors.dart';
 
 import 'package:acc/utilites/ui_widgets.dart';
+import 'package:ps_code_checking/ps_code_checking.dart';
 
 class SignUpFundraiserOTP extends StatefulWidget {
   @override
@@ -31,6 +35,8 @@ class _SignUpFundraiserOTPState extends State<SignUpFundraiserOTP> {
   }
 
   TextEditingController phoneController = new TextEditingController();
+  final captchaController = CodeCheckController();
+  final textConroller = TextEditingController();
   var progress;
 
   @override
@@ -123,31 +129,31 @@ class _SignUpFundraiserOTPState extends State<SignUpFundraiserOTP> {
                         ),
                       ),
 
-                      SizedBox(
-                        height: 30.0,
-                      ),
+                      //CAPTCHA
+                      _createCaptcha(context),
 
                       //SIGN UP BUTTON
-
                       Container(
                           margin: const EdgeInsets.only(
                               top: 5.0, left: 25.0, bottom: 20, right: 25.0),
                           child: ElevatedButton(
                             onPressed: () {
+                              FocusScope.of(context).requestFocus(FocusNode());
                               if (phoneController.text.isEmpty) {
-                                showSnackBar(
-                                    context, "Please enter phone number.");
+                                showSnackBar(context, correctMobile);
                                 return;
                               }
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              openSignUpVerifyOTP("", phoneController.text);
-                              // progress = ProgressHUD.of(context);
-                              // // progress?.show();
-                              // progress?.showWithText('Sending OTP...');
-                              // String phoneNumber = "+91 " +
-                              //     phoneController.text.toString().trim();
-                              // // openSignUpVerifyOTP("", phoneNumber);
-                              // _submitPhoneNumber(phoneController.text);
+                              if (!captchaController
+                                  .verify(textConroller.value.text)) {
+                                showSnackBar(context, correctCaptcha);
+                                textConroller.clear();
+                                captchaController.refresh();
+                                return;
+                              }
+
+                              progress = ProgressHUD.of(context);
+                              progress?.showWithText(sendingOtp);
+                              _submitPhoneNumber(phoneController.text);
                             },
                             style: ElevatedButton.styleFrom(
                                 padding: EdgeInsets.all(0.0),
@@ -163,7 +169,7 @@ class _SignUpFundraiserOTPState extends State<SignUpFundraiserOTP> {
                                 height: 60,
                                 alignment: Alignment.center,
                                 child: Text(
-                                  'Send OTP',
+                                  sendOtp,
                                   style: TextStyle(
                                       fontSize: 18.0,
                                       fontFamily: 'Poppins-Regular',
@@ -180,6 +186,99 @@ class _SignUpFundraiserOTPState extends State<SignUpFundraiserOTP> {
             ),
           ),
         )));
+  }
+
+  Container _createCaptcha(BuildContext context) {
+    return Container(
+        child: Padding(
+            padding: const EdgeInsets.only(
+              left: 25.0,
+              bottom: 20.0,
+              right: 25.0,
+            ),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(
+                captchaText,
+                style: textNormal16(textGrey),
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              Row(children: [
+                Expanded(
+                    flex: 1,
+                    child: Container(
+                      height: 60,
+                      decoration: BoxDecoration(
+                          color: HexColor('E5E5E5'),
+                          borderRadius: BorderRadius.all(
+                            const Radius.circular(20.0),
+                          )),
+                      child: Container(
+                        margin: EdgeInsets.only(right: 10.0),
+                        alignment: Alignment.center,
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () => setState(() {}),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: PSCodeCheckingWidget(
+                                    lineWidth: 1,
+                                    maxFontSize: 24,
+                                    dotMaxSize: 8,
+                                    lineColorGenerator: SingleColorGenerator(
+                                        Colors.transparent),
+                                    textColorGenerator:
+                                        SingleColorGenerator(Colors.black),
+                                    dotColorGenerator:
+                                        SingleColorGenerator(Colors.black),
+                                    controller: captchaController,
+                                    codeGenerator: SizedCodeGenerator(size: 6)),
+                              ),
+                              Container(
+                                  child: Container(
+                                      margin: EdgeInsets.only(
+                                          left: 20.0, bottom: 5.0),
+                                      child: IconButton(
+                                          icon: Icon(
+                                            Icons.refresh,
+                                          ),
+                                          iconSize: 30,
+                                          highlightColor: Colors.transparent,
+                                          splashColor: Colors.transparent,
+                                          color: kDarkOrange,
+                                          onPressed: () {
+                                            captchaController.refresh();
+                                          })))
+                            ],
+                          ),
+                        ),
+                      ),
+                    )),
+                Expanded(
+                    flex: 1,
+                    child: Container(
+                      margin: EdgeInsets.only(left: 10.0),
+                      width: MediaQuery.of(context).size.width,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(
+                          const Radius.circular(20.0),
+                        ),
+                        shape: BoxShape.rectangle,
+                        border: Border.all(
+                          color: HexColor('E5E5E5'),
+                          width: 2,
+                        ),
+                      ),
+                      child: inputTextField(),
+                    ))
+              ])
+            ])));
   }
 
   BoxDecoration customDecoration() {
@@ -231,11 +330,8 @@ class _SignUpFundraiserOTPState extends State<SignUpFundraiserOTP> {
 
   TextField inputTextField() {
     return TextField(
-      style: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.normal,
-          fontSize: 18.0,
-          fontFamily: 'Poppins-Regular'),
+      controller: textConroller,
+      style: textBlackNormal18(),
       decoration: new InputDecoration(
         contentPadding: EdgeInsets.all(15.0),
         border: InputBorder.none,
