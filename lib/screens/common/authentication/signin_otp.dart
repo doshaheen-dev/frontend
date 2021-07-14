@@ -1,3 +1,4 @@
+import 'package:acc/utilites/hex_color.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +11,7 @@ import 'package:acc/utilites/app_strings.dart';
 import 'package:acc/utilites/text_style.dart';
 
 import 'package:acc/utilites/ui_widgets.dart';
+import 'package:ps_code_checking/ps_code_checking.dart';
 
 class SignInOTP extends StatefulWidget {
   @override
@@ -22,16 +24,18 @@ bool emailValid(String input) => RegExp(
 
 class _SignInOTPState extends State<SignInOTP> {
   TextEditingController phoneController = new TextEditingController();
+  final captchaController = CodeCheckController();
+  final textConroller = TextEditingController();
   var progress;
 
   bool isPhone(String input) =>
       RegExp(r'^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$')
           .hasMatch(input);
-  bool _isButtonVisible = true;
+  bool _isDropdownVisible = true;
 
   void showToast() {
     setState(() {
-      _isButtonVisible = true;
+      _isDropdownVisible = true;
     });
   }
 
@@ -48,12 +52,12 @@ class _SignInOTPState extends State<SignInOTP> {
         bottomNavigationBar: BottomAppBar(),
         backgroundColor: Colors.white,
         body: ProgressHUD(
-            child: Builder(
-                builder: (context) => SafeArea(
-                        child: SingleChildScrollView(
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
+          child: Builder(
+              builder: (context) => SafeArea(
+                    child: SingleChildScrollView(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
                           Container(
                             width: 60,
                             height: 60,
@@ -78,43 +82,11 @@ class _SignInOTPState extends State<SignInOTP> {
                                       style: textNormal16(textGrey)),
                                 ),
                                 SizedBox(
-                                  height: 25,
+                                  height: 30,
                                 ),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Visibility(
-                                      visible: _isButtonVisible,
-                                      child: Expanded(
-                                          flex: 1,
-                                          child: Container(
-                                            margin: const EdgeInsets.only(
-                                                top: 5.0,
-                                                left: 25.0,
-                                                bottom: 20,
-                                                right: 5.0),
-                                            decoration: customDecoration(),
-                                            child: dropdownField(),
-                                          )),
-                                    ),
-                                    Container(
-                                      width: 1,
-                                    ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Container(
-                                        margin: const EdgeInsets.only(
-                                            top: 5.0,
-                                            bottom: 20,
-                                            left: 25.0,
-                                            right: 25.0),
-                                        decoration: customDecoration(),
-                                        child: inputTextField(
-                                            mobileEmailLabel, phoneController),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                _createMobileFields(),
+                                //CAPTCHA
+                                _createCaptcha(context),
 
                                 //SIGN IN BUTTON
                                 Container(
@@ -130,8 +102,20 @@ class _SignInOTPState extends State<SignInOTP> {
                                           if (phoneController.text.isEmpty) {
                                             showSnackBar(
                                                 context, correctEmailMobile);
+
                                             return;
                                           }
+                                          print(captchaController.verify(
+                                              textConroller.value.text));
+                                          if (!captchaController.verify(
+                                              textConroller.value.text)) {
+                                            showSnackBar(
+                                                context, correctCaptcha);
+                                            textConroller.clear();
+                                            captchaController.refresh();
+                                            return;
+                                          }
+
                                           if (isPhone(phoneController.text)) {
                                             print("mobile");
                                             progress = ProgressHUD.of(context);
@@ -188,8 +172,138 @@ class _SignInOTPState extends State<SignInOTP> {
                                               child: Text(sendOtp,
                                                   style: textWhiteBold18()),
                                             ))))
-                              ])
-                        ]))))));
+                              ]),
+                        ])),
+                  )),
+        ));
+  }
+
+  Row _createMobileFields() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Visibility(
+          visible: _isDropdownVisible,
+          child: Expanded(
+              flex: 1,
+              child: Container(
+                margin: const EdgeInsets.only(
+                    top: 5.0, left: 25.0, bottom: 20, right: 5.0),
+                decoration: customDecoration(),
+                child: dropdownField(),
+              )),
+        ),
+        Container(
+          width: 1,
+        ),
+        Expanded(
+          flex: 2,
+          child: Container(
+            margin: const EdgeInsets.only(
+                top: 5.0, bottom: 20, left: 25.0, right: 25.0),
+            decoration: customDecoration(),
+            child: inputTextField(mobileEmailLabel, phoneController),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Container _createCaptcha(BuildContext context) {
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.only(
+          left: 25.0,
+          bottom: 20.0,
+          right: 25.0,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              captchaText,
+              style: textNormal16(textGrey),
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            Row(children: [
+              Expanded(
+                flex: 1,
+                child: Container(
+                  margin: EdgeInsets.only(right: 10.0),
+                  height: 60,
+                  decoration: BoxDecoration(
+                      color: HexColor('E5E5E5'),
+                      borderRadius: BorderRadius.all(
+                        const Radius.circular(20.0),
+                      )),
+                  child: Container(
+                    margin:
+                        EdgeInsets.only(right: 10.0, left: 10.0, bottom: 5.0),
+                    alignment: Alignment.center,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () => setState(() {}),
+                      child: Row(children: [
+                        Expanded(
+                          child: PSCodeCheckingWidget(
+                            lineWidth: 1,
+                            maxFontSize: 24,
+                            dotMaxSize: 8,
+                            lineColorGenerator:
+                                SingleColorGenerator(Colors.transparent),
+                            textColorGenerator:
+                                SingleColorGenerator(Colors.black),
+                            dotColorGenerator:
+                                SingleColorGenerator(Colors.black),
+                            controller: captchaController,
+                            codeGenerator: SizedCodeGenerator(size: 6),
+                          ),
+                        ),
+                        Expanded(
+                            child: Container(
+                                margin: EdgeInsets.only(left: 40, bottom: 20),
+                                child: IconButton(
+                                    icon: Icon(
+                                      Icons.refresh,
+                                    ),
+                                    iconSize: 30,
+                                    highlightColor: Colors.transparent,
+                                    splashColor: Colors.transparent,
+                                    color: kDarkOrange,
+                                    onPressed: () {
+                                      captchaController.refresh();
+                                    })))
+                      ]),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                  flex: 1,
+                  child: Container(
+                    margin: EdgeInsets.only(left: 10.0),
+                    width: MediaQuery.of(context).size.width,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        const Radius.circular(20.0),
+                      ),
+                      shape: BoxShape.rectangle,
+                      border: Border.all(
+                        color: HexColor('E5E5E5'),
+                        width: 2,
+                      ),
+                    ),
+                    child: otpTextField(),
+                  ))
+            ])
+          ],
+        ),
+      ),
+    );
   }
 
   BoxDecoration customDecoration() {
@@ -240,26 +354,47 @@ class _SignInOTPState extends State<SignInOTP> {
     );
   }
 
-  TextField inputTextField(text, controller) {
+  TextField otpTextField() {
+    return TextField(
+      controller: textConroller,
+      style: textBlackNormal18(),
+      decoration: new InputDecoration(
+        contentPadding: EdgeInsets.all(15.0),
+        border: InputBorder.none,
+        focusedBorder: UnderlineInputBorder(
+          borderSide: const BorderSide(color: Colors.transparent, width: 2.0),
+          borderRadius: BorderRadius.all(
+            const Radius.circular(10.0),
+          ),
+        ),
+      ),
+      keyboardType: TextInputType.number,
+      inputFormatters: <TextInputFormatter>[
+        FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(10),
+      ],
+    );
+  }
+
+  TextField inputTextField(text, _controller) {
     return TextField(
         onChanged: (text) {
-          print(text);
           if (emailValid(text)) {
             setState(() {
-              _isButtonVisible = false;
+              _isDropdownVisible = false;
             });
           } else if (text == null) {
             setState(() {
-              _isButtonVisible = true;
+              _isDropdownVisible = true;
             });
           } else {
             setState(() {
-              _isButtonVisible = true;
+              _isDropdownVisible = true;
             });
           }
         },
         style: textBlackNormal16(),
-        controller: controller,
+        controller: _controller,
         decoration: new InputDecoration(
             contentPadding: EdgeInsets.all(15.0),
             labelText: text,

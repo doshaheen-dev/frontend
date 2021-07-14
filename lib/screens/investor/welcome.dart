@@ -1,3 +1,7 @@
+import 'package:acc/models/investor/hearaboutus.dart';
+import 'package:acc/services/InvestmentInfoService.dart';
+import 'package:acc/utilites/app_strings.dart';
+import 'package:acc/utilites/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/investor/found_us.dart';
@@ -16,18 +20,18 @@ class _WelcomeInvestorState extends State<WelcomeInvestor> {
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 0,
-        elevation: 0.0,
-        backgroundColor: Color(0xffffffff),
-      ),
-      bottomNavigationBar: BottomAppBar(),
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+        appBar: AppBar(
+          toolbarHeight: 0,
+          elevation: 0.0,
+          backgroundColor: Color(0xffffffff),
+        ),
+        bottomNavigationBar: BottomAppBar(),
+        backgroundColor: Colors.white,
+        body: SafeArea(
+            child: SingleChildScrollView(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
               Container(
                 child: IconButton(
                   icon: Icon(Icons.arrow_back, size: 30),
@@ -35,148 +39,93 @@ class _WelcomeInvestorState extends State<WelcomeInvestor> {
                 ),
               ),
               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.only(
-                        top: 10.0, left: 25.0, right: 25.0),
-                    child: Text(
-                      "Welcome to Amicorp Capital Connect",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: headingBlack,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 28.0,
-                          fontFamily: 'Poppins-Light'),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      alignment: Alignment.center,
+                      margin: const EdgeInsets.only(
+                          top: 10.0, left: 25.0, right: 25.0),
+                      child: Text(welcomeInvestor,
+                          textAlign: TextAlign.center,
+                          style: textBold28(headingBlack)),
                     ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(
-                        top: 10.0, left: 25.0, right: 25.0),
-                    child: Text(
-                      "To give you the best possible experience we need to find out a bit more about you.\n(This will take less than a minute).",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: textGrey,
-                          fontSize: 16.0,
-                          fontFamily: 'Poppins-Light'),
+                    SizedBox(
+                      height: 10,
                     ),
-                  ),
+                    Container(
+                      margin: const EdgeInsets.only(
+                          top: 10.0, left: 25.0, right: 25.0),
+                      child: Text(welcomeInvestorBody,
+                          textAlign: TextAlign.center,
+                          style: textNormal16(textGrey)),
+                    ),
 
-                  SizedBox(
-                    height: 40,
-                  ),
-                  Center(
-                    child: Image.asset(
-                        'assets/images/investor/welcome_experience.png'),
-                  ),
-                  SizedBox(
-                    height: 50,
-                  ),
-                  //NEXT BUTTON
-                  Container(
-                    margin: const EdgeInsets.only(
-                        top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(40),
-                      onTap: () {
-                        // on click
-                        openInvestorSearchInfo();
-                      },
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 60,
-                        decoration: appColorButton(),
-                        child: Center(
-                            child: Text(
-                          "Let’s Do it",
-                          style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        )),
-                      ),
+                    SizedBox(
+                      height: 40,
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  TextStyle setTextStyle(colors) {
-    return TextStyle(color: colors, fontSize: 14, fontWeight: FontWeight.w500);
+                    Center(
+                      child: Image.asset(
+                          'assets/images/investor/welcome_experience.png'),
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    //NEXT BUTTON
+                    Container(
+                        margin: const EdgeInsets.only(
+                            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+                        child: InkWell(
+                            borderRadius: BorderRadius.circular(40),
+                            onTap: () {
+                              // on click
+                              openInvestorSearchInfo();
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 60,
+                              decoration: appColorButton(),
+                              child: Center(
+                                  child: Text("Let’s Do it",
+                                      style: textWhiteBold18())),
+                            )))
+                  ])
+            ]))));
   }
 
   BoxDecoration customDecoration() {
     return BoxDecoration(
-      color: Colors.transparent,
-      borderRadius: BorderRadius.all(const Radius.circular(10.0)),
-      boxShadow: [
-        BoxShadow(
-          offset: Offset(0, 2),
-          color: Colors.grey[200],
-        )
-      ],
-    );
-  }
-
-  TextStyle _setTextFieldStyle() {
-    return TextStyle(
-        color: Colors.black,
-        fontWeight: FontWeight.normal,
-        fontSize: 18.0,
-        fontFamily: 'Poppins-Regular');
-  }
-
-  InputDecoration _setTextFieldDecoration(_text) {
-    return InputDecoration(
-      contentPadding: EdgeInsets.all(10.0),
-      labelText: _text,
-      labelStyle: new TextStyle(color: Colors.grey[600]),
-      border: InputBorder.none,
-      focusedBorder: UnderlineInputBorder(
-        borderSide: const BorderSide(color: Colors.transparent, width: 2.0),
-        borderRadius: BorderRadius.all(
-          const Radius.circular(10.0),
-        ),
-      ),
-    );
+        color: Colors.transparent,
+        borderRadius: BorderRadius.all(const Radius.circular(10.0)),
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(0, 2),
+            color: Colors.grey[200],
+          )
+        ]);
   }
 
   TextField inputTextField(text) {
     return TextField(
-      style: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.normal,
-          fontSize: 16.0,
-          fontFamily: 'Poppins-Regular'),
-      decoration: new InputDecoration(
-        contentPadding: EdgeInsets.all(10.0),
-        labelText: text,
-        labelStyle: new TextStyle(color: Colors.grey[600]),
-        border: InputBorder.none,
-        focusedBorder: UnderlineInputBorder(
-          borderSide: const BorderSide(color: Colors.transparent, width: 2.0),
-          borderRadius: BorderRadius.all(
-            const Radius.circular(10.0),
-          ),
-        ),
-      ),
-    );
+        style: textBlackNormal16(),
+        decoration: new InputDecoration(
+            contentPadding: EdgeInsets.all(10.0),
+            labelText: text,
+            labelStyle: new TextStyle(color: Colors.grey[600]),
+            border: InputBorder.none,
+            focusedBorder: UnderlineInputBorder(
+                borderSide:
+                    const BorderSide(color: Colors.transparent, width: 2.0),
+                borderRadius: BorderRadius.all(
+                  const Radius.circular(10.0),
+                ))));
   }
 
-  void openInvestorSearchInfo() {
+  Future<void> openInvestorSearchInfo() async {
+    HearAboutUs hearAboutUs = await InvestmentInfoService.hearAboutUsInfo();
+
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) {
-          return InvestorSearchInfo();
+          return InvestorSearchInfo(data: hearAboutUs);
         },
         transitionDuration: Duration(milliseconds: 2000),
         transitionsBuilder: (context, animation, anotherAnimation, child) {

@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:acc/models/profile/basic_details.dart';
 import 'package:acc/screens/investor/welcome.dart';
-import 'package:acc/services/NewAuthenticationService.dart';
+import 'package:acc/services/AuthenticationService.dart';
 import 'package:acc/services/ProfileService.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/ui_widgets.dart';

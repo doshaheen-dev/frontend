@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:acc/utilites/app_strings.dart';
+import 'package:acc/utilites/hex_color.dart';
+import 'package:acc/utilites/text_style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +12,7 @@ import 'package:acc/screens/investor/authentication/signup_verify_otp.dart';
 import 'package:acc/utilites/app_colors.dart';
 
 import 'package:acc/utilites/ui_widgets.dart';
+import 'package:ps_code_checking/ps_code_checking.dart';
 
 class SignUpOTP extends StatefulWidget {
   @override
@@ -31,6 +35,8 @@ class _SignUpOTPState extends State<SignUpOTP> {
   }
 
   TextEditingController phoneController = new TextEditingController();
+  final captchaController = CodeCheckController();
+  final textConroller = TextEditingController();
   var progress;
 
   @override
@@ -95,127 +101,33 @@ class _SignUpOTPState extends State<SignUpOTP> {
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                                flex: 1,
-                                child: Container(
-                                  margin: const EdgeInsets.only(
-                                      top: 5.0,
-                                      left: 25.0,
-                                      bottom: 20,
-                                      right: 5.0),
-                                  decoration: customDecoration(),
-                                  child: dropdownField(),
-                                )),
-                            Expanded(
-                              flex: 2,
-                              child: Container(
-                                margin: const EdgeInsets.only(
-                                    top: 5.0, bottom: 20, right: 25.0),
-                                decoration: customDecoration(),
-                                child: labelTextField(
-                                    "Mobile Number", phoneController),
-                              ),
-                            ),
-                          ],
-                        ),
+                        child: _createMobileFields(),
                       ),
 
-                      SizedBox(
-                        height: 30.0,
-                      ),
                       //CAPTCHA
-                      // Container(
-                      //   child: Padding(
-                      //     padding: const EdgeInsets.only(
-                      //       left: 25.0,
-                      //       bottom: 20.0,
-                      //       right: 25.0,
-                      //     ),
-                      //     child: Column(
-                      //       crossAxisAlignment: CrossAxisAlignment.start,
-                      //       children: [
-                      //         Text(
-                      //           "Captcha",
-                      //           style: TextStyle(
-                      //               color: headingBlack,
-                      //               fontWeight: FontWeight.bold,
-                      //               fontSize: 20.0,
-                      //               fontFamily: 'Poppins-Light'),
-                      //         ),
-                      //         SizedBox(
-                      //           height: 20.0,
-                      //         ),
-                      //         Row(
-                      //           children: [
-                      //             Expanded(
-                      //                 flex: 1,
-                      //                 child: Container(
-                      //                   margin: EdgeInsets.only(right: 10.0),
-                      //                   height: 60,
-                      //                   decoration: BoxDecoration(
-                      //                       color: HexColor('E5E5E5'),
-                      //                       borderRadius: BorderRadius.all(
-                      //                         const Radius.circular(20.0),
-                      //                       )),
-                      //                   child: Container(
-                      //                       alignment: Alignment.center,
-                      //                       child: GestureDetector(
-                      //                           behavior: HitTestBehavior.opaque,
-                      //                           onTap: () => setState(() {}),
-                      //                           child: HBCheckCode(
-                      //                             code: code,
-                      //                           ))),
-                      //                 )),
-                      //             Expanded(
-                      //               flex: 1,
-                      //               child: Container(
-                      //                 margin: EdgeInsets.only(left: 10.0),
-                      //                 width: MediaQuery.of(context).size.width,
-                      //                 height: 60,
-                      //                 decoration: BoxDecoration(
-                      //                   color: Colors.white,
-                      //                   borderRadius: BorderRadius.all(
-                      //                     const Radius.circular(20.0),
-                      //                   ),
-                      //                   shape: BoxShape.rectangle,
-                      //                   border: Border.all(
-                      //                     color: HexColor('E5E5E5'),
-                      //                     width: 2,
-                      //                   ),
-                      //                 ),
-                      //                 child: inputTextField(),
-                      //               ),
-                      //             ),
-                      //           ],
-                      //         )
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
+                      _createCaptcha(context),
 
                       //SIGN UP BUTTON
-
                       Container(
                           margin: const EdgeInsets.only(
                               top: 5.0, left: 25.0, bottom: 20, right: 25.0),
                           child: ElevatedButton(
                             onPressed: () {
+                              FocusScope.of(context).requestFocus(FocusNode());
                               if (phoneController.text.isEmpty) {
-                                showSnackBar(
-                                    context, "Please enter phone number.");
+                                showSnackBar(context, correctMobile);
                                 return;
                               }
-                              FocusScope.of(context).requestFocus(FocusNode());
+                              if (!captchaController
+                                  .verify(textConroller.value.text)) {
+                                showSnackBar(context, correctCaptcha);
+                                textConroller.clear();
+                                captchaController.refresh();
+                                return;
+                              }
 
                               progress = ProgressHUD.of(context);
-                              // progress?.show();
-                              progress?.showWithText('Sending OTP...');
-                              String phoneNumber = "+91 " +
-                                  phoneController.text.toString().trim();
-                              // openSignUpVerifyOTP("", phoneNumber);
+                              progress?.showWithText(sendingOtp);
                               _submitPhoneNumber(phoneController.text);
                             },
                             style: ElevatedButton.styleFrom(
@@ -231,14 +143,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
                                 width: MediaQuery.of(context).size.width,
                                 height: 60,
                                 alignment: Alignment.center,
-                                child: Text(
-                                  'Send OTP',
-                                  style: TextStyle(
-                                      fontSize: 18.0,
-                                      fontFamily: 'Poppins-Regular',
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
+                                child: Text(sendOtp, style: textWhiteBold18()),
                               ),
                             ),
                           ))
@@ -249,6 +154,129 @@ class _SignUpOTPState extends State<SignUpOTP> {
             ),
           ),
         )));
+  }
+
+  Row _createMobileFields() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+            flex: 1,
+            child: Container(
+              margin: const EdgeInsets.only(
+                  top: 5.0, left: 25.0, bottom: 20, right: 5.0),
+              decoration: customDecoration(),
+              child: dropdownField(),
+            )),
+        Expanded(
+          flex: 2,
+          child: Container(
+            margin: const EdgeInsets.only(top: 5.0, bottom: 20, right: 25.0),
+            decoration: customDecoration(),
+            child: labelTextField("Mobile Number", phoneController),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Container _createCaptcha(BuildContext context) {
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.only(
+          left: 25.0,
+          bottom: 20.0,
+          right: 25.0,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              captchaText,
+              style: textNormal16(textGrey),
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            Row(children: [
+              Expanded(
+                flex: 1,
+                child: Container(
+                  margin: EdgeInsets.only(right: 10.0),
+                  height: 60,
+                  decoration: BoxDecoration(
+                      color: HexColor('E5E5E5'),
+                      borderRadius: BorderRadius.all(
+                        const Radius.circular(20.0),
+                      )),
+                  child: Container(
+                    margin: EdgeInsets.only(right: 10.0),
+                    alignment: Alignment.center,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () => setState(() {}),
+                      child: Row(children: [
+                        Expanded(
+                          flex: 2,
+                          child: PSCodeCheckingWidget(
+                            lineWidth: 1,
+                            maxFontSize: 24,
+                            dotMaxSize: 8,
+                            lineColorGenerator:
+                                SingleColorGenerator(Colors.transparent),
+                            textColorGenerator:
+                                SingleColorGenerator(Colors.black),
+                            dotColorGenerator:
+                                SingleColorGenerator(Colors.black),
+                            controller: captchaController,
+                            codeGenerator: SizedCodeGenerator(size: 6),
+                          ),
+                        ),
+                        Expanded(
+                            flex: 1,
+                            child: Container(
+                                margin:
+                                    EdgeInsets.only(left: 20.0, bottom: 5.0),
+                                child: IconButton(
+                                    icon: Icon(
+                                      Icons.refresh,
+                                    ),
+                                    iconSize: 30,
+                                    highlightColor: Colors.transparent,
+                                    splashColor: Colors.transparent,
+                                    color: kDarkOrange,
+                                    onPressed: () {
+                                      captchaController.refresh();
+                                    })))
+                      ]),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                  flex: 1,
+                  child: Container(
+                    margin: EdgeInsets.only(left: 10.0),
+                    width: MediaQuery.of(context).size.width,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        const Radius.circular(20.0),
+                      ),
+                      shape: BoxShape.rectangle,
+                      border: Border.all(
+                        color: HexColor('E5E5E5'),
+                        width: 2,
+                      ),
+                    ),
+                    child: inputTextField(),
+                  ))
+            ])
+          ],
+        ),
+      ),
+    );
   }
 
   BoxDecoration customDecoration() {
@@ -300,11 +328,8 @@ class _SignUpOTPState extends State<SignUpOTP> {
 
   TextField inputTextField() {
     return TextField(
-      style: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.normal,
-          fontSize: 18.0,
-          fontFamily: 'Poppins-Regular'),
+      controller: textConroller,
+      style: textBlackNormal18(),
       decoration: new InputDecoration(
         contentPadding: EdgeInsets.all(15.0),
         border: InputBorder.none,
@@ -387,7 +412,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
     }
 
     void codeSent(String verificationId, [int code]) {
-      progress?.showWithText('OTP Sent Successfully...');
+      progress?.showWithText(successOTP);
       Future.delayed(Duration(milliseconds: 2), () {
         progress.dismiss();
         openSignUpVerifyOTP(verificationId, phoneNumber);

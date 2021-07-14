@@ -1,12 +1,13 @@
 import 'package:acc/providers/fund_slot_provider.dart';
 import 'package:acc/providers/product_type_provider.dart';
 import 'package:acc/screens/investor/investment_limit.dart';
+import 'package:acc/utilites/app_colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:acc/screens/common/onboarding.dart';
-import 'package:acc/services/NewAuthenticationService.dart';
+import 'package:acc/services/AuthenticationService.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -38,17 +39,22 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        //home: MyLoginPage(),
-        home: MyLoginPage(),
+        theme: ThemeData(
+          brightness: Brightness.light,
+          primaryColor: kLightOrange,
+          accentColor: kDarkOrange,
+          fontFamily: 'Poppins-Regular',
+        ),
+        home: StartPage(),
       ),
     );
   }
 }
 
-class MyLoginPage extends StatelessWidget {
+class StartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final firebaseUser = context.watch<User>();
+    // final firebaseUser = context.watch<User>();
     // if (firebaseUser != null) {
     //   return Home();
     // }

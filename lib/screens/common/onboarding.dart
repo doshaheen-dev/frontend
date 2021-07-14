@@ -1,3 +1,5 @@
+import 'package:acc/screens/investor/found_us.dart';
+import 'package:acc/screens/investor/welcome.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -231,7 +233,7 @@ class _OnBoardingState extends State<OnBoarding> {
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) {
           return SignInOTP();
-          //return InvestorDashboard();
+          //return WelcomeInvestor();
           //return FundraiserDashboard();
         },
         transitionDuration: Duration(milliseconds: 1000),
