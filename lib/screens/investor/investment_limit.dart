@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// import 'package:flutter_progress_hud/flutter_progress_hud.dart';
+
 import 'package:acc/screens/investor/investment_choices.dart';
 import 'package:acc/utilites/app_colors.dart';
+import 'package:provider/provider.dart';
+
+// import '../../models/fundslot/fundslot.dart';
+// import '../../services/fund_slot_service.dart';
+import '../../providers/fund_slot_provider.dart' as slotProvider;
 
 class InvestmentLimit extends StatefulWidget {
   @override
@@ -9,6 +16,100 @@ class InvestmentLimit extends StatefulWidget {
 }
 
 class _InvestmentLimitState extends State<InvestmentLimit> {
+  Widget fundSlotWidget() {
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              child: IconButton(
+                icon: Icon(Icons.arrow_back, size: 30),
+                onPressed: () => {Navigator.pop(context)},
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  margin:
+                      const EdgeInsets.only(top: 10.0, left: 25.0, right: 25.0),
+                  child: Text(
+                    "How much are you looking to invest?",
+                    style: TextStyle(
+                        color: headingBlack,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 28.0,
+                        fontFamily: 'Poppins-Light'),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Center(
+                  child: Container(
+                    margin: const EdgeInsets.only(
+                        top: 10.0, left: 25.0, right: 25.0),
+                    child: Image.asset(
+                      'assets/images/investor/investment_limit.png',
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  margin:
+                      const EdgeInsets.only(top: 30.0, left: 25.0, right: 25.0),
+                  child: FutureBuilder(
+                    future: Provider.of<slotProvider.FundSlots>(context,
+                            listen: false)
+                        .fetchAndSetSlots(),
+                    builder: (ctx, dataSnapshot) {
+                      if (dataSnapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return Center(
+                            child: CircularProgressIndicator(
+                          backgroundColor: Colors.orange,
+                          valueColor:
+                              new AlwaysStoppedAnimation<Color>(Colors.amber),
+                        ));
+                      } else {
+                        if (dataSnapshot.error != null) {
+                          return Center(child: Text("An error occurred!"));
+                        } else {
+                          return Consumer<slotProvider.FundSlots>(
+                            builder: (ctx, slotData, child) => GridView.count(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 20.0,
+                              mainAxisSpacing: 30.0,
+                              shrinkWrap: true,
+                              childAspectRatio:
+                                  (MediaQuery.of(context).size.width / 2 / 65),
+                              children: List.generate(
+                                slotData.slotLineItems.length,
+                                (index) {
+                                  return _createCell(
+                                      slotData.slotLineItems[index]);
+                                },
+                              ),
+                            ),
+                          );
+                        }
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -22,90 +123,20 @@ class _InvestmentLimitState extends State<InvestmentLimit> {
       ),
       bottomNavigationBar: BottomAppBar(),
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                child: IconButton(
-                  icon: Icon(Icons.arrow_back, size: 30),
-                  onPressed: () => {Navigator.pop(context)},
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    margin: const EdgeInsets.only(
-                        top: 10.0, left: 25.0, right: 25.0),
-                    child: Text(
-                      "How much are you looking to invest?",
-                      style: TextStyle(
-                          color: headingBlack,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 28.0,
-                          fontFamily: 'Poppins-Light'),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Center(
-                    child: Container(
-                      margin: const EdgeInsets.only(
-                          top: 10.0, left: 25.0, right: 25.0),
-                      child: Image.asset(
-                        'assets/images/investor/investment_limit.png',
-                        width: MediaQuery.of(context).size.width,
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(
-                        top: 30.0, left: 25.0, right: 25.0),
-                    child: GridView.count(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 20.0,
-                        mainAxisSpacing: 30.0,
-                        shrinkWrap: true,
-                        childAspectRatio:
-                            (MediaQuery.of(context).size.width / 2 / 65),
-                        children: List.generate(infoItem.length, (index) {
-                          return _createCell(index);
-                        })),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+      body: fundSlotWidget(),
     );
   }
 
   List<String> infoItemList = [];
-  List<InvestmentLimitItem> infoItem = [
-    InvestmentLimitItem('50k\$ - 100K\$'),
-    InvestmentLimitItem('100K\$-200K\$'),
-    InvestmentLimitItem('200k\$ - 300K\$'),
-    InvestmentLimitItem('300k\$ - 400K\$'),
-    InvestmentLimitItem('400k\$ - 500K\$'),
-    InvestmentLimitItem('Above 500K\$'),
-  ];
 
-  InkWell _createCell(int _index) {
+  InkWell _createCell(slotProvider.InvestmentLimitItem item) {
     return InkWell(
       highlightColor: Colors.transparent,
       borderRadius: BorderRadius.circular(40),
       onTap: () {
-        print(infoItem[_index].header);
+        // print(item.header);
         infoItemList = [];
-        infoItemList.add(infoItem[_index].header);
+        infoItemList.add(item.header);
         setState(() {
           openInvestmentChoices();
         });
@@ -114,7 +145,7 @@ class _InvestmentLimitState extends State<InvestmentLimit> {
         width: 10,
         height: 70,
         decoration: BoxDecoration(
-          color: infoItemList.contains(infoItem[_index].header)
+          color: infoItemList.contains(item.header)
               ? selectedOrange
               : unselectedGray,
           borderRadius: BorderRadius.all(
@@ -122,20 +153,20 @@ class _InvestmentLimitState extends State<InvestmentLimit> {
           ),
         ),
         child: Center(
-            child: Text(infoItem[_index].header,
+            child: Text(item.header,
                 style: TextStyle(
-                    color: infoItemList.contains(infoItem[_index].header)
+                    color: infoItemList.contains(item.header)
                         ? Colors.white
                         : Colors.black,
                     fontWeight: FontWeight.normal,
-                    fontSize: 18.0,
+                    fontSize: 12.0,
                     fontFamily: 'Poppins-Light'))),
       ),
     );
   }
 
   TextStyle setTextStyle(colors) {
-    return TextStyle(color: colors, fontSize: 14, fontWeight: FontWeight.w500);
+    return TextStyle(color: colors, fontSize: 10, fontWeight: FontWeight.w500);
   }
 
   BoxDecoration customDecoration() {
@@ -167,10 +198,4 @@ class _InvestmentLimitState extends State<InvestmentLimit> {
           );
         }));
   }
-}
-
-class InvestmentLimitItem {
-  final String header;
-
-  InvestmentLimitItem(this.header);
 }

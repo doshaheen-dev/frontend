@@ -1,3 +1,6 @@
+import 'package:acc/providers/fund_slot_provider.dart';
+import 'package:acc/providers/product_type_provider.dart';
+import 'package:acc/screens/investor/investment_limit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +28,13 @@ class MyApp extends StatelessWidget {
         StreamProvider(
           create: (context) => context.read<Authentication>().authStateChanges,
           initialData: null,
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => FundSlots(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => ProductTypes(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -43,6 +52,7 @@ class MyLoginPage extends StatelessWidget {
     // if (firebaseUser != null) {
     //   return Home();
     // }
-    return OnBoarding();
+    return InvestmentLimit();
+    // return OnBoarding();
   }
 }

@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:crypto/crypto.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:acc/models/profile/basic_details.dart';
 import 'package:acc/services/http_service.dart';
