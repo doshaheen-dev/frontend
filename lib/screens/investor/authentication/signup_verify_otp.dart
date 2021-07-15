@@ -1,15 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:acc/models/authentication/verify_phone_signin.dart';
+import 'package:acc/utilites/app_strings.dart';
+import 'package:acc/utilites/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
-import 'package:acc/models/authentication/verify_phone.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:acc/screens/investor/authentication/signup_quick.dart';
 import 'package:acc/services/OtpService.dart';
 import 'package:acc/utilites/app_colors.dart';
-
 import 'package:acc/utilites/ui_widgets.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpVerifyOTP extends StatefulWidget {
   final String _verificationId;
@@ -54,9 +53,9 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
             child: Builder(
           builder: (context) => SafeArea(
             child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
                   Container(
                     child: IconButton(
                       icon: Icon(Icons.arrow_back, size: 30),
@@ -69,7 +68,7 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                       Container(
                         margin: const EdgeInsets.only(top: 10.0, left: 25.0),
                         child: Text(
-                          "Enter Your OTP",
+                          otpLabel,
                           style: TextStyle(
                               color: headingBlack,
                               fontWeight: FontWeight.bold,
@@ -80,7 +79,7 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                       Container(
                         margin: const EdgeInsets.only(top: 5.0, left: 25.0),
                         child: Text(
-                          "Enter the OTP sent to your mobile",
+                          otpMobileLabel,
                           style: TextStyle(
                               color: textGrey,
                               fontWeight: FontWeight.normal,
@@ -127,7 +126,7 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                             print("Allowing to paste $text");
                             //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
                             //but you can show anything you want here, like your pop up saying wrong paste format or etc
-                            return true;
+                            return false;
                           },
                         ),
                       ),
@@ -139,135 +138,85 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                           margin: const EdgeInsets.only(
                               top: 5.0, left: 25.0, bottom: 20, right: 25.0),
                           child: ElevatedButton(
-                            onPressed: () {
-                              if (otpController.text.isEmpty) {
-                                showSnackBar(context,
-                                    "Please enter OTP sent to your mobile number.");
-                                return;
-                              }
-                              FocusScope.of(context).requestFocus(FocusNode());
+                              onPressed: () {
+                                if (otpController.text.isEmpty) {
+                                  showSnackBar(context, warningOTP);
+                                  return;
+                                }
+                                FocusScope.of(context)
+                                    .requestFocus(FocusNode());
 
-                              progress = ProgressHUD.of(context);
-                              progress?.showWithText('Verifying OTP...');
-                              // verifyUser(otpController.text, _verificationId,
-                              //     _phoneNumber);
-                              _verifyPhoneOTP(otpController.text,
-                                  _verificationId, _phoneNumber);
-                            },
-                            style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.all(0.0),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18))),
-                            child: Ink(
-                              decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                      colors: [kDarkOrange, kLightOrange]),
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: 60,
-                                alignment: Alignment.center,
-                                child: Text(
-                                  'Verify OTP',
-                                  style: TextStyle(
-                                      fontSize: 18.0,
-                                      fontFamily: 'Poppins-Regular',
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ))
+                                progress = ProgressHUD.of(context);
+                                progress?.showWithText(verifyingOtp);
+                                _verifySignUpOTP(otpController.text,
+                                    _verificationId, _phoneNumber);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.all(0.0),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18))),
+                              child: Ink(
+                                  decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                          colors: [kDarkOrange, kLightOrange]),
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 60,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        verifyOtp,
+                                        style: textWhiteBold18(),
+                                      )))))
                     ],
-                  ),
-                ],
-              ),
-            ),
+                  )
+                ])),
           ),
         )));
   }
 
-  void openQuickSignUp() {
-    Navigator.of(context).pushAndRemoveUntil(
-        PageRouteBuilder(
-            pageBuilder: (context, animation, anotherAnimation) {
-              return QuickSignUp();
-            },
-            transitionDuration: Duration(milliseconds: 2000),
-            transitionsBuilder: (context, animation, anotherAnimation, child) {
-              animation = CurvedAnimation(
-                  curve: Curves.fastLinearToSlowEaseIn, parent: animation);
-              return SlideTransition(
-                position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-                    .animate(animation),
-                child: child,
-              );
-            }),
-        (Route<dynamic> route) => false);
-  }
-
-  Future<void> verifyUser(String token, String phoneNumber) async {
-    print("Token: $token, phoneNumber -> $phoneNumber");
-    VerifyPhoneNumber verifyPhoneNumber =
-        await OtpService.verifyUser(token, phoneNumber);
-    progress.dismiss();
-    if (verifyPhoneNumber.status == 200) {
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setInt("userId", verifyPhoneNumber.data.id);
-      openQuickSignUp();
-    } else {
-      _openDialog(context, verifyPhoneNumber.message);
-    }
-  }
-
-  Future<void> _verifyPhoneOTP(
-      String text, String verificationId, String phoneNumber) async {
-    String smsCode = text.toString().trim();
-
-    /// when used different phoneNumber other than the current (running) device
-    /// we need to use OTP to get `phoneAuthCredential` which is inturn used to signIn/login
-    AuthCredential _phoneAuthCredential = PhoneAuthProvider.credential(
-        verificationId: this._verificationId, smsCode: smsCode);
-
-    try {
-      final AuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: verificationId,
-        smsCode: smsCode,
-      );
-      final UserCredential userResult =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      print("userResult -> ${userResult.toString()}");
-      final User currentUser = await FirebaseAuth.instance.currentUser;
-      print("User => ${currentUser.toString()}");
-      if (currentUser != null) {
-        currentUser.getIdToken().then((token) async {
-          //verify number
-          print("Token: $token, phoneNumber -> $phoneNumber");
-          verifyUser(token.toString(), phoneNumber);
-        });
-      } else {
+  Future<void> _verifySignUpOTP(
+      String otpCode, String verificationId, String phoneNumber) async {
+    SignUpInvestor verificationIdSignIn = await OtpService.getVerifySignUpOtp(
+        phoneNumber, verificationId, otpCode);
+    if (verificationIdSignIn.status == 200) {
+      progress?.showWithText(successOTP);
+      Future.delayed(Duration(milliseconds: 2), () async {
         progress.dismiss();
-        showSnackBar(context, "Something went wrong");
-      }
-    } catch (e) {
-      progress.dismiss();
-      print("Error -> ${e.toString()}");
+        openQuickSignUp();
+      });
+    } else {
+      _openDialog(context, verificationIdSignIn.message);
     }
+  }
+
+  void openQuickSignUp() {
+    Navigator.of(context).push(PageRouteBuilder(
+        pageBuilder: (context, animation, anotherAnimation) {
+          return QuickSignUp();
+        },
+        transitionDuration: Duration(milliseconds: 2000),
+        transitionsBuilder: (context, animation, anotherAnimation, child) {
+          animation = CurvedAnimation(
+              curve: Curves.fastLinearToSlowEaseIn, parent: animation);
+          return SlideTransition(
+            position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                .animate(animation),
+            child: child,
+          );
+        }));
   }
 
   _openDialog(BuildContext context, String message) {
     // set up the buttons
     Widget positiveButton = TextButton(
-      onPressed: () {
-        Navigator.pop(context);
-      },
-      child: Text("Ok",
-          style: TextStyle(
-              fontWeight: FontWeight.w800,
-              color: Color(0xff00A699),
-              fontSize: 16.0,
-              fontFamily: 'Poppins-Regular')),
-    );
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: Text("Ok",
+            style: textNormal16(
+              Color(0xff00A699),
+            )));
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(

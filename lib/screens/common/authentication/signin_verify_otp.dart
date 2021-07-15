@@ -5,7 +5,6 @@ import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/screens/fundraiser/dashboard/fundraiser_dashboard.dart';
-import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
 import 'package:acc/services/OtpService.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/app_strings.dart';
@@ -151,7 +150,6 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
                                           }
                                           FocusScope.of(context)
                                               .requestFocus(FocusNode());
-
                                           signIn(context);
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -184,22 +182,8 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
     progress = ProgressHUD.of(context);
     progress?.showWithText(verifyingOtp);
 
-    //mobile
-    print("---> $_otpType _requesterType => $_requesterType");
-    if (_otpType == "mobile" && _requesterType == "firebase") {
-      _verifyOtpByFirebase(otpController.text, _verificationId, _phoneNumber,
-          _otpType, _requesterType);
-    } else {
-      // 1. email using firebase or
-      // 2. email mobile using twillo
-      verifyPhoneUser(
-          "",
-          _phoneNumber,
-          _otpType,
-          otpController.text.trim().toString(),
-          _verificationId,
-          _requesterType);
-    }
+    verifyPhoneUser("", _phoneNumber, _otpType,
+        otpController.text.trim().toString(), _verificationId, _requesterType);
   }
 
   void openHome() {
@@ -220,42 +204,6 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
               );
             }),
         (Route<dynamic> route) => false);
-  }
-
-  Future<void> _verifyOtpByFirebase(String text, String verificationId,
-      String phoneNumber, String otpType, String requesterType) async {
-    String smsCode = text.toString().trim();
-
-    /// when used different phoneNumber other than the current (running) device
-    /// we need to use OTP to get `phoneAuthCredential` which is inturn used to signIn/login
-    AuthCredential _phoneAuthCredential = PhoneAuthProvider.credential(
-        verificationId: this._verificationId, smsCode: smsCode);
-
-    try {
-      final AuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: verificationId,
-        smsCode: smsCode,
-      );
-      final UserCredential userResult =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-
-      final User currentUser = await FirebaseAuth.instance.currentUser;
-
-      if (currentUser != null) {
-        currentUser.getIdToken().then((token) async {
-          //verify number
-
-          verifyPhoneUser(token.toString(), phoneNumber, otpType, smsCode,
-              verificationId, requesterType);
-        });
-      } else {
-        progress.dismiss();
-        showSnackBar(context, error);
-      }
-    } catch (e) {
-      progress.dismiss();
-      print("Error -> ${e.toString()}");
-    }
   }
 
   Future<void> verifyPhoneUser(String token, String phoneNumber, String otpType,

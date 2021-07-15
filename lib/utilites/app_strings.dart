@@ -14,6 +14,7 @@ final sendingOtp = "Sending OTP...";
 final verifyingOtp = "Verifying OTP...";
 final successOTP = "OTP Sent Successfully...";
 final otpLabel = "Enter Your OTP";
+final otpMobileLabel = "Enter the OTP sent to your mobile";
 final otpSentTo = "Enter the OTP sent to your mobile/email";
 final warningOTP = "Please enter OTP sent to your mobile number.";
 final error = "Something went wrong";
@@ -23,3 +24,6 @@ final welcomeInvestorBody =
     "To give you the best possible experience we need to find out a bit more about you.\n(This will take less than a minute).";
 final correctCaptcha = "Incorrect Captcha";
 final captchaText = "Enter the text as shown in the image";
+final mobileNumber = "Mobile Number";
+final signUpHeader = "Let's start here";
+final signUpSubHeader = "Let's verify your mobile number";

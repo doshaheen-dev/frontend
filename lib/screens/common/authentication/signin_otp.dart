@@ -1,5 +1,5 @@
 import 'package:acc/utilites/hex_color.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:acc/utils/code_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
@@ -18,19 +18,12 @@ class SignInOTP extends StatefulWidget {
   _SignInOTPState createState() => _SignInOTPState();
 }
 
-bool emailValid(String input) => RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-    .hasMatch(input);
-
 class _SignInOTPState extends State<SignInOTP> {
   TextEditingController phoneController = new TextEditingController();
   final captchaController = CodeCheckController();
   final textConroller = TextEditingController();
   var progress;
 
-  bool isPhone(String input) =>
-      RegExp(r'^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$')
-          .hasMatch(input);
   bool _isDropdownVisible = true;
 
   void showToast() {
@@ -116,31 +109,20 @@ class _SignInOTPState extends State<SignInOTP> {
                                             return;
                                           }
 
-                                          if (isPhone(phoneController.text)) {
+                                          if (CodeUtils.isPhone(
+                                              phoneController.text)) {
                                             print("mobile");
                                             progress = ProgressHUD.of(context);
-
                                             progress?.showWithText(sendingOtp);
 
-                                            //FIREBASE
-                                            // _submitPhoneNumber(
-                                            //     phoneController.text);
-
-                                            // TWILIO
                                             sendOTPServer(phoneController.text,
                                                 "twilio", "mobile");
-                                          } else if (emailValid(
+                                          } else if (CodeUtils.emailValid(
                                               phoneController.text)) {
                                             progress = ProgressHUD.of(context);
 
                                             progress?.showWithText(sendingOtp);
-                                            print("email");
 
-                                            //FIREBASE
-                                            // sendOTPServer(phoneController.text,
-                                            //     "firebase", "email");
-
-                                            // TWILIO
                                             sendOTPServer(phoneController.text,
                                                 "twilio", "email");
                                           } else {
@@ -379,7 +361,7 @@ class _SignInOTPState extends State<SignInOTP> {
   TextField inputTextField(text, _controller) {
     return TextField(
         onChanged: (text) {
-          if (emailValid(text)) {
+          if (CodeUtils.emailValid(text)) {
             setState(() {
               _isDropdownVisible = false;
             });
@@ -408,6 +390,28 @@ class _SignInOTPState extends State<SignInOTP> {
                 ))));
   }
 
+  Future<void> sendOTPServer(
+      String text, String requesterType, String osType) async {
+    String getOtpPlatform = "";
+    print("osType => $osType");
+    if (osType == "email") {
+      getOtpPlatform = text.toString().trim();
+    } else {
+      getOtpPlatform = "+91" + text.toString().trim();
+    }
+    VerificationIdSignIn verificationIdSignIn =
+        await OtpService.getVerificationFromTwillio(
+            getOtpPlatform, osType, requesterType);
+
+    progress.dismiss();
+    if (verificationIdSignIn.type == "success") {
+      openSignInVerifyOTP(verificationIdSignIn.data.verificationId,
+          getOtpPlatform, osType, requesterType);
+    } else {
+      showSnackBar(context, verificationIdSignIn.message);
+    }
+  }
+
   void openSignInVerifyOTP(String verificationId, String phoneNumber,
       String otpType, String requesterType) {
     Navigator.of(context).push(PageRouteBuilder(
@@ -429,81 +433,5 @@ class _SignInOTPState extends State<SignInOTP> {
             child: child,
           );
         }));
-  }
-
-  Future<void> _submitPhoneNumber(String text) async {
-    /// NOTE: Either append your phone number country code or add in the code itself
-    /// Since I'm in India we use "+91 " as prefix `phoneNumber`
-    String phoneNumber = "+91 " + text.toString().trim();
-    print(phoneNumber);
-
-    /// The below functions are the callbacks, separated so as to make code more redable
-    void verificationCompleted(AuthCredential phoneAuthCredential) {
-      progress.dismiss();
-    }
-
-    void verificationFailed(FirebaseAuthException error) {
-      progress.dismiss();
-      showSnackBar(context, "$error");
-    }
-
-    void codeSent(String verificationId, [int code]) {
-      progress?.showWithText(successOTP);
-      Future.delayed(Duration(milliseconds: 2), () {
-        progress.dismiss();
-        openSignInVerifyOTP(verificationId, phoneNumber, "mobile", "firebase");
-      });
-    }
-
-    void codeAutoRetrievalTimeout(String verificationId) {
-      progress.dismiss();
-    }
-
-    await FirebaseAuth.instance.verifyPhoneNumber(
-      /// Make sure to prefix with your country code
-      phoneNumber: phoneNumber,
-
-      /// `seconds` didn't work. The underlying implementation code only reads in `millisenconds`
-      timeout: Duration(milliseconds: 10000),
-
-      /// If the SIM (with phoneNumber) is in the current device this function is called.
-      /// This function gives `AuthCredential`. Moreover `login` function can be called from this callback
-      /// When this function is called there is no need to enter the OTP, you can click on Login button to sigin directly as the device is now verified
-      verificationCompleted: verificationCompleted,
-
-      /// Called when the verification is failed
-      verificationFailed: verificationFailed,
-
-      /// This is called after the OTP is sent. Gives a `verificationId` and `code`
-      codeSent: codeSent,
-
-      /// After automatic code retrival `tmeout` this function is called
-      codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
-    ); // All the callbacks are above
-  }
-
-  Future<void> sendOTPServer(
-      String text, String requesterType, String osType) async {
-    String getOtpPlatform = "";
-    print("osType => $osType");
-    if (osType == "email") {
-      getOtpPlatform = text.toString().trim();
-    } else {
-      getOtpPlatform = "+91" + text.toString().trim();
-    }
-
-    print("sendOTPServer:=> $getOtpPlatform");
-    VerificationIdSignIn verificationIdSignIn =
-        await OtpService.getVerificationFromTwillio(
-            getOtpPlatform, osType, requesterType);
-    print("verificationId ${verificationIdSignIn.data.verificationId}");
-
-    progress.dismiss();
-    if (verificationIdSignIn.type == "success") {
-      openSignInVerifyOTP(verificationIdSignIn.data.verificationId,
-          getOtpPlatform, osType, requesterType);
-    } else {
-      showSnackBar(context, verificationIdSignIn.message);
-    }
   }
 }

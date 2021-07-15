@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
+import 'package:acc/models/authentication/verify_phone_signin.dart';
+import 'package:acc/services/OtpService.dart';
 import 'package:acc/utilites/app_strings.dart';
 import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utilites/text_style.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
@@ -21,6 +23,8 @@ class SignUpOTP extends StatefulWidget {
 
 class _SignUpOTPState extends State<SignUpOTP> {
   bool visible = false;
+
+  EdgeInsets margin;
 
   loadProgress() {
     if (visible == true) {
@@ -76,25 +80,13 @@ class _SignUpOTPState extends State<SignUpOTP> {
                     children: <Widget>[
                       Container(
                         margin: const EdgeInsets.only(top: 10.0, left: 25.0),
-                        child: Text(
-                          "Let's start here",
-                          style: TextStyle(
-                              color: headingBlack,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 28.0,
-                              fontFamily: 'Poppins-Regular'),
-                        ),
+                        child:
+                            Text(signUpHeader, style: textBold28(headingBlack)),
                       ),
                       Container(
                         margin: const EdgeInsets.only(top: 5.0, left: 25.0),
-                        child: Text(
-                          "Let's verify your mobile number",
-                          style: TextStyle(
-                              color: textGrey,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 20.0,
-                              fontFamily: 'Poppins-Regular'),
-                        ),
+                        child: Text(signUpSubHeader,
+                            style: textNormal20(textGrey)),
                       ),
                       SizedBox(
                         height: 25,
@@ -128,7 +120,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
 
                               progress = ProgressHUD.of(context);
                               progress?.showWithText(sendingOtp);
-                              _submitPhoneNumber(phoneController.text);
+                              _getOtp(phoneController.text);
                             },
                             style: ElevatedButton.styleFrom(
                                 padding: EdgeInsets.all(0.0),
@@ -173,7 +165,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
           child: Container(
             margin: const EdgeInsets.only(top: 5.0, bottom: 20, right: 25.0),
             decoration: customDecoration(),
-            child: labelTextField("Mobile Number", phoneController),
+            child: labelTextField(mobileNumber, phoneController),
           ),
         ),
       ],
@@ -181,6 +173,13 @@ class _SignUpOTPState extends State<SignUpOTP> {
   }
 
   Container _createCaptcha(BuildContext context) {
+    if (Platform.isIOS) {
+      margin = EdgeInsets.only(right: 10.0);
+    }
+    if (Platform.isAndroid) {
+      margin = EdgeInsets.only(right: 20.0, left: 20.0);
+    }
+
     return Container(
       child: Padding(
         padding: const EdgeInsets.only(
@@ -210,7 +209,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
                         const Radius.circular(20.0),
                       )),
                   child: Container(
-                    margin: EdgeInsets.only(right: 10.0),
+                    margin: margin,
                     alignment: Alignment.center,
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
@@ -376,6 +375,23 @@ class _SignUpOTPState extends State<SignUpOTP> {
     );
   }
 
+  Future<void> _getOtp(String phoneNumber) async {
+    String _phoneNumber = "+91 " + phoneNumber.toString().trim();
+    VerificationIdSignIn verificationIdSignIn =
+        await OtpService.getSignUpOtp(_phoneNumber);
+    if (verificationIdSignIn.status == 200) {
+      progress?.showWithText(successOTP);
+      Future.delayed(Duration(milliseconds: 2), () {
+        progress.dismiss();
+        openSignUpVerifyOTP(
+            verificationIdSignIn.data.verificationId, _phoneNumber);
+      });
+    } else {
+      progress.dismiss();
+      showSnackBar(context, verificationIdSignIn.message);
+    }
+  }
+
   void openSignUpVerifyOTP([String verificationId, String phoneNumber]) {
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) {
@@ -392,57 +408,5 @@ class _SignUpOTPState extends State<SignUpOTP> {
             child: child,
           );
         }));
-  }
-
-  Future<void> _submitPhoneNumber(String text) async {
-    /// NOTE: Either append your phone number country code or add in the code itself
-    /// Since I'm in India we use "+91 " as prefix `phoneNumber`
-    String phoneNumber = "+91 " + text.toString().trim();
-    print(phoneNumber);
-
-    /// The below functions are the callbacks, separated so as to make code more redable
-    void verificationCompleted(AuthCredential phoneAuthCredential) {
-      progress.dismiss();
-      print('verificationCompleted');
-    }
-
-    void verificationFailed(FirebaseAuthException error) {
-      progress.dismiss();
-      showSnackBar(context, "${error.toString()}");
-    }
-
-    void codeSent(String verificationId, [int code]) {
-      progress?.showWithText(successOTP);
-      Future.delayed(Duration(milliseconds: 2), () {
-        progress.dismiss();
-        openSignUpVerifyOTP(verificationId, phoneNumber);
-      });
-    }
-
-    void codeAutoRetrievalTimeout(String verificationId) {
-      progress.dismiss();
-    }
-
-    await FirebaseAuth.instance.verifyPhoneNumber(
-      /// Make sure to prefix with your country code
-      phoneNumber: phoneNumber,
-
-      /// `seconds` didn't work. The underlying implementation code only reads in `millisenconds`
-      timeout: Duration(milliseconds: 10000),
-
-      /// If the SIM (with phoneNumber) is in the current device this function is called.
-      /// This function gives `AuthCredential`. Moreover `login` function can be called from this callback
-      /// When this function is called there is no need to enter the OTP, you can click on Login button to sigin directly as the device is now verified
-      verificationCompleted: verificationCompleted,
-
-      /// Called when the verification is failed
-      verificationFailed: verificationFailed,
-
-      /// This is called after the OTP is sent. Gives a `verificationId` and `code`
-      codeSent: codeSent,
-
-      /// After automatic code retrival `tmeout` this function is called
-      codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
-    ); // All the callbacks are above
   }
 }

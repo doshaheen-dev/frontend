@@ -218,41 +218,6 @@ class _SignUpVerifyFundraiserState extends State<SignUpVerifyFundraiser> {
     }
   }
 
-  Future<void> _verifyPhoneOTP(
-      String text, String verificationId, String phoneNumber) async {
-    String smsCode = text.toString().trim();
-
-    /// when used different phoneNumber other than the current (running) device
-    /// we need to use OTP to get `phoneAuthCredential` which is inturn used to signIn/login
-    AuthCredential _phoneAuthCredential = PhoneAuthProvider.credential(
-        verificationId: this._verificationId, smsCode: smsCode);
-
-    try {
-      final AuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: verificationId,
-        smsCode: smsCode,
-      );
-      final UserCredential userResult =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      print("userResult -> ${userResult.toString()}");
-      final User currentUser = await FirebaseAuth.instance.currentUser;
-      print("User => ${currentUser.toString()}");
-      if (currentUser != null) {
-        currentUser.getIdToken().then((token) async {
-          //verify number
-          print("Token: $token, phoneNumber -> $phoneNumber");
-          verifyUser(token.toString(), phoneNumber);
-        });
-      } else {
-        progress.dismiss();
-        showSnackBar(context, "Something went wrong");
-      }
-    } catch (e) {
-      progress.dismiss();
-      print("Error -> ${e.toString()}");
-    }
-  }
-
   _openDialog(BuildContext context, String message) {
     // set up the buttons
     Widget positiveButton = TextButton(

@@ -13,8 +13,6 @@ class OtpService {
         Uri.parse("${ApiServices.baseUrl}/sign-up/verify/firebase/mobile_no");
     final headers = {"Content-type": "application/json"};
     final _body = '{"mobile_no": "$phoneNumber", "idToken": "$token"}';
-    print("Body:${_body}");
-
     // make POST request
     final response = await post(url, headers: headers, body: _body);
     final responseBody = response.body;
@@ -44,11 +42,9 @@ class OtpService {
       _body =
           '{"mobile_no": "$phoneNumber", "idToken": "$token","verificationId": "$verificationId", "smsCode": "$smsCode"}';
     }
-    print("Body:${_body}");
 
     // make POST request
     final response = await post(url, headers: headers, body: _body);
-    print("response:${response.body}");
     final responseBody = response.body;
     Map valueMap = jsonDecode(responseBody);
     VerifyPhoneNumberSignIn userDetails =
@@ -74,6 +70,38 @@ class OtpService {
     final responseBody = response.body;
     Map valueMap = jsonDecode(responseBody);
     VerificationIdSignIn userDetails = VerificationIdSignIn.from(valueMap);
+    return userDetails;
+  }
+
+  //Sign up - Investor
+  static Future<VerificationIdSignIn> getSignUpOtp(String phoneNumber) async {
+    final url = Uri.parse("${ApiServices.baseUrl}/sign-up/send_otp");
+    final headers = {
+      "Content-type": "application/json",
+    };
+    var _body = '{"mobile_no": "$phoneNumber"}';
+    final response = await post(url, headers: headers, body: _body);
+    final responseBody = response.body;
+    Map valueMap = jsonDecode(responseBody);
+    VerificationIdSignIn userDetails = VerificationIdSignIn.from(valueMap);
+    return userDetails;
+  }
+
+  //Sign up verify otp - Investor
+  static Future<SignUpInvestor> getVerifySignUpOtp(
+      String phoneNumber, String verificationId, String otpCode) async {
+    final url = Uri.parse("${ApiServices.baseUrl}/sign-up/verify_otp");
+    final headers = {
+      "Content-type": "application/json",
+      "Charset": "utf-8",
+    };
+
+    var _body =
+        '{"mobile_no": "$phoneNumber", "verificationId" : "$verificationId", "smsCode" : "$otpCode"}';
+    final response = await post(url, headers: headers, body: _body);
+    final responseBody = response.body;
+    Map valueMap = jsonDecode(responseBody);
+    SignUpInvestor userDetails = SignUpInvestor.from(valueMap);
     return userDetails;
   }
 }
