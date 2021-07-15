@@ -58,7 +58,7 @@ class StartPage extends StatelessWidget {
     // if (firebaseUser != null) {
     //   return Home();
     // }
-    return InvestmentLimit();
-    // return OnBoarding();
+    // return InvestmentLimit();
+    return OnBoarding();
   }
 }

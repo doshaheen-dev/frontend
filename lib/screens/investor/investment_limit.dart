@@ -16,6 +16,24 @@ class InvestmentLimit extends StatefulWidget {
 }
 
 class _InvestmentLimitState extends State<InvestmentLimit> {
+  var _isInit = true;
+  Future _fundSlots;
+
+  Future<void> _fetchFundSlots(BuildContext context) async {
+    await Provider.of<slotProvider.FundSlots>(context, listen: false)
+        .fetchAndSetSlots();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {});
+      _fundSlots = _fetchFundSlots(context);
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
   Widget fundSlotWidget() {
     return SafeArea(
       child: SingleChildScrollView(
@@ -64,9 +82,7 @@ class _InvestmentLimitState extends State<InvestmentLimit> {
                   margin:
                       const EdgeInsets.only(top: 30.0, left: 25.0, right: 25.0),
                   child: FutureBuilder(
-                    future: Provider.of<slotProvider.FundSlots>(context,
-                            listen: false)
-                        .fetchAndSetSlots(),
+                    future: _fundSlots,
                     builder: (ctx, dataSnapshot) {
                       if (dataSnapshot.connectionState ==
                           ConnectionState.waiting) {
@@ -134,7 +150,7 @@ class _InvestmentLimitState extends State<InvestmentLimit> {
       highlightColor: Colors.transparent,
       borderRadius: BorderRadius.circular(40),
       onTap: () {
-        // print(item.header);
+        print(item.header);
         infoItemList = [];
         infoItemList.add(item.header);
         setState(() {

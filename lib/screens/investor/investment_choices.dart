@@ -17,6 +17,13 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
   bool _isVisible = false;
   var isSelected = false;
   var mycolor = Colors.white;
+  var _isInit = true;
+  Future _productTypes;
+
+  Future<void> _fetchProductTypes(BuildContext context) async {
+    await Provider.of<productProvider.ProductTypes>(context, listen: false)
+        .fetchAndSetProductTypes();
+  }
 
   void showToast() {
     setState(() {
@@ -25,6 +32,16 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
         _isButtonVisible = false;
       }
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {});
+      _productTypes = _fetchProductTypes(context);
+    }
+    _isInit = false;
+    super.didChangeDependencies();
   }
 
   @override
@@ -65,9 +82,7 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                   ),
 
                   FutureBuilder(
-                    future: Provider.of<productProvider.ProductTypes>(context,
-                            listen: false)
-                        .fetchAndSetProductTypes(),
+                    future: _productTypes,
                     builder: (ctx, dataSnapshot) {
                       if (dataSnapshot.connectionState ==
                           ConnectionState.waiting) {
