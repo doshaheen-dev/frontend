@@ -6,9 +6,14 @@ import '../services/product_type_service.dart';
 
 class ProductTypes with ChangeNotifier {
   List<InvestmentLimitItem> _types = [];
+  List<InvestmentLimitItem> _selectedTypes = [];
 
   List<InvestmentLimitItem> get types {
     return [..._types];
+  }
+
+  List<InvestmentLimitItem> get selectedTypes {
+    return [..._selectedTypes];
   }
 
   Future<void> fetchAndSetProductTypes() async {
@@ -29,6 +34,21 @@ class ProductTypes with ChangeNotifier {
     });
 
     _types = loadedProductTypes.toList();
+    notifyListeners();
+  }
+
+  void checkOption(InvestmentLimitItem type) {
+    _selectedTypes.add(type);
+    notifyListeners();
+  }
+
+  void uncheckOption(InvestmentLimitItem type) {
+    _selectedTypes.remove(type);
+    notifyListeners();
+  }
+
+  void clear() {
+    _selectedTypes = [];
     notifyListeners();
   }
 }

@@ -12,6 +12,8 @@ import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../utils/code_utils.dart';
+
 class SignUpDetails extends StatefulWidget {
   final User _user;
   final String _userAvatar;
@@ -122,6 +124,34 @@ class _SignUpDetailsState extends State<SignUpDetails> {
           });
     }
 
+    Widget _profilePic() {
+      return Container(
+        alignment: Alignment.center,
+        child: CircleAvatar(
+          backgroundColor: Colors.blueGrey,
+          backgroundImage: profilePhoto == null
+              ? (widget._userAvatar == null)
+                  ? AssetImage("assets/images/UserProfile.png")
+                  : widget._userAvatar.length > 0 &&
+                          (widget._userAvatar.startsWith('http://') ||
+                              widget._userAvatar.startsWith('https://'))
+                      ? NetworkImage(widget._userAvatar)
+                      : AssetImage("assets/images/UserProfile.png")
+              : FileImage(profilePhoto),
+          radius: 60.0,
+          child: Align(
+            alignment: Alignment(1.3, 1.3),
+            child: IconButton(
+                icon: Icon(Icons.camera_alt),
+                color: Colors.orange,
+                onPressed: () async {
+                  _showPicker(context);
+                }),
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,
@@ -163,37 +193,10 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                       SizedBox(
                         height: 30,
                       ),
-                      Container(
-                        alignment: Alignment.center,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.blueGrey,
-                          backgroundImage: profilePhoto == null
-                              ? (widget._userAvatar == null)
-                                  ? AssetImage("assets/images/UserProfile.png")
-                                  : widget._userAvatar.length > 0 &&
-                                          (widget._userAvatar
-                                                  .startsWith('http://') ||
-                                              widget._userAvatar
-                                                  .startsWith('https://'))
-                                      ? NetworkImage(widget._userAvatar)
-                                      : AssetImage(
-                                          "assets/images/UserProfile.png")
-                              : FileImage(profilePhoto),
-                          radius: 60.0,
-                          child: Align(
-                            alignment: Alignment(1.3, 1.3),
-                            child: IconButton(
-                                icon: Icon(Icons.camera_alt),
-                                color: Colors.orange,
-                                onPressed: () async {
-                                  _showPicker(context);
-                                }),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
+                      // _profilePic(),
+                      // SizedBox(
+                      //   height: 30,
+                      // ),
                       Container(
                         margin: const EdgeInsets.only(
                             top: 5.0, left: 25.0, bottom: 20, right: 25.0),
@@ -304,6 +307,11 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                             if (emailController.text.isEmpty) {
                               showSnackBar(
                                   context, "Please enter the email id.");
+                              return;
+                            }
+                            if (!CodeUtils.emailValid(emailController.text)) {
+                              showSnackBar(
+                                  context, "Please enter a valid email id.");
                               return;
                             }
                             FocusScope.of(context).requestFocus(FocusNode());

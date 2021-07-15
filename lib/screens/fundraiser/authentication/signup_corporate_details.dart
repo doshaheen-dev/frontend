@@ -14,6 +14,8 @@ import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 
+import '../../../utils/code_utils.dart';
+
 class CorporateDetails extends StatefulWidget {
   @override
   _CorporateDetailsState createState() => _CorporateDetailsState();
@@ -213,6 +215,18 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                           if (titleController.text.isEmpty) {
                                             showSnackBar(context,
                                                 "Please enter the title.");
+                                            return;
+                                          }
+                                          if (companyEmailController
+                                              .text.isEmpty) {
+                                            showSnackBar(context,
+                                                "Please enter the email id.");
+                                            return;
+                                          }
+                                          if (CodeUtils.emailValid(
+                                              companyEmailController.text)) {
+                                            showSnackBar(context,
+                                                "Please enter a valid email id.");
                                             return;
                                           }
                                           FocusScope.of(context)

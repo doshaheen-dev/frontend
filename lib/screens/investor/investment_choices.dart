@@ -17,6 +17,24 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
   bool _isVisible = false;
   var isSelected = false;
   var mycolor = Colors.white;
+  var _isInit = true;
+  Future _productTypes;
+
+  Future<void> _fetchProductTypes(BuildContext context) async {
+    await Provider.of<productProvider.ProductTypes>(context, listen: false)
+        .fetchAndSetProductTypes();
+    Provider.of<productProvider.ProductTypes>(context, listen: false).clear();
+  }
+
+  void _checkOption(productProvider.InvestmentLimitItem option) {
+    Provider.of<productProvider.ProductTypes>(context, listen: false)
+        .checkOption(option);
+  }
+
+  void _uncheckOption(productProvider.InvestmentLimitItem option) {
+    Provider.of<productProvider.ProductTypes>(context, listen: false)
+        .uncheckOption(option);
+  }
 
   void showToast() {
     setState(() {
@@ -25,6 +43,16 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
         _isButtonVisible = false;
       }
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {});
+      _productTypes = _fetchProductTypes(context);
+    }
+    _isInit = false;
+    super.didChangeDependencies();
   }
 
   @override
@@ -65,9 +93,7 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                   ),
 
                   FutureBuilder(
-                    future: Provider.of<productProvider.ProductTypes>(context,
-                            listen: false)
-                        .fetchAndSetProductTypes(),
+                    future: _productTypes,
                     builder: (ctx, dataSnapshot) {
                       if (dataSnapshot.connectionState ==
                           ConnectionState.waiting) {
@@ -115,6 +141,13 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                           borderRadius: BorderRadius.circular(40),
                           onTap: () {
                             // on click
+                            // var types =
+                            //     Provider.of<productProvider.ProductTypes>(
+                            //             context,
+                            //             listen: false)
+                            //         .selectedTypes;
+                            // print('Checked Count: ${types.length}');
+                            // print(types[0].description);
                             openGeneralTermsPrivacy();
                           },
                           child: Container(
@@ -367,8 +400,10 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
 
                             if (!item.isCheck) {
                               infoItemList.remove(item.name);
+                              _uncheckOption(item);
                             } else {
                               infoItemList.add(item.name);
+                              _checkOption(item);
                             }
                             print(item.isCheck);
                             print(infoItemList.length);
