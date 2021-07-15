@@ -17,14 +17,25 @@ import 'package:acc/utilites/ui_widgets.dart';
 import 'package:ps_code_checking/ps_code_checking.dart';
 
 class SignUpOTP extends StatefulWidget {
+  final String _userType;
+  SignUpOTP({Key key, String userType})
+      : _userType = userType,
+        super(key: key);
+
   @override
   _SignUpOTPState createState() => _SignUpOTPState();
 }
 
 class _SignUpOTPState extends State<SignUpOTP> {
   bool visible = false;
-
   EdgeInsets margin;
+  String _userType;
+
+  @override
+  void initState() {
+    _userType = widget._userType;
+    super.initState();
+  }
 
   loadProgress() {
     if (visible == true) {
@@ -396,7 +407,9 @@ class _SignUpOTPState extends State<SignUpOTP> {
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) {
           return SignUpVerifyOTP(
-              verificationId: verificationId, phoneNumber: phoneNumber);
+              verificationId: verificationId,
+              phoneNumber: phoneNumber,
+              userType: _userType);
         },
         transitionDuration: Duration(milliseconds: 2000),
         transitionsBuilder: (context, animation, anotherAnimation, child) {

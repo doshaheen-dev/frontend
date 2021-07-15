@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:acc/screens/fundraiser/authentication/signup_fundraiser.dart';
 import 'package:acc/screens/investor/authentication/signup_otp.dart';
 import 'package:acc/utilites/app_colors.dart';
 
@@ -81,7 +80,7 @@ class _UserTypeState extends State<UserType> {
           selectedCategory = [];
           selectedCategory.add(investor);
           setState(() {
-            openInvestorSignUp();
+            openSignUp("Investor");
           });
         },
         child: Container(
@@ -133,7 +132,7 @@ class _UserTypeState extends State<UserType> {
           selectedCategory = [];
           selectedCategory.add(fundraiser);
           setState(() {
-            openFundRaiserSignUp();
+            openSignUp("Fundraiser");
           });
         },
         child: Container(
@@ -175,27 +174,10 @@ class _UserTypeState extends State<UserType> {
     ]);
   }
 
-  void openInvestorSignUp() {
+  void openSignUp(String userType) {
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) {
-          return SignUpOTP();
-        },
-        transitionDuration: Duration(milliseconds: 2000),
-        transitionsBuilder: (context, animation, anotherAnimation, child) {
-          animation = CurvedAnimation(
-              curve: Curves.fastLinearToSlowEaseIn, parent: animation);
-          return SlideTransition(
-            position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-                .animate(animation),
-            child: child,
-          );
-        }));
-  }
-
-  void openFundRaiserSignUp() {
-    Navigator.of(context).push(PageRouteBuilder(
-        pageBuilder: (context, animation, anotherAnimation) {
-          return SignUpFundraiserOTP();
+          return SignUpOTP(userType: userType);
         },
         transitionDuration: Duration(milliseconds: 2000),
         transitionsBuilder: (context, animation, anotherAnimation, child) {

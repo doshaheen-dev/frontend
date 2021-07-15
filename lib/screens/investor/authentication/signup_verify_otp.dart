@@ -1,4 +1,5 @@
 import 'package:acc/models/authentication/verify_phone_signin.dart';
+import 'package:acc/screens/fundraiser/authentication/signup_corporate_details.dart';
 import 'package:acc/utilites/app_strings.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +14,12 @@ import 'package:acc/utilites/ui_widgets.dart';
 class SignUpVerifyOTP extends StatefulWidget {
   final String _verificationId;
   final String _phoneNumber;
-  const SignUpVerifyOTP({Key key, String verificationId, String phoneNumber})
+  final String _userType;
+  const SignUpVerifyOTP(
+      {Key key, String verificationId, String phoneNumber, String userType})
       : _verificationId = verificationId,
         _phoneNumber = phoneNumber,
+        _userType = userType,
         super(key: key);
 
   @override
@@ -27,6 +31,7 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
   bool hasError = false;
   String _verificationId;
   String _phoneNumber;
+  String _userType;
   TextEditingController otpController = new TextEditingController();
   var progress;
 
@@ -34,6 +39,7 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
   void initState() {
     _verificationId = widget._verificationId;
     _phoneNumber = widget._phoneNumber;
+    _userType = widget._userType;
     super.initState();
   }
 
@@ -186,25 +192,43 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
         openQuickSignUp();
       });
     } else {
-      _openDialog(context, verificationIdSignIn.message);
+      progress.dismiss();
+      showSnackBar(context, verificationIdSignIn.message);
     }
   }
 
   void openQuickSignUp() {
-    Navigator.of(context).push(PageRouteBuilder(
-        pageBuilder: (context, animation, anotherAnimation) {
-          return QuickSignUp();
-        },
-        transitionDuration: Duration(milliseconds: 2000),
-        transitionsBuilder: (context, animation, anotherAnimation, child) {
-          animation = CurvedAnimation(
-              curve: Curves.fastLinearToSlowEaseIn, parent: animation);
-          return SlideTransition(
-            position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-                .animate(animation),
-            child: child,
-          );
-        }));
+    if (_userType == "Investor") {
+      Navigator.of(context).push(PageRouteBuilder(
+          pageBuilder: (context, animation, anotherAnimation) {
+            return QuickSignUp();
+          },
+          transitionDuration: Duration(milliseconds: 2000),
+          transitionsBuilder: (context, animation, anotherAnimation, child) {
+            animation = CurvedAnimation(
+                curve: Curves.fastLinearToSlowEaseIn, parent: animation);
+            return SlideTransition(
+              position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                  .animate(animation),
+              child: child,
+            );
+          }));
+    } else if (_userType == "Fundraiser") {
+      Navigator.of(context).push(PageRouteBuilder(
+          pageBuilder: (context, animation, anotherAnimation) {
+            return CorporateDetails();
+          },
+          transitionDuration: Duration(milliseconds: 2000),
+          transitionsBuilder: (context, animation, anotherAnimation, child) {
+            animation = CurvedAnimation(
+                curve: Curves.fastLinearToSlowEaseIn, parent: animation);
+            return SlideTransition(
+              position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                  .animate(animation),
+              child: child,
+            );
+          }));
+    }
   }
 
   _openDialog(BuildContext context, String message) {
