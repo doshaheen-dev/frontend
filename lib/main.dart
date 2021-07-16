@@ -4,8 +4,7 @@ import 'package:acc/providers/fund_slot_provider.dart';
 import 'package:acc/providers/product_type_provider.dart';
 import 'package:acc/providers/country_provider.dart';
 import 'package:acc/providers/city_provider.dart';
-// import 'package:acc/screens/fundraiser/authentication/signup_corporate_details.dart';
-// import 'package:acc/screens/investor/authentication/signup_details.dart';
+import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
 import 'package:acc/screens/investor/investment_limit.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -70,7 +69,8 @@ class StartPage extends StatelessWidget {
     // if (firebaseUser != null) {
     //   return Home();
     // }
-    //return InvestmentLimit();
+    // return InvestmentLimit();
+
     return OnBoarding();
   }
 }

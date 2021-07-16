@@ -1,3 +1,4 @@
+import 'package:acc/models/local_countries.dart';
 import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utils/code_utils.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,12 @@ class _SignInOTPState extends State<SignInOTP> {
   final captchaController = CodeCheckController();
   final textConroller = TextEditingController();
   var progress;
+  var selectedCountry;
+  List<Countries> countryList = <Countries>[
+    const Countries("India", "IN", 91, 10),
+    const Countries("Singapore", "SG", 65, 12),
+    const Countries("United States", "US", 1, 10),
+  ];
 
   bool _isDropdownVisible = true;
 
@@ -92,14 +99,13 @@ class _SignInOTPState extends State<SignInOTP> {
                                         onPressed: () {
                                           FocusScope.of(context)
                                               .requestFocus(FocusNode());
+
                                           if (phoneController.text.isEmpty) {
                                             showSnackBar(
                                                 context, correctEmailMobile);
-
                                             return;
                                           }
-                                          print(captchaController.verify(
-                                              textConroller.value.text));
+
                                           if (!captchaController.verify(
                                               textConroller.value.text)) {
                                             showSnackBar(
@@ -111,6 +117,18 @@ class _SignInOTPState extends State<SignInOTP> {
 
                                           if (CodeUtils.isPhone(
                                               phoneController.text)) {
+                                            if (selectedCountry == null) {
+                                              showSnackBar(
+                                                  context, errorCountryCode);
+                                              return;
+                                            }
+
+                                            if (selectedCountry.maxLength !=
+                                                phoneController.text.length) {
+                                              showSnackBar(context,
+                                                  "Phone number should be of ${selectedCountry.maxLength} digits.");
+                                              return;
+                                            }
                                             print("mobile");
                                             progress = ProgressHUD.of(context);
                                             progress?.showWithText(sendingOtp);
@@ -172,7 +190,7 @@ class _SignInOTPState extends State<SignInOTP> {
                 margin: const EdgeInsets.only(
                     top: 5.0, left: 25.0, bottom: 20, right: 5.0),
                 decoration: customDecoration(),
-                child: dropdownField(),
+                child: _buildCodeDropDown(),
               )),
         ),
         Container(
@@ -300,40 +318,37 @@ class _SignInOTPState extends State<SignInOTP> {
         ]);
   }
 
-  String _value = '+91';
-  Widget dropdownField() {
+  Widget _buildCodeDropDown() {
     return Padding(
-      padding: EdgeInsets.only(left: 10.0, right: 5.0),
-      child: DropdownButtonFormField(
+        padding: EdgeInsets.only(left: 10.0, right: 5.0),
+        child: DropdownButtonFormField<Countries>(
           decoration: InputDecoration(
-              labelText: 'Code',
+              labelText: 'Country Code',
               labelStyle: new TextStyle(color: Colors.grey[600]),
               enabledBorder: UnderlineInputBorder(
                   borderRadius: BorderRadius.all(const Radius.circular(10.0)),
                   borderSide: BorderSide(color: Colors.transparent))),
-          value: _value,
-          items: [
-            DropdownMenuItem(
-              child: Text(
-                "+91",
-              ),
-              value: '+91',
-            ),
-            DropdownMenuItem(
-              child: Text("+1"),
-              value: '+1',
-            ),
-            DropdownMenuItem(
-              child: Text("+852"),
-              value: '+852',
-            )
-          ],
-          onChanged: (value) {
+          value: selectedCountry,
+          onChanged: (Countries countries) {
             setState(() {
-              _value = value;
+              print("selectedItemValue3 => ${countries.maxLength}");
+              selectedCountry = countries;
             });
-          }),
-    );
+          },
+          items: countryList.map((Countries countries) {
+            return DropdownMenuItem<Countries>(
+              value: countries,
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    "+${countries.dialCode}",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ));
   }
 
   TextField otpTextField() {
@@ -397,7 +412,7 @@ class _SignInOTPState extends State<SignInOTP> {
     if (osType == "email") {
       getOtpPlatform = text.toString().trim();
     } else {
-      getOtpPlatform = "+91" + text.toString().trim();
+      getOtpPlatform = "+${selectedCountry.dialCode}" + text.toString().trim();
     }
     VerificationIdSignIn verificationIdSignIn =
         await OtpService.getVerificationFromTwillio(
@@ -420,7 +435,6 @@ class _SignInOTPState extends State<SignInOTP> {
             verificationId: verificationId,
             phoneNumber: phoneNumber,
             otpType: otpType,
-            requesterType: requesterType,
           );
         },
         transitionDuration: Duration(milliseconds: 2000),

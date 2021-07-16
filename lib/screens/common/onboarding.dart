@@ -1,5 +1,6 @@
 import 'package:acc/screens/investor/found_us.dart';
 import 'package:acc/screens/investor/welcome.dart';
+import 'package:acc/utilites/app_strings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -71,9 +72,9 @@ class _OnBoardingState extends State<OnBoarding> {
             alignment: Alignment.bottomCenter,
             padding: EdgeInsets.all(25.0),
             child: Text(
-              "Find an investment opportunity\nthat's right for you.",
+              onBoardingScreen1,
               textAlign: TextAlign.center,
-              style: textWhiteNormal18(),
+              style: textWhiteNormal(20.0),
             ))
       ]),
       Stack(children: [
@@ -91,9 +92,9 @@ class _OnBoardingState extends State<OnBoarding> {
             alignment: Alignment.bottomCenter,
             padding: EdgeInsets.all(25.0),
             child: Text(
-              "Looking for an investor?\nWe will find it for you!",
+              onBoardingScreen2,
               textAlign: TextAlign.center,
-              style: textWhiteNormal18(),
+              style: textWhiteNormal(20.0),
             ))
       ]),
       Stack(children: [
@@ -111,9 +112,9 @@ class _OnBoardingState extends State<OnBoarding> {
             alignment: Alignment.bottomCenter,
             padding: EdgeInsets.all(25.0),
             child: Text(
-              "Increase your capital gains? Let \nus take the risk",
+              onBoardingScreen3,
               textAlign: TextAlign.center,
-              style: textWhiteNormal18(),
+              style: textWhiteNormal(20.0),
             ))
       ])
     ];
@@ -233,8 +234,6 @@ class _OnBoardingState extends State<OnBoarding> {
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) {
           return SignInOTP();
-          //return WelcomeInvestor();
-          //return FundraiserDashboard();
         },
         transitionDuration: Duration(milliseconds: 1000),
         transitionsBuilder: (context, animation, anotherAnimation, child) {

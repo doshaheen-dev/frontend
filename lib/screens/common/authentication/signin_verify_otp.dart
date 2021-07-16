@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,18 +19,12 @@ class SignInVerifyOTP extends StatefulWidget {
   final String _verificationId;
   final String _phoneNumber;
   final String _otpType;
-  final String _requesterType;
 
   const SignInVerifyOTP(
-      {Key key,
-      String verificationId,
-      String phoneNumber,
-      String otpType,
-      String requesterType})
+      {Key key, String verificationId, String phoneNumber, String otpType})
       : _verificationId = verificationId,
         _phoneNumber = phoneNumber,
         _otpType = otpType,
-        _requesterType = requesterType,
         super(key: key);
 
   @override
@@ -41,7 +38,6 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
   String _verificationId;
   String _phoneNumber;
   String _otpType;
-  String _requesterType;
 
   TextEditingController otpController = new TextEditingController();
   var progress;
@@ -51,7 +47,7 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
     _verificationId = widget._verificationId;
     _phoneNumber = widget._phoneNumber;
     _otpType = widget._otpType;
-    _requesterType = widget._requesterType;
+
     super.initState();
   }
 
@@ -183,39 +179,60 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
     progress?.showWithText(verifyingOtp);
 
     verifyPhoneUser("", _phoneNumber, _otpType,
-        otpController.text.trim().toString(), _verificationId, _requesterType);
+        otpController.text.trim().toString(), _verificationId);
   }
 
-  void openHome() {
-    Navigator.of(context).pushAndRemoveUntil(
-        PageRouteBuilder(
-            pageBuilder: (context, animation, anotherAnimation) {
-              // return InvestorDashboard();
-              return FundraiserDashboard();
-            },
-            transitionDuration: Duration(milliseconds: 2000),
-            transitionsBuilder: (context, animation, anotherAnimation, child) {
-              animation = CurvedAnimation(
-                  curve: Curves.fastLinearToSlowEaseIn, parent: animation);
-              return SlideTransition(
-                position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-                    .animate(animation),
-                child: child,
-              );
-            }),
-        (Route<dynamic> route) => false);
+  void openHome(String userType) {
+    if (userType == "Investor" || userType == "investor" || userType == "") {
+      Navigator.of(context).pushAndRemoveUntil(
+          PageRouteBuilder(
+              pageBuilder: (context, animation, anotherAnimation) {
+                return InvestorDashboard();
+              },
+              transitionDuration: Duration(milliseconds: 2000),
+              transitionsBuilder:
+                  (context, animation, anotherAnimation, child) {
+                animation = CurvedAnimation(
+                    curve: Curves.fastLinearToSlowEaseIn, parent: animation);
+                return SlideTransition(
+                  position:
+                      Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                          .animate(animation),
+                  child: child,
+                );
+              }),
+          (Route<dynamic> route) => false);
+    } else if (userType == "Fundraiser" || userType == "fundraiser") {
+      Navigator.of(context).pushAndRemoveUntil(
+          PageRouteBuilder(
+              pageBuilder: (context, animation, anotherAnimation) {
+                return FundraiserDashboard();
+              },
+              transitionDuration: Duration(milliseconds: 2000),
+              transitionsBuilder:
+                  (context, animation, anotherAnimation, child) {
+                animation = CurvedAnimation(
+                    curve: Curves.fastLinearToSlowEaseIn, parent: animation);
+                return SlideTransition(
+                  position:
+                      Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                          .animate(animation),
+                  child: child,
+                );
+              }),
+          (Route<dynamic> route) => false);
+    }
   }
 
   Future<void> verifyPhoneUser(String token, String phoneNumber, String otpType,
-      String smsCode, String verificationId, String requesterType) async {
-    VerifyPhoneNumberSignIn verifyPhoneNumber =
-        await OtpService.verifyUserByServer(token, phoneNumber, verificationId,
-            smsCode, otpType, requesterType);
+      String smsCode, String verificationId) async {
+    UserSignIn verifyPhoneNumber = await OtpService.verifyUserByServer(
+        token, phoneNumber, verificationId, smsCode, otpType);
     progress.dismiss();
 
     if (verifyPhoneNumber.type == "success") {
       showSnackBarWithoutButton(context, verifyPhoneNumber.message);
-      openHome();
+      openHome(verifyPhoneNumber.data.userType);
     } else {
       _openDialog(context, verifyPhoneNumber.message);
     }

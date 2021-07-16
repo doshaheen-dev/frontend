@@ -21,19 +21,16 @@ class OtpService {
     return userDetails;
   }
 
-  // Get otp from backend
-  static Future<VerifyPhoneNumberSignIn> verifyUserByServer(
-      String token,
-      String phoneNumber,
-      String verificationId,
-      String smsCode,
-      String inputType,
-      String requesterType) async {
+  // VERIFY OTP FOR SIGN IN
+  static Future<UserSignIn> verifyUserByServer(
+    String token,
+    String phoneNumber,
+    String verificationId,
+    String smsCode,
+    String inputType,
+  ) async {
     final url = Uri.parse("${ApiServices.baseUrl}/sign-in/verify_otp");
-    final headers = {
-      "Content-type": "application/json",
-      "x-auth-service-type": "$requesterType"
-    };
+    final headers = {"Content-type": "application/json"};
     var _body;
     if (inputType == "email") {
       _body =
@@ -43,16 +40,14 @@ class OtpService {
           '{"mobile_no": "$phoneNumber", "idToken": "$token","verificationId": "$verificationId", "smsCode": "$smsCode"}';
     }
 
-    // make POST request
     final response = await post(url, headers: headers, body: _body);
     final responseBody = response.body;
     Map valueMap = jsonDecode(responseBody);
-    VerifyPhoneNumberSignIn userDetails =
-        VerifyPhoneNumberSignIn.from(valueMap);
+    UserSignIn userDetails = UserSignIn.from(valueMap);
     return userDetails;
   }
 
-  // Get otp from backend
+  // SEND OTP TO MOBILE AND EMAIL
   static Future<VerificationIdSignIn> getVerificationFromTwillio(
       String phoneNumber, String inputType, String requesterType) async {
     final url = Uri.parse("${ApiServices.baseUrl}/sign-in/send_otp");

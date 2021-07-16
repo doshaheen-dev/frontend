@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:acc/screens/investor/authentication/signup_otp.dart';
+import 'package:acc/screens/common/authentication/signup_otp.dart';
 import 'package:acc/utilites/app_colors.dart';
 
 class UserType extends StatefulWidget {
