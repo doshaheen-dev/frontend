@@ -435,7 +435,6 @@ class _SignInOTPState extends State<SignInOTP> {
             verificationId: verificationId,
             phoneNumber: phoneNumber,
             otpType: otpType,
-            requesterType: requesterType,
           );
         },
         transitionDuration: Duration(milliseconds: 2000),

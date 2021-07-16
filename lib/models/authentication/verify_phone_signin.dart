@@ -62,7 +62,6 @@ class VerificationIdSignIn {
   final int status;
   final String message;
   final VerificationData data;
-  // final String verificationId;
 
   VerificationIdSignIn({
     this.type,
@@ -164,52 +163,42 @@ class UserSignIn {
 
 class UserData {
   final String token;
-  final String userId;
   final String firstName;
   final String middleName;
   final String lastName;
   final String mobileNo;
   final String emaiId;
   final String userType;
-  final String profileImageUrl;
 
-  UserData({
-    this.token,
-    this.userId,
-    this.firstName,
-    this.middleName,
-    this.lastName,
-    this.mobileNo,
-    this.emaiId,
-    this.userType,
-    this.profileImageUrl,
-  });
+  UserData(
+      {this.token,
+      this.firstName,
+      this.middleName,
+      this.lastName,
+      this.mobileNo,
+      this.emaiId,
+      this.userType});
 
   factory UserData.fromMap(Map<String, dynamic> json) {
     return UserData(
-      token: json["token"],
-      userId: json["user_id"],
-      firstName: json["first_name"],
-      middleName: json["middle_name"],
-      lastName: json["last_name"],
-      mobileNo: json["mobile_no"],
-      emaiId: json["email_id"],
-      userType: json["user_type"],
-      profileImageUrl: json["profile_image_url"],
-    );
+        mobileNo: json["mobile_no"],
+        emaiId: json["email_id"],
+        firstName: json["first_name"],
+        middleName: json["middle_name"],
+        lastName: json["last_name"],
+        userType: json["user_type"],
+        token: json["token"]);
   }
 
   factory UserData.fromJson(Map<String, dynamic> json) {
     return UserData(
       token: json["token"],
-      userId: json["user_id"],
       firstName: json["first_name"],
       middleName: json["middle_name"],
       lastName: json["last_name"],
       mobileNo: json["mobile_no"],
       emaiId: json["email_id"],
       userType: json["user_type"],
-      profileImageUrl: json["profile_image_url"],
     );
   }
 }
