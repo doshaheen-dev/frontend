@@ -1,3 +1,4 @@
+import 'package:acc/services/signup_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +9,7 @@ import 'package:acc/screens/investor/thank_you.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 import 'package:readmore/readmore.dart';
+import 'package:acc/models/authentication/signup_request.dart';
 
 class GeneralTermsPrivacy extends StatefulWidget {
   @override
@@ -200,8 +202,12 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                         top: 5.0, left: 25.0, bottom: 20, right: 25.0),
                     child: InkWell(
                       borderRadius: BorderRadius.circular(40),
-                      onTap: () {
+                      onTap: () async {
                         // on click
+                        final requestModelInstance =
+                            InvestorSignupRequestModel.instance;
+                        requestModelInstance.userType = 'investor';
+                        SignUpService.uploadUserDetails(requestModelInstance);
                         openNextScreen();
                       },
                       child: Container(

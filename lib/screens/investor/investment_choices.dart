@@ -6,6 +6,7 @@ import 'package:acc/utilites/ui_widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/product_type_provider.dart' as productProvider;
+import 'package:acc/models/authentication/signup_request.dart';
 
 class InvestmentChoices extends StatefulWidget {
   @override
@@ -118,19 +119,9 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                       }
                     },
                   ),
-
-                  // ListView.builder(
-                  //     physics: NeverScrollableScrollPhysics(),
-                  //     itemCount: infoItem.length,
-                  //     shrinkWrap: true,
-                  //     itemBuilder: (BuildContext context, int index) {
-                  //       return _buildPlayerModelList(infoItem[index]);
-                  //     }), //),
-
                   SizedBox(
                     height: 20,
                   ),
-
                   //NEXT BUTTON
                   Visibility(
                       visible: _isButtonVisible,
@@ -141,13 +132,23 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                           borderRadius: BorderRadius.circular(40),
                           onTap: () {
                             // on click
-                            // var types =
-                            //     Provider.of<productProvider.ProductTypes>(
-                            //             context,
-                            //             listen: false)
-                            //         .selectedTypes;
+                            var types =
+                                Provider.of<productProvider.ProductTypes>(
+                                        context,
+                                        listen: false)
+                                    .selectedTypes;
+                            var listIds = [];
+                            types.forEach((item) {
+                              listIds.add(item.id);
+                            });
                             // print('Checked Count: ${types.length}');
-                            // print(types[0].description);
+                            print(listIds);
+                            if (listIds.isNotEmpty) {
+                              final requestModelInstance =
+                                  InvestorSignupRequestModel.instance;
+                              requestModelInstance.productIds =
+                                  listIds.join(',');
+                            }
                             openGeneralTermsPrivacy();
                           },
                           child: Container(

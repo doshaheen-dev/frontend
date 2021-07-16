@@ -15,6 +15,8 @@ import 'package:provider/provider.dart';
 
 import '../../../utils/code_utils.dart';
 import '../../../providers/country_provider.dart' as countryProvider;
+import 'package:acc/models/authentication/signup_request.dart';
+import 'package:acc/utils/crypt_utils.dart';
 
 class SignUpDetails extends StatefulWidget {
   final User _user;
@@ -363,9 +365,14 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                               showSnackBar(context, "Please select a country.");
                               return;
                             }
+                            if (_addressController.text.isEmpty) {
+                              showSnackBar(
+                                  context, "Please enter the address.");
+                              return;
+                            }
                             FocusScope.of(context).requestFocus(FocusNode());
-                            progress = ProgressHUD.of(context);
-                            progress?.showWithText('Uploading Details...');
+                            // progress = ProgressHUD.of(context);
+                            // progress?.showWithText('Uploading Details...');
                             submitDetails(
                               _firstNameController.text.trim(),
                               _lastnameController.text.trim(),
@@ -469,17 +476,24 @@ class _SignUpDetailsState extends State<SignUpDetails> {
     String countryCode,
     String address,
   ) async {
-    UpdateBasicDetails basicDetails = await ProfileService.updateBasicDetails(
-        firstName, lastName, emailId, countryCode, address);
-    print('BD type: ${basicDetails.type}');
-    print('BD status: ${basicDetails.status}');
-    print('BD message: ${basicDetails.message}');
-    progress.dismiss();
-    if (basicDetails.type == "success") {
-      openWelcomeInvestor();
-    } else {
-      showSnackBar(context, "Something went wrong");
-    }
+    final requestModelInstance = InvestorSignupRequestModel.instance;
+    requestModelInstance.firstName = CryptUtils.encryption(firstName);
+    requestModelInstance.lastName = CryptUtils.encryption(lastName);
+    requestModelInstance.emailId = CryptUtils.encryption(emailId);
+    requestModelInstance.countryCode = countryCode;
+    requestModelInstance.address = address;
+
+    // UpdateBasicDetails basicDetails = await ProfileService.updateBasicDetails(
+    //     firstName, lastName, emailId, countryCode, address);
+    // print('BD type: ${basicDetails.type}');
+    // print('BD status: ${basicDetails.status}');
+    // print('BD message: ${basicDetails.message}');
+    // progress.dismiss();
+    // if (basicDetails.type == "success") {
+    openWelcomeInvestor();
+    // } else {
+    //   showSnackBar(context, "Something went wrong");
+    // }
   }
 
   void openWelcomeInvestor() {

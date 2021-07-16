@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-@JsonSerializable(nullable: false, explicitToJson: true)
+@JsonSerializable(nullable: true, explicitToJson: true)
 class InvestorSignupRequestModel {
   InvestorSignupRequestModel._privateConstructor();
 
@@ -9,26 +9,25 @@ class InvestorSignupRequestModel {
 
   static InvestorSignupRequestModel get instance => _instance;
 
-  int id;
   String firstName;
-  String middleName;
   String lastName;
+  String mobileNo;
   String emailId;
   String countryCode;
   String address;
   String hearAboutUs;
   String referralName;
-  int slotId;
-  List<int> productIds;
+  String slotId;
+  String productIds;
   String userType;
   String designation;
   String companyName;
+  String verificationId;
 
   Map<String, dynamic> toJson() => {
-        "id": this.id,
         "first_name": this.firstName,
-        "middle_name": this.middleName,
         "last_name": this.lastName,
+        "mobile_no": this.mobileNo,
         "email_id": this.emailId,
         "country_code": this.countryCode,
         "address": this.address,
@@ -39,5 +38,6 @@ class InvestorSignupRequestModel {
         "user_type": this.userType,
         "designation": this.designation,
         "company_name": this.companyName,
+        "verificationId": this.verificationId,
       };
 }

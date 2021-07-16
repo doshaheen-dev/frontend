@@ -387,7 +387,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
   }
 
   Future<void> _getOtp(String phoneNumber) async {
-    String _phoneNumber = "+91 " + phoneNumber.toString().trim();
+    String _phoneNumber = "+91" + phoneNumber.toString().trim();
     VerificationIdSignIn verificationIdSignIn =
         await OtpService.getSignUpOtp(_phoneNumber);
     if (verificationIdSignIn.status == 200) {

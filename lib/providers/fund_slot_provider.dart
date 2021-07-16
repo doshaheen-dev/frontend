@@ -18,7 +18,7 @@ class FundSlots with ChangeNotifier {
       return;
     }
     extractedData.data.options.forEach((option) {
-      loadedSlots.add(InvestmentLimitItem(option.range));
+      loadedSlots.add(InvestmentLimitItem(option.id, option.range));
     });
 
     _slotLineItems = loadedSlots.toList();
@@ -27,6 +27,7 @@ class FundSlots with ChangeNotifier {
 }
 
 class InvestmentLimitItem {
+  final int id;
   final String header;
-  InvestmentLimitItem(this.header);
+  InvestmentLimitItem(this.id, this.header);
 }

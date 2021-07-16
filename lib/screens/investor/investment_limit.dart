@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 // import '../../models/fundslot/fundslot.dart';
 // import '../../services/fund_slot_service.dart';
 import '../../providers/fund_slot_provider.dart' as slotProvider;
+import 'package:acc/models/authentication/signup_request.dart';
 
 class InvestmentLimit extends StatefulWidget {
   @override
@@ -153,6 +154,8 @@ class _InvestmentLimitState extends State<InvestmentLimit> {
         print(item.header);
         infoItemList = [];
         infoItemList.add(item.header);
+        final requestModelInstance = InvestorSignupRequestModel.instance;
+        requestModelInstance.slotId = '${item.id}';
         setState(() {
           openInvestmentChoices();
         });

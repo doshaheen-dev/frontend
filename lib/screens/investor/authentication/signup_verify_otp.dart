@@ -11,6 +11,9 @@ import 'package:acc/services/OtpService.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 
+import 'package:acc/models/authentication/signup_request.dart';
+import 'package:acc/utils/crypt_utils.dart';
+
 class SignUpVerifyOTP extends StatefulWidget {
   final String _verificationId;
   final String _phoneNumber;
@@ -47,6 +50,7 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
+
     return Scaffold(
         appBar: AppBar(
           toolbarHeight: 0,
@@ -187,6 +191,9 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
         phoneNumber, verificationId, otpCode);
     if (verificationIdSignIn.status == 200) {
       progress?.showWithText(successOTP);
+      final requestModelInstance = InvestorSignupRequestModel.instance;
+      requestModelInstance.mobileNo = CryptUtils.encryption(phoneNumber);
+      requestModelInstance.verificationId = verificationId;
       Future.delayed(Duration(milliseconds: 2), () async {
         progress.dismiss();
         openQuickSignUp();

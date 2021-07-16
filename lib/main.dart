@@ -4,11 +4,10 @@ import 'package:acc/providers/fund_slot_provider.dart';
 import 'package:acc/providers/product_type_provider.dart';
 import 'package:acc/providers/country_provider.dart';
 import 'package:acc/providers/city_provider.dart';
-import 'package:acc/screens/fundraiser/authentication/signup_corporate_details.dart';
-import 'package:acc/screens/investor/authentication/signup_details.dart';
+// import 'package:acc/screens/fundraiser/authentication/signup_corporate_details.dart';
+// import 'package:acc/screens/investor/authentication/signup_details.dart';
 import 'package:acc/screens/investor/investment_limit.dart';
 import 'package:acc/utilites/app_colors.dart';
-import 'package:acc/utils/crypt_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:acc/screens/common/onboarding.dart';
 import 'package:acc/services/AuthenticationService.dart';
 import 'package:provider/provider.dart';
-
-import 'models/authentication/sign_up_request.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

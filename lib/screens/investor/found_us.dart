@@ -5,6 +5,9 @@ import 'package:acc/screens/investor/investment_limit.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 
+import 'package:acc/models/authentication/signup_request.dart';
+import 'package:acc/utils/crypt_utils.dart';
+
 class InvestorSearchInfo extends StatefulWidget {
   final HearAboutUs _hearAboutUs;
 
@@ -149,6 +152,16 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                                 borderRadius: BorderRadius.circular(40),
                                 onTap: () {
                                   // on click
+                                  final requestModelInstance =
+                                      InvestorSignupRequestModel.instance;
+                                  if (infoItemList.isNotEmpty) {
+                                    requestModelInstance.hearAboutUs =
+                                        infoItemList.first;
+                                  }
+                                  if (firstNameController.text.isNotEmpty) {
+                                    requestModelInstance.referralName =
+                                        firstNameController.text.trim();
+                                  }
                                   openInvestmentLimit();
                                 },
                                 child: Container(
