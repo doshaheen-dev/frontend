@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:acc/models/authentication/verify_phone_signin.dart';
+import 'package:acc/models/local_countries.dart';
 import 'package:acc/services/OtpService.dart';
 import 'package:acc/utilites/app_strings.dart';
 import 'package:acc/utilites/hex_color.dart';
@@ -10,7 +11,7 @@ import 'package:acc/utilites/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
-import 'package:acc/screens/investor/authentication/signup_verify_otp.dart';
+import 'package:acc/screens/common/authentication/signup_verify_otp.dart';
 import 'package:acc/utilites/app_colors.dart';
 
 import 'package:acc/utilites/ui_widgets.dart';
@@ -30,6 +31,12 @@ class _SignUpOTPState extends State<SignUpOTP> {
   bool visible = false;
   EdgeInsets margin;
   String _userType;
+  var selectedCountry;
+  List<Countries> countryList = <Countries>[
+    const Countries("India", "IN", 91, 10),
+    const Countries("Singapore", "SG", 65, 12),
+    const Countries("United States", "US", 1, 10),
+  ];
 
   @override
   void initState() {
@@ -117,10 +124,23 @@ class _SignUpOTPState extends State<SignUpOTP> {
                           child: ElevatedButton(
                             onPressed: () {
                               FocusScope.of(context).requestFocus(FocusNode());
+
+                              if (selectedCountry == null) {
+                                showSnackBar(context, errorCountryCode);
+                                return;
+                              }
+
                               if (phoneController.text.isEmpty) {
                                 showSnackBar(context, correctMobile);
                                 return;
                               }
+                              if (selectedCountry.maxLength !=
+                                  phoneController.text.length) {
+                                showSnackBar(context,
+                                    "Phone number should be of ${selectedCountry.maxLength} digits.");
+                                return;
+                              }
+
                               if (!captchaController
                                   .verify(textConroller.value.text)) {
                                 showSnackBar(context, correctCaptcha);
@@ -146,10 +166,20 @@ class _SignUpOTPState extends State<SignUpOTP> {
                                 width: MediaQuery.of(context).size.width,
                                 height: 60,
                                 alignment: Alignment.center,
-                                child: Text(sendOtp, style: textWhiteBold18()),
+                                child: Text(sendOtpSecret,
+                                    style: textWhiteBold18()),
                               ),
                             ),
-                          ))
+                          )),
+
+                      Container(
+                        margin: const EdgeInsets.only(
+                            left: 25.0, bottom: 20, right: 25.0),
+                        width: MediaQuery.of(context).size.width,
+                        child: Text(
+                            "*You will recieve a one time password(Secret Code) on your mobile.",
+                            style: textNormal16(textGrey)),
+                      ),
                     ],
                   ),
                 ],
@@ -169,7 +199,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
               margin: const EdgeInsets.only(
                   top: 5.0, left: 25.0, bottom: 20, right: 5.0),
               decoration: customDecoration(),
-              child: dropdownField(),
+              child: _buildCodeDropDown(),
             )),
         Expanded(
           flex: 2,
@@ -257,6 +287,8 @@ class _SignUpOTPState extends State<SignUpOTP> {
                                     color: kDarkOrange,
                                     onPressed: () {
                                       captchaController.refresh();
+                                      textConroller.clear();
+                                      captchaController.refresh();
                                     })))
                       ]),
                     ),
@@ -302,38 +334,36 @@ class _SignUpOTPState extends State<SignUpOTP> {
     );
   }
 
-  String _value = '+91';
-  Widget dropdownField() {
+  Widget _buildCodeDropDown() {
     return Padding(
-      padding: EdgeInsets.only(left: 10.0, right: 5.0),
-      child: DropdownButtonFormField(
+        padding: EdgeInsets.only(left: 10.0, right: 5.0),
+        child: DropdownButtonFormField<Countries>(
           decoration: InputDecoration(
-              labelText: 'Code',
+              labelText: 'Country Code',
               labelStyle: new TextStyle(color: Colors.grey[600]),
               enabledBorder: UnderlineInputBorder(
                   borderRadius: BorderRadius.all(const Radius.circular(10.0)),
                   borderSide: BorderSide(color: Colors.transparent))),
-          value: _value,
-          items: [
-            DropdownMenuItem(
-              child: Text("+91"),
-              value: '+91',
-            ),
-            DropdownMenuItem(
-              child: Text("+1"),
-              value: '+1',
-            ),
-            DropdownMenuItem(
-              child: Text("+852"),
-              value: '+852',
-            ),
-          ],
-          onChanged: (value) {
+          value: selectedCountry,
+          onChanged: (Countries countries) {
             setState(() {
-              _value = value;
+              selectedCountry = countries;
             });
-          }),
-    );
+          },
+          items: countryList.map((Countries countries) {
+            return DropdownMenuItem<Countries>(
+              value: countries,
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    "+${countries.dialCode}",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ));
   }
 
   TextField inputTextField() {
@@ -341,15 +371,15 @@ class _SignUpOTPState extends State<SignUpOTP> {
       controller: textConroller,
       style: textBlackNormal18(),
       decoration: new InputDecoration(
-        contentPadding: EdgeInsets.all(15.0),
-        border: InputBorder.none,
-        focusedBorder: UnderlineInputBorder(
-          borderSide: const BorderSide(color: Colors.transparent, width: 2.0),
-          borderRadius: BorderRadius.all(
-            const Radius.circular(10.0),
-          ),
-        ),
-      ),
+          contentPadding: EdgeInsets.all(15.0),
+          labelStyle: new TextStyle(color: Colors.grey[600]),
+          border: InputBorder.none,
+          focusedBorder: UnderlineInputBorder(
+              borderSide:
+                  const BorderSide(color: Colors.transparent, width: 0.0),
+              borderRadius: BorderRadius.all(
+                const Radius.circular(10.0),
+              ))),
       keyboardType: TextInputType.number,
       inputFormatters: <TextInputFormatter>[
         FilteringTextInputFormatter.digitsOnly,
@@ -381,13 +411,14 @@ class _SignUpOTPState extends State<SignUpOTP> {
       keyboardType: TextInputType.number,
       inputFormatters: <TextInputFormatter>[
         FilteringTextInputFormatter.digitsOnly,
-        LengthLimitingTextInputFormatter(10),
       ],
     );
   }
 
   Future<void> _getOtp(String phoneNumber) async {
-    String _phoneNumber = "+91 " + phoneNumber.toString().trim();
+    String _phoneNumber =
+        "+${selectedCountry.dialCode}" + phoneNumber.toString().trim();
+    print(_phoneNumber);
     VerificationIdSignIn verificationIdSignIn =
         await OtpService.getSignUpOtp(_phoneNumber);
     if (verificationIdSignIn.status == 200) {

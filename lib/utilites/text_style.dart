@@ -8,6 +8,30 @@ TextStyle textWhiteNormal18() {
       fontWeight: FontWeight.normal);
 }
 
+TextStyle textWhiteNormal(double _fontSize) {
+  return TextStyle(
+      fontSize: _fontSize,
+      color: Colors.white,
+      fontFamily: 'Poppins-Regular',
+      fontWeight: FontWeight.normal);
+}
+
+TextStyle textNormal(Color _colorName, double _fontSize) {
+  return TextStyle(
+      fontSize: _fontSize,
+      color: _colorName,
+      fontFamily: 'Poppins-Regular',
+      fontWeight: FontWeight.normal);
+}
+
+TextStyle textBold(Color _colorName, double _fontSize) {
+  return TextStyle(
+      fontSize: _fontSize,
+      color: _colorName,
+      fontFamily: 'Poppins-Regular',
+      fontWeight: FontWeight.bold);
+}
+
 TextStyle textWhiteBold18() {
   return TextStyle(
       fontSize: 18.0,

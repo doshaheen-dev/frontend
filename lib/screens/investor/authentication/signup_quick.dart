@@ -45,7 +45,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
                   Container(
                     margin: const EdgeInsets.only(top: 10.0, left: 25.0),
                     child: Text(
-                      "Quick Sign Up",
+                      "Register Your Email",
                       style: TextStyle(
                           color: headingBlack,
                           fontWeight: FontWeight.bold,
@@ -53,17 +53,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
                           fontFamily: 'Poppins-Light'),
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 5.0, left: 25.0),
-                    child: Text(
-                      "You can easily sign up via",
-                      style: TextStyle(
-                          color: textGrey,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 20.0,
-                          fontFamily: 'Poppins-Regular'),
-                    ),
-                  ),
+
                   SizedBox(
                     height: 30,
                   ),
@@ -96,7 +86,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
                   ),
                   Center(
                     child: Text(
-                      "Use your email address to sign up",
+                      "Use your email address to register",
                       style: TextStyle(
                           color: textGrey,
                           fontSize: 18.0,
@@ -123,7 +113,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
                         decoration: appColorButton(),
                         child: Center(
                             child: Text(
-                          "Sign up",
+                          "Register",
                           style: TextStyle(
                               fontSize: 18.0,
                               fontWeight: FontWeight.bold,
