@@ -13,8 +13,10 @@ import 'package:acc/utilites/app_strings.dart';
 import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
+import 'package:provider/provider.dart';
 
 import '../../../utils/code_utils.dart';
+import '../../../providers/country_provider.dart' as countryProvider;
 
 class CorporateDetails extends StatefulWidget {
   @override
@@ -28,20 +30,49 @@ class _CorporateDetailsState extends State<CorporateDetails> {
   String title = "";
   String company_name = "";
   String company_email = "";
+  String country = "";
   File profilePhoto;
   var progress;
-  var firstNameController = TextEditingController();
-  var lastnameController = TextEditingController();
-  var titleController = TextEditingController();
-  var companyNameController = TextEditingController();
-  var companyEmailController = TextEditingController();
+  var _firstNameController = TextEditingController();
+  var _lastnameController = TextEditingController();
+  var _titleController = TextEditingController();
+  var _companyNameController = TextEditingController();
+  var _companyEmailController = TextEditingController();
   bool _displayConfirmationText = false;
   String nextButtonText = "Submit for Verification";
+
+  Future _countries;
+  var _isInit = true;
+
+  Future<void> _fetchCountries(BuildContext context) async {
+    await Provider.of<countryProvider.Countries>(context, listen: false)
+        .fetchAndSetCountries();
+  }
 
   void showConfirmationText() {
     setState(() {
       _displayConfirmationText = true;
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {});
+      _countries = _fetchCountries(context);
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _firstNameController.dispose();
+    _lastnameController.dispose();
+    _titleController.dispose();
+    _companyNameController.dispose();
+    _companyEmailController.dispose();
+    super.dispose();
   }
 
   @override
@@ -108,7 +139,7 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                     decoration: customDecoration(),
                                     child: TextField(
                                       style: textBlackNormal18(),
-                                      controller: firstNameController,
+                                      controller: _firstNameController,
                                       onChanged: (value) => {firstname = value},
                                       decoration:
                                           _setTextFieldDecoration("Firstname"),
@@ -122,7 +153,7 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                         right: 25.0),
                                     decoration: customDecoration(),
                                     child: TextField(
-                                      controller: lastnameController,
+                                      controller: _lastnameController,
                                       style: textBlackNormal18(),
                                       onChanged: (value) => lastname = value,
                                       decoration:
@@ -137,14 +168,88 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                         right: 25.0),
                                     decoration: customDecoration(),
                                     child: TextField(
-                                      controller: titleController,
+                                      controller: _titleController,
                                       style: textBlackNormal18(),
                                       onChanged: (value) => title = value,
                                       decoration:
                                           _setTextFieldDecoration("Title"),
                                     ),
                                   ),
-
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 5.0,
+                                        left: 25.0,
+                                        bottom: 20,
+                                        right: 25.0),
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 80,
+                                    decoration: customDecoration(),
+                                    child: FutureBuilder(
+                                        future: _countries,
+                                        builder: (ctx, dataSnapshot) {
+                                          if (dataSnapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                              backgroundColor: Colors.orange,
+                                              valueColor:
+                                                  new AlwaysStoppedAnimation<
+                                                      Color>(Colors.amber),
+                                            ));
+                                          } else {
+                                            if (dataSnapshot.error != null) {
+                                              return Center(
+                                                  child: Text(
+                                                      "An error occurred!"));
+                                            } else {
+                                              return Consumer<
+                                                  countryProvider.Countries>(
+                                                builder:
+                                                    (ctx, countryData, child) =>
+                                                        Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      10.0),
+                                                  child:
+                                                      DropdownButtonFormField(
+                                                          decoration: InputDecoration(
+                                                              labelText:
+                                                                  'Country',
+                                                              labelStyle:
+                                                                  new TextStyle(
+                                                                      color: Colors
+                                                                              .grey[
+                                                                          600]),
+                                                              enabledBorder: UnderlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .all(const Radius.circular(
+                                                                              10.0)),
+                                                                  borderSide: BorderSide(
+                                                                      color: Colors
+                                                                          .transparent))),
+                                                          items: countryData
+                                                              .countries
+                                                              .map((info) =>
+                                                                  DropdownMenuItem(
+                                                                    child: Text(
+                                                                        info.name),
+                                                                    value: info
+                                                                        .abbreviation,
+                                                                  ))
+                                                              .toList(),
+                                                          onChanged: (value) {
+                                                            print(value);
+                                                            setState(() {
+                                                              country = value;
+                                                            });
+                                                          }),
+                                                ),
+                                              );
+                                            }
+                                          }
+                                        }),
+                                  ),
                                   Container(
                                     margin: const EdgeInsets.only(
                                         top: 5.0,
@@ -154,7 +259,7 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                     decoration: customDecoration(),
                                     child: TextField(
                                       style: textBlackNormal18(),
-                                      controller: companyNameController,
+                                      controller: _companyNameController,
                                       onChanged: (value) =>
                                           company_name = value,
                                       decoration: _setTextFieldDecoration(
@@ -168,7 +273,7 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                     decoration: customDecoration(),
                                     child: TextField(
                                       style: textBlackNormal18(),
-                                      controller: companyEmailController,
+                                      controller: _companyEmailController,
                                       onChanged: (value) =>
                                           company_email = value,
                                       decoration: _setTextFieldDecoration(
@@ -201,32 +306,38 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                       child: ElevatedButton(
                                         onPressed: () {
                                           // on click
-                                          if (firstNameController
+                                          if (_firstNameController
                                               .text.isEmpty) {
                                             showSnackBar(context,
                                                 "Please enter the Firstname.");
                                             return;
                                           }
-                                          if (lastnameController.text.isEmpty) {
+                                          if (_lastnameController
+                                              .text.isEmpty) {
                                             showSnackBar(context,
                                                 "Please enter the Lastname.");
                                             return;
                                           }
-                                          if (titleController.text.isEmpty) {
+                                          if (_titleController.text.isEmpty) {
                                             showSnackBar(context,
                                                 "Please enter the title.");
                                             return;
                                           }
-                                          if (companyEmailController
+                                          if (_companyEmailController
                                               .text.isEmpty) {
                                             showSnackBar(context,
                                                 "Please enter the email id.");
                                             return;
                                           }
-                                          if (CodeUtils.emailValid(
-                                              companyEmailController.text)) {
+                                          if (!CodeUtils.emailValid(
+                                              _companyEmailController.text)) {
                                             showSnackBar(context,
                                                 "Please enter a valid email id.");
+                                            return;
+                                          }
+                                          if (country.isEmpty) {
+                                            showSnackBar(context,
+                                                "Please select a country.");
                                             return;
                                           }
                                           FocusScope.of(context)

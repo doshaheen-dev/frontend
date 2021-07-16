@@ -17,15 +17,8 @@ class FundSlots with ChangeNotifier {
     if (extractedData == null) {
       return;
     }
-    String symbol = extractedData.data.currencySymbol;
     extractedData.data.options.forEach((option) {
-      if (option.toAmount.isEmpty) {
-        loadedSlots
-            .add(InvestmentLimitItem('Above ${option.fromAmount}$symbol'));
-      } else {
-        loadedSlots.add(InvestmentLimitItem(
-            '${option.fromAmount}$symbol - ${option.toAmount}$symbol'));
-      }
+      loadedSlots.add(InvestmentLimitItem(option.range));
     });
 
     _slotLineItems = loadedSlots.toList();

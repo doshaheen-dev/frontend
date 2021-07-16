@@ -58,8 +58,7 @@ class _ThankYouInvestorState extends State<ThankYouInvestor> {
               Container(
                   margin: const EdgeInsets.only(top: 50.0),
                   child: Center(
-                    child: Text(
-                        'Thank you for signing up.\n\n Our team will review \nand revert soon.',
+                    child: Text('Thank you for signing up.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: headingBlack,

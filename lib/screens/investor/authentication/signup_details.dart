@@ -11,8 +11,10 @@ import 'package:acc/services/ProfileService.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 import '../../../utils/code_utils.dart';
+import '../../../providers/country_provider.dart' as countryProvider;
 
 class SignUpDetails extends StatefulWidget {
   final User _user;
@@ -31,15 +33,26 @@ class SignUpDetails extends StatefulWidget {
 }
 
 class _SignUpDetailsState extends State<SignUpDetails> {
+  final _firstNameController = TextEditingController();
+  final _lastnameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _addressController = TextEditingController();
   User _user;
   String firstname = "";
   String lastname = "";
   String email = "";
-  String country = 'IND';
+  String country = "";
   String address = "";
   File profilePhoto;
 
   var progress;
+  Future _countries;
+  var _isInit = true;
+
+  Future<void> _fetchCountries(BuildContext context) async {
+    await Provider.of<countryProvider.Countries>(context, listen: false)
+        .fetchAndSetCountries();
+  }
 
   @override
   void initState() {
@@ -48,28 +61,43 @@ class _SignUpDetailsState extends State<SignUpDetails> {
   }
 
   @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {});
+      _countries = _fetchCountries(context);
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _firstNameController.dispose();
+    _lastnameController.dispose();
+    _emailController.dispose();
+    _addressController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
-    final firstNameController = TextEditingController();
-    final lastnameController = TextEditingController();
-    final emailController = TextEditingController();
-    final addressController = TextEditingController();
     print("info, ${_user}");
 
     if (_user != null) {
       int idx = _user.displayName.indexOf(" ");
       // Or check if appState.username != null or what ever your use case is.
-      firstNameController.text = (_user.displayName == null ||
+      _firstNameController.text = (_user.displayName == null ||
               _user.displayName.substring(0, idx).trim() == 'null')
           ? ''
           : _user.displayName.substring(0, idx).trim() ?? '';
-      lastnameController.text = (_user.displayName == null ||
+      _lastnameController.text = (_user.displayName == null ||
               _user.displayName.substring(idx + 1).trim() == 'null')
           ? ''
           : _user.displayName.substring(idx + 1).trim() ?? '';
-      emailController.text = _user.email == null ? '' : _user.email ?? '';
+      _emailController.text = _user.email == null ? '' : _user.email ?? '';
     }
 
     void _imgFromCamera() async {
@@ -203,7 +231,7 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                         decoration: customDecoration(),
                         child: TextField(
                           style: _setTextFieldStyle(),
-                          controller: firstNameController,
+                          controller: _firstNameController,
                           onChanged: (value) => {firstname = value},
                           decoration: _setTextFieldDecoration("Firstname"),
                         ),
@@ -213,7 +241,7 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                             top: 5.0, left: 25.0, bottom: 20, right: 25.0),
                         decoration: customDecoration(),
                         child: TextField(
-                          controller: lastnameController,
+                          controller: _lastnameController,
                           style: _setTextFieldStyle(),
                           onChanged: (value) => lastname = value,
                           decoration: _setTextFieldDecoration("Lastname"),
@@ -224,7 +252,7 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                             top: 5.0, left: 25.0, bottom: 20, right: 25.0),
                         decoration: customDecoration(),
                         child: TextField(
-                          controller: emailController,
+                          controller: _emailController,
                           style: _setTextFieldStyle(),
                           onChanged: (value) => email = value,
                           decoration: _setTextFieldDecoration("E-mail"),
@@ -237,48 +265,65 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                         width: MediaQuery.of(context).size.width,
                         height: 80,
                         decoration: customDecoration(),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: DropdownButtonFormField(
-                              decoration: InputDecoration(
-                                  labelText: 'Country',
-                                  labelStyle:
-                                      new TextStyle(color: Colors.grey[600]),
-                                  enabledBorder: UnderlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                          const Radius.circular(10.0)),
-                                      borderSide: BorderSide(
-                                          color: Colors.transparent))),
-                              value: country,
-                              items: [
-                                DropdownMenuItem(
-                                  child: Text("INDIA"),
-                                  value: 'IND',
-                                ),
-                                DropdownMenuItem(
-                                  child: Text("DUBAI"),
-                                  value: 'UAE',
-                                ),
-                                DropdownMenuItem(
-                                  child: Text("SINGAPORE"),
-                                  value: 'SGP',
-                                ),
-                              ],
-                              onChanged: (value) {
-                                setState(() {
-                                  country = value;
-                                });
-                              }),
-                        ),
+                        child: FutureBuilder(
+                            future: _countries,
+                            builder: (ctx, dataSnapshot) {
+                              if (dataSnapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(
+                                    child: CircularProgressIndicator(
+                                  backgroundColor: Colors.orange,
+                                  valueColor: new AlwaysStoppedAnimation<Color>(
+                                      Colors.amber),
+                                ));
+                              } else {
+                                if (dataSnapshot.error != null) {
+                                  return Center(
+                                      child: Text("An error occurred!"));
+                                } else {
+                                  return Consumer<countryProvider.Countries>(
+                                    builder: (ctx, countryData, child) =>
+                                        Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: DropdownButtonFormField(
+                                        decoration: InputDecoration(
+                                            labelText: 'Country',
+                                            labelStyle: new TextStyle(
+                                                color: Colors.grey[600]),
+                                            enabledBorder: UnderlineInputBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    const Radius.circular(
+                                                        10.0)),
+                                                borderSide: BorderSide(
+                                                    color:
+                                                        Colors.transparent))),
+                                        // value: country,
+                                        items: countryData.countries
+                                            .map((info) => DropdownMenuItem(
+                                                  child: Text(info.name),
+                                                  value: info.abbreviation,
+                                                ))
+                                            .toList(),
+                                        onChanged: (value) {
+                                          // print(value);
+                                          setState(() {
+                                            country = value;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                }
+                              }
+                            }),
                       ),
-
                       Container(
                         margin: const EdgeInsets.only(
                             top: 5.0, left: 25.0, bottom: 20, right: 25.0),
                         decoration: customDecoration(),
                         child: TextField(
                           style: _setTextFieldStyle(),
-                          controller: addressController,
+                          controller: _addressController,
                           onChanged: (value) => address = value,
                           decoration: _setTextFieldDecoration("Address 1"),
                         ),
@@ -294,35 +339,39 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                           borderRadius: BorderRadius.circular(40),
                           onTap: () {
                             // on click
-                            if (firstNameController.text.isEmpty) {
+                            if (_firstNameController.text.isEmpty) {
                               showSnackBar(
                                   context, "Please enter the Firstname.");
                               return;
                             }
-                            if (lastnameController.text.isEmpty) {
+                            if (_lastnameController.text.isEmpty) {
                               showSnackBar(
                                   context, "Please enter the Lastname.");
                               return;
                             }
-                            if (emailController.text.isEmpty) {
+                            if (_emailController.text.isEmpty) {
                               showSnackBar(
                                   context, "Please enter the email id.");
                               return;
                             }
-                            if (!CodeUtils.emailValid(emailController.text)) {
+                            if (!CodeUtils.emailValid(_emailController.text)) {
                               showSnackBar(
                                   context, "Please enter a valid email id.");
+                              return;
+                            }
+                            if (country.isEmpty) {
+                              showSnackBar(context, "Please select a country.");
                               return;
                             }
                             FocusScope.of(context).requestFocus(FocusNode());
                             progress = ProgressHUD.of(context);
                             progress?.showWithText('Uploading Details...');
                             submitDetails(
-                              firstNameController.text.trim(),
-                              lastnameController.text.trim(),
-                              emailController.text.trim(),
+                              _firstNameController.text.trim(),
+                              _lastnameController.text.trim(),
+                              _emailController.text.trim(),
                               country,
-                              addressController.text,
+                              _addressController.text,
                             );
                           },
                           child: Container(

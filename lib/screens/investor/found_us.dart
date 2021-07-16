@@ -125,8 +125,8 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                             style: _setTextFieldStyle(),
                             controller: firstNameController,
                             onChanged: (value) => {firstname = value},
-                            decoration:
-                                _setTextFieldDecoration("Name of the person"),
+                            decoration: _setTextFieldDecoration(
+                                "Name of the person who referred you"),
                           ),
                         ),
                       ],
