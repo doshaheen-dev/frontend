@@ -1,19 +1,25 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:acc/models/authentication/signup_request.dart';
+import 'package:acc/models/authentication/signup_response.dart' as response;
+import 'package:acc/services/signup_service.dart';
+import 'package:acc/utils/crypt_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
-import 'package:acc/models/profile/basic_details.dart';
+// import 'package:acc/models/profile/basic_details.dart';
 import 'package:acc/screens/common/onboarding.dart';
 import 'package:acc/screens/investor/welcome.dart';
-import 'package:acc/services/ProfileService.dart';
+// import 'package:acc/services/ProfileService.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/app_strings.dart';
 import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../utils/code_utils.dart';
 import '../../../providers/country_provider.dart' as countryProvider;
@@ -344,24 +350,23 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                               .requestFocus(FocusNode());
                                           if (nextButtonText ==
                                               'Back to Home') {
-                                            // open onboarding again
-                                            openOnboarding();
+                                            progress = ProgressHUD.of(context);
+                                            progress?.showWithText(
+                                                'Uploading Details...');
+                                            submitDetails(
+                                              _firstNameController.text.trim(),
+                                              _lastnameController.text.trim(),
+                                              _titleController.text.trim(),
+                                              country,
+                                              _companyNameController.text,
+                                              _companyEmailController.text,
+                                            );
                                           }
 
                                           setState(() {
                                             showConfirmationText();
                                             nextButtonText = 'Back to Home';
                                           });
-
-                                          // progress = ProgressHUD.of(context);
-                                          // progress?.showWithText('Uploading Details...');
-                                          // submitDetails(
-                                          //   firstNameController.text.trim(),
-                                          //   lastnameController.text.trim(),
-                                          //   titleController.text.trim(),
-                                          //   country,
-                                          //   addressController.text,
-                                          // );
                                         },
                                         style: ElevatedButton.styleFrom(
                                             padding: EdgeInsets.all(0.0),
@@ -446,18 +451,28 @@ class _CorporateDetailsState extends State<CorporateDetails> {
   Future<void> submitDetails(
     String firstName,
     String lastName,
-    String emailId,
+    String title,
     String countryCode,
-    String address,
+    String companyName,
+    String companyEmailId,
   ) async {
-    UpdateBasicDetails basicDetails = await ProfileService.updateBasicDetails(
-        firstName, lastName, emailId, countryCode, address);
-    print('BD type: ${basicDetails.type}');
-    print('BD status: ${basicDetails.status}');
-    print('BD message: ${basicDetails.message}');
+    final requestModelInstance = InvestorSignupRequestModel.instance;
+    requestModelInstance.firstName = CryptUtils.encryption(firstName);
+    requestModelInstance.lastName = CryptUtils.encryption(lastName);
+    requestModelInstance.emailId = CryptUtils.encryption(companyEmailId);
+    requestModelInstance.countryCode = countryCode;
+    requestModelInstance.companyName = companyName;
+    requestModelInstance.designation = title;
+    requestModelInstance.userType = 'fundraiser';
+
+    response.User signedUpUser =
+        await SignUpService.uploadUserDetails(requestModelInstance);
     progress.dismiss();
-    if (basicDetails.type == "success") {
-      openWelcomeInvestor();
+    if (signedUpUser.type == 'success') {
+      final prefs = await SharedPreferences.getInstance();
+      final userJson = jsonEncode(signedUpUser.data);
+      prefs.setString('UserInfo', userJson);
+      openOnboarding();
     } else {
       showSnackBar(context, "Something went wrong");
     }

@@ -371,8 +371,6 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                               return;
                             }
                             FocusScope.of(context).requestFocus(FocusNode());
-                            // progress = ProgressHUD.of(context);
-                            // progress?.showWithText('Uploading Details...');
                             submitDetails(
                               _firstNameController.text.trim(),
                               _lastnameController.text.trim(),

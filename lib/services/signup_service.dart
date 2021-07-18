@@ -1,18 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:acc/models/authentication/signup_response.dart';
 import 'package:http/http.dart' as http;
-import 'package:acc/models/profile/basic_details.dart';
 import 'package:acc/services/http_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:acc/models/authentication/signup_request.dart';
 
 class SignUpService {
   // Upload User Details
-  static Future<void> uploadUserDetails(
+  static Future<User> uploadUserDetails(
       InvestorSignupRequestModel request) async {
     // set up POST request arguments
-    final prefs = await SharedPreferences.getInstance();
     final url = Uri.parse("${ApiServices.baseUrl}/sign-up/user");
     final headers = {"Content-type": "application/json"};
     final jsonBody = jsonEncode(request);
@@ -25,6 +23,7 @@ class SignUpService {
     final responseBody = response.body;
     Map valueMap = jsonDecode(responseBody);
     print('Signup Resp: $valueMap');
-    return;
+    User userDetails = User.from(valueMap);
+    return userDetails;
   }
 }
