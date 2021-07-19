@@ -1,12 +1,11 @@
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:acc/providers/fund_slot_provider.dart';
 import 'package:acc/providers/product_type_provider.dart';
 import 'package:acc/providers/country_provider.dart';
 import 'package:acc/providers/city_provider.dart';
-import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
-import 'package:acc/screens/investor/investment_limit.dart';
 import 'package:acc/utilites/app_colors.dart';
+import 'package:acc/utilites/hex_color.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -54,23 +53,40 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
           primaryColor: kLightOrange,
           accentColor: kDarkOrange,
-          fontFamily: 'Poppins-Regular',
+          fontFamily: 'Montserrat-Regular',
         ),
-        home: StartPage(),
+        home: MyHomePage(),
       ),
     );
   }
 }
 
-class StartPage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void initState() {
+    super.initState();
+    Timer(
+        Duration(seconds: 3),
+        () => Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => OnBoarding())));
+  }
+
   @override
   Widget build(BuildContext context) {
-    // final firebaseUser = context.watch<User>();
-    // if (firebaseUser != null) {
-    //   return Home();
-    // }
-    // return InvestmentLimit();
-
-    return OnBoarding();
+    return Scaffold(
+      backgroundColor: HexColor("#114069"),
+      body: Center(
+        child: Image.asset(
+          'assets/images/company_logo/app_logo_vertical.png',
+          height: 350.0,
+          width: 200.0,
+        ),
+      ),
+    );
   }
 }
