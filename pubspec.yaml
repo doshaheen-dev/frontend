@@ -23,8 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-
+  
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -59,6 +58,16 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.9.0 
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/company_logo/app_logo_vertical.png"
+  # For Android only
+  # image_path_android
+  # For iOS only
+  # image_path_ios
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -107,7 +116,7 @@ flutter:
         - asset: assets/fonts/Poppins-Regular.ttf
     - family: Montserrat
       fonts:
-        - asset: assets/fonts/Montserrat/            
+        - asset: assets/fonts/Montserrat/Montserrat-Regular.otf         
 
   #
   # For details regarding fonts from package dependencies,
