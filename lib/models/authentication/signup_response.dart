@@ -57,7 +57,7 @@ class ResponseData {
   final String productIds;
   final String userType;
   final String mobileNoVerifiedTimestamp;
-  final bool mobileNoVerified;
+  final int mobileNoVerified;
 
   ResponseData(
     this.id,
