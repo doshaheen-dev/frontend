@@ -76,6 +76,23 @@ class ResponseData {
     this.mobileNoVerified,
   );
 
+  Map<String, dynamic> toJson() => {
+        "id": this.id,
+        "first_name": this.firstName,
+        "last_name": this.lastName,
+        "mobile_no": this.mobileNo,
+        "email_id": this.emailId,
+        "country_code": this.countryCode,
+        "address": this.address,
+        "hear_about_us": this.hearAboutUs,
+        "referral_name": this.referralName,
+        "slot_id": this.slotId,
+        "product_ids": this.productIds,
+        "user_type": this.userType,
+        "mobile_no_verified_timestamp": this.mobileNoVerifiedTimestamp,
+        "mobile_no_verified": this.mobileNoVerified,
+      };
+
   factory ResponseData.fromMap(Map<String, dynamic> json) {
     return ResponseData(
       json['id'],

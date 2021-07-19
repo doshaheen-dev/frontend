@@ -330,6 +330,12 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                                 "Please enter the title.");
                                             return;
                                           }
+                                          if (_companyNameController
+                                              .text.isEmpty) {
+                                            showSnackBar(context,
+                                                "Please enter the company name.");
+                                            return;
+                                          }
                                           if (_companyEmailController
                                               .text.isEmpty) {
                                             showSnackBar(context,
@@ -351,6 +357,10 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                               .requestFocus(FocusNode());
                                           if (nextButtonText ==
                                               'Back to Home') {
+                                            openOnboarding();
+                                          }
+
+                                          setState(() {
                                             progress = ProgressHUD.of(context);
                                             progress?.showWithText(
                                                 'Uploading Details...');
@@ -362,11 +372,6 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                               _companyNameController.text,
                                               _companyEmailController.text,
                                             );
-                                          }
-
-                                          setState(() {
-                                            showConfirmationText();
-                                            nextButtonText = 'Back to Home';
                                           });
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -470,10 +475,12 @@ class _CorporateDetailsState extends State<CorporateDetails> {
         await SignUpService.uploadUserDetails(requestModelInstance);
     progress.dismiss();
     if (signedUpUser.type == 'success') {
-      // final prefs = await SharedPreferences.getInstance();
-      // final userJson = jsonEncode(signedUpUser.data);
-      // prefs.setString('UserInfo', userJson);
-      openOnboarding();
+      final prefs = await SharedPreferences.getInstance();
+      final userJson = jsonEncode(signedUpUser.data);
+      prefs.setString('UserInfo', userJson);
+      // print('Saved UserInfo: ${prefs.getString('UserInfo')}');
+      showConfirmationText();
+      nextButtonText = 'Back to Home';
     } else {
       showSnackBar(context, "Something went wrong");
     }

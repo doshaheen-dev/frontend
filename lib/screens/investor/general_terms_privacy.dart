@@ -226,10 +226,10 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                                     requestModelInstance);
                             progress.dismiss();
                             if (signedUpUser.type == 'success') {
-                              // final prefs =
-                              //     await SharedPreferences.getInstance();
-                              // final userJson = jsonEncode(signedUpUser.data);
-                              // prefs.setString('UserInfo', userJson);
+                              final prefs =
+                                  await SharedPreferences.getInstance();
+                              final userJson = jsonEncode(signedUpUser.data);
+                              prefs.setString('UserInfo', userJson);
                               openNextScreen();
                             } else {
                               showSnackBar(context, "Something went wrong");
