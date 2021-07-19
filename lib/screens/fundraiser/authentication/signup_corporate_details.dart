@@ -470,9 +470,9 @@ class _CorporateDetailsState extends State<CorporateDetails> {
         await SignUpService.uploadUserDetails(requestModelInstance);
     progress.dismiss();
     if (signedUpUser.type == 'success') {
-      final prefs = await SharedPreferences.getInstance();
-      final userJson = jsonEncode(signedUpUser.data);
-      prefs.setString('UserInfo', userJson);
+      // final prefs = await SharedPreferences.getInstance();
+      // final userJson = jsonEncode(signedUpUser.data);
+      // prefs.setString('UserInfo', userJson);
       openOnboarding();
     } else {
       showSnackBar(context, "Something went wrong");
