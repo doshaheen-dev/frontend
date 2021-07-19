@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:acc/constants/font_family.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -78,7 +79,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                           fontSize: 18.0,
-                          fontFamily: 'Poppins-Regular'),
+                          fontFamily: FontFamilyMontserrat.regular),
                     ),
                   ),
                   SizedBox(
@@ -90,7 +91,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
                       style: TextStyle(
                           color: textGrey,
                           fontSize: 18.0,
-                          fontFamily: 'Poppins-Regular'),
+                          fontFamily: FontFamilyMontserrat.regular),
                     ),
                   ),
                   SizedBox(

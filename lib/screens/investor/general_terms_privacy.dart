@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:acc/constants/font_family.dart';
 import 'package:acc/services/signup_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -265,7 +266,7 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
         color: colors,
         fontSize: _fontSize,
         fontWeight: FontWeight.w500,
-        fontFamily: 'Poppins-Regular');
+        fontFamily: FontFamilyMontserrat.regular);
   }
 
   BoxDecoration customDecoration() {
@@ -287,7 +288,7 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
           color: Colors.black,
           fontWeight: FontWeight.normal,
           fontSize: 18.0,
-          fontFamily: 'Poppins-Regular'),
+          fontFamily: FontFamilyMontserrat.regular),
       decoration: new InputDecoration(
         contentPadding: EdgeInsets.all(15.0),
         border: InputBorder.none,

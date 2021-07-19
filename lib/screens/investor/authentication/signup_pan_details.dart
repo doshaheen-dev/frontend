@@ -1,3 +1,4 @@
+import 'package:acc/constants/font_family.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/investor/thank_you.dart';
@@ -59,7 +60,7 @@ class _SignUpPanDetailsState extends State<SignUpPanDetails> {
                           color: textGrey,
                           fontWeight: FontWeight.normal,
                           fontSize: 20.0,
-                          fontFamily: 'Poppins-Regular'),
+                          fontFamily: FontFamilyMontserrat.regular),
                     ),
                   ),
 
@@ -203,7 +204,7 @@ class _SignUpPanDetailsState extends State<SignUpPanDetails> {
         color: Colors.black,
         fontWeight: FontWeight.normal,
         fontSize: 18.0,
-        fontFamily: 'Poppins-Regular');
+        fontFamily: FontFamilyMontserrat.regular);
   }
 
   InputDecoration _setTextFieldDecoration(_text) {
@@ -227,7 +228,7 @@ class _SignUpPanDetailsState extends State<SignUpPanDetails> {
           color: Colors.black,
           fontWeight: FontWeight.normal,
           fontSize: 16.0,
-          fontFamily: 'Poppins-Regular'),
+          fontFamily: FontFamilyMontserrat.regular),
       decoration: new InputDecoration(
         contentPadding: EdgeInsets.all(10.0),
         labelText: text,

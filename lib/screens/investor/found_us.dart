@@ -1,3 +1,4 @@
+import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/investor/hearaboutus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -194,7 +195,7 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
         color: Colors.black,
         fontWeight: FontWeight.normal,
         fontSize: 18.0,
-        fontFamily: 'Poppins-Regular');
+        fontFamily: FontFamilyMontserrat.regular);
   }
 
   InputDecoration _setTextFieldDecoration(_text) {

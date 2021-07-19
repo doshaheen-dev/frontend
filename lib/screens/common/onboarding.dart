@@ -1,3 +1,4 @@
+import 'package:acc/constants/font_family.dart';
 import 'package:acc/screens/investor/found_us.dart';
 import 'package:acc/screens/investor/welcome.dart';
 import 'package:acc/utilites/app_strings.dart';
@@ -74,7 +75,7 @@ class _OnBoardingState extends State<OnBoarding> {
             child: Text(
               onBoardingScreen1,
               textAlign: TextAlign.center,
-              style: textWhiteNormal(20.0),
+              style: textWhiteBold20(),
             ))
       ]),
       Stack(children: [
@@ -94,7 +95,7 @@ class _OnBoardingState extends State<OnBoarding> {
             child: Text(
               onBoardingScreen2,
               textAlign: TextAlign.center,
-              style: textWhiteNormal(20.0),
+              style: textWhiteBold20(),
             ))
       ]),
       Stack(children: [
@@ -114,7 +115,7 @@ class _OnBoardingState extends State<OnBoarding> {
             child: Text(
               onBoardingScreen3,
               textAlign: TextAlign.center,
-              style: textWhiteNormal(20.0),
+              style: textWhiteBold20(),
             ))
       ])
     ];
@@ -264,7 +265,7 @@ class _OnBoardingState extends State<OnBoarding> {
                   fontSize: 14.0,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
-                  fontFamily: 'Poppins-Light'),
+                  fontFamily: FontFamilyMontserrat.regular),
             ),
           ),
           decoration: BoxDecoration(

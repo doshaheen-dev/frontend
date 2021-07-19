@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:acc/constants/font_family.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -427,7 +428,7 @@ class _SignUpDetailsState extends State<SignUpDetails> {
         color: Colors.black,
         fontWeight: FontWeight.normal,
         fontSize: 18.0,
-        fontFamily: 'Poppins-Regular');
+        fontFamily: FontFamilyMontserrat.regular);
   }
 
   InputDecoration _setTextFieldDecoration(_text) {
@@ -451,7 +452,7 @@ class _SignUpDetailsState extends State<SignUpDetails> {
           color: Colors.black,
           fontWeight: FontWeight.normal,
           fontSize: 16.0,
-          fontFamily: 'Poppins-Regular'),
+          fontFamily: FontFamilyMontserrat.regular),
       decoration: new InputDecoration(
         contentPadding: EdgeInsets.all(10.0),
         labelText: text,

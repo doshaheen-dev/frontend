@@ -1,3 +1,5 @@
+import 'package:acc/constants/font_family.dart';
+import 'package:acc/utilites/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/common/authentication/signup_otp.dart';
@@ -40,21 +42,14 @@ class _UserTypeState extends State<UserType> {
                           margin: const EdgeInsets.only(top: 80.0, left: 25.0),
                           child: Text(
                             "I am a",
-                            style: TextStyle(
-                                color: headingBlack,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 28.0,
-                                fontFamily: 'Poppins-Light'),
+                            style: textBold(Colors.black, 30),
                           ),
                         ),
                         Container(
                           margin: const EdgeInsets.only(top: 5.0, left: 25.0),
                           child: Text(
                             "Please choose your appropiate type",
-                            style: TextStyle(
-                                color: textGrey,
-                                fontSize: 20.0,
-                                fontFamily: 'Poppins-Regular'),
+                            style: textNormal(textGrey, 18.0),
                           ),
                         ),
                         Center(
@@ -108,12 +103,9 @@ class _UserTypeState extends State<UserType> {
                   height: 10.0,
                 ),
                 Text("Investor",
-                    style: TextStyle(
-                        color: selectedCategory.contains(investor)
-                            ? Colors.white
-                            : Colors.black,
-                        fontSize: 18.0,
-                        fontFamily: 'Poppins-Light'))
+                    style: textNormal18(selectedCategory.contains(investor)
+                        ? Colors.white
+                        : Colors.black))
               ],
             ),
           ),
@@ -160,12 +152,9 @@ class _UserTypeState extends State<UserType> {
                   height: 10.0,
                 ),
                 Text("Fundraiser",
-                    style: TextStyle(
-                        color: selectedCategory.contains(fundraiser)
-                            ? Colors.white
-                            : Colors.black,
-                        fontSize: 18.0,
-                        fontFamily: 'Poppins-Light'))
+                    style: textNormal18(selectedCategory.contains(fundraiser)
+                        ? Colors.white
+                        : Colors.black))
               ],
             ),
           ),

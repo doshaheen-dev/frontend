@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/models/local_countries.dart';
 import 'package:acc/services/OtpService.dart';
@@ -99,12 +100,12 @@ class _SignUpOTPState extends State<SignUpOTP> {
                       Container(
                         margin: const EdgeInsets.only(top: 10.0, left: 25.0),
                         child:
-                            Text(signUpHeader, style: textBold28(headingBlack)),
+                            Text(signUpHeader, style: textBold30(headingBlack)),
                       ),
                       Container(
                         margin: const EdgeInsets.only(top: 5.0, left: 25.0),
                         child: Text(signUpSubHeader,
-                            style: textNormal20(textGrey)),
+                            style: textNormal18(textGrey)),
                       ),
                       SizedBox(
                         height: 25,
@@ -394,7 +395,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
           color: Colors.black,
           fontWeight: FontWeight.normal,
           fontSize: 16.0,
-          fontFamily: 'Poppins-Regular'),
+          fontFamily: FontFamilyMontserrat.regular),
       controller: controller,
       decoration: new InputDecoration(
         contentPadding: EdgeInsets.all(15.0),

@@ -1,3 +1,4 @@
+import 'package:acc/constants/font_family.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -55,7 +56,7 @@ class _RequestRecievedState extends State<RequestRecieved> {
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 18.0,
-                          fontFamily: 'Poppins-Regular',
+                          fontFamily: FontFamilyMontserrat.regular,
                           fontWeight: FontWeight.normal),
                     ),
                     SizedBox(
@@ -66,7 +67,7 @@ class _RequestRecievedState extends State<RequestRecieved> {
                       style: TextStyle(
                           color: Colors.blueGrey,
                           fontSize: 14.0,
-                          fontFamily: 'Poppins-Regular',
+                          fontFamily: FontFamilyMontserrat.regular,
                           fontWeight: FontWeight.normal),
                     ),
                   ],
@@ -96,7 +97,7 @@ class _RequestRecievedState extends State<RequestRecieved> {
                             fontWeight: FontWeight.w800,
                             color: Colors.green,
                             fontSize: 16.0,
-                            fontFamily: 'Poppins-Regular'))),
+                            fontFamily: FontFamilyMontserrat.regular))),
               ),
 
               //Reject Button
@@ -115,7 +116,7 @@ class _RequestRecievedState extends State<RequestRecieved> {
                             fontWeight: FontWeight.w800,
                             color: Colors.red,
                             fontSize: 16.0,
-                            fontFamily: 'Poppins-Regular'))),
+                            fontFamily: FontFamilyMontserrat.regular))),
               ),
             ],
           ),
@@ -135,7 +136,7 @@ class _RequestRecievedState extends State<RequestRecieved> {
                 fontWeight: FontWeight.w800,
                 color: Color(0xff00A699),
                 fontSize: 16.0,
-                fontFamily: 'Poppins-Regular')));
+                fontFamily: FontFamilyMontserrat.regular)));
 
     Widget positiveButton = TextButton(
       onPressed: () {
@@ -146,7 +147,7 @@ class _RequestRecievedState extends State<RequestRecieved> {
               fontWeight: FontWeight.w800,
               color: Color(0xff00A699),
               fontSize: 16.0,
-              fontFamily: 'Poppins-Regular')),
+              fontFamily: FontFamilyMontserrat.regular)),
     );
 
     // set up the AlertDialog

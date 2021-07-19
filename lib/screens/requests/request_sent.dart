@@ -1,3 +1,4 @@
+import 'package:acc/constants/font_family.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -53,7 +54,7 @@ class _RequestSentState extends State<RequestSent> {
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 18.0,
-                          fontFamily: 'Poppins-Regular',
+                          fontFamily: FontFamilyMontserrat.regular,
                           fontWeight: FontWeight.normal),
                     ),
                     SizedBox(
@@ -64,7 +65,7 @@ class _RequestSentState extends State<RequestSent> {
                       style: TextStyle(
                           color: Colors.blueGrey,
                           fontSize: 14.0,
-                          fontFamily: 'Poppins-Regular',
+                          fontFamily: FontFamilyMontserrat.regular,
                           fontWeight: FontWeight.normal),
                     ),
                   ],
@@ -94,7 +95,7 @@ class _RequestSentState extends State<RequestSent> {
                             fontWeight: FontWeight.w800,
                             color: Colors.red,
                             fontSize: 16.0,
-                            fontFamily: 'Poppins-Regular'))),
+                            fontFamily: FontFamilyMontserrat.regular))),
               ),
             ],
           ),
@@ -114,7 +115,7 @@ class _RequestSentState extends State<RequestSent> {
                 fontWeight: FontWeight.w800,
                 color: Color(0xff00A699),
                 fontSize: 16.0,
-                fontFamily: 'Poppins-Regular')));
+                fontFamily: FontFamilyMontserrat.regular)));
 
     Widget positiveButton = TextButton(
       onPressed: () {
@@ -125,7 +126,7 @@ class _RequestSentState extends State<RequestSent> {
               fontWeight: FontWeight.w800,
               color: Color(0xff00A699),
               fontSize: 16.0,
-              fontFamily: 'Poppins-Regular')),
+              fontFamily: FontFamilyMontserrat.regular)),
     );
 
     // set up the AlertDialog

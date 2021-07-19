@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:acc/constants/font_family.dart';
 import 'package:acc/providers/fund_slot_provider.dart';
 import 'package:acc/providers/product_type_provider.dart';
 import 'package:acc/providers/country_provider.dart';
@@ -54,7 +55,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
           primaryColor: kLightOrange,
           accentColor: kDarkOrange,
-          fontFamily: 'Poppins-Regular',
+          fontFamily: FontFamilyMontserrat.regular,
         ),
         home: StartPage(),
       ),

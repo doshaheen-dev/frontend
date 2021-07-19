@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/signup_request.dart';
 import 'package:acc/models/authentication/signup_response.dart' as response;
 import 'package:acc/services/signup_service.dart';
@@ -432,7 +433,7 @@ class _CorporateDetailsState extends State<CorporateDetails> {
           color: Colors.black,
           fontWeight: FontWeight.normal,
           fontSize: 16.0,
-          fontFamily: 'Poppins-Regular'),
+          fontFamily: FontFamilyMontserrat.regular),
       decoration: new InputDecoration(
         contentPadding: EdgeInsets.all(10.0),
         labelText: text,

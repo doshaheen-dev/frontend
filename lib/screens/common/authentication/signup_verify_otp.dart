@@ -1,3 +1,4 @@
+import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/screens/fundraiser/authentication/signup_corporate_details.dart';
 import 'package:acc/utilites/app_strings.dart';
@@ -82,8 +83,8 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                           style: TextStyle(
                               color: headingBlack,
                               fontWeight: FontWeight.bold,
-                              fontSize: 28.0,
-                              fontFamily: 'Poppins-Regular'),
+                              fontSize: 30.0,
+                              fontFamily: FontFamilyMontserrat.regular),
                         ),
                       ),
                       Container(
@@ -94,7 +95,7 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                               color: textGrey,
                               fontWeight: FontWeight.normal,
                               fontSize: 20.0,
-                              fontFamily: 'Poppins-Regular'),
+                              fontFamily: FontFamilyMontserrat.regular),
                         ),
                       ),
                       SizedBox(
