@@ -395,7 +395,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
           color: Colors.black,
           fontWeight: FontWeight.normal,
           fontSize: 16.0,
-          fontFamily: FontFamilyMontserrat.regular),
+          fontFamily: FontFamilyMontserrat.name),
       controller: controller,
       decoration: new InputDecoration(
         contentPadding: EdgeInsets.all(15.0),

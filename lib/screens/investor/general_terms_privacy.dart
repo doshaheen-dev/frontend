@@ -266,7 +266,7 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
         color: colors,
         fontSize: _fontSize,
         fontWeight: FontWeight.w500,
-        fontFamily: FontFamilyMontserrat.regular);
+        fontFamily: FontFamilyMontserrat.name);
   }
 
   BoxDecoration customDecoration() {
@@ -288,7 +288,7 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
           color: Colors.black,
           fontWeight: FontWeight.normal,
           fontSize: 18.0,
-          fontFamily: FontFamilyMontserrat.regular),
+          fontFamily: FontFamilyMontserrat.name),
       decoration: new InputDecoration(
         contentPadding: EdgeInsets.all(15.0),
         border: InputBorder.none,

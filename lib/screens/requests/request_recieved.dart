@@ -56,7 +56,7 @@ class _RequestRecievedState extends State<RequestRecieved> {
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 18.0,
-                          fontFamily: FontFamilyMontserrat.regular,
+                          fontFamily: FontFamilyMontserrat.name,
                           fontWeight: FontWeight.normal),
                     ),
                     SizedBox(
@@ -67,7 +67,7 @@ class _RequestRecievedState extends State<RequestRecieved> {
                       style: TextStyle(
                           color: Colors.blueGrey,
                           fontSize: 14.0,
-                          fontFamily: FontFamilyMontserrat.regular,
+                          fontFamily: FontFamilyMontserrat.name,
                           fontWeight: FontWeight.normal),
                     ),
                   ],
@@ -97,7 +97,7 @@ class _RequestRecievedState extends State<RequestRecieved> {
                             fontWeight: FontWeight.w800,
                             color: Colors.green,
                             fontSize: 16.0,
-                            fontFamily: FontFamilyMontserrat.regular))),
+                            fontFamily: FontFamilyMontserrat.name))),
               ),
 
               //Reject Button
@@ -116,7 +116,7 @@ class _RequestRecievedState extends State<RequestRecieved> {
                             fontWeight: FontWeight.w800,
                             color: Colors.red,
                             fontSize: 16.0,
-                            fontFamily: FontFamilyMontserrat.regular))),
+                            fontFamily: FontFamilyMontserrat.name))),
               ),
             ],
           ),
@@ -136,7 +136,7 @@ class _RequestRecievedState extends State<RequestRecieved> {
                 fontWeight: FontWeight.w800,
                 color: Color(0xff00A699),
                 fontSize: 16.0,
-                fontFamily: FontFamilyMontserrat.regular)));
+                fontFamily: FontFamilyMontserrat.name)));
 
     Widget positiveButton = TextButton(
       onPressed: () {
@@ -147,7 +147,7 @@ class _RequestRecievedState extends State<RequestRecieved> {
               fontWeight: FontWeight.w800,
               color: Color(0xff00A699),
               fontSize: 16.0,
-              fontFamily: FontFamilyMontserrat.regular)),
+              fontFamily: FontFamilyMontserrat.name)),
     );
 
     // set up the AlertDialog

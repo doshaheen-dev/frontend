@@ -79,7 +79,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                           fontSize: 18.0,
-                          fontFamily: FontFamilyMontserrat.regular),
+                          fontFamily: FontFamilyMontserrat.name),
                     ),
                   ),
                   SizedBox(
@@ -91,7 +91,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
                       style: TextStyle(
                           color: textGrey,
                           fontSize: 18.0,
-                          fontFamily: FontFamilyMontserrat.regular),
+                          fontFamily: FontFamilyMontserrat.name),
                     ),
                   ),
                   SizedBox(

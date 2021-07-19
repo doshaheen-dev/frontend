@@ -265,7 +265,7 @@ class _OnBoardingState extends State<OnBoarding> {
                   fontSize: 14.0,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
-                  fontFamily: FontFamilyMontserrat.regular),
+                  fontFamily: FontFamilyMontserrat.name),
             ),
           ),
           decoration: BoxDecoration(

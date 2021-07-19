@@ -195,7 +195,7 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
         color: Colors.black,
         fontWeight: FontWeight.normal,
         fontSize: 18.0,
-        fontFamily: FontFamilyMontserrat.regular);
+        fontFamily: FontFamilyMontserrat.name);
   }
 
   InputDecoration _setTextFieldDecoration(_text) {

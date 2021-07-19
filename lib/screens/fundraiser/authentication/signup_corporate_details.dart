@@ -433,7 +433,7 @@ class _CorporateDetailsState extends State<CorporateDetails> {
           color: Colors.black,
           fontWeight: FontWeight.normal,
           fontSize: 16.0,
-          fontFamily: FontFamilyMontserrat.regular),
+          fontFamily: FontFamilyMontserrat.name),
       decoration: new InputDecoration(
         contentPadding: EdgeInsets.all(10.0),
         labelText: text,

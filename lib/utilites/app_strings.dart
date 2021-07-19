@@ -1,6 +1,6 @@
 final onBoardingScreen1 =
     "Find an investment opportunity that's right for you.";
-final onBoardingScreen2 = "Looking for an investor?We will find one for you!";
+final onBoardingScreen2 = "Looking for an investor?\nWe will find one for you!";
 final onBoardingScreen3 = "Get matched based on your investment preference";
 
 final corporateVerificationText =

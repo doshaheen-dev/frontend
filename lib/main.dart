@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
           primaryColor: kLightOrange,
           accentColor: kDarkOrange,
-          fontFamily: FontFamilyMontserrat.regular,
+          fontFamily: FontFamilyMontserrat.name,
         ),
         home: MyHomePage(),
       ),
