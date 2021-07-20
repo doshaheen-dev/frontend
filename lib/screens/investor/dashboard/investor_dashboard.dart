@@ -1,3 +1,4 @@
+import 'package:acc/constants/font_family.dart';
 import 'package:acc/screens/investor/dashboard/investor_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,7 +37,7 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 28.0,
-                          fontFamily: 'Poppins-Light'),
+                          fontFamily: FontFamilyMontserrat.name),
                     )),
                     Image.asset('assets/images/investor/icon_investor.png'),
                   ],

@@ -242,7 +242,7 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                               color: headingBlack,
                               fontWeight: FontWeight.bold,
                               fontSize: 28.0,
-                              fontFamily: 'Poppins-Light'),
+                              fontFamily: FontFamilyMontserrat.name),
                         ),
                       ),
                       SizedBox(

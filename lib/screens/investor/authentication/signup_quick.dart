@@ -51,7 +51,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
                           color: headingBlack,
                           fontWeight: FontWeight.bold,
                           fontSize: 28.0,
-                          fontFamily: 'Poppins-Light'),
+                          fontFamily: FontFamilyMontserrat.name),
                     ),
                   ),
 

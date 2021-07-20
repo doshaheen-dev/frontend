@@ -1,3 +1,4 @@
+import 'package:acc/constants/font_family.dart';
 import 'package:acc/screens/investor/dashboard/fund_detail.dart';
 import 'package:acc/screens/investor/dashboard/product_detail.dart';
 import 'package:acc/utilites/text_style.dart';
@@ -153,7 +154,9 @@ class _InvestorHomeState extends State<InvestorHome> {
                         ),
                       ],
                     )),
-
+                    SizedBox(
+                      height: 10,
+                    ),
                     //FUNDS
                     Container(
                         margin: const EdgeInsets.only(
@@ -166,7 +169,7 @@ class _InvestorHomeState extends State<InvestorHome> {
                                     color: headingBlack,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20.0,
-                                    fontFamily: 'Poppins-Light',
+                                    fontFamily: FontFamilyMontserrat.name,
                                   )),
                               SizedBox(
                                 height: 10.0,
@@ -176,7 +179,7 @@ class _InvestorHomeState extends State<InvestorHome> {
                                     color: textGrey,
                                     fontWeight: FontWeight.normal,
                                     fontSize: 16.0,
-                                    fontFamily: 'Poppins-Light',
+                                    fontFamily: FontFamilyMontserrat.name,
                                   )),
                             ])),
                     Container(
@@ -365,7 +368,7 @@ class _InvestorHomeState extends State<InvestorHome> {
                 color: headingBlack,
                 fontWeight: FontWeight.bold,
                 fontSize: 20.0,
-                fontFamily: 'Poppins-Light',
+                fontFamily: FontFamilyMontserrat.name,
               )),
           SizedBox(
             height: 10.0,
@@ -376,7 +379,7 @@ class _InvestorHomeState extends State<InvestorHome> {
                 color: textGrey,
                 fontWeight: FontWeight.normal,
                 fontSize: 16.0,
-                fontFamily: 'Poppins-Light',
+                fontFamily: FontFamilyMontserrat.name,
               )),
         ],
       ),

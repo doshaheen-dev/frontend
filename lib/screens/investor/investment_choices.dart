@@ -1,3 +1,4 @@
+import 'package:acc/constants/font_family.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/investor/general_terms_privacy.dart';
@@ -86,7 +87,7 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                           color: headingBlack,
                           fontWeight: FontWeight.bold,
                           fontSize: 28.0,
-                          fontFamily: 'Poppins-Light'),
+                          fontFamily: FontFamilyMontserrat.name),
                     ),
                   ),
                   SizedBox(
@@ -303,7 +304,7 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
   //                                   : Colors.black,
   //                               fontWeight: FontWeight.normal,
   //                               fontSize: 18.0,
-  //                               fontFamily: 'Poppins-Light'))),
+  //                               fontFamily: FontFamilyMontserrat.name))),
   //                   new Spacer(
   //                     flex: 3,
   //                   ), // I just added one line
@@ -349,7 +350,7 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
   //                                   color: Colors.black,
   //                                   fontWeight: FontWeight.normal,
   //                                   fontSize: 16.0,
-  //                                   fontFamily: 'Poppins-Light')))),
+  //                                   fontFamily: FontFamilyMontserrat.name)))),
   //                 ],
   //               ),
   //             ),
@@ -425,7 +426,7 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                                     : headingBlack,
                                 fontWeight: FontWeight.normal,
                                 fontSize: 20.0,
-                                fontFamily: 'Poppins-Light')),
+                                fontFamily: FontFamilyMontserrat.name)),
                       ),
                     )),
                   ],
@@ -442,7 +443,7 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                             : Colors.black,
                         fontWeight: FontWeight.normal,
                         fontSize: 18.0,
-                        fontFamily: 'Poppins-Light'),
+                        fontFamily: FontFamilyMontserrat.name),
                   ),
                 )
               ],
@@ -471,7 +472,7 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                                     color: Colors.black,
                                     fontWeight: FontWeight.normal,
                                     fontSize: 16.0,
-                                    fontFamily: 'Poppins-Light')))),
+                                    fontFamily: FontFamilyMontserrat.name)))),
                   ],
                 ),
               ),

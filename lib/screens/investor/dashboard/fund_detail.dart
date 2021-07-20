@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:acc/constants/font_family.dart';
 import 'package:acc/screens/investor/dashboard/investor_home.dart';
 import 'package:acc/screens/investor/dashboard/pdf_viewer.dart';
 import 'package:acc/utilites/app_colors.dart';
@@ -218,7 +219,7 @@ class _FundDetailState extends State<FundDetail> {
                           color: _selectedTextColor,
                           fontWeight: FontWeight.normal,
                           fontSize: 16.0,
-                          fontFamily: 'Poppins-Light'))),
+                          fontFamily: FontFamilyMontserrat.name))),
               Spacer(),
               IconButton(
                   onPressed: () {
@@ -330,7 +331,7 @@ class _FundDetailState extends State<FundDetail> {
                           color: _selectedFundDeckTextColor,
                           fontWeight: FontWeight.normal,
                           fontSize: 16.0,
-                          fontFamily: 'Poppins-Light'))),
+                          fontFamily: FontFamilyMontserrat.name))),
               Spacer(),
               IconButton(
                   onPressed: () {

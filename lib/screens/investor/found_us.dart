@@ -95,7 +95,7 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                           color: headingBlack,
                           fontWeight: FontWeight.bold,
                           fontSize: 28.0,
-                          fontFamily: 'Poppins-Light'),
+                          fontFamily: FontFamilyMontserrat.name),
                     ),
                   ),
                   SizedBox(
@@ -271,7 +271,7 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                           : Colors.black,
                       fontWeight: FontWeight.normal,
                       fontSize: 18.0,
-                      fontFamily: 'Poppins-Light'))
+                      fontFamily: FontFamilyMontserrat.name))
             ],
           ),
         ),

@@ -1,3 +1,4 @@
+import 'package:acc/constants/font_family.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/common/onboarding.dart';
@@ -42,7 +43,7 @@ class _ThankYouInvestorState extends State<ThankYouInvestor> {
                             color: headingBlack,
                             fontWeight: FontWeight.bold,
                             fontSize: 28.0,
-                            fontFamily: 'Poppins-Light'),
+                            fontFamily: FontFamilyMontserrat.name),
                       )),
                       Image.asset('assets/images/investor/icon_investor.png'),
                     ],
@@ -64,7 +65,7 @@ class _ThankYouInvestorState extends State<ThankYouInvestor> {
                             color: headingBlack,
                             fontWeight: FontWeight.bold,
                             fontSize: 20.0,
-                            fontFamily: 'Poppins-Light')),
+                            fontFamily: FontFamilyMontserrat.name)),
                   )),
               //NEXT BUTTON
               Container(

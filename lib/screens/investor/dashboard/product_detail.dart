@@ -1,3 +1,4 @@
+import 'package:acc/constants/font_family.dart';
 import 'package:acc/screens/investor/dashboard/investor_home.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/hex_color.dart';
@@ -94,7 +95,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                     color: _selectedTextColor,
                                     fontWeight: FontWeight.normal,
                                     fontSize: 16.0,
-                                    fontFamily: 'Poppins-Light'))),
+                                    fontFamily: FontFamilyMontserrat.name))),
                         Spacer(),
                         IconButton(
                             onPressed: () {
@@ -232,7 +233,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       flex: 1,
                       child: Container(
                         margin: const EdgeInsets.only(
-                            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+                            top: 5.0, left: 5.0, bottom: 20, right: 5.0),
                         child: ElevatedButton(
                           onPressed: () {},
                           style: ElevatedButton.styleFrom(
@@ -248,8 +249,8 @@ class _ProductDetailState extends State<ProductDetail> {
                                 width: MediaQuery.of(context).size.width,
                                 height: 50,
                                 alignment: Alignment.center,
-                                child: Text("Reject",
-                                    style: textWhiteNormal(16.0))),
+                                child:
+                                    Text("Reject", style: textWhiteBold16())),
                           ),
                         ),
                       )),
@@ -257,7 +258,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       flex: 1,
                       child: Container(
                           margin: const EdgeInsets.only(
-                              top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+                              top: 5.0, left: 5.0, bottom: 20, right: 5.0),
                           child: ElevatedButton(
                             onPressed: () {},
                             style: ElevatedButton.styleFrom(
@@ -274,7 +275,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                 height: 50,
                                 alignment: Alignment.center,
                                 child: Text("Show Interest",
-                                    style: textWhiteNormal(16.0)),
+                                    style: textWhiteBold16()),
                               ),
                             ),
                           )))

@@ -1,3 +1,4 @@
+import 'package:acc/constants/font_family.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter_progress_hud/flutter_progress_hud.dart';
@@ -59,7 +60,7 @@ class _InvestmentLimitState extends State<InvestmentLimit> {
                         color: headingBlack,
                         fontWeight: FontWeight.bold,
                         fontSize: 28.0,
-                        fontFamily: 'Poppins-Light'),
+                        fontFamily: FontFamilyMontserrat.name),
                   ),
                 ),
                 SizedBox(
@@ -179,7 +180,7 @@ class _InvestmentLimitState extends State<InvestmentLimit> {
                         : Colors.black,
                     fontWeight: FontWeight.normal,
                     fontSize: 12.0,
-                    fontFamily: 'Poppins-Light'))),
+                    fontFamily: FontFamilyMontserrat.name))),
       ),
     );
   }

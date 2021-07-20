@@ -33,6 +33,14 @@ TextStyle textBold(Color _colorName, double _fontSize) {
       fontWeight: FontWeight.bold);
 }
 
+TextStyle textWhiteBold16() {
+  return TextStyle(
+      fontSize: 16.0,
+      color: Colors.white,
+      fontFamily: FontFamilyMontserrat.name,
+      fontWeight: FontWeight.bold);
+}
+
 TextStyle textWhiteBold18() {
   return TextStyle(
       fontSize: 18.0,
