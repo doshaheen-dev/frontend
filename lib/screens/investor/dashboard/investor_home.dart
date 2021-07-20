@@ -78,15 +78,33 @@ class _InvestorHomeState extends State<InvestorHome> {
                         SizedBox(
                           height: 10.0,
                         ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                                flex: 1,
+                        Container(
+                          child: new Stack(
+                            children: <Widget>[
+                              Container(
+                                  height: 300.0,
+                                  child: ScrollablePositionedList.builder(
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemScrollController:
+                                          itemScrollController,
+                                      itemPositionsListener:
+                                          itemPositionsListener,
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: recommendationList.length,
+                                      itemBuilder: (context, index) {
+                                        return Container(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          child: _buildRecommendationList(
+                                              context, index),
+                                        );
+                                      })),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                heightFactor: 4,
                                 child: IconButton(
-                                    icon: Icon(
-                                      Icons.arrow_left,
-                                    ),
+                                    icon: Image.asset(
+                                        "assets/images/navigation/arrow_left.png"),
                                     iconSize: 20,
                                     highlightColor: Colors.transparent,
                                     splashColor: Colors.transparent,
@@ -104,38 +122,14 @@ class _InvestorHomeState extends State<InvestorHome> {
                                               curve: Curves.easeInOutCubic);
                                         }
                                       });
-                                    })),
-                            Expanded(
-                                flex: 5,
-                                child: Container(
-                                    height: 300.0,
-                                    child: ScrollablePositionedList.builder(
-                                        //shrinkWrap: true,
-                                        padding: const EdgeInsets.all(0.0),
-                                        itemScrollController:
-                                            itemScrollController,
-                                        itemPositionsListener:
-                                            itemPositionsListener,
-                                        // controller: _scrollController,
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: recommendationList.length,
-                                        itemBuilder: (context, index) {
-                                          return Container(
-                                            margin: EdgeInsets.all(5.0),
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.7,
-                                            child: _buildRecommendationList(
-                                                context, index),
-                                          );
-                                        }))),
-                            Expanded(
-                                flex: 1,
+                                    }),
+                              ),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                heightFactor: 4,
                                 child: IconButton(
-                                    icon: Icon(
-                                      Icons.arrow_right,
-                                    ),
+                                    icon: Image.asset(
+                                        "assets/images/navigation/arrow_right.png"),
                                     highlightColor: Colors.transparent,
                                     splashColor: Colors.transparent,
                                     color: kDarkOrange,
@@ -152,8 +146,10 @@ class _InvestorHomeState extends State<InvestorHome> {
                                               curve: Curves.easeInOutCubic);
                                         }
                                       });
-                                    })),
-                          ],
+                                    }),
+                              )
+                            ],
+                          ),
                         ),
                       ],
                     )),
@@ -183,15 +179,34 @@ class _InvestorHomeState extends State<InvestorHome> {
                                     fontFamily: 'Poppins-Light',
                                   )),
                             ])),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                            flex: 1,
+                    Container(
+                      child: new Stack(
+                        children: <Widget>[
+                          Container(
+                              height: 150.0,
+                              child: ScrollablePositionedList.builder(
+                                  //shrinkWrap: true,
+                                  padding: const EdgeInsets.all(0.0),
+                                  itemScrollController:
+                                      fundItemScrollController,
+                                  itemPositionsListener:
+                                      fundIitemPositionsListener,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: fundsList.length,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      margin: EdgeInsets.all(5.0),
+                                      width: MediaQuery.of(context).size.width *
+                                          0.3,
+                                      child: _buildFundsList(context, index),
+                                    );
+                                  })),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            heightFactor: 3,
                             child: IconButton(
-                                icon: Icon(
-                                  Icons.arrow_left,
-                                ),
+                                icon: Image.asset(
+                                    "assets/images/navigation/arrow_left.png"),
                                 iconSize: 20,
                                 highlightColor: Colors.transparent,
                                 splashColor: Colors.transparent,
@@ -209,35 +224,14 @@ class _InvestorHomeState extends State<InvestorHome> {
                                           curve: Curves.easeInOutCubic);
                                     }
                                   });
-                                })),
-                        Expanded(
-                            flex: 5,
-                            child: Container(
-                                height: 150.0,
-                                child: ScrollablePositionedList.builder(
-                                    //shrinkWrap: true,
-                                    padding: const EdgeInsets.all(0.0),
-                                    itemScrollController:
-                                        fundItemScrollController,
-                                    itemPositionsListener:
-                                        fundIitemPositionsListener,
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: fundsList.length,
-                                    itemBuilder: (context, index) {
-                                      return Container(
-                                        margin: EdgeInsets.all(5.0),
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.3,
-                                        child: _buildFundsList(context, index),
-                                      );
-                                    }))),
-                        Expanded(
-                            flex: 1,
+                                }),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            heightFactor: 3,
                             child: IconButton(
-                                icon: Icon(
-                                  Icons.arrow_right,
-                                ),
+                                icon: Image.asset(
+                                    "assets/images/navigation/arrow_right.png"),
                                 highlightColor: Colors.transparent,
                                 splashColor: Colors.transparent,
                                 color: kDarkOrange,
@@ -253,33 +247,11 @@ class _InvestorHomeState extends State<InvestorHome> {
                                           curve: Curves.easeInOutCubic);
                                     }
                                   });
-                                })),
-                      ],
+                                }),
+                          )
+                        ],
+                      ),
                     ),
-                    // Container(
-                    //     margin: EdgeInsets.symmetric(vertical: 20.0),
-                    //     height: 200.0,
-                    //     child: new ListView(
-                    //       scrollDirection: Axis.horizontal,
-                    //       children: <Widget>[
-                    //         Container(
-                    //           width: MediaQuery.of(context).size.width,
-                    //           color: Colors.red,
-                    //         ),
-                    //         Container(
-                    //           width: MediaQuery.of(context).size.width,
-                    //           color: Colors.orange,
-                    //         ),
-                    //         Container(
-                    //           width: MediaQuery.of(context).size.width,
-                    //           color: Colors.pink,
-                    //         ),
-                    //         Container(
-                    //           width: MediaQuery.of(context).size.width,
-                    //           color: Colors.yellow,
-                    //         ),
-                    //       ],
-                    //     )),
                   ])),
         ));
   }
@@ -295,6 +267,7 @@ class _InvestorHomeState extends State<InvestorHome> {
                           ProductDetail(data: recommendationList[index])))
             },
         child: Card(
+          margin: EdgeInsets.zero,
           elevation: 1.0,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),

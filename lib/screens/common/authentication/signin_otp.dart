@@ -41,6 +41,7 @@ class _SignInOTPState extends State<SignInOTP> {
 
   @override
   Widget build(BuildContext context) {
+    selectedCountry = countryList[0];
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
     return Scaffold(

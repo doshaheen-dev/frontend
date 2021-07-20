@@ -231,7 +231,6 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
     progress.dismiss();
 
     if (verifyPhoneNumber.type == "success") {
-      showSnackBarWithoutButton(context, verifyPhoneNumber.message);
       openHome(verifyPhoneNumber.data.userType);
     } else {
       _openDialog(context, verifyPhoneNumber.message);
