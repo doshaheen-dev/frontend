@@ -86,6 +86,7 @@ flutter:
    - assets/images/onboarding/
    - assets/images/dashboard/
    - assets/images/investor/
+   - assets/images/navigation/
    - assets/images/social_media/
    - assets/images/company_logo/
    - assets/images/raise_capital/

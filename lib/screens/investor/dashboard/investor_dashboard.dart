@@ -1,3 +1,4 @@
+import 'package:acc/screens/investor/dashboard/investor_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/investor/dashboard/investor_home.dart';
@@ -116,7 +117,7 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
         Blue(),
         Yellow(),
         Red(),
-        Blue(),
+        InvestorProfile(),
       ],
     );
   }
