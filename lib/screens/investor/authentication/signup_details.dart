@@ -13,6 +13,7 @@ import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 import '../../../utils/code_utils.dart';
 import '../../../providers/country_provider.dart' as countryProvider;
@@ -183,6 +184,29 @@ class _SignUpDetailsState extends State<SignUpDetails> {
       );
     }
 
+    Widget getDropDownSearch(List<Map<String, dynamic>> items) {
+      return DropdownSearch<Map<String, dynamic>>(
+        mode: Mode.BOTTOM_SHEET,
+        showSearchBox: true,
+        showSelectedItem: false,
+        items: items,
+        itemAsString: (Map<String, dynamic> i) => i['text'],
+        label: "Country",
+        hint: "",
+        onChanged: (map) {
+          setState(() {
+            country = map['value'];
+            print(country);
+          });
+        },
+        dropdownSearchDecoration: InputDecoration(
+          border: InputBorder.none,
+        ),
+        selectedItem: null,
+        maxHeight: 700,
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,
@@ -287,34 +311,46 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                                   return Consumer<countryProvider.Countries>(
                                     builder: (ctx, countryData, child) =>
                                         Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: DropdownButtonFormField(
-                                        decoration: InputDecoration(
-                                            labelText: 'Country',
-                                            labelStyle: new TextStyle(
-                                                color: Colors.grey[600]),
-                                            enabledBorder: UnderlineInputBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    const Radius.circular(
-                                                        10.0)),
-                                                borderSide: BorderSide(
-                                                    color:
-                                                        Colors.transparent))),
-                                        // value: country,
-                                        items: countryData.countries
-                                            .map((info) => DropdownMenuItem(
-                                                  child: Text(info.name),
-                                                  value: info.abbreviation,
-                                                ))
-                                            .toList(),
-                                        onChanged: (value) {
-                                          // print(value);
-                                          setState(() {
-                                            country = value;
-                                          });
-                                        },
-                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0),
+                                      child: getDropDownSearch(
+                                          countryData.countries
+                                              .map((info) => {
+                                                    'text': info.name,
+                                                    'value': info.abbreviation,
+                                                  })
+                                              .toList()),
                                     ),
+
+                                    //     Padding(
+                                    //   padding: const EdgeInsets.all(10.0),
+                                    //   child: DropdownButtonFormField(
+                                    //     decoration: InputDecoration(
+                                    //         labelText: 'Country',
+                                    //         labelStyle: new TextStyle(
+                                    //             color: Colors.grey[600]),
+                                    //         enabledBorder: UnderlineInputBorder(
+                                    //             borderRadius: BorderRadius.all(
+                                    //                 const Radius.circular(
+                                    //                     10.0)),
+                                    //             borderSide: BorderSide(
+                                    //                 color:
+                                    //                     Colors.transparent))),
+                                    //     // value: country,
+                                    //     items: countryData.countries
+                                    //         .map((info) => DropdownMenuItem(
+                                    //               child: Text(info.name),
+                                    //               value: info.abbreviation,
+                                    //             ))
+                                    //         .toList(),
+                                    //     onChanged: (value) {
+                                    //       // print(value);
+                                    //       setState(() {
+                                    //         country = value;
+                                    //       });
+                                    //     },
+                                    //   ),
+                                    // ),
                                   );
                                 }
                               }

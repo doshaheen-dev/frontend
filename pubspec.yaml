@@ -52,8 +52,7 @@ dependencies:
   scrollable_positioned_list: ^0.1.10
   pdf_viewer_flutter: ^1.0.2
   path_provider: any
- 
- 
+  dropdown_search: ^0.6.3
 
 dev_dependencies:
   flutter_test:
