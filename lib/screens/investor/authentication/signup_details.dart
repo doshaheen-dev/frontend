@@ -91,7 +91,8 @@ class _SignUpDetailsState extends State<SignUpDetails> {
     print("info, ${_user}");
 
     if (_user != null) {
-      int idx = _user.displayName.indexOf(" ");
+      var idx;
+      idx = (_user.displayName == null) ? 0 : _user.displayName.indexOf(" ");
       // Or check if appState.username != null or what ever your use case is.
       _firstNameController.text = (_user.displayName == null ||
               _user.displayName.substring(0, idx).trim() == 'null')

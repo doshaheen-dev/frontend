@@ -146,8 +146,11 @@ class Authentication {
         webAuthenticationOptions: WebAuthenticationOptions(
           clientId: 'com.amicorp.accservice',
           redirectUri: Uri.parse(
-            'https://citrine-grand-veterinarian.glitch.me/callbacks/sign_in_with_apple',
+            'https://cold-verdant-dracorex.glitch.me/callbacks/sign_in_with_apple',
           ),
+          // redirectUri: Uri.parse(
+          //   'https://amicorp-connect.firebaseapp.com/__/auth/handler',
+          // ),
         ),
       );
 
