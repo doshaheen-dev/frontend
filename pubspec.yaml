@@ -53,6 +53,7 @@ dependencies:
   pdf_viewer_flutter: ^1.0.2
   path_provider: any
   dropdown_search: ^0.6.3
+  file_picker: ^3.0.3
 
 dev_dependencies:
   flutter_test:

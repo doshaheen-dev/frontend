@@ -1,9 +1,21 @@
+import 'dart:io';
+
 import 'package:acc/screens/fundraiser/dashboard/success_fund_submit.dart';
+import 'package:acc/services/upload_document.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/utilites/app_colors.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
+
+enum DocumentType {
+  ID,
+  ICDocument,
+  FundDeck,
+  BrandImage,
+}
 
 class CreateFundsContinue extends StatefulWidget {
   @override
@@ -13,6 +25,7 @@ class CreateFundsContinue extends StatefulWidget {
 class _CreateFundsContinueState extends State<CreateFundsContinue> {
   int selectedIndex;
   final _fundNameController = TextEditingController();
+  var progress;
 
   bool _isTermsCheck = false;
 
@@ -29,188 +42,209 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
       ),
       bottomNavigationBar: BottomAppBar(),
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            margin: const EdgeInsets.only(left: 25.0, right: 25.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back, size: 30),
-                    onPressed: () => {Navigator.pop(context)},
-                  ),
-                ),
-                Column(
+      body: ProgressHUD(
+        child: Builder(
+          builder: (context) => SafeArea(
+            child: SingleChildScrollView(
+              child: Container(
+                margin: const EdgeInsets.only(left: 25.0, right: 25.0),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      margin: const EdgeInsets.only(top: 10.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Tell us about your fund",
-                              style: textBold(headingBlack, 20)),
-                          Text(
-                              "What is the Minimum Investment from an investor",
-                              style: textNormal(textGrey, 14))
-                        ],
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_back, size: 30),
+                        onPressed: () => {Navigator.pop(context)},
                       ),
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      child: GridView.count(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10.0,
-                          mainAxisSpacing: 10.0,
-                          shrinkWrap: true,
-                          childAspectRatio:
-                              (MediaQuery.of(context).size.width / 2 / 65),
-                          children: List.generate(infoItem.length, (index) {
-                            return _createCell(index);
-                          })),
-                    ),
-
-                    //Fund  General Partner / Managing Partner (GP)
-                    Container(
-                      margin: const EdgeInsets.only(top: 5.0, bottom: 20),
-                      decoration: customDecoration(),
-                      child: inputTextField(
-                          "Fund  General Partner / Managing Partner (GP)",
-                          "Please enter general partner here",
-                          _fundNameController),
-                    ),
-
-                    Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Please upload required documents",
-                            style: textNormal(textGrey, 14),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          _createDocumentUI("Upload Passport / ID here",
-                              "Passport/ID of Fund Representataive", "ID"),
-                          _createDocumentUI(
-                              "Upload Incorporation Doc here",
-                              "Fund Company InCorporation Document",
-                              "InCorporationD"),
-                          _createDocumentUI("Upload Fund Deck",
-                              "PDF, JPEG, PNG, JPG, PPT etc.", "Fund Deck"),
-                          _createDocumentUI("Upload Fund Brand Image",
-                              "JPEG, PNG, JPG.", "Brand Image"),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          margin: const EdgeInsets.only(top: 10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Text("Tell us about your fund",
+                                  style: textBold(headingBlack, 20)),
                               Text(
-                                "Matchmaker fee for Amicorp",
-                                style: textNormal(textGrey, 12),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                "5%",
-                                style: textNormal(selectedOrange, 18),
-                              )
+                                  "What is the Minimum Investment from an investor",
+                                  style: textNormal(textGrey, 14))
                             ],
                           ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          child: GridView.count(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10.0,
+                              mainAxisSpacing: 10.0,
+                              shrinkWrap: true,
+                              childAspectRatio:
+                                  (MediaQuery.of(context).size.width / 2 / 65),
+                              children: List.generate(infoItem.length, (index) {
+                                return _createCell(index);
+                              })),
+                        ),
+
+                        //Fund  General Partner / Managing Partner (GP)
+                        Container(
+                          margin: const EdgeInsets.only(top: 5.0, bottom: 20),
+                          decoration: customDecoration(),
+                          child: inputTextField(
+                              "Fund  General Partner / Managing Partner (GP)",
+                              "Please enter general partner here",
+                              _fundNameController),
+                        ),
+
+                        Container(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Checkbox(
-                                  checkColor:
-                                      Colors.white, // color of tick Mark
-                                  activeColor: kDarkOrange,
-                                  value: _isTermsCheck,
-                                  onChanged: (bool value) {
-                                    setState(() {
-                                      _isTermsCheck = value;
-                                    });
-                                  }),
-                              SizedBox(
-                                width: 10,
+                              Text(
+                                "Please upload required documents",
+                                style: textNormal(textGrey, 14),
                               ),
-                              Align(
-                                alignment: Alignment.center,
-                                child: RichText(
-                                  textAlign: TextAlign.center,
-                                  text: TextSpan(
-                                      text: "By signing in, I agree with ",
-                                      style: textNormal(textLightGrey, 14),
-                                      children: [
-                                        TextSpan(
-                                            text: "Terms of Use ",
-                                            style: textNormal(Colors.black, 14),
-                                            recognizer: TapGestureRecognizer()
-                                              ..onTap = () {
-                                                //openSignIn(context);
-                                              }),
-                                        TextSpan(
-                                          text: "\n and ",
+                              SizedBox(
+                                height: 20,
+                              ),
+                              _createDocumentUI(
+                                  context,
+                                  "Upload Passport / ID here",
+                                  "Passport/ID of Fund Representataive",
+                                  DocumentType.ID),
+                              _createDocumentUI(
+                                  context,
+                                  "Upload Incorporation Doc here",
+                                  "Fund Company InCorporation Document",
+                                  DocumentType.ICDocument),
+                              _createDocumentUI(
+                                  context,
+                                  "Upload Fund Deck",
+                                  "PDF, JPEG, PNG, JPG, PPT etc.",
+                                  DocumentType.FundDeck),
+                              _createDocumentUI(
+                                context,
+                                "Upload Fund Brand Image",
+                                "JPEG, PNG, JPG.",
+                                DocumentType.BrandImage,
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Matchmaker fee for Amicorp",
+                                    style: textNormal(textGrey, 12),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    "5%",
+                                    style: textNormal(selectedOrange, 18),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                children: [
+                                  Checkbox(
+                                      checkColor:
+                                          Colors.white, // color of tick Mark
+                                      activeColor: kDarkOrange,
+                                      value: _isTermsCheck,
+                                      onChanged: (bool value) {
+                                        setState(() {
+                                          _isTermsCheck = value;
+                                        });
+                                      }),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: RichText(
+                                      textAlign: TextAlign.center,
+                                      text: TextSpan(
+                                          text: "By signing in, I agree with ",
                                           style: textNormal(textLightGrey, 14),
-                                        ),
-                                        TextSpan(
-                                            text: "Privacy Poicy",
-                                            style: textNormal(Colors.black, 14),
-                                            recognizer: TapGestureRecognizer()
-                                              ..onTap = () {
-                                                //openSignIn(context);
-                                              })
-                                      ]),
-                                ),
+                                          children: [
+                                            TextSpan(
+                                                text: "Terms of Use ",
+                                                style: textNormal(
+                                                    Colors.black, 14),
+                                                recognizer:
+                                                    TapGestureRecognizer()
+                                                      ..onTap = () {
+                                                        //openSignIn(context);
+                                                      }),
+                                            TextSpan(
+                                              text: "\n and ",
+                                              style:
+                                                  textNormal(textLightGrey, 14),
+                                            ),
+                                            TextSpan(
+                                                text: "Privacy Poicy",
+                                                style: textNormal(
+                                                    Colors.black, 14),
+                                                recognizer:
+                                                    TapGestureRecognizer()
+                                                      ..onTap = () {
+                                                        //openSignIn(context);
+                                                      })
+                                          ]),
+                                    ),
+                                  ),
+                                ],
                               ),
+                              //NEXT BUTTON
+                              Container(
+                                  margin: const EdgeInsets.only(
+                                    top: 20,
+                                    bottom: 20,
+                                  ),
+                                  child: ElevatedButton(
+                                      onPressed: () {
+                                        FocusScope.of(context)
+                                            .requestFocus(FocusNode());
+                                        openSuccesssFundSubmitted();
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                          padding: EdgeInsets.all(0.0),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(18))),
+                                      child: Ink(
+                                          decoration: BoxDecoration(
+                                              gradient: LinearGradient(colors: [
+                                                kDarkOrange,
+                                                kLightOrange
+                                              ]),
+                                              borderRadius:
+                                                  BorderRadius.circular(15)),
+                                          child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            height: 60,
+                                            alignment: Alignment.center,
+                                            child: Text("Submit",
+                                                style: textWhiteBold18()),
+                                          )))),
                             ],
                           ),
-                          //NEXT BUTTON
-                          Container(
-                              margin: const EdgeInsets.only(
-                                top: 20,
-                                bottom: 20,
-                              ),
-                              child: ElevatedButton(
-                                  onPressed: () {
-                                    FocusScope.of(context)
-                                        .requestFocus(FocusNode());
-                                    openSuccesssFundSubmitted();
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      padding: EdgeInsets.all(0.0),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(18))),
-                                  child: Ink(
-                                      decoration: BoxDecoration(
-                                          gradient: LinearGradient(colors: [
-                                            kDarkOrange,
-                                            kLightOrange
-                                          ]),
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                      child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        height: 60,
-                                        alignment: Alignment.center,
-                                        child: Text("Submit",
-                                            style: textWhiteBold18()),
-                                      )))),
-                        ],
-                      ),
-                    )
+                        )
+                      ],
+                    ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
@@ -219,30 +253,42 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
   }
 
   InkWell _createDocumentUI(
-      String labelText, String description, String docType) {
+    BuildContext ctx,
+    String labelText,
+    String description,
+    DocumentType docType,
+  ) {
     return InkWell(
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         onTap: () {
-          setState(() {});
+          setState(() {
+            progress = ProgressHUD.of(ctx);
+            progress?.showWithText('Uploading File...');
+            _uploadFile();
+          });
         },
         child: Row(
           children: [
             Expanded(
-              flex: 1,
+              flex: 2,
               child: Container(
                 margin: EdgeInsets.only(top: 10.0, bottom: 10.0, right: 10),
                 width: 20,
-                height: 40,
+                height: 45,
                 decoration: BoxDecoration(
                   color: unselectedGray,
                   borderRadius: BorderRadius.all(
                     const Radius.circular(15.0),
                   ),
                 ),
-                child: Center(
-                    child:
-                        Text(labelText, style: textNormal(Colors.black, 14))),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 4.0, vertical: 2.0),
+                  child: Center(
+                      child:
+                          Text(labelText, style: textNormal(Colors.black, 14))),
+                ),
               ),
             ),
             Expanded(
@@ -253,6 +299,20 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                 )),
           ],
         ));
+  }
+
+  Future<void> _uploadFile() async {
+    FilePickerResult result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      print('Path: ${result.files.single.path}');
+      print('Name: ${result.files.single.name}');
+      String fileName = result.files.single.name;
+      File file = File(result.files.single.path);
+      UploadDocumentService.uploadDocument(file, fileName);
+    } else {
+      print('User canceled the picker');
+    }
+    progress.dismiss();
   }
 
   TextField inputTextField(text, hint, _controller) {

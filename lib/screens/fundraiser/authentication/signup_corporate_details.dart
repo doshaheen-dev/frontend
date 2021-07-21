@@ -404,6 +404,7 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                           if (nextButtonText ==
                                               'Back to Home') {
                                             openOnboarding();
+                                            return;
                                           }
 
                                           setState(() {

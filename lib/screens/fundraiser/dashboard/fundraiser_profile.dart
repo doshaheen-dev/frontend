@@ -45,8 +45,8 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                     top: 150.0, left: 25.0, bottom: 20, right: 25.0),
                 child: ElevatedButton(
                     onPressed: () async {
-                      // final prefs = await SharedPreferences.getInstance();
-                      // prefs.setString('UserInfo', '');
+                      final prefs = await SharedPreferences.getInstance();
+                      prefs.setString('UserInfo', '');
                       openOnBoarding();
                     },
                     style: ElevatedButton.styleFrom(
