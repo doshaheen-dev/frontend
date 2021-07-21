@@ -113,6 +113,14 @@ TextStyle textNormal20(Color colorName) {
       fontWeight: FontWeight.normal);
 }
 
+TextStyle textBold26(Color colorName) {
+  return TextStyle(
+      fontSize: 26.0,
+      color: colorName,
+      fontFamily: FontFamilyMontserrat.name,
+      fontWeight: FontWeight.bold);
+}
+
 TextStyle textBold28(Color colorName) {
   return TextStyle(
       fontSize: 28.0,

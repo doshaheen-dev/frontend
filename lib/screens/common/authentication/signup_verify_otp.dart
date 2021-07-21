@@ -83,7 +83,7 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                           style: TextStyle(
                               color: headingBlack,
                               fontWeight: FontWeight.bold,
-                              fontSize: 30.0,
+                              fontSize: 26.0,
                               fontFamily: FontFamilyMontserrat.name),
                         ),
                       ),
@@ -94,7 +94,7 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                           style: TextStyle(
                               color: textGrey,
                               fontWeight: FontWeight.normal,
-                              fontSize: 20.0,
+                              fontSize: 16.0,
                               fontFamily: FontFamilyMontserrat.name),
                         ),
                       ),

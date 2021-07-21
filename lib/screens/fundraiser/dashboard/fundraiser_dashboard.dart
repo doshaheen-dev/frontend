@@ -36,7 +36,7 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
                     Expanded(
                         child: Text(
                       'Hello Entrepreneur',
-                      style: textBold28(headingBlack),
+                      style: textBold26(headingBlack),
                     )),
                     Image.asset('assets/images/investor/icon_investor.png'),
                   ],

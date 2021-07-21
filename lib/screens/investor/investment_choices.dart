@@ -86,7 +86,7 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                       style: TextStyle(
                           color: headingBlack,
                           fontWeight: FontWeight.bold,
-                          fontSize: 28.0,
+                          fontSize: 26.0,
                           fontFamily: FontFamilyMontserrat.name),
                     ),
                   ),
@@ -425,7 +425,7 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                                     ? Colors.white
                                     : headingBlack,
                                 fontWeight: FontWeight.normal,
-                                fontSize: 20.0,
+                                fontSize: 18.0,
                                 fontFamily: FontFamilyMontserrat.name)),
                       ),
                     )),
@@ -442,7 +442,7 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                             ? Colors.white
                             : Colors.black,
                         fontWeight: FontWeight.normal,
-                        fontSize: 18.0,
+                        fontSize: 16.0,
                         fontFamily: FontFamilyMontserrat.name),
                   ),
                 )

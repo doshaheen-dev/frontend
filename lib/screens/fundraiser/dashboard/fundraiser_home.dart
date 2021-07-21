@@ -28,7 +28,7 @@ class _FundraiserHomeState extends State<FundraiserHome> {
                     child: Column(
                       children: [
                         Text("You have not adedd any funds yet.",
-                            style: textBlackNormal18()),
+                            style: textBlackNormal16()),
                         SizedBox(
                           height: 10.0,
                         ),

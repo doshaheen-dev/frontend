@@ -25,6 +25,8 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
   bool _isNextVisible = false;
   List<String> infoItemList = [];
   List<Options> hearAboutUsList = [];
+  String firstname = "";
+  final firstNameController = TextEditingController();
 
   void showNameField() {
     setState(() {
@@ -58,9 +60,6 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
 
   @override
   Widget build(BuildContext context) {
-    String firstname = "";
-    final firstNameController = TextEditingController();
-
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
@@ -94,7 +93,7 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                       style: TextStyle(
                           color: headingBlack,
                           fontWeight: FontWeight.bold,
-                          fontSize: 28.0,
+                          fontSize: 26.0,
                           fontFamily: FontFamilyMontserrat.name),
                     ),
                   ),
@@ -270,7 +269,7 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                           ? Colors.white
                           : Colors.black,
                       fontWeight: FontWeight.normal,
-                      fontSize: 18.0,
+                      fontSize: 16.0,
                       fontFamily: FontFamilyMontserrat.name))
             ],
           ),

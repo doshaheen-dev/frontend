@@ -367,7 +367,7 @@ class _InvestorHomeState extends State<InvestorHome> {
               style: TextStyle(
                 color: headingBlack,
                 fontWeight: FontWeight.bold,
-                fontSize: 20.0,
+                fontSize: 18.0,
                 fontFamily: FontFamilyMontserrat.name,
               )),
           SizedBox(

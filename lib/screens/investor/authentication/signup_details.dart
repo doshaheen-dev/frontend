@@ -192,7 +192,6 @@ class _SignUpDetailsState extends State<SignUpDetails> {
         showSelectedItem: false,
         items: items,
         itemAsString: (Map<String, dynamic> i) => i['text'],
-        label: "Country",
         hint: "",
         onChanged: (map) {
           setState(() {
@@ -201,7 +200,16 @@ class _SignUpDetailsState extends State<SignUpDetails> {
           });
         },
         dropdownSearchDecoration: InputDecoration(
-          border: InputBorder.none,
+          labelText: 'Country',
+          labelStyle: new TextStyle(
+            color: Colors.grey[600],
+            fontFamily: FontFamilyMontserrat.name,
+            fontSize: 18,
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(const Radius.circular(10.0)),
+            borderSide: BorderSide(color: Colors.transparent),
+          ),
         ),
         selectedItem: null,
         maxHeight: 700,
@@ -242,7 +250,7 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                           style: TextStyle(
                               color: headingBlack,
                               fontWeight: FontWeight.bold,
-                              fontSize: 28.0,
+                              fontSize: 26.0,
                               fontFamily: FontFamilyMontserrat.name),
                         ),
                       ),

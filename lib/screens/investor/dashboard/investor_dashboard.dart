@@ -36,7 +36,7 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                       'Hello Investor',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 28.0,
+                          fontSize: 26.0,
                           fontFamily: FontFamilyMontserrat.name),
                     )),
                     Image.asset('assets/images/investor/icon_investor.png'),
