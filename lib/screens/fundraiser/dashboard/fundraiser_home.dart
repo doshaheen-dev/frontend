@@ -1,3 +1,4 @@
+import 'package:acc/screens/fundraiser/dashboard/add_new_funds.dart';
 import 'package:flutter/material.dart';
 import 'package:acc/screens/explore.dart';
 import 'package:acc/utilites/app_colors.dart';
@@ -67,7 +68,7 @@ class _FundraiserHomeState extends State<FundraiserHome> {
   void openAddNewFunds() {
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) {
-          return Explore();
+          return AddNewFunds();
         },
         transitionDuration: Duration(milliseconds: 1000),
         transitionsBuilder: (context, animation, anotherAnimation, child) {
