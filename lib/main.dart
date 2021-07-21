@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 
 import 'package:acc/screens/common/onboarding.dart';
 import 'package:acc/services/AuthenticationService.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark
+        .copyWith(statusBarColor: HexColor("#114069")));
+
     return MultiProvider(
       providers: [
         Provider<Authentication>(

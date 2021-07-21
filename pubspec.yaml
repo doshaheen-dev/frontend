@@ -41,7 +41,6 @@ dependencies:
   bubble: ^1.1.9+1
   # For OTP text field
   pin_code_fields: ^7.2.0 
-  readmore: ^2.1.0
   # Captcha
   ps_code_checking: ^0.0.3
   # Progress Indicator
@@ -54,6 +53,7 @@ dependencies:
   path_provider: any
   dropdown_search: ^0.6.3
   file_picker: ^3.0.3
+  webview_flutter: ^0.3.3    
 
 dev_dependencies:
   flutter_test:
