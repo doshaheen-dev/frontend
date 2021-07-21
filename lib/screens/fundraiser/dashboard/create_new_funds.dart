@@ -171,7 +171,7 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                               child: inputTextField(
                                   "Fund Regulator (if regulated)",
                                   "Please enter the name of fund regulator here",
-                                  _fundNameController),
+                                  null),
                             ),
 
                             //Investment Objective
@@ -183,7 +183,7 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                               child: inputTextField(
                                   "Investment Objective",
                                   "Please provide a brief description of the fund here",
-                                  _fundNameController),
+                                  null),
                             ),
 
                             //Funds currently managed by the sponsors
@@ -194,7 +194,7 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                               child: inputTextField(
                                   "Funds currently managed by the sponsors",
                                   "Please enter fund value here in \$",
-                                  _fundNameController),
+                                  null),
                             ),
 
                             //New Fund for which funds are being raised
@@ -205,17 +205,15 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                               child: inputTextField(
                                   "New Fund for which funds are being raised ",
                                   "Please enter fund value here in \$",
-                                  _fundNameController),
+                                  null),
                             ),
                             //Funds currently managed by the sponsors
                             Container(
                               margin:
                                   const EdgeInsets.only(top: 5.0, bottom: 20),
                               decoration: customDecoration(),
-                              child: inputTextField(
-                                  "Website Link",
-                                  "Please enter website link here",
-                                  _fundNameController),
+                              child: inputTextField("Website Link",
+                                  "Please enter website link here", null),
                             ),
                           ],
                         ),
