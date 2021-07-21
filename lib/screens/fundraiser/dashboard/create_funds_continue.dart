@@ -1,5 +1,4 @@
 import 'package:acc/screens/fundraiser/dashboard/success_fund_submit.dart';
-import 'package:acc/screens/investor/investment_choices.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

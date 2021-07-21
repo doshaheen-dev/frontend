@@ -22,6 +22,8 @@ class _AddNewFundsState extends State<AddNewFunds> {
     const LikedFunds("Digital Crypto Products"),
   ];
 
+  int selectedIndex;
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -64,7 +66,7 @@ class _AddNewFundsState extends State<AddNewFunds> {
                         top: 10.0, left: 25.0, right: 25.0),
                     child: ListView.builder(
                       itemBuilder: (ctx, index) {
-                        return _createCell(fundsList[index]);
+                        return _createCell(fundsList[index], index);
                       },
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: fundsList.length,
@@ -83,13 +85,14 @@ class _AddNewFundsState extends State<AddNewFunds> {
     );
   }
 
-  InkWell _createCell(LikedFunds item) {
+  InkWell _createCell(LikedFunds item, int index) {
     return InkWell(
       focusColor: Colors.transparent,
       highlightColor: Colors.transparent,
       borderRadius: BorderRadius.circular(40),
       onTap: () {
         setState(() {
+          selectedIndex = index;
           openCreateNewFunds();
         });
       },
@@ -97,7 +100,7 @@ class _AddNewFundsState extends State<AddNewFunds> {
         margin: EdgeInsets.only(top: 10.0),
         height: 50,
         decoration: BoxDecoration(
-          color: unselectedGray,
+          color: selectedIndex == index ? selectedOrange : unselectedGray,
           borderRadius: BorderRadius.all(
             const Radius.circular(15.0),
           ),
@@ -105,7 +108,8 @@ class _AddNewFundsState extends State<AddNewFunds> {
         child: Center(
             child: Text(item.name,
                 textAlign: TextAlign.start,
-                style: textNormal(Colors.black, 17))),
+                style: textNormal(
+                    selectedIndex == index ? Colors.white : Colors.black, 17))),
       ),
     );
   }
