@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.amicorp.acc">
    <application
-        
+        android:usesCleartextTraffic="true"
+
         android:label="Amicorp Capital Connect"
         android:icon="@mipmap/launcher_icon">
         <activity

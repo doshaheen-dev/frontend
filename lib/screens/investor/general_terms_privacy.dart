@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:acc/constants/font_family.dart';
+import 'package:acc/screens/common/webview_container.dart';
 import 'package:acc/services/signup_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,6 @@ import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/ui_widgets.dart';
-import 'package:readmore/readmore.dart';
 import 'package:acc/models/authentication/signup_request.dart';
 import 'package:acc/models/authentication/signup_response.dart';
 
@@ -29,6 +29,10 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
       "AmiCorp (“we” or “us” or “our”) respects the privacy of our users (“user” or “you”). This Privacy Policy explains how we collect, use, disclose IF YOU DO NOT AGREE WITH THE TERMS OF THIS PRIVACY POLICY, PLEASE DO NOT ACCESS THE APPLICATION.";
   var progress;
 
+  String tempUrl =
+      "http://ec2-65-2-69-222.ap-south-1.compute.amazonaws.com:3000/terms_and_conditions"
+      "";
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -38,7 +42,7 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
       appBar: AppBar(
         toolbarHeight: 0,
         elevation: 0.0,
-        backgroundColor: Color(0xffffffff),
+        backgroundColor: Colors.white,
       ),
       bottomNavigationBar: BottomAppBar(),
       backgroundColor: Colors.white,
@@ -100,15 +104,23 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                                       SizedBox(
                                         height: 10.0,
                                       ),
-                                      ReadMoreText(
-                                        termsConditions,
-                                        style: setTextStyle(textDarkGrey, 16.0),
-                                        trimLines: 5,
-                                        trimMode: TrimMode.Line,
-                                        trimCollapsedText: 'Read More',
-                                        trimExpandedText: 'Read Less',
-                                        moreStyle:
-                                            setTextStyle(Colors.blue, 16.0),
+                                      // // TERMS AND CONDITIONS
+                                      RichText(
+                                        text: TextSpan(
+                                            text: termsConditions,
+                                            style: setTextStyle(
+                                                textDarkGrey, 16.0),
+                                            children: [
+                                              TextSpan(
+                                                  text: "... Read More",
+                                                  style: setTextStyle(
+                                                      Colors.blue, 16.0),
+                                                  recognizer:
+                                                      TapGestureRecognizer()
+                                                        ..onTap = () {
+                                                          openUrl(tempUrl);
+                                                        }),
+                                            ]),
                                       ),
                                       SizedBox(
                                         height: 20.0,
@@ -120,15 +132,22 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                                       SizedBox(
                                         height: 10.0,
                                       ),
-                                      ReadMoreText(
-                                        _privacy,
-                                        style: setTextStyle(textDarkGrey, 16.0),
-                                        trimLines: 4,
-                                        trimMode: TrimMode.Line,
-                                        trimCollapsedText: 'Read More',
-                                        trimExpandedText: 'Read Less',
-                                        moreStyle:
-                                            setTextStyle(Colors.blue, 16.0),
+                                      RichText(
+                                        text: TextSpan(
+                                            text: _privacy,
+                                            style: setTextStyle(
+                                                textDarkGrey, 16.0),
+                                            children: [
+                                              TextSpan(
+                                                  text: "... Read More",
+                                                  style: setTextStyle(
+                                                      Colors.blue, 16.0),
+                                                  recognizer:
+                                                      TapGestureRecognizer()
+                                                        ..onTap = () {
+                                                          openUrl(tempUrl);
+                                                        }),
+                                            ]),
                                       ),
                                     ],
                                   )),
@@ -139,74 +158,6 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                       SizedBox(
                         height: 20,
                       ),
-
-                      // //CAPTCHA
-                      // Container(
-                      //   child: Padding(
-                      //     padding: const EdgeInsets.only(
-                      //       left: 25.0,
-                      //       bottom: 20.0,
-                      //       right: 25.0,
-                      //     ),
-                      //     child: Column(
-                      //       crossAxisAlignment: CrossAxisAlignment.start,
-                      //       children: [
-                      //         Text(
-                      //           "Captcha",
-                      //           style: TextStyle(
-                      //               color: headingBlack,
-                      //               fontWeight: FontWeight.bold,
-                      //               fontSize: 20.0,
-                      //               fontFamily: FontFamilyMontserrat.name),
-                      //         ),
-                      //         SizedBox(
-                      //           height: 20.0,
-                      //         ),
-                      //         Row(
-                      //           children: [
-                      //             Expanded(
-                      //                 flex: 1,
-                      //                 child: Container(
-                      //                   margin: EdgeInsets.only(right: 10.0),
-                      //                   height: 60,
-                      //                   decoration: BoxDecoration(
-                      //                       color: HexColor('E5E5E5'),
-                      //                       borderRadius: BorderRadius.all(
-                      //                         const Radius.circular(20.0),
-                      //                       )),
-                      //                   child: Center(
-                      //                       child: Text(
-                      //                     "10 + 2",
-                      //                     style: TextStyle(
-                      //                         fontSize: 18.0, color: Colors.black),
-                      //                   )),
-                      //                 )),
-                      //             Expanded(
-                      //               flex: 1,
-                      //               child: Container(
-                      //                 margin: EdgeInsets.only(left: 10.0),
-                      //                 width: MediaQuery.of(context).size.width,
-                      //                 height: 60,
-                      //                 decoration: BoxDecoration(
-                      //                   color: Colors.white,
-                      //                   borderRadius: BorderRadius.all(
-                      //                     const Radius.circular(20.0),
-                      //                   ),
-                      //                   shape: BoxShape.rectangle,
-                      //                   border: Border.all(
-                      //                     color: HexColor('E5E5E5'),
-                      //                     width: 2,
-                      //                   ),
-                      //                 ),
-                      //                 child: inputTextField(),
-                      //               ),
-                      //             ),
-                      //           ],
-                      //         )
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
 
                       //NEXT BUTTON
                       Container(
@@ -305,6 +256,23 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
         LengthLimitingTextInputFormatter(10),
       ],
     );
+  }
+
+  void openUrl(String url) {
+    Navigator.of(context).push(PageRouteBuilder(
+        pageBuilder: (context, animation, anotherAnimation) {
+          return WebViewContainer(url);
+        },
+        transitionDuration: Duration(milliseconds: 2000),
+        transitionsBuilder: (context, animation, anotherAnimation, child) {
+          animation = CurvedAnimation(
+              curve: Curves.fastLinearToSlowEaseIn, parent: animation);
+          return SlideTransition(
+            position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                .animate(animation),
+            child: child,
+          );
+        }));
   }
 
   void openNextScreen() {
