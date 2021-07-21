@@ -1,10 +1,9 @@
+import 'package:acc/screens/fundraiser/dashboard/fundraiser_dashboard.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:acc/screens/common/onboarding.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/ui_widgets.dart';
-import 'package:http/http.dart';
 
 class SuccesssFundSubmitted extends StatefulWidget {
   @override
@@ -40,7 +39,7 @@ class _SuccesssFundSubmittedState extends State<SuccesssFundSubmitted> {
                       Expanded(
                           child: Text(
                         'Hello Fundraiser',
-                        style: textNormal(headingBlack, 20),
+                        style: textBold26(headingBlack),
                       )),
                       Image.asset('assets/images/investor/icon_investor.png'),
                     ],
@@ -75,6 +74,27 @@ class _SuccesssFundSubmittedState extends State<SuccesssFundSubmitted> {
                   borderRadius: BorderRadius.circular(40),
                   onTap: () {
                     // on click
+                    Navigator.of(context).pushAndRemoveUntil(
+                        PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, anotherAnimation) {
+                              return FundraiserDashboard();
+                            },
+                            transitionDuration: Duration(milliseconds: 2000),
+                            transitionsBuilder:
+                                (context, animation, anotherAnimation, child) {
+                              animation = CurvedAnimation(
+                                  curve: Curves.fastLinearToSlowEaseIn,
+                                  parent: animation);
+                              return SlideTransition(
+                                position: Tween(
+                                        begin: Offset(1.0, 0.0),
+                                        end: Offset(0.0, 0.0))
+                                    .animate(animation),
+                                child: child,
+                              );
+                            }),
+                        (Route<dynamic> route) => false);
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width,

@@ -180,7 +180,7 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                               margin:
                                   const EdgeInsets.only(top: 5.0, bottom: 20),
                               decoration: customDecoration(),
-                              child: inputTextField(
+                              child: multiLineInputTextField(
                                   "Investment Objective",
                                   "Please provide a brief description of the fund here",
                                   null),
@@ -259,6 +259,29 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
         onChanged: (text) {},
         style: textBlackNormal16(),
         controller: _controller,
+        decoration: new InputDecoration(
+            contentPadding: EdgeInsets.all(10.0),
+            labelText: text,
+            hintText: hint,
+            hintMaxLines: 2,
+            labelStyle: new TextStyle(color: Colors.grey),
+            border: InputBorder.none,
+            focusedBorder: UnderlineInputBorder(
+                borderSide:
+                    const BorderSide(color: Colors.transparent, width: 2.0),
+                borderRadius: BorderRadius.all(
+                  const Radius.circular(10.0),
+                ))));
+  }
+
+  TextField multiLineInputTextField(text, hint, _controller) {
+    return TextField(
+        onChanged: (text) {},
+        style: textBlackNormal16(),
+        controller: _controller,
+        maxLines: null,
+        expands: true,
+        keyboardType: TextInputType.multiline,
         decoration: new InputDecoration(
             contentPadding: EdgeInsets.all(10.0),
             labelText: text,

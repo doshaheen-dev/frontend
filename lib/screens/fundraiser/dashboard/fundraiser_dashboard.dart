@@ -1,6 +1,6 @@
+import 'package:acc/screens/fundraiser/dashboard/fundraiser_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:acc/screens/investor/dashboard/investor_home.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/text_style.dart';
 
@@ -35,7 +35,7 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
                     SizedBox(width: 10.0),
                     Expanded(
                         child: Text(
-                      'Hello Entrepreneur',
+                      'Hello  Fundraiser',
                       style: textBold26(headingBlack),
                     )),
                     Image.asset('assets/images/investor/icon_investor.png'),
@@ -117,7 +117,7 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
         Blue(),
         Yellow(),
         Red(),
-        Blue(),
+        FundraiserProfile(),
       ],
     );
   }
@@ -139,7 +139,7 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
 
       pageController.jumpToPage(
         index,
-      ); // duration: Duration(milliseconds: 500), curve: Curves.easeIn
+      );
     });
   }
 }
