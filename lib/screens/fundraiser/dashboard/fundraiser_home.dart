@@ -113,13 +113,7 @@ class _FundraiserHomeState extends State<FundraiserHome> {
       highlightColor: Colors.transparent,
       borderRadius: BorderRadius.circular(40),
       onTap: () {
-        setState(() {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      FundraiserFundDetail(data: fundsList[index])));
-        });
+        setState(() {});
       },
       child: Container(
         margin: EdgeInsets.only(top: 10.0),
@@ -145,6 +139,13 @@ class _FundraiserHomeState extends State<FundraiserHome> {
                   Row(
                     children: [
                       InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => FundraiserFundDetail(
+                                      data: fundsList[index])));
+                        },
                         child: Text(
                           "Show Details",
                           style: textNormal12(HexColor("#468FFD")),

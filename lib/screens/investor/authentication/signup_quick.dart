@@ -123,36 +123,36 @@ class _QuickSignUpState extends State<QuickSignUp> {
                       ),
                     ),
                   ),
-                  // TERMS AND CONDITIONS
-                  Align(
-                    alignment: Alignment.center,
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                          text: "By signing in, I agree with ",
-                          style: setTextStyle(textLightGrey),
-                          children: [
-                            TextSpan(
-                                text: "Terms of Use ",
-                                style: setTextStyle(Colors.black),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    //openSignIn(context);
-                                  }),
-                            TextSpan(
-                              text: "\n and ",
-                              style: setTextStyle(textLightGrey),
-                            ),
-                            TextSpan(
-                                text: "Privacy Poicy",
-                                style: setTextStyle(Colors.black),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    //openSignIn(context);
-                                  })
-                          ]),
-                    ),
-                  ),
+                  // // TERMS AND CONDITIONS
+                  // Align(
+                  //   alignment: Alignment.center,
+                  //   child: RichText(
+                  //     textAlign: TextAlign.center,
+                  //     text: TextSpan(
+                  //         text: "By signing in, I agree with ",
+                  //         style: setTextStyle(textLightGrey),
+                  //         children: [
+                  //           TextSpan(
+                  //               text: "Terms of Use ",
+                  //               style: setTextStyle(Colors.black),
+                  //               recognizer: TapGestureRecognizer()
+                  //                 ..onTap = () {
+                  //                   //openSignIn(context);
+                  //                 }),
+                  //           TextSpan(
+                  //             text: "\n and ",
+                  //             style: setTextStyle(textLightGrey),
+                  //           ),
+                  //           TextSpan(
+                  //               text: "Privacy Poicy",
+                  //               style: setTextStyle(Colors.black),
+                  //               recognizer: TapGestureRecognizer()
+                  //                 ..onTap = () {
+                  //                   //openSignIn(context);
+                  //                 })
+                  //         ]),
+                  //   ),
+                  // ),
                 ],
               ),
             ],

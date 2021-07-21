@@ -166,12 +166,35 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
   }
 
   Widget _createFundHeader() {
+    MaterialColor iconColor;
+    if (_likedFunds.type == "Listed") {
+      iconColor = Colors.green;
+    } else if (_likedFunds.type == "Under Scrutiny") {
+      iconColor = Colors.blue;
+    } else if (_likedFunds.type == "Not Listed") {
+      iconColor = Colors.red;
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
           _likedFunds.name,
           style: textBold18(headingBlack),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(
+              Icons.circle,
+              color: iconColor,
+              size: 15.0,
+            ),
+            SizedBox(
+              width: 5,
+            ),
+            Text(_likedFunds.type, style: textNormal16(HexColor("#2B2B2B")))
+          ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
