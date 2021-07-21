@@ -83,7 +83,7 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
                                   margin: const EdgeInsets.only(
                                       top: 10.0, left: 25.0),
                                   child: Text(otpLabel,
-                                      style: textBold28(headingBlack)),
+                                      style: textBold26(headingBlack)),
                                 ),
                                 Container(
                                   margin: const EdgeInsets.only(

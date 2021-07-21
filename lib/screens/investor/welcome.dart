@@ -47,7 +47,7 @@ class _WelcomeInvestorState extends State<WelcomeInvestor> {
                           top: 10.0, left: 25.0, right: 25.0),
                       child: Text(welcomeInvestor,
                           textAlign: TextAlign.center,
-                          style: textBold28(headingBlack)),
+                          style: textBold26(headingBlack)),
                     ),
                     SizedBox(
                       height: 10,

@@ -42,14 +42,14 @@ class _UserTypeState extends State<UserType> {
                           margin: const EdgeInsets.only(top: 80.0, left: 25.0),
                           child: Text(
                             "I am a",
-                            style: textBold(Colors.black, 30),
+                            style: textBold(Colors.black, 26),
                           ),
                         ),
                         Container(
                           margin: const EdgeInsets.only(top: 5.0, left: 25.0),
                           child: Text(
                             "Please choose your appropiate type",
-                            style: textNormal(textGrey, 18.0),
+                            style: textNormal(textGrey, 16.0),
                           ),
                         ),
                         Center(
@@ -103,7 +103,7 @@ class _UserTypeState extends State<UserType> {
                   height: 10.0,
                 ),
                 Text("Investor",
-                    style: textNormal18(selectedCategory.contains(investor)
+                    style: textNormal16(selectedCategory.contains(investor)
                         ? Colors.white
                         : Colors.black))
               ],
@@ -152,7 +152,7 @@ class _UserTypeState extends State<UserType> {
                   height: 10.0,
                 ),
                 Text("Fundraiser",
-                    style: textNormal18(selectedCategory.contains(fundraiser)
+                    style: textNormal16(selectedCategory.contains(fundraiser)
                         ? Colors.white
                         : Colors.black))
               ],

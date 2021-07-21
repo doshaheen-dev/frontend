@@ -50,7 +50,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
                       style: TextStyle(
                           color: headingBlack,
                           fontWeight: FontWeight.bold,
-                          fontSize: 28.0,
+                          fontSize: 26.0,
                           fontFamily: FontFamilyMontserrat.name),
                     ),
                   ),
@@ -78,7 +78,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
                       style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
-                          fontSize: 18.0,
+                          fontSize: 16.0,
                           fontFamily: FontFamilyMontserrat.name),
                     ),
                   ),
@@ -90,7 +90,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
                       "Use your email address to register",
                       style: TextStyle(
                           color: textGrey,
-                          fontSize: 18.0,
+                          fontSize: 16.0,
                           fontFamily: FontFamilyMontserrat.name),
                     ),
                   ),

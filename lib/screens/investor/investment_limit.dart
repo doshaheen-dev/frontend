@@ -59,7 +59,7 @@ class _InvestmentLimitState extends State<InvestmentLimit> {
                     style: TextStyle(
                         color: headingBlack,
                         fontWeight: FontWeight.bold,
-                        fontSize: 28.0,
+                        fontSize: 26.0,
                         fontFamily: FontFamilyMontserrat.name),
                   ),
                 ),

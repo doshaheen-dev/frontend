@@ -101,12 +101,12 @@ class _SignUpOTPState extends State<SignUpOTP> {
                       Container(
                         margin: const EdgeInsets.only(top: 10.0, left: 25.0),
                         child:
-                            Text(signUpHeader, style: textBold30(headingBlack)),
+                            Text(signUpHeader, style: textBold26(headingBlack)),
                       ),
                       Container(
                         margin: const EdgeInsets.only(top: 5.0, left: 25.0),
                         child: Text(signUpSubHeader,
-                            style: textNormal18(textGrey)),
+                            style: textNormal16(textGrey)),
                       ),
                       SizedBox(
                         height: 25,

@@ -95,7 +95,6 @@ class _CorporateDetailsState extends State<CorporateDetails> {
         showSelectedItem: false,
         items: items,
         itemAsString: (Map<String, dynamic> i) => i['text'],
-        label: "Country",
         hint: "",
         onChanged: (map) {
           setState(() {
@@ -104,7 +103,16 @@ class _CorporateDetailsState extends State<CorporateDetails> {
           });
         },
         dropdownSearchDecoration: InputDecoration(
-          border: InputBorder.none,
+          labelText: 'Country',
+          labelStyle: new TextStyle(
+            color: Colors.grey[600],
+            fontFamily: FontFamilyMontserrat.name,
+            fontSize: 18,
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(const Radius.circular(10.0)),
+            borderSide: BorderSide(color: Colors.transparent),
+          ),
         ),
         selectedItem: null,
         maxHeight: 700,
@@ -146,14 +154,14 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                         children: [
                                           Text(
                                             "Corporate Sign Up",
-                                            style: textBold28(headingBlack),
+                                            style: textBold26(headingBlack),
                                           ),
                                           SizedBox(
                                             height: 5,
                                           ),
                                           Text(
                                             "Please fill out your representative details",
-                                            style: textNormal18(textGrey),
+                                            style: textNormal16(textGrey),
                                           )
                                         ],
                                       )),
