@@ -40,4 +40,21 @@ class InvestorSignupRequestModel {
         "company_name": this.companyName,
         "verificationId": this.verificationId,
       };
+
+  void clear() {
+    this.firstName = '';
+    this.lastName = '';
+    this.mobileNo = '';
+    this.emailId = '';
+    this.countryCode = '';
+    this.address = '';
+    this.hearAboutUs = '';
+    this.referralName = '';
+    this.slotId = '';
+    this.productIds = '';
+    this.userType = '';
+    this.designation = '';
+    this.companyName = '';
+    this.verificationId = '';
+  }
 }

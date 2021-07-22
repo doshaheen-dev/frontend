@@ -10,6 +10,7 @@ class Countries with ChangeNotifier {
   }
 
   Future<void> fetchAndSetCountries() async {
+    clear();
     final List<CountryInfo> loadedCountries = [];
     final Country extractedData = await CountryService.fetchCountries();
     if (extractedData == null) {
@@ -24,6 +25,11 @@ class Countries with ChangeNotifier {
     });
 
     _countries = loadedCountries.toList();
+    notifyListeners();
+  }
+
+  void clear() {
+    _countries = [];
     notifyListeners();
   }
 }

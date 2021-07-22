@@ -1,21 +1,20 @@
 import 'dart:io';
 
+import 'package:acc/models/upload/upload_document.dart';
+import 'package:acc/providers/kyc_docs_provider.dart';
 import 'package:acc/screens/fundraiser/dashboard/success_fund_submit.dart';
-import 'package:acc/services/upload_document.dart';
+import 'package:acc/services/upload_document_service.dart';
 import 'package:acc/utilites/text_style.dart';
+import 'package:acc/utilites/ui_widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
+import 'package:provider/provider.dart';
 
-enum DocumentType {
-  ID,
-  ICDocument,
-  FundDeck,
-  BrandImage,
-}
+import '../../../models/kyc/kyc_documents.dart';
 
 class CreateFundsContinue extends StatefulWidget {
   @override
@@ -26,14 +25,135 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
   int selectedIndex;
   final _fundNameController = TextEditingController();
   var progress;
-  List<RequiredDocumentType> requiredDocTypeList = getRequiredDocList();
-
   bool _isTermsCheck = false;
+  Future _documents;
+  var _isInit = true;
+  List<DocumentInfo> _uploadedDocuments = [];
+  var _isLogoUploaded = false;
+
+  Future<void> _fetchDocuments(BuildContext context) async {
+    await Provider.of<KYCDocuments>(context, listen: false)
+        .fetchAndSetKYCDocuments();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {});
+      _documents = _fetchDocuments(context);
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _fundNameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
+
+    InkWell _createDocumentCell(OptionsData kycDoc) {
+      return InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          onTap: () {
+            setState(() {});
+            _selectFile(context, kycDoc.kycId);
+          },
+          child: Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: unselectedGray,
+                      borderRadius: BorderRadius.all(
+                        const Radius.circular(15.0),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 20),
+                      child: Center(
+                          child: (_uploadedDocuments
+                                      .where((doc) => doc.id == kycDoc.kycId)
+                                      .length >
+                                  0)
+                              ? Text('Uploaded',
+                                  textAlign: TextAlign.center,
+                                  softWrap: true,
+                                  style: textNormal(Colors.green, 14))
+                              : Text('Upload ${kycDoc.kycDocName}',
+                                  textAlign: TextAlign.center,
+                                  softWrap: true,
+                                  style: textNormal(Colors.black, 14))),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                  flex: 1,
+                  child: Text(
+                    kycDoc.kycDocDesc,
+                    style: textNormal(textGrey, 14),
+                  )),
+            ],
+          ));
+    }
+
+    Widget _uploadRequiredDocuments() {
+      return FutureBuilder(
+          future: _documents,
+          builder: (ctx, dataSnapshot) {
+            if (dataSnapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                  child: CircularProgressIndicator(
+                backgroundColor: Colors.orange,
+                valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
+              ));
+            } else {
+              if (dataSnapshot.error != null) {
+                return Center(child: Text("An error occurred!"));
+              } else {
+                return Consumer<KYCDocuments>(
+                  builder: (ctx, docData, child) => Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Please upload required documents",
+                          style: textNormal(textGrey, 14),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(bottom: 5.0, right: 15),
+                          child: ListView.builder(
+                            itemBuilder: (ctx, index) {
+                              return _createDocumentCell(
+                                  docData.documents[index]);
+                            },
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: docData.documents.length,
+                            shrinkWrap: true,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+            }
+          });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -44,221 +164,276 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
       bottomNavigationBar: BottomAppBar(),
       backgroundColor: Colors.white,
       body: ProgressHUD(
-        child: Builder(
-            builder: (context) => SafeArea(
+          child: Builder(
+              builder: (context) => SafeArea(
                     child: SingleChildScrollView(
-                        child: Container(
-                  margin: const EdgeInsets.only(left: 25.0, right: 25.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        child: IconButton(
-                          icon: Icon(Icons.arrow_back, size: 30),
-                          onPressed: () => {Navigator.pop(context)},
-                        ),
-                      ),
-                      Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              margin: const EdgeInsets.only(top: 10.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Tell us about your fund",
-                                      style: textBold(headingBlack, 20)),
-                                  Text(
-                                      "What is the Minimum Investment from an investor",
-                                      style: textNormal(textGrey, 14))
-                                ],
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 25.0, right: 25.0),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                child: IconButton(
+                                  icon: Icon(Icons.arrow_back, size: 30),
+                                  onPressed: () => {Navigator.pop(context)},
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              child: GridView.count(
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 10.0,
-                                  mainAxisSpacing: 10.0,
-                                  shrinkWrap: true,
-                                  childAspectRatio:
-                                      (MediaQuery.of(context).size.width /
-                                          2 /
-                                          65),
-                                  children:
-                                      List.generate(infoItem.length, (index) {
-                                    return _createCell(index);
-                                  })),
-                            ),
-
-                            //Fund  General Partner / Managing Partner (GP)
-                            Container(
-                              margin:
-                                  const EdgeInsets.only(top: 20.0, bottom: 20),
-                              decoration: customDecoration(),
-                              child: inputTextField(
-                                  "Fund  General Partner / Managing Partner (GP)",
-                                  "Please enter general partner here",
-                                  _fundNameController),
-                            ),
-
-                            //upload required documents
-                            Container(
-                                child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Please upload required documents",
-                                  style: textNormal(textGrey, 14),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  margin:
-                                      EdgeInsets.only(bottom: 5.0, right: 15),
-                                  child: ListView.builder(
-                                    itemBuilder: (ctx, index) {
-                                      return _createDocumentCell(
-                                          requiredDocTypeList[index],
-                                          index,
-                                          context);
-                                    },
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemCount: requiredDocTypeList.length,
-                                    shrinkWrap: true,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    margin: const EdgeInsets.only(top: 10.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text("Tell us about your fund",
+                                            style: textBold(headingBlack, 20)),
+                                        Text(
+                                            "What is the Minimum Investment from an investor",
+                                            style: textNormal(textGrey, 14))
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Container(
-                                  margin:
-                                      EdgeInsets.only(bottom: 10.0, right: 15),
-                                  child: _createDocumentUI(
-                                    context,
-                                    "Upload Fund Brand Image",
-                                    "JPEG, PNG, JPG.",
-                                    DocumentType.BrandImage,
+                                  SizedBox(
+                                    height: 10,
                                   ),
-                                ),
+                                  Container(
+                                    child: GridView.count(
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: 10.0,
+                                        mainAxisSpacing: 10.0,
+                                        shrinkWrap: true,
+                                        childAspectRatio:
+                                            (MediaQuery.of(context).size.width /
+                                                2 /
+                                                65),
+                                        children: List.generate(infoItem.length,
+                                            (index) {
+                                          return _createCell(index);
+                                        })),
+                                  ),
 
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Matchmaker fee for Amicorp",
-                                      style: textNormal(textGrey, 12),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      "5%",
-                                      style: textNormal(selectedOrange, 18),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  children: [
-                                    Checkbox(
-                                        checkColor:
-                                            Colors.white, // color of tick Mark
-                                        activeColor: kDarkOrange,
-                                        value: _isTermsCheck,
-                                        onChanged: (bool value) {
-                                          setState(() {
-                                            _isTermsCheck = value;
-                                          });
-                                        }),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: RichText(
-                                        textAlign: TextAlign.center,
-                                        text: TextSpan(
-                                            text:
-                                                "By signing in, I agree with ",
-                                            style:
-                                                textNormal(textLightGrey, 14),
-                                            children: [
-                                              TextSpan(
-                                                  text: "Terms of Use ",
-                                                  style: textNormal(
-                                                      Colors.black, 14),
-                                                  recognizer:
-                                                      TapGestureRecognizer()
-                                                        ..onTap = () {
-                                                          //openSignIn(context);
-                                                        }),
-                                              TextSpan(
-                                                text: "\n and ",
-                                                style: textNormal(
-                                                    textLightGrey, 14),
-                                              ),
-                                              TextSpan(
-                                                  text: "Privacy Poicy",
-                                                  style: textNormal(
-                                                      Colors.black, 14),
-                                                  recognizer:
-                                                      TapGestureRecognizer()
-                                                        ..onTap = () {
-                                                          //openSignIn(context);
-                                                        })
-                                            ]),
+                                  //Fund  General Partner / Managing Partner (GP)
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 20.0, bottom: 20),
+                                    decoration: customDecoration(),
+                                    child: inputTextField(
+                                        "Fund  General Partner / Managing Partner (GP)",
+                                        "Please enter general partner here",
+                                        _fundNameController),
+                                  ),
+                                  _uploadRequiredDocuments(),
+
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        bottom: 10.0, right: 15),
+                                    child: _createDocumentUI(
+                                        context,
+                                        "Upload Fund Brand Image",
+                                        "JPEG, PNG, JPG."),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Matchmaker fee for Amicorp",
+                                        style: textNormal(textGrey, 12),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                //NEXT BUTTON
-                                Container(
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        "5%",
+                                        style: textNormal(selectedOrange, 18),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Checkbox(
+                                          checkColor: Colors
+                                              .white, // color of tick Mark
+                                          activeColor: kDarkOrange,
+                                          value: _isTermsCheck,
+                                          onChanged: (bool value) {
+                                            setState(() {
+                                              _isTermsCheck = value;
+                                            });
+                                          }),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Align(
+                                        alignment: Alignment.center,
+                                        child: RichText(
+                                          textAlign: TextAlign.center,
+                                          text: TextSpan(
+                                              text:
+                                                  "By signing in, I agree with ",
+                                              style:
+                                                  textNormal(textLightGrey, 14),
+                                              children: [
+                                                TextSpan(
+                                                    text: "Terms of Use ",
+                                                    style: textNormal(
+                                                        Colors.black, 14),
+                                                    recognizer:
+                                                        TapGestureRecognizer()
+                                                          ..onTap = () {
+                                                            //openSignIn(context);
+                                                          }),
+                                                TextSpan(
+                                                  text: "\n and ",
+                                                  style: textNormal(
+                                                      textLightGrey, 14),
+                                                ),
+                                                TextSpan(
+                                                    text: "Privacy Poicy",
+                                                    style: textNormal(
+                                                        Colors.black, 14),
+                                                    recognizer:
+                                                        TapGestureRecognizer()
+                                                          ..onTap = () {
+                                                            //openSignIn(context);
+                                                          })
+                                              ]),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  //NEXT BUTTON
+                                  Container(
                                     margin: const EdgeInsets.only(
                                       top: 20,
                                       bottom: 20,
                                     ),
                                     child: ElevatedButton(
-                                        onPressed: () {
-                                          FocusScope.of(context)
-                                              .requestFocus(FocusNode());
-                                          openSuccesssFundSubmitted();
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                            padding: EdgeInsets.all(0.0),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(18))),
-                                        child: Ink(
-                                            decoration: BoxDecoration(
-                                                gradient: LinearGradient(
-                                                    colors: [
-                                                      kDarkOrange,
-                                                      kLightOrange
-                                                    ]),
-                                                borderRadius:
-                                                    BorderRadius.circular(15)),
-                                            child: Container(
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              height: 60,
-                                              alignment: Alignment.center,
-                                              child: Text("Submit",
-                                                  style: textWhiteBold18()),
-                                            )))),
-                              ],
-                            ))
-                          ]),
-                    ],
-                  ),
-                )))),
-      ),
+                                      onPressed: () {
+                                        FocusScope.of(context)
+                                            .requestFocus(FocusNode());
+                                        openSuccesssFundSubmitted();
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                          padding: EdgeInsets.all(0.0),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(18))),
+                                      child: Ink(
+                                        decoration: BoxDecoration(
+                                            gradient: LinearGradient(colors: [
+                                              kDarkOrange,
+                                              kLightOrange
+                                            ]),
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        child: Container(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          height: 60,
+                                          alignment: Alignment.center,
+                                          child: Text("Submit",
+                                              style: textWhiteBold18()),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ]),
+                      ),
+                    ),
+                  ))),
     );
+  }
+
+  void _updateUploadedDocs(DocumentInfo docInfo) {
+    final docIndex =
+        _uploadedDocuments.indexWhere((doc) => doc.id == docInfo.id);
+    if (docIndex >= 0) {
+      _uploadedDocuments[docIndex] = docInfo;
+      return;
+    }
+    _uploadedDocuments.add(docInfo);
+  }
+
+  Future<void> _uploadFile(
+      BuildContext context, int kycDocId, File file, String fileName) async {
+    if (file != null) {
+      UploadDocument doc =
+          await UploadDocumentService.uploadDocument(file, fileName);
+      if (doc != null && kycDocId > 0) {
+        _updateUploadedDocs(DocumentInfo(kycDocId, doc.data.fundKYCDocPath));
+      }
+      if (kycDocId == 0) {
+        _isLogoUploaded = true;
+      }
+    } else {
+      if (kycDocId == 0) {
+        _isLogoUploaded = false;
+      }
+      showSnackBar(context, 'Something went wrong.');
+    }
+  }
+
+  _openDialogToUploadFile(
+      BuildContext context, int kycDocId, File file, String fileName) {
+    // set up the buttons
+    Widget positiveButton = TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+          _uploadFile(context, kycDocId, file, fileName);
+        },
+        child: Text(
+          "Ok",
+          style: textNormal16(Color(0xff00A699)),
+        ));
+
+    Widget cancelButton = TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text(
+          "Cancel",
+          style: textNormal16(Color(0xff00A699)),
+        ));
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: Text('Do you want to upload the file?'),
+      actions: [
+        positiveButton,
+        cancelButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  Future<void> _selectFile(BuildContext context, int kycDocId) async {
+    FilePickerResult result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      // print('Path: ${result.files.single.path}');
+      // print('Name: ${result.files.single.name}');
+      String fileName = result.files.single.name;
+      File file = File(result.files.single.path);
+      _openDialogToUploadFile(context, kycDocId, file, fileName);
+    } else {
+      showSnackBar(context, "No file selected.");
+    }
   }
 
   TextField inputTextField(text, hint, _controller) {
@@ -320,17 +495,13 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
     BuildContext ctx,
     String labelText,
     String description,
-    DocumentType docType,
   ) {
     return InkWell(
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         onTap: () {
-          setState(() {
-            progress = ProgressHUD.of(ctx);
-            progress?.showWithText('Uploading File...');
-            _uploadFile();
-          });
+          setState(() {});
+          _selectFile(context, 0);
         },
         child: Row(
           children: [
@@ -341,7 +512,7 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                 child: Container(
                   // margin: EdgeInsets.only(bottom: 10.0, right: 10),
                   // width: 20,
-                  //height: 40,
+                  // height: 45,
                   decoration: BoxDecoration(
                     color: unselectedGray,
                     borderRadius: BorderRadius.all(
@@ -349,10 +520,14 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                     ),
                   ),
                   child: Padding(
-                    padding: EdgeInsets.all(10.0),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 5, vertical: 20),
                     child: Center(
-                        child: Text(labelText,
-                            style: textNormal(Colors.black, 14))),
+                        child: _isLogoUploaded
+                            ? Text('Uploaded',
+                                style: textNormal(Colors.green, 14))
+                            : Text(labelText,
+                                style: textNormal(Colors.black, 14))),
                   ),
                 ),
               ),
@@ -361,65 +536,6 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                 flex: 1,
                 child: Text(
                   description,
-                  style: textNormal(textGrey, 14),
-                )),
-          ],
-        ));
-  }
-
-  Future<void> _uploadFile() async {
-    FilePickerResult result = await FilePicker.platform.pickFiles();
-    if (result != null) {
-      print('Path: ${result.files.single.path}');
-      print('Name: ${result.files.single.name}');
-      String fileName = result.files.single.name;
-      File file = File(result.files.single.path);
-      UploadDocumentService.uploadDocument(file, fileName);
-    } else {
-      print('User canceled the picker');
-    }
-    progress.dismiss();
-  }
-
-  InkWell _createDocumentCell(RequiredDocumentType requiredDocTypeList,
-      int index, BuildContext context) {
-    return InkWell(
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        onTap: () {
-          setState(() {
-            progress = ProgressHUD.of(context);
-            progress?.showWithText('Uploading File...');
-            _uploadFile();
-          });
-        },
-        child: Row(
-          children: [
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: unselectedGray,
-                    borderRadius: BorderRadius.all(
-                      const Radius.circular(15.0),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Center(
-                        child: Text(requiredDocTypeList.name,
-                            textAlign: TextAlign.center,
-                            style: textNormal(Colors.black, 14))),
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-                flex: 1,
-                child: Text(
-                  requiredDocTypeList.description,
                   style: textNormal(textGrey, 14),
                 )),
           ],
@@ -455,17 +571,6 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
           );
         }));
   }
-
-  static List<RequiredDocumentType> getRequiredDocList() {
-    return <RequiredDocumentType>[
-      RequiredDocumentType('Upload Passport / ID here',
-          'Passport/ID of Fund Representataive', "ID"),
-      RequiredDocumentType('Upload Incorporation Doc here',
-          'Fund Company InCorporation Document', "ICDocument"),
-      RequiredDocumentType(
-          'Upload Fund Deck', 'PDF, JPEG, PNG, JPG, PPT etc.', "FundDeck"),
-    ];
-  }
 }
 
 class InvestmentLimitItem {
@@ -474,9 +579,11 @@ class InvestmentLimitItem {
   InvestmentLimitItem(this.header);
 }
 
-class RequiredDocumentType {
-  const RequiredDocumentType(this.name, this.description, this.docType);
-  final String name;
-  final String description;
-  final String docType;
+class DocumentInfo {
+  const DocumentInfo(
+    this.id,
+    this.uploadedKey,
+  );
+  final int id;
+  final String uploadedKey;
 }

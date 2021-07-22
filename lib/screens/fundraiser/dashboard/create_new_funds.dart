@@ -1,3 +1,4 @@
+import 'package:acc/constants/font_family.dart';
 import 'package:acc/screens/fundraiser/dashboard/create_funds_continue.dart';
 import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utilites/text_style.dart';
@@ -30,7 +31,9 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
 
   var _isInit = true;
 
-  var country;
+  var country = '';
+  var countryId = 0;
+  var cityId = 0;
   var selectedCity;
 
   Future<void> _fetchCountries(BuildContext context) async {
@@ -38,9 +41,9 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
         .fetchAndSetCountries();
   }
 
-  Future<void> _fetchCities(BuildContext context) async {
+  Future<void> _fetchCities(BuildContext context, String country) async {
     await Provider.of<cityProvider.Cities>(context, listen: false)
-        .fetchAndSetCities();
+        .fetchAndSetCitiesByCountry(country);
   }
 
   @override
@@ -48,7 +51,6 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
     if (_isInit) {
       setState(() {});
       _countries = _fetchCountries(context);
-      _cities = _fetchCities(context);
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -359,6 +361,7 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                   child: getDropDownSearch(
                       countryData.countries
                           .map((info) => {
+                                'id': info.id,
                                 'text': info.name,
                                 'value': info.abbreviation,
                               })
@@ -382,12 +385,28 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
       hint: "Search",
       onChanged: (map) {
         setState(() {
-          country = map['value'];
-          print(country);
+          if (label == "Fund  Location") {
+            country = map['value'];
+            _cities = _fetchCities(context, country);
+          } else {
+            cityId = map['id'];
+            print('City id: $cityId');
+          }
         });
       },
       dropdownSearchDecoration: InputDecoration(
         border: InputBorder.none,
+      ),
+      emptyBuilder: (ctx, search) => Center(
+        child: Text(
+          'No $label found',
+          style: TextStyle(
+            color: Colors.red,
+            fontFamily: FontFamilyMontserrat.name,
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       selectedItem: null,
       maxHeight: 700,
@@ -414,6 +433,7 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                   child: getDropDownSearch(
                       cityData.cities
                           .map((info) => {
+                                'id': info.id,
                                 'text': info.name,
                                 'value': info.name,
                               })

@@ -177,6 +177,7 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                                     requestModelInstance);
                             progress.dismiss();
                             if (signedUpUser.type == 'success') {
+                              requestModelInstance.clear();
                               final prefs =
                                   await SharedPreferences.getInstance();
                               final userJson = jsonEncode(signedUpUser.data);
