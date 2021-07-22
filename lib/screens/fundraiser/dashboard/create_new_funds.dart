@@ -11,6 +11,7 @@ import 'package:acc/services/AuthenticationService.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/country_provider.dart' as countryProvider;
+import '../../../providers/city_provider.dart' as cityProvider;
 
 class CreateNewFunds extends StatefulWidget {
   @override
@@ -25,13 +26,21 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
 
   var progress;
   Future _countries;
+  Future _cities;
+
   var _isInit = true;
 
   var country;
+  var selectedCity;
 
   Future<void> _fetchCountries(BuildContext context) async {
     await Provider.of<countryProvider.Countries>(context, listen: false)
         .fetchAndSetCountries();
+  }
+
+  Future<void> _fetchCities(BuildContext context) async {
+    await Provider.of<cityProvider.Cities>(context, listen: false)
+        .fetchAndSetCities();
   }
 
   @override
@@ -39,6 +48,7 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
     if (_isInit) {
       setState(() {});
       _countries = _fetchCountries(context);
+      _cities = _fetchCities(context);
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -132,7 +142,6 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                             Container(
                               margin: const EdgeInsets.only(bottom: 20),
                               width: MediaQuery.of(context).size.width,
-                              height: 80,
                               decoration: customDecoration(),
                               child: _createDropdownCities(),
                             ),
@@ -347,12 +356,14 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
               return Consumer<countryProvider.Countries>(
                 builder: (ctx, countryData, child) => Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: getDropDownSearch(countryData.countries
-                      .map((info) => {
-                            'text': info.name,
-                            'value': info.abbreviation,
-                          })
-                      .toList()),
+                  child: getDropDownSearch(
+                      countryData.countries
+                          .map((info) => {
+                                'text': info.name,
+                                'value': info.abbreviation,
+                              })
+                          .toList(),
+                      "Fund  Location"),
                 ),
               );
             }
@@ -360,15 +371,15 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
         });
   }
 
-  Widget getDropDownSearch(List<Map<String, dynamic>> items) {
+  Widget getDropDownSearch(List<Map<String, dynamic>> items, String label) {
     return DropdownSearch<Map<String, dynamic>>(
       mode: Mode.BOTTOM_SHEET,
       showSearchBox: true,
       showSelectedItem: false,
       items: items,
       itemAsString: (Map<String, dynamic> i) => i['text'],
-      label: "Fund  Location",
-      hint: "Search your country",
+      label: label,
+      hint: "Search",
       onChanged: (map) {
         setState(() {
           country = map['value'];
@@ -385,7 +396,7 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
 
   FutureBuilder<dynamic> _createDropdownCities() {
     return FutureBuilder(
-        future: _countries,
+        future: _cities,
         builder: (ctx, dataSnapshot) {
           if (dataSnapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -397,31 +408,17 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
             if (dataSnapshot.error != null) {
               return Center(child: Text("An error occurred!"));
             } else {
-              return Consumer<countryProvider.Countries>(
-                builder: (ctx, countryData, child) => Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: DropdownButtonFormField(
-                    decoration: InputDecoration(
-                        labelText: 'Fund  City',
-                        labelStyle: new TextStyle(color: Colors.grey[600]),
-                        enabledBorder: UnderlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(const Radius.circular(10.0)),
-                            borderSide: BorderSide(color: Colors.transparent))),
-                    // value: country,
-                    items: countryData.countries
-                        .map((info) => DropdownMenuItem(
-                              child: Text(info.name),
-                              value: info.abbreviation,
-                            ))
-                        .toList(),
-                    onChanged: (value) {
-                      // print(value);
-                      setState(() {
-                        country = value;
-                      });
-                    },
-                  ),
+              return Consumer<cityProvider.Cities>(
+                builder: (ctx, cityData, child) => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: getDropDownSearch(
+                      cityData.cities
+                          .map((info) => {
+                                'text': info.name,
+                                'value': info.name,
+                              })
+                          .toList(),
+                      "Fund City"),
                 ),
               );
             }
