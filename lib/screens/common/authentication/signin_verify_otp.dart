@@ -190,7 +190,9 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
       Navigator.of(context).pushAndRemoveUntil(
           PageRouteBuilder(
               pageBuilder: (context, animation, anotherAnimation) {
-                return InvestorDashboard();
+                return InvestorDashboard(
+                  userData: data,
+                );
               },
               transitionDuration: Duration(milliseconds: 2000),
               transitionsBuilder:
@@ -243,6 +245,9 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
   }
 
   Future<void> saveUserInfo(UserData data) async {
+    final requestModelInstance = UserData.instance;
+    requestModelInstance.token = data.token;
+    print("SignIn:- ${requestModelInstance.token}");
     final prefs = await SharedPreferences.getInstance();
     final userJson = jsonEncode(data);
     prefs.setString('UserInfo', userJson);

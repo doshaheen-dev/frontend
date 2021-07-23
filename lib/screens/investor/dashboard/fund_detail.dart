@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:acc/constants/font_family.dart';
-import 'package:acc/screens/investor/dashboard/investor_home.dart';
+import 'package:acc/providers/investor_home_provider.dart';
 import 'package:acc/screens/investor/dashboard/pdf_viewer.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/hex_color.dart';
@@ -12,8 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
 class FundDetail extends StatefulWidget {
-  final LikedFunds _recommendation;
-  const FundDetail({Key key, LikedFunds data})
+  final FundsInfo _recommendation;
+  const FundDetail({Key key, FundsInfo data})
       : _recommendation = data,
         super(key: key);
 
@@ -22,7 +22,9 @@ class FundDetail extends StatefulWidget {
 }
 
 class _FundDetailState extends State<FundDetail> {
-  LikedFunds _likedFunds;
+  String description =
+      "Elite Specia; Exporter & supplier engaged in offering a varied range of quality products; Already exported 26+ containers valued at \$170k+; Imported Kiwis & Apples valued at \$200k+; Strong sales team in the Middle East; Already raised Rs. 5mn";
+  FundsInfo _likedFunds;
   bool _isFundOverview = false;
   bool _isFundDeck = false;
   var _changeBgColor = unselectedGray;
@@ -93,12 +95,14 @@ class _FundDetailState extends State<FundDetail> {
                       onPressed: () => {Navigator.pop(context)},
                     ),
                   ),
-                  Image.asset(
-                    _likedFunds.image,
-                    width: MediaQuery.of(context).size.width,
+                  Image(
+                    image: _likedFunds.fundLogo != ""
+                        ? NetworkImage("http://${_likedFunds.fundLogo}")
+                        : AssetImage("assets/images/dummy/investment1.png"),
                     height: 100,
                     fit: BoxFit.fill,
                   ),
+
                   SizedBox(
                     height: 5,
                   ),
@@ -155,7 +159,7 @@ class _FundDetailState extends State<FundDetail> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          _likedFunds.name,
+          _likedFunds.fundName,
           style: textBold18(headingBlack),
         ),
         Row(
@@ -167,20 +171,20 @@ class _FundDetailState extends State<FundDetail> {
               width: 30,
             ),
             Text(
-              _likedFunds.location,
+              "Pune",
               style: textNormal(HexColor("#404040"), 12.0),
             )
           ],
         ),
         Text(
-          "Minimum Investment : ${_likedFunds.minimumInvestment}",
+          "Minimum Investment : ${_likedFunds.fundExistVal}",
           style: textNormal(HexColor("#404040"), 12.0),
         ),
         SizedBox(
           height: 20.0,
         ),
         Text(
-          _likedFunds.description,
+          description,
           style: textNormal(HexColor("#3A3B3F"), 14.0),
         )
       ],
@@ -250,7 +254,11 @@ class _FundDetailState extends State<FundDetail> {
                       Row(
                         children: [
                           Expanded(flex: 1, child: Text("Fund Regulated")),
-                          Expanded(flex: 1, child: Text("Yes"))
+                          Expanded(
+                              flex: 1,
+                              child: Text(_likedFunds.fundRegulated == 1
+                                  ? "Yes"
+                                  : "No"))
                         ],
                       ),
                       SizedBox(
@@ -259,7 +267,9 @@ class _FundDetailState extends State<FundDetail> {
                       Row(
                         children: [
                           Expanded(flex: 1, child: Text("Fund Regulator")),
-                          Expanded(flex: 1, child: Text("Rahul Roy"))
+                          Expanded(
+                              flex: 1,
+                              child: Text(_likedFunds.fundRegulatorName))
                         ],
                       ),
                       SizedBox(
@@ -268,7 +278,8 @@ class _FundDetailState extends State<FundDetail> {
                       Row(
                         children: [
                           Expanded(flex: 1, child: Text("Website Link")),
-                          Expanded(flex: 1, child: Text("www.exportbus.com"))
+                          Expanded(
+                              flex: 1, child: Text(_likedFunds.fundWebsite))
                         ],
                       ),
                       SizedBox(
@@ -277,7 +288,8 @@ class _FundDetailState extends State<FundDetail> {
                       Row(
                         children: [
                           Expanded(flex: 1, child: Text("Fund Sponsor")),
-                          Expanded(flex: 1, child: Text("Alok Mittal"))
+                          Expanded(
+                              flex: 1, child: Text(_likedFunds.fundSponsorName))
                         ],
                       ),
                       SizedBox(
@@ -286,7 +298,9 @@ class _FundDetailState extends State<FundDetail> {
                       Row(
                         children: [
                           Expanded(flex: 1, child: Text("Existing Fund")),
-                          Expanded(flex: 1, child: Text("\$300K"))
+                          Expanded(
+                              flex: 1,
+                              child: Text("\$${_likedFunds.fundExistVal}"))
                         ],
                       ),
                       SizedBox(
@@ -295,7 +309,9 @@ class _FundDetailState extends State<FundDetail> {
                       Row(
                         children: [
                           Expanded(flex: 1, child: Text("New Fund")),
-                          Expanded(flex: 1, child: Text("\$200K"))
+                          Expanded(
+                              flex: 1,
+                              child: Text("\$${_likedFunds.fundNewVal}"))
                         ],
                       ),
                       SizedBox(

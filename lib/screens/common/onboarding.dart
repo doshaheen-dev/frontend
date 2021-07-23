@@ -275,8 +275,6 @@ class _OnBoardingState extends State<OnBoarding> {
   }
 
   void getChangedPageAndMoveBar(int page) {
-    print('page is $page');
-
     currentPageValue = page;
 
     if (previousPageValue == 0) {

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:acc/models/investor/funds.dart';
 import 'package:acc/models/investor/recommendation.dart';
 import 'package:acc/models/investor/respond_recommendation.dart';
 import 'package:http/http.dart' as http;
@@ -8,9 +9,10 @@ import 'http_service.dart';
 
 class InvestorHomeService {
   // Fetch Recommendations
-  static Future<Recommendations> fetchRecommendation(String token) async {
+  static Future<Recommendations> fetchRecommendation(
+      String token, int pageNo) async {
     final url = Uri.parse(
-        '${ApiServices.baseUrl}/fund/recommendation?pageNo=2&pageSize=20');
+        '${ApiServices.baseUrl}/fund/recommendation?pageNo=$pageNo&pageSize=20');
     final headers = {
       "Content-type": "application/json",
       "authorization": "Bearer $token"
@@ -39,6 +41,21 @@ class InvestorHomeService {
     RespondRecommendation recommendations =
         RespondRecommendation.from(valueMap);
     print("recommendations: $recommendations");
+    return recommendations;
+  }
+
+  // Fetch Recommendations
+  static Future<Funds> fetchInterestedFunds(String token, int pageNo) async {
+    final url = Uri.parse(
+        '${ApiServices.baseUrl}/fund/liked?pageNo=$pageNo&pageSize=10');
+    final headers = {
+      "Content-type": "application/json",
+      "authorization": "Bearer $token"
+    };
+
+    final response = await http.get(url, headers: headers);
+    Map valueMap = jsonDecode(response.body);
+    Funds recommendations = Funds.from(valueMap);
     return recommendations;
   }
 }

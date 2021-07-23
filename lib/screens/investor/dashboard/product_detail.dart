@@ -12,9 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 
 class ProductDetail extends StatefulWidget {
-  final Recommended _recommendation;
+  final FundsInfo _recommendation;
   final String _token;
-  const ProductDetail({Key key, Recommended data, String token})
+  const ProductDetail({Key key, FundsInfo data, String token})
       : _recommendation = data,
         _token = token,
         super(key: key);
@@ -24,7 +24,7 @@ class ProductDetail extends StatefulWidget {
 }
 
 class _ProductDetailState extends State<ProductDetail> {
-  Recommended _recommendation;
+  FundsInfo _recommendation;
   String _token;
   bool _isFundOverview = false;
   var _changeBgColor = unselectedGray;

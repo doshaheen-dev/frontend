@@ -1,19 +1,23 @@
 import 'package:acc/models/investor/recommendation.dart';
+import 'package:acc/models/investor/funds.dart';
+
 import 'package:acc/services/investor_home_service.dart';
 import 'package:flutter/foundation.dart';
 
 class InvestorHome with ChangeNotifier {
-  List<Recommended> recommended;
+  List<FundsInfo> recommended;
 
-  Future<void> fetchAndSetRecommendations(String token) async {
-    final List<Recommended> loadedRecommendations = [];
+  var interestedFundsData;
+
+  Future<void> fetchAndSetRecommendations(String token, int pageNo) async {
+    final List<FundsInfo> loadedRecommendations = [];
     final Recommendations extractedData =
-        await InvestorHomeService.fetchRecommendation(token);
+        await InvestorHomeService.fetchRecommendation(token, pageNo);
     if (extractedData == null) {
       return;
     }
     extractedData.data.option.forEach((option) {
-      loadedRecommendations.add(Recommended(
+      loadedRecommendations.add(FundsInfo(
           option.fundName,
           option.fundLogo,
           option.fundExistVal,
@@ -28,9 +32,33 @@ class InvestorHome with ChangeNotifier {
     recommended = loadedRecommendations.toList();
     notifyListeners();
   }
+
+  Future<void> fetchAndSetInterestedFunds(String token, int pageNo) async {
+    final List<FundsInfo> loadedFunds = [];
+    final Funds extractedData =
+        await InvestorHomeService.fetchInterestedFunds(token, pageNo);
+    if (extractedData == null) {
+      return;
+    }
+    extractedData.data.option.forEach((option) {
+      loadedFunds.add(FundsInfo(
+          option.fundName,
+          option.fundLogo,
+          option.fundExistVal,
+          option.fundNewVal,
+          option.fundTxnId,
+          option.fundSponsorName,
+          option.fundRegulated,
+          option.fundRegulatorName,
+          option.fundWebsite));
+    });
+
+    interestedFundsData = loadedFunds.toList();
+    notifyListeners();
+  }
 }
 
-class Recommended {
+class FundsInfo {
   final String fundName;
   final String fundLogo;
   final int fundExistVal;
@@ -41,7 +69,7 @@ class Recommended {
   final String fundRegulatorName;
   final String fundWebsite;
 
-  Recommended(
+  FundsInfo(
       this.fundName,
       this.fundLogo,
       this.fundExistVal,

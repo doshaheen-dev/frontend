@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
@@ -10,7 +9,6 @@ import 'package:acc/providers/kyc_docs_provider.dart';
 import 'package:acc/providers/product_type_provider.dart';
 import 'package:acc/providers/country_provider.dart';
 import 'package:acc/providers/city_provider.dart';
-import 'package:acc/screens/common/authentication/signin_otp.dart';
 import 'package:acc/screens/fundraiser/dashboard/fundraiser_dashboard.dart';
 import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
 import 'package:acc/utilites/app_colors.dart';
@@ -99,24 +97,26 @@ class _MyHomePageState extends State<MyHomePage> {
             context, MaterialPageRoute(builder: (context) => OnBoarding())));
   }
 
+  // Get store data and redirect to view.
   getUserInfo() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     Map<String, dynamic> userMap;
     final String userStr = prefs.getString('UserInfo');
-
-    if (userStr != null) {
+    if (userStr != null && userStr != "") {
       userMap = jsonDecode(userStr) as Map<String, dynamic>;
-    }
+      UserData userData = UserData.fromNoDecryptionMap(userMap);
+      final requestModelInstance = UserData.instance;
+      requestModelInstance.token = userData.token;
 
-    if (userMap != null) {
-      final UserData user = UserData.fromJson(userMap);
-      print("MAIN => ${user.token}");
-      print("MAIN => ${user.userType}");
-
-      UserData userDetails = UserData.from(userMap);
-      print("MAIN1 => ${userDetails.userType}");
-      // openHome(user);
+      if (userData != null) {
+        openHome(userData);
+      } else {
+        Timer(
+            Duration(seconds: 3),
+            () => Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => OnBoarding())));
+      }
     } else {
       Timer(
           Duration(seconds: 3),
@@ -146,7 +146,9 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.of(context).pushAndRemoveUntil(
           PageRouteBuilder(
               pageBuilder: (context, animation, anotherAnimation) {
-                return InvestorDashboard();
+                return InvestorDashboard(
+                  userData: data,
+                );
               },
               transitionDuration: Duration(milliseconds: 2000),
               transitionsBuilder:
@@ -180,6 +182,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               }),
           (Route<dynamic> route) => false);
+    } else {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => OnBoarding()));
     }
   }
 }
