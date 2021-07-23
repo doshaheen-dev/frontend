@@ -229,6 +229,8 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                                                 slotProvider.FundSlots>(
                                               builder: (ctx, slotData, child) =>
                                                   GridView.count(
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
                                                 crossAxisCount: 2,
                                                 crossAxisSpacing: 10.0,
                                                 mainAxisSpacing: 10.0,

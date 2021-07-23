@@ -91,14 +91,15 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    //getUserInfo();
+    // getUserInfo();
 
     Timer(
         Duration(seconds: 3),
-        () => Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => OnBoarding())));
+        () => Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => FundraiserDashboard())));
   }
 
+  // Get store data and redirect to view.
   getUserInfo() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -107,16 +108,24 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (userStr != null) {
       userMap = jsonDecode(userStr) as Map<String, dynamic>;
-    }
+      UserData userData = UserData(
+          userMap['token'],
+          userMap['firstName'],
+          userMap['middleName'],
+          userMap['lastName'],
+          userMap['email_id'],
+          userMap['mobileNo'],
+          userMap['userType']);
+      print('Hi, ${userData.userType}'); // Hi John Doe
 
-    if (userMap != null) {
-      final UserData user = UserData.fromJson(userMap);
-      print("MAIN => ${user.token}");
-      print("MAIN => ${user.userType}");
-
-      UserData userDetails = UserData.from(userMap);
-      print("MAIN1 => ${userDetails.userType}");
-      // openHome(user);
+      if (userData != null) {
+        openHome(userData);
+      } else {
+        Timer(
+            Duration(seconds: 3),
+            () => Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => OnBoarding())));
+      }
     } else {
       Timer(
           Duration(seconds: 3),
@@ -146,7 +155,9 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.of(context).pushAndRemoveUntil(
           PageRouteBuilder(
               pageBuilder: (context, animation, anotherAnimation) {
-                return InvestorDashboard();
+                return InvestorDashboard(
+                  data: data,
+                );
               },
               transitionDuration: Duration(milliseconds: 2000),
               transitionsBuilder:
