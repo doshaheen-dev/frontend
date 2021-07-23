@@ -6,6 +6,7 @@ import 'package:acc/screens/fundraiser/dashboard/success_fund_submit.dart';
 import 'package:acc/services/upload_document_service.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
+import 'package:acc/widgets/kyc_document_items.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,25 +27,7 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
   final _fundNameController = TextEditingController();
   var progress;
   bool _isTermsCheck = false;
-  Future _documents;
-  var _isInit = true;
   List<DocumentInfo> _uploadedDocuments = [];
-  var _isLogoUploaded = false;
-
-  Future<void> _fetchDocuments(BuildContext context) async {
-    await Provider.of<KYCDocuments>(context, listen: false)
-        .fetchAndSetKYCDocuments();
-  }
-
-  @override
-  void didChangeDependencies() {
-    if (_isInit) {
-      setState(() {});
-      _documents = _fetchDocuments(context);
-    }
-    _isInit = false;
-    super.didChangeDependencies();
-  }
 
   @override
   void dispose() {
@@ -56,104 +39,6 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
-
-    InkWell _createDocumentCell(OptionsData kycDoc) {
-      return InkWell(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          onTap: () {
-            setState(() {});
-            _selectFile(context, kycDoc.kycId);
-          },
-          child: Row(
-            children: [
-              Expanded(
-                flex: 2,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: unselectedGray,
-                      borderRadius: BorderRadius.all(
-                        const Radius.circular(15.0),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5, vertical: 20),
-                      child: Center(
-                          child: (_uploadedDocuments
-                                      .where((doc) => doc.id == kycDoc.kycId)
-                                      .length >
-                                  0)
-                              ? Text('Uploaded',
-                                  textAlign: TextAlign.center,
-                                  softWrap: true,
-                                  style: textNormal(Colors.green, 14))
-                              : Text('Upload ${kycDoc.kycDocName}',
-                                  textAlign: TextAlign.center,
-                                  softWrap: true,
-                                  style: textNormal(Colors.black, 14))),
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                  flex: 1,
-                  child: Text(
-                    kycDoc.kycDocDesc,
-                    style: textNormal(textGrey, 14),
-                  )),
-            ],
-          ));
-    }
-
-    Widget _uploadRequiredDocuments() {
-      return FutureBuilder(
-          future: _documents,
-          builder: (ctx, dataSnapshot) {
-            if (dataSnapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                  child: CircularProgressIndicator(
-                backgroundColor: Colors.orange,
-                valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
-              ));
-            } else {
-              if (dataSnapshot.error != null) {
-                return Center(child: Text("An error occurred!"));
-              } else {
-                return Consumer<KYCDocuments>(
-                  builder: (ctx, docData, child) => Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Please upload required documents",
-                          style: textNormal(textGrey, 14),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 5.0, right: 15),
-                          child: ListView.builder(
-                            itemBuilder: (ctx, index) {
-                              return _createDocumentCell(
-                                  docData.documents[index]);
-                            },
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: docData.documents.length,
-                            shrinkWrap: true,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }
-            }
-          });
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -224,7 +109,8 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                                         "Please enter general partner here",
                                         _fundNameController),
                                   ),
-                                  _uploadRequiredDocuments(),
+                                  KYCDocumentItems(
+                                      _uploadedDocuments, _selectFile),
 
                                   Container(
                                     margin: EdgeInsets.only(
@@ -365,21 +251,19 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
 
   Future<void> _uploadFile(
       BuildContext context, int kycDocId, File file, String fileName) async {
+    progress = ProgressHUD.of(context);
+    progress?.showWithText('Uploading File...');
     if (file != null) {
       UploadDocument doc =
           await UploadDocumentService.uploadDocument(file, fileName);
-      if (doc != null && kycDocId > 0) {
+      if (doc != null) {
         _updateUploadedDocs(DocumentInfo(kycDocId, doc.data.fundKYCDocPath));
       }
-      if (kycDocId == 0) {
-        _isLogoUploaded = true;
-      }
     } else {
-      if (kycDocId == 0) {
-        _isLogoUploaded = false;
-      }
       showSnackBar(context, 'Something went wrong.');
     }
+    progress.dismiss();
+    setState(() {});
   }
 
   _openDialogToUploadFile(
@@ -499,10 +383,7 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
     return InkWell(
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
-        onTap: () {
-          setState(() {});
-          _selectFile(context, 0);
-        },
+        onTap: () => _selectFile(context, 0),
         child: Row(
           children: [
             Expanded(
@@ -523,7 +404,9 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 5, vertical: 20),
                     child: Center(
-                        child: _isLogoUploaded
+                        child: (_uploadedDocuments
+                                    .indexWhere((doc) => doc.id == 0) >=
+                                0)
                             ? Text('Uploaded',
                                 style: textNormal(Colors.green, 14))
                             : Text(labelText,
