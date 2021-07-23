@@ -3,8 +3,9 @@ import 'package:acc/utilites/text_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:acc/screens/investor/general_terms_privacy.dart';
 import 'package:acc/utilites/app_colors.dart';
+import 'package:provider/provider.dart';
+import 'package:acc/providers/product_type_provider.dart' as productProvider;
 
 class AddNewFunds extends StatefulWidget {
   @override
@@ -12,18 +13,25 @@ class AddNewFunds extends StatefulWidget {
 }
 
 class _AddNewFundsState extends State<AddNewFunds> {
-  List<LikedFunds> fundsList = <LikedFunds>[
-    const LikedFunds("Angel Investment"),
-    const LikedFunds("Venture Capital"),
-    const LikedFunds("Private Equity"),
-    const LikedFunds("Listed Equities"),
-    const LikedFunds("Fixed Income"),
-    const LikedFunds("Structured Products"),
-    const LikedFunds("Digital Crypto Products"),
-  ];
+  var _isInit = true;
+  Future _futureFundSlots;
+
+  Future<void> _getAllProducts(BuildContext context) async {
+    await Provider.of<productProvider.ProductTypes>(context, listen: false)
+        .fetchAndSetProductTypes();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {});
+      _futureFundSlots = _getAllProducts(context);
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
 
   int selectedIndex;
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -64,17 +72,36 @@ class _AddNewFundsState extends State<AddNewFunds> {
                   Container(
                     margin: const EdgeInsets.only(
                         top: 10.0, left: 25.0, right: 25.0),
-                    child: ListView.builder(
-                      itemBuilder: (ctx, index) {
-                        return _createCell(fundsList[index], index);
+                    child: FutureBuilder(
+                      future: _futureFundSlots,
+                      builder: (ctx, dataSnapshot) {
+                        if (dataSnapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(
+                              child: CircularProgressIndicator(
+                            backgroundColor: Colors.orange,
+                            valueColor:
+                                new AlwaysStoppedAnimation<Color>(Colors.amber),
+                          ));
+                        } else {
+                          if (dataSnapshot.error != null) {
+                            return Center(child: Text("An error occurred!"));
+                          } else {
+                            return Consumer<productProvider.ProductTypes>(
+                                builder: (ctx, fundData, child) =>
+                                    ListView.builder(
+                                      itemBuilder: (ctx, index) {
+                                        return _createCell(
+                                            fundData.types[index], index);
+                                      },
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount: fundData.types.length,
+                                      shrinkWrap: true,
+                                    ));
+                          }
+                        }
                       },
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: fundsList.length,
-                      shrinkWrap: true,
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
                   ),
                 ],
               ),
@@ -85,7 +112,7 @@ class _AddNewFundsState extends State<AddNewFunds> {
     );
   }
 
-  InkWell _createCell(LikedFunds item, int index) {
+  InkWell _createCell(productProvider.InvestmentLimitItem item, int index) {
     return InkWell(
       focusColor: Colors.transparent,
       highlightColor: Colors.transparent,
@@ -122,39 +149,4 @@ class _AddNewFundsState extends State<AddNewFunds> {
       ),
     );
   }
-
-  BoxDecoration customDecoration() {
-    return BoxDecoration(
-      color: Colors.transparent,
-      borderRadius: BorderRadius.all(const Radius.circular(10.0)),
-      boxShadow: [
-        BoxShadow(
-          offset: Offset(0, 2),
-          color: Colors.grey[200],
-        )
-      ],
-    );
-  }
-
-  void openGeneralTermsPrivacy() {
-    Navigator.of(context).push(PageRouteBuilder(
-        pageBuilder: (context, animation, anotherAnimation) {
-          return GeneralTermsPrivacy();
-        },
-        transitionDuration: Duration(milliseconds: 2000),
-        transitionsBuilder: (context, animation, anotherAnimation, child) {
-          animation = CurvedAnimation(
-              curve: Curves.fastLinearToSlowEaseIn, parent: animation);
-          return SlideTransition(
-            position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-                .animate(animation),
-            child: child,
-          );
-        }));
-  }
-}
-
-class LikedFunds {
-  const LikedFunds(this.name);
-  final String name;
 }

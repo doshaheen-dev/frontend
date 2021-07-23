@@ -8,8 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/common/authentication/signin_otp.dart';
 import 'package:acc/screens/common/user_type.dart';
-import 'package:acc/screens/fundraiser/dashboard/fundraiser_dashboard.dart';
-import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';

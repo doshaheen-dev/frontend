@@ -1,0 +1,137 @@
+class Recommendations {
+  String type;
+  int status;
+  String message;
+  Data data;
+
+  Recommendations({this.type, this.status, this.message, this.data});
+
+  Recommendations.from(Map<String, dynamic> json) {
+    type = json['type'];
+    status = json['status'];
+    message = json['message'];
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['type'] = this.type;
+    data['status'] = this.status;
+    data['message'] = this.message;
+    if (this.data != null) {
+      data['data'] = this.data.toJson();
+    }
+    return data;
+  }
+}
+
+class Data {
+  List<Option> option;
+  int pageNo;
+
+  Data({this.option, this.pageNo});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    if (json['option'] != null) {
+      option = [];
+      json['option'].forEach((v) {
+        option.add(new Option.fromJson(v));
+      });
+    }
+    pageNo = json['pageNo'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.option != null) {
+      data['option'] = this.option.map((v) => v.toJson()).toList();
+    }
+    data['pageNo'] = this.pageNo;
+    return data;
+  }
+}
+
+class Option {
+  int fundTxnId;
+  int userId;
+  int productId;
+  int slotId;
+  String fundSponsorName;
+  String fundTermsAgreedDateTime;
+  String fundName;
+  int fundCountryId;
+  int fundCityId;
+  int fundRegulated;
+  String fundRegulatorName;
+  String fundInvstmtObj;
+  int fundExistVal;
+  int fundNewVal;
+  String fundWebsite;
+  String fundLogo;
+  String fundStatus;
+  Null fundInternalApproved;
+
+  Option(
+      {this.fundTxnId,
+      this.userId,
+      this.productId,
+      this.slotId,
+      this.fundSponsorName,
+      this.fundTermsAgreedDateTime,
+      this.fundName,
+      this.fundCountryId,
+      this.fundCityId,
+      this.fundRegulated,
+      this.fundRegulatorName,
+      this.fundInvstmtObj,
+      this.fundExistVal,
+      this.fundNewVal,
+      this.fundWebsite,
+      this.fundLogo,
+      this.fundStatus,
+      this.fundInternalApproved});
+
+  Option.fromJson(Map<String, dynamic> json) {
+    fundTxnId = json['fund_txn_id'];
+    userId = json['user_id'];
+    productId = json['product_id'];
+    slotId = json['slot_id'];
+    fundSponsorName = json['fund_sponsor_name'];
+    fundTermsAgreedDateTime = json['fund_terms_agreed_date_time'];
+    fundName = json['fund_name'];
+    fundCountryId = json['fund_country_id'];
+    fundCityId = json['fund_city_id'];
+    fundRegulated = json['fund_regulated'];
+    fundRegulatorName = json['fund_regulator_name'];
+    fundInvstmtObj = json['fund_invstmt_obj'];
+    fundExistVal = json['fund_exist_val'];
+    fundNewVal = json['fund_new_val'];
+    fundWebsite = json['fund_website'];
+    fundLogo = json['fund_logo'];
+    fundStatus = json['fund_status'];
+    fundInternalApproved = json['fund_internal_approved'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['fund_txn_id'] = this.fundTxnId;
+    data['user_id'] = this.userId;
+    data['product_id'] = this.productId;
+    data['slot_id'] = this.slotId;
+    data['fund_sponsor_name'] = this.fundSponsorName;
+    data['fund_terms_agreed_date_time'] = this.fundTermsAgreedDateTime;
+    data['fund_name'] = this.fundName;
+    data['fund_country_id'] = this.fundCountryId;
+    data['fund_city_id'] = this.fundCityId;
+    data['fund_regulated'] = this.fundRegulated;
+    data['fund_regulator_name'] = this.fundRegulatorName;
+    data['fund_invstmt_obj'] = this.fundInvstmtObj;
+    data['fund_exist_val'] = this.fundExistVal;
+    data['fund_new_val'] = this.fundNewVal;
+    data['fund_website'] = this.fundWebsite;
+    data['fund_logo'] = this.fundLogo;
+    data['fund_status'] = this.fundStatus;
+    data['fund_internal_approved'] = this.fundInternalApproved;
+    return data;
+  }
+}

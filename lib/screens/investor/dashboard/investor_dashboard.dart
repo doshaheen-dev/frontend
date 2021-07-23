@@ -1,11 +1,16 @@
 import 'package:acc/constants/font_family.dart';
+import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/screens/investor/dashboard/investor_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/investor/dashboard/investor_home.dart';
 
 class InvestorDashboard extends StatefulWidget {
-  InvestorDashboard({Key key}) : super(key: key);
+  final UserData userData;
+
+  const InvestorDashboard({Key key, UserData data})
+      : userData = data,
+        super(key: key);
 
   @override
   _InvestorDashboardState createState() => _InvestorDashboardState();
@@ -13,6 +18,13 @@ class InvestorDashboard extends StatefulWidget {
 
 class _InvestorDashboardState extends State<InvestorDashboard> {
   int bottomSelectedIndex = 0;
+  UserData _userData;
+
+  @override
+  void initState() {
+    _userData = widget.userData;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,18 +126,13 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
         pageChanged(index);
       },
       children: <Widget>[
-        InvestorHome(),
+        InvestorHome(null),
         Blue(),
         Yellow(),
         Red(),
         InvestorProfile(),
       ],
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   void pageChanged(int index) {

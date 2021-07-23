@@ -1,12 +1,18 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:math';
 
 import 'package:acc/constants/font_family.dart';
+import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/providers/fund_slot_provider.dart';
+import 'package:acc/providers/investor_home_provider.dart';
 import 'package:acc/providers/kyc_docs_provider.dart';
 import 'package:acc/providers/product_type_provider.dart';
 import 'package:acc/providers/country_provider.dart';
 import 'package:acc/providers/city_provider.dart';
-import 'package:acc/screens/fundraiser/dashboard/add_new_funds.dart';
+import 'package:acc/screens/common/authentication/signin_otp.dart';
+import 'package:acc/screens/fundraiser/dashboard/fundraiser_dashboard.dart';
+import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/hex_color.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,6 +23,7 @@ import 'package:acc/screens/common/onboarding.dart';
 import 'package:acc/services/AuthenticationService.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,6 +61,9 @@ class MyApp extends StatelessWidget {
           create: (ctx) => Cities(),
         ),
         ChangeNotifierProvider(
+          create: (ctx) => InvestorHome(),
+        ),
+        ChangeNotifierProvider(
           create: (ctx) => KYCDocuments(),
         ),
       ],
@@ -80,10 +90,39 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+
+    //getUserInfo();
+
     Timer(
         Duration(seconds: 3),
         () => Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => OnBoarding())));
+  }
+
+  getUserInfo() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    Map<String, dynamic> userMap;
+    final String userStr = prefs.getString('UserInfo');
+
+    if (userStr != null) {
+      userMap = jsonDecode(userStr) as Map<String, dynamic>;
+    }
+
+    if (userMap != null) {
+      final UserData user = UserData.fromJson(userMap);
+      print("MAIN => ${user.token}");
+      print("MAIN => ${user.userType}");
+
+      UserData userDetails = UserData.from(userMap);
+      print("MAIN1 => ${userDetails.userType}");
+      // openHome(user);
+    } else {
+      Timer(
+          Duration(seconds: 3),
+          () => Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => OnBoarding())));
+    }
   }
 
   @override
@@ -98,5 +137,49 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+
+  void openHome(UserData data) {
+    if (data.userType == "Investor" ||
+        data.userType == "investor" ||
+        data.userType == "") {
+      Navigator.of(context).pushAndRemoveUntil(
+          PageRouteBuilder(
+              pageBuilder: (context, animation, anotherAnimation) {
+                return InvestorDashboard();
+              },
+              transitionDuration: Duration(milliseconds: 2000),
+              transitionsBuilder:
+                  (context, animation, anotherAnimation, child) {
+                animation = CurvedAnimation(
+                    curve: Curves.fastLinearToSlowEaseIn, parent: animation);
+                return SlideTransition(
+                  position:
+                      Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                          .animate(animation),
+                  child: child,
+                );
+              }),
+          (Route<dynamic> route) => false);
+    } else if (data.userType == "Fundraiser" || data.userType == "fundraiser") {
+      Navigator.of(context).pushAndRemoveUntil(
+          PageRouteBuilder(
+              pageBuilder: (context, animation, anotherAnimation) {
+                return FundraiserDashboard();
+              },
+              transitionDuration: Duration(milliseconds: 2000),
+              transitionsBuilder:
+                  (context, animation, anotherAnimation, child) {
+                animation = CurvedAnimation(
+                    curve: Curves.fastLinearToSlowEaseIn, parent: animation);
+                return SlideTransition(
+                  position:
+                      Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                          .animate(animation),
+                  child: child,
+                );
+              }),
+          (Route<dynamic> route) => false);
+    }
   }
 }

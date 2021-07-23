@@ -1,7 +1,7 @@
-import 'dart:math';
+import 'dart:convert';
 
 import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:acc/utils/crypt_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
@@ -14,6 +14,7 @@ import 'package:acc/utilites/app_strings.dart';
 import 'package:acc/utilites/text_style.dart';
 
 import 'package:acc/utilites/ui_widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInVerifyOTP extends StatefulWidget {
   final String _verificationId;
@@ -182,8 +183,10 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
         otpController.text.trim().toString(), _verificationId);
   }
 
-  void openHome(String userType) {
-    if (userType == "Investor" || userType == "investor" || userType == "") {
+  void openHome(UserData data) {
+    if (data.userType == "Investor" ||
+        data.userType == "investor" ||
+        data.userType == "") {
       Navigator.of(context).pushAndRemoveUntil(
           PageRouteBuilder(
               pageBuilder: (context, animation, anotherAnimation) {
@@ -202,7 +205,7 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
                 );
               }),
           (Route<dynamic> route) => false);
-    } else if (userType == "Fundraiser" || userType == "fundraiser") {
+    } else if (data.userType == "Fundraiser" || data.userType == "fundraiser") {
       Navigator.of(context).pushAndRemoveUntil(
           PageRouteBuilder(
               pageBuilder: (context, animation, anotherAnimation) {
@@ -231,10 +234,18 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
     progress.dismiss();
 
     if (verifyPhoneNumber.type == "success") {
-      openHome(verifyPhoneNumber.data.userType);
+      saveUserInfo(verifyPhoneNumber.data);
+
+      openHome(verifyPhoneNumber.data);
     } else {
       _openDialog(context, verifyPhoneNumber.message);
     }
+  }
+
+  Future<void> saveUserInfo(UserData data) async {
+    final prefs = await SharedPreferences.getInstance();
+    final userJson = jsonEncode(data);
+    prefs.setString('UserInfo', userJson);
   }
 
   _openDialog(BuildContext context, String message) {

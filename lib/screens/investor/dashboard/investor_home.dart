@@ -1,30 +1,34 @@
 import 'package:acc/constants/font_family.dart';
+import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/screens/investor/dashboard/fund_detail.dart';
 import 'package:acc/screens/investor/dashboard/product_detail.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/utilites/app_colors.dart';
+import 'package:provider/provider.dart';
+import '../../../providers/investor_home_provider.dart' as investorProvider;
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class InvestorHome extends StatefulWidget {
-  InvestorHome({Key key}) : super(key: key);
+  final UserData userData;
+
+  const InvestorHome(UserData userData, {Key key, UserData data})
+      : userData = data,
+        super(key: key);
 
   @override
   _InvestorHomeState createState() => _InvestorHomeState();
 }
 
 class _InvestorHomeState extends State<InvestorHome> {
-  List<Recommendations> recommendationList = <Recommendations>[
-    const Recommendations(
-        "Helion Venture Partners", "assets/images/dummy/investment1.png", null),
-    const Recommendations(
-        "Sequoia Capital Funds", "assets/images/dummy/investment2.png", null),
-    const Recommendations(
-        "Big Data Saas Platform", "assets/images/dummy/investment3.png", null),
-    const Recommendations(
-        "Always Stay Connected", "assets/images/dummy/investment4.png", null),
-  ];
+  UserData _userData;
+
+  @override
+  void initState() {
+    _userData = widget.userData;
+    super.initState();
+  }
 
   List<LikedFunds> fundsList = <LikedFunds>[
     const LikedFunds(
@@ -52,12 +56,32 @@ class _InvestorHomeState extends State<InvestorHome> {
 
   var currentIndex = 0;
   var _fundscurrentIndex = 0;
+
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
   final ItemScrollController fundItemScrollController = ItemScrollController();
   final ItemPositionsListener fundIitemPositionsListener =
       ItemPositionsListener.create();
+
+  Future _recommendations;
+  var _isInit = true;
+
+  Future<void> _fetchRecommendation(BuildContext context) async {
+    await Provider.of<investorProvider.InvestorHome>(context, listen: false)
+        .fetchAndSetRecommendations(
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGVfbm8iOiJDaFp1bXRFQVNPUXZlWmppQWZQUEx3PT0iLCJlbWFpbF9pZCI6ImUvVTVUaWtzWGV1QjB2WGxndUg1eEhTS2hDSnZsVHczRENpZXY2M2R2WG89IiwiZmlyc3RfbmFtZSI6ImV5ZDJmOE0xb3lUc3h5Y0VRbmRjSGc9PSIsIm1pZGRsZV9uYW1lIjpudWxsLCJsYXN0X25hbWUiOiJqMG01aDlUTWZZZ0o1TGNWS0tER3BBPT0iLCJpZCI6MTI3LCJ1c2VyX3R5cGUiOiJpbnZlc3RvciIsImlhdCI6MTYyNjk0ODU5NX0.fCfXSWvNLjM3XucvSpmHtYvGfoFUujs2FqhUU7cbjJc");
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {});
+      _recommendations = _fetchRecommendation(context);
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,27 +110,52 @@ class _InvestorHomeState extends State<InvestorHome> {
                                 height: 300.0,
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 20),
-                                // color: Colors.red,
-                                child: Container(
-                                    height: 300.0,
-                                    child: ScrollablePositionedList.builder(
-                                        physics: NeverScrollableScrollPhysics(),
-                                        itemScrollController:
-                                            itemScrollController,
-                                        itemPositionsListener:
-                                            itemPositionsListener,
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: recommendationList.length,
-                                        itemBuilder: (context, index) {
-                                          return Container(
-                                            width: (MediaQuery.of(context)
-                                                    .size
-                                                    .width -
-                                                40),
-                                            child: _buildRecommendationList(
-                                                context, index),
-                                          );
-                                        })),
+                                child: FutureBuilder(
+                                  future: _recommendations,
+                                  builder: (context, dataSnapshot) {
+                                    if (dataSnapshot.error != null) {
+                                      return Center(
+                                          child: Text("An error occurred!"));
+                                    } else {
+                                      return Consumer<
+                                              investorProvider.InvestorHome>(
+                                          builder: (context, recommededData,
+                                                  child) =>
+                                              Container(
+                                                  height: 300.0,
+                                                  child: ScrollablePositionedList
+                                                      .builder(
+                                                          physics:
+                                                              NeverScrollableScrollPhysics(),
+                                                          itemScrollController:
+                                                              itemScrollController,
+                                                          itemPositionsListener:
+                                                              itemPositionsListener,
+                                                          scrollDirection:
+                                                              Axis.horizontal,
+                                                          itemCount:
+                                                              recommededData
+                                                                  .recommended
+                                                                  .length,
+                                                          itemBuilder:
+                                                              (context, index) {
+                                                            return Container(
+                                                              width: (MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width -
+                                                                  40),
+                                                              child: _buildRecommendationList(
+                                                                  context,
+                                                                  index,
+                                                                  recommededData
+                                                                          .recommended[
+                                                                      index]),
+                                                            );
+                                                          })));
+                                    }
+                                  },
+                                ),
                               ),
                               Positioned(
                                 left: 0,
@@ -146,8 +195,7 @@ class _InvestorHomeState extends State<InvestorHome> {
                                     color: kDarkOrange,
                                     onPressed: () {
                                       setState(() {
-                                        if (currentIndex <
-                                            recommendationList.length) {
+                                        if (currentIndex < 10) {
                                           currentIndex++;
 
                                           print(currentIndex);
@@ -275,15 +323,16 @@ class _InvestorHomeState extends State<InvestorHome> {
         ));
   }
 
-  Widget _buildRecommendationList(BuildContext context, int index) {
+  Widget _buildRecommendationList(BuildContext context, int index,
+      investorProvider.Recommended recommended) {
     return GestureDetector(
         onTap: () => {
-              print("Name:- ${recommendationList[index].name}"),
+              print("Name:- ${recommended.fundName}"),
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          ProductDetail(data: recommendationList[index])))
+                      builder: (context) => ProductDetail(
+                          data: recommended, token: _userData.token)))
             },
         child: Card(
           margin: EdgeInsets.zero,
@@ -297,15 +346,18 @@ class _InvestorHomeState extends State<InvestorHome> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(8.0),
-                        topRight: Radius.circular(8.0),
-                      ),
-                      child: Image.asset(
-                        recommendationList[index].image,
-                        height: 200.0,
-                        fit: BoxFit.fill,
-                      )),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8.0),
+                      topRight: Radius.circular(8.0),
+                    ),
+                    child: Image(
+                      image: recommended.fundLogo != ""
+                          ? NetworkImage("http://${recommended.fundLogo}")
+                          : AssetImage("assets/images/dummy/investment1.png"),
+                      height: 200,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
                   Container(
                     alignment: Alignment.center,
                     margin: EdgeInsets.only(top: 10.0),
@@ -317,7 +369,7 @@ class _InvestorHomeState extends State<InvestorHome> {
                         SizedBox(
                           height: 5.0,
                         ),
-                        Text(recommendationList[index].name,
+                        Text(recommended.fundName,
                             style: textBold16(headingBlack)),
                       ],
                     ),
@@ -403,19 +455,6 @@ class _InvestorHomeState extends State<InvestorHome> {
   }
 }
 
-class Recommendations {
-  const Recommendations(this.name, this.image, this.description);
-  final String name;
-  final String image;
-  final RecommendationData description;
-}
-
-class RecommendationData {
-  const RecommendationData(this.headerName, this.data);
-  final String headerName;
-  final String data;
-}
-
 class LikedFunds {
   const LikedFunds(this.name, this.image, this.location, this.minimumInvestment,
       this.description, this.data);
@@ -428,3 +467,16 @@ class LikedFunds {
 }
 
 class FundsData {}
+
+class Recommendations {
+  const Recommendations(this.name, this.image, this.description);
+  final String name;
+  final String image;
+  final RecommendationData description;
+}
+
+class RecommendationData {
+  const RecommendationData(this.headerName, this.data);
+  final String headerName;
+  final String data;
+}
