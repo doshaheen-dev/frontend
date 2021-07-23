@@ -90,58 +90,53 @@ class _KYCDocumentItemsState extends State<KYCDocumentItems> {
 
   @override
   Widget build(BuildContext context) {
-    return ProgressHUD(
-      child: Builder(
-        builder: (context) => FutureBuilder(
-            future: _documents,
-            builder: (ctx, dataSnapshot) {
-              if (dataSnapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                    child: CircularProgressIndicator(
-                  backgroundColor: Colors.orange,
-                  valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
-                ));
-              } else {
-                if (dataSnapshot.error != null) {
-                  return Center(child: Text("An error occurred!"));
-                } else {
-                  return Consumer<KYCDocuments>(
-                    builder: (ctx, docData, child) => Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Please upload required documents",
-                            style: textNormal(textGrey, 14),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(bottom: 5.0, right: 15),
-                            child: ListView.builder(
-                              itemBuilder: (ctx, index) {
-                                // return DocumentCell(
-                                //   widget.uploadedDocuments,
-                                //   docData.documents[index],
-                                //   widget.selectFile,
-                                // );
-                                return _createDocumentCell(
-                                    docData.documents[index]);
-                              },
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: docData.documents.length,
-                              shrinkWrap: true,
-                            ),
-                          ),
-                        ],
+    return FutureBuilder(
+      future: _documents,
+      builder: (ctx, dataSnapshot) {
+        if (dataSnapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+              child: CircularProgressIndicator(
+            backgroundColor: Colors.orange,
+            valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
+          ));
+        } else {
+          if (dataSnapshot.error != null) {
+            return Center(child: Text("An error occurred!"));
+          } else {
+            return Consumer<KYCDocuments>(
+              builder: (ctx, docData, child) => Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Please upload required documents",
+                      style: textNormal(textGrey, 14),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 5.0, right: 15),
+                      child: ListView.builder(
+                        itemBuilder: (ctx, index) {
+                          return DocumentCell(
+                            widget.uploadedDocuments,
+                            docData.documents[index],
+                            widget.selectFile,
+                          );
+                        },
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: docData.documents.length,
+                        shrinkWrap: true,
                       ),
                     ),
-                  );
-                }
-              }
-            }),
-      ),
+                  ],
+                ),
+              ),
+            );
+          }
+        }
+      },
     );
   }
 }

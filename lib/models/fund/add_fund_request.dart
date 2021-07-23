@@ -1,13 +1,13 @@
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable(nullable: true, explicitToJson: true)
-class InvestorSignupRequestModel {
-  InvestorSignupRequestModel._privateConstructor();
+class AddFundRequestModel {
+  AddFundRequestModel._privateConstructor();
 
-  static final InvestorSignupRequestModel _instance =
-      InvestorSignupRequestModel._privateConstructor();
+  static final AddFundRequestModel _instance =
+      AddFundRequestModel._privateConstructor();
 
-  static InvestorSignupRequestModel get instance => _instance;
+  static AddFundRequestModel get instance => _instance;
 
   String firstName;
   String lastName;
