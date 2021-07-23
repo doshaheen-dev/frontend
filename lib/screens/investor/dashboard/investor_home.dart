@@ -15,10 +15,6 @@ import '../../../providers/investor_home_provider.dart' as investorProvider;
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class InvestorHome extends StatefulWidget {
-  final UserData userData;
-
-  InvestorHome({Key key, this.userData}) : super(key: key);
-
   @override
   _InvestorHomeState createState() => _InvestorHomeState();
 }
@@ -58,13 +54,13 @@ class _InvestorHomeState extends State<InvestorHome> {
   Future<void> _fetchRecommendation(BuildContext context) async {
     await Provider.of<investorProvider.InvestorHome>(context, listen: false)
         .fetchAndSetRecommendations(
-            widget.userData.token, pageNo); //_userData.token
+            UserData.instance.token, pageNo); //_userData.token
   }
 
   Future<void> _fetchInterestedFunds(BuildContext context) async {
     await Provider.of<investorProvider.InvestorHome>(context, listen: false)
         .fetchAndSetInterestedFunds(
-            widget.userData.token, fundPageNo); //widget.userData.token
+            UserData.instance.token, fundPageNo); //widget.userData.token
   }
 
   @override
@@ -79,9 +75,37 @@ class _InvestorHomeState extends State<InvestorHome> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    checkListSize();
+  void initState() {
+    var recommendationInfo =
+        InvestorHomeService.fetchRecommendation(UserData.instance.token, 0);
+    recommendationInfo.then((result) {
+      print("recommendationInfo");
+      setState(() {
+        if (result.data.option.length == 0) {
+          displayRecommendations(false);
+        } else {
+          displayRecommendations(true);
+        }
+      });
+    });
 
+    Future<Funds> fundsInfo =
+        InvestorHomeService.fetchInterestedFunds(UserData.instance.token, 0);
+    fundsInfo.then((result) {
+      print("Funds");
+      setState(() {
+        if (result.data.option.length == 0) {
+          displayInterestedFunds(false);
+        } else {
+          displayInterestedFunds(true);
+        }
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
@@ -419,7 +443,7 @@ class _InvestorHomeState extends State<InvestorHome> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => ProductDetail(
-                          data: recommended, token: widget.userData.token)))
+                          data: recommended, token: UserData.instance.token)))
             },
         child: Card(
           margin: EdgeInsets.zero,
@@ -498,32 +522,4 @@ class _InvestorHomeState extends State<InvestorHome> {
   }
 
   // ------------------------------- end of recommendations -------------------------- //
-
-  void checkListSize() {
-    var recommendationInfo =
-        InvestorHomeService.fetchRecommendation(widget.userData.token, 0);
-    recommendationInfo.then((result) {
-      print(result);
-      setState(() {
-        if (result.data.option.length == 0) {
-          displayRecommendations(false);
-        } else {
-          displayRecommendations(true);
-        }
-      });
-    });
-
-    Future<Funds> fundsInfo =
-        InvestorHomeService.fetchInterestedFunds(widget.userData.token, 0);
-    fundsInfo.then((result) {
-      print(result);
-      setState(() {
-        if (result.data.option.length == 0) {
-          displayInterestedFunds(false);
-        } else {
-          displayInterestedFunds(true);
-        }
-      });
-    });
-  }
 }

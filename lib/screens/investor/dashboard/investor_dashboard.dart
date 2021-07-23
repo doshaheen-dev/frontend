@@ -124,9 +124,7 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
         pageChanged(index);
       },
       children: <Widget>[
-        InvestorHome(
-          userData: _userData,
-        ),
+        InvestorHome(),
         Blue(),
         Yellow(),
         Red(),

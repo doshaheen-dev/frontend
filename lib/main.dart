@@ -103,21 +103,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
     Map<String, dynamic> userMap;
     final String userStr = prefs.getString('UserInfo');
-
-    if (userStr != null) {
+    if (userStr != null && userStr != "") {
       userMap = jsonDecode(userStr) as Map<String, dynamic>;
-      UserData userData = UserData(
-          userMap['token'],
-          userMap['firstName'],
-          userMap['middleName'],
-          userMap['lastName'],
-          userMap['email_id'],
-          userMap['mobileNo'],
-          userMap['userType']);
+      UserData userData = UserData.fromNoDecryptionMap(userMap);
       final requestModelInstance = UserData.instance;
       requestModelInstance.token = userData.token;
-
-      print('Hi, ${userData.userType}');
 
       if (userData != null) {
         openHome(userData);

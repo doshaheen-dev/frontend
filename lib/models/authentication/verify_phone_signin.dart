@@ -199,6 +199,17 @@ class UserData {
         CryptUtils.decryption(json['email_id']),
         json['user_type']);
   }
+
+  factory UserData.fromNoDecryptionMap(Map<String, dynamic> json) {
+    return UserData(
+        json['token'],
+        json['first_name'],
+        json['middle_name'],
+        json['last_name'],
+        json['mobile_no'],
+        json['email_id'],
+        json['user_type']);
+  }
   factory UserData.fromJson(Map<String, dynamic> json) {
     return UserData(
         json['token'],
