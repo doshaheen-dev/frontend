@@ -39,55 +39,6 @@ class _KYCDocumentItemsState extends State<KYCDocumentItems> {
     super.didChangeDependencies();
   }
 
-  InkWell _createDocumentCell(OptionsData kycDoc) {
-    return InkWell(
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        onTap: () => widget.selectFile(context, kycDoc.kycId),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 10.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: unselectedGray,
-                    borderRadius: BorderRadius.all(
-                      const Radius.circular(15.0),
-                    ),
-                  ),
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 5, vertical: 20),
-                    child: Center(
-                        child: (widget.uploadedDocuments
-                                    .where((doc) => doc.id == kycDoc.kycId)
-                                    .length >
-                                0)
-                            ? Text('Uploaded',
-                                textAlign: TextAlign.center,
-                                softWrap: true,
-                                style: textNormal(Colors.green, 14))
-                            : Text('Upload ${kycDoc.kycDocName}',
-                                textAlign: TextAlign.center,
-                                softWrap: true,
-                                style: textNormal(Colors.black, 14))),
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-                flex: 1,
-                child: Text(
-                  kycDoc.kycDocDesc,
-                  style: textNormal(textGrey, 14),
-                )),
-          ],
-        ));
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
