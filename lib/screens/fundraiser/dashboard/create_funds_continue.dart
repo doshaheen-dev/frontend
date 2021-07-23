@@ -391,15 +391,6 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                 ))));
   }
 
-  // List<String> infoItemList = [];
-  // List<InvestmentLimitItem> infoItem = [
-  //   InvestmentLimitItem('100K\$-200K\$'),
-  //   InvestmentLimitItem('200k\$ - 300K\$'),
-  //   InvestmentLimitItem('300k\$ - 400K\$'),
-  //   InvestmentLimitItem('400k\$ - 500K\$'),
-  //   InvestmentLimitItem('Above 500K\$'),
-  // ];
-
   InkWell _createCell(
       slotProvider.InvestmentLimitItem slotLineItem, int index) {
     return InkWell(
