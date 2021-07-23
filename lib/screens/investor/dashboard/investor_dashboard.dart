@@ -8,9 +8,7 @@ import 'package:acc/screens/investor/dashboard/investor_home.dart';
 class InvestorDashboard extends StatefulWidget {
   final UserData userData;
 
-  const InvestorDashboard({Key key, UserData data})
-      : userData = data,
-        super(key: key);
+  InvestorDashboard({Key key, this.userData}) : super(key: key);
 
   @override
   _InvestorDashboardState createState() => _InvestorDashboardState();
@@ -126,7 +124,9 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
         pageChanged(index);
       },
       children: <Widget>[
-        InvestorHome(null),
+        InvestorHome(
+          userData: _userData,
+        ),
         Blue(),
         Yellow(),
         Red(),

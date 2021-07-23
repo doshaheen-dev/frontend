@@ -160,82 +160,55 @@ class UserSignIn {
   }
 }
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: false, explicitToJson: true)
 class UserData {
-  final String token;
-  final String firstName;
-  final String middleName;
-  final String lastName;
-  final String mobileNo;
-  final String emailId;
-  final String userType;
+  String token;
+  String firstName;
+  String middleName;
+  String lastName;
+  String mobileNo;
+  String emailId;
+  String userType;
 
-  // UserData(
-  //     {this.token,
-  //     this.firstName,
-  //     this.middleName,
-  //     this.lastName,
-  //     this.mobileNo,
-  //     this.emailId,
-  //     this.userType});
+  UserData._privateConstructor();
+
+  static final UserData _instance = UserData._privateConstructor();
+
+  static UserData get instance => _instance;
 
   UserData(this.token, this.firstName, this.middleName, this.lastName,
       this.mobileNo, this.emailId, this.userType);
 
   Map<String, dynamic> toJson() => {
         "token": this.token,
-        "firstName": this.firstName,
-        "middleName": this.middleName,
-        "lastName": this.lastName,
-        "mobileNo": this.mobileNo,
-        "emaiId": this.emailId,
-        "userType": this.userType
+        "first_name": this.firstName,
+        "middle_name": this.middleName,
+        "last_name": this.lastName,
+        "email_id": this.emailId,
+        "mobile_no": this.mobileNo,
+        "user_type": this.userType,
       };
 
   factory UserData.fromMap(Map<String, dynamic> json) {
     return UserData(
-      json['token'],
-      CryptUtils.decryption(json['firstName']),
-      CryptUtils.decryption(json['middleName']),
-      CryptUtils.decryption(json['lastName']),
-      CryptUtils.decryption(json['mobileNo']),
-      CryptUtils.decryption(json['emaiId']),
-      json['userType'],
-    );
+        json['token'],
+        CryptUtils.decryption(json['first_name']),
+        CryptUtils.decryption(json['middle_name']),
+        CryptUtils.decryption(json['last_name']),
+        CryptUtils.decryption(json['mobile_no']),
+        CryptUtils.decryption(json['email_id']),
+        json['user_type']);
   }
-
   factory UserData.fromJson(Map<String, dynamic> json) {
     return UserData(
-      json['token'],
-      CryptUtils.decryption(json['first_name']),
-      CryptUtils.decryption(json['middle_name']),
-      CryptUtils.decryption(json['last_name']),
-      CryptUtils.decryption(json['mobile_no']),
-      CryptUtils.decryption(json['email_id']),
-      json['user_type'],
-    );
+        json['token'],
+        CryptUtils.decryption(json['first_name']),
+        CryptUtils.decryption(json['middle_name']),
+        CryptUtils.decryption(json['last_name']),
+        CryptUtils.decryption(json['mobile_no']),
+        CryptUtils.decryption(json['email_id']),
+        json['user_type']);
   }
-  static UserData from(Map valueMap) {
-    return UserData(
-      valueMap['token'],
-      CryptUtils.decryption(valueMap['first_name']),
-      CryptUtils.decryption(valueMap['middle_name']),
-      CryptUtils.decryption(valueMap['last_name']),
-      CryptUtils.decryption(valueMap['mobile_no']),
-      CryptUtils.decryption(valueMap['email_id']),
-      valueMap['user_type'],
-    );
-  }
-
-  // UserData.fromJson(Map<String, dynamic> json) {
-  //   token = json['token'];
-  //   userType = json['user_type'];
-  //   firstName = CryptUtils.decryption(json['first_name']);
-  //   middleName = CryptUtils.decryption(json['middleName']);
-  //   lastName = CryptUtils.decryption(json['last_name']);
-  //   mobileNo = CryptUtils.decryption(json['mobile_no']);
-  //   emailId = CryptUtils.decryption(json['email_id']);
-  // }
 }
 
 @JsonSerializable(nullable: false)

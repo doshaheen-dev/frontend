@@ -190,7 +190,9 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
       Navigator.of(context).pushAndRemoveUntil(
           PageRouteBuilder(
               pageBuilder: (context, animation, anotherAnimation) {
-                return InvestorDashboard();
+                return InvestorDashboard(
+                  userData: data,
+                );
               },
               transitionDuration: Duration(milliseconds: 2000),
               transitionsBuilder:
