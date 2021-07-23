@@ -3,6 +3,7 @@ import 'package:acc/providers/kyc_docs_provider.dart';
 import 'package:acc/screens/fundraiser/dashboard/create_funds_continue.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/text_style.dart';
+import 'package:acc/widgets/document_cell.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
@@ -48,7 +49,8 @@ class _KYCDocumentItemsState extends State<KYCDocumentItems> {
             Expanded(
               flex: 2,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 10.0),
                 child: Container(
                   decoration: BoxDecoration(
                     color: unselectedGray,
@@ -119,6 +121,11 @@ class _KYCDocumentItemsState extends State<KYCDocumentItems> {
                             margin: EdgeInsets.only(bottom: 5.0, right: 15),
                             child: ListView.builder(
                               itemBuilder: (ctx, index) {
+                                // return DocumentCell(
+                                //   widget.uploadedDocuments,
+                                //   docData.documents[index],
+                                //   widget.selectFile,
+                                // );
                                 return _createDocumentCell(
                                     docData.documents[index]);
                               },

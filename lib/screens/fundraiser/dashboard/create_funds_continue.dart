@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:acc/models/upload/upload_document.dart';
-import 'package:acc/providers/kyc_docs_provider.dart';
+import 'package:acc/providers/fund_slot_provider.dart' as slotProvider;
 import 'package:acc/screens/fundraiser/dashboard/success_fund_submit.dart';
 import 'package:acc/services/upload_document_service.dart';
 import 'package:acc/utilites/text_style.dart';
@@ -15,8 +15,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/kyc/kyc_documents.dart';
-
 class CreateFundsContinue extends StatefulWidget {
   @override
   _CreateFundsContinueState createState() => _CreateFundsContinueState();
@@ -28,6 +26,23 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
   var progress;
   bool _isTermsCheck = false;
   List<DocumentInfo> _uploadedDocuments = [];
+  var _isInit = true;
+
+  Future _fundSlots;
+  Future<void> _fetchFundSlots(BuildContext context) async {
+    await Provider.of<slotProvider.FundSlots>(context, listen: false)
+        .fetchAndSetSlots();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {});
+      _fundSlots = _fetchFundSlots(context);
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
 
   @override
   void dispose() {
@@ -84,19 +99,55 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                                     height: 10,
                                   ),
                                   Container(
-                                    child: GridView.count(
-                                        crossAxisCount: 2,
-                                        crossAxisSpacing: 10.0,
-                                        mainAxisSpacing: 10.0,
-                                        shrinkWrap: true,
-                                        childAspectRatio:
-                                            (MediaQuery.of(context).size.width /
-                                                2 /
-                                                65),
-                                        children: List.generate(infoItem.length,
-                                            (index) {
-                                          return _createCell(index);
-                                        })),
+                                    child: FutureBuilder(
+                                      future: _fundSlots,
+                                      builder: (ctx, dataSnapshot) {
+                                        if (dataSnapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return Center(
+                                              child: CircularProgressIndicator(
+                                            backgroundColor: Colors.orange,
+                                            valueColor:
+                                                new AlwaysStoppedAnimation<
+                                                    Color>(Colors.amber),
+                                          ));
+                                        } else {
+                                          if (dataSnapshot.error != null) {
+                                            return Center(
+                                                child:
+                                                    Text("An error occurred!"));
+                                          } else {
+                                            return Consumer<
+                                                slotProvider.FundSlots>(
+                                              builder: (ctx, slotData, child) =>
+                                                  GridView.count(
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                crossAxisCount: 2,
+                                                crossAxisSpacing: 10.0,
+                                                mainAxisSpacing: 10.0,
+                                                shrinkWrap: true,
+                                                childAspectRatio:
+                                                    (MediaQuery.of(context)
+                                                            .size
+                                                            .width /
+                                                        2 /
+                                                        65),
+                                                children: List.generate(
+                                                  slotData.slotLineItems.length,
+                                                  (index) {
+                                                    return _createCell(
+                                                        slotData.slotLineItems[
+                                                            index],
+                                                        index);
+                                                  },
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      },
+                                    ),
                                   ),
 
                                   //Fund  General Partner / Managing Partner (GP)
@@ -120,9 +171,9 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                                         "Upload Fund Brand Image",
                                         "JPEG, PNG, JPG."),
                                   ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
+                                  // SizedBox(
+                                  //   height: 10,
+                                  // ),
                                   Row(
                                     children: [
                                       Text(
@@ -340,89 +391,93 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                 ))));
   }
 
-  List<String> infoItemList = [];
-  List<InvestmentLimitItem> infoItem = [
-    InvestmentLimitItem('100K\$-200K\$'),
-    InvestmentLimitItem('200k\$ - 300K\$'),
-    InvestmentLimitItem('300k\$ - 400K\$'),
-    InvestmentLimitItem('400k\$ - 500K\$'),
-    InvestmentLimitItem('Above 500K\$'),
-  ];
+  // List<String> infoItemList = [];
+  // List<InvestmentLimitItem> infoItem = [
+  //   InvestmentLimitItem('100K\$-200K\$'),
+  //   InvestmentLimitItem('200k\$ - 300K\$'),
+  //   InvestmentLimitItem('300k\$ - 400K\$'),
+  //   InvestmentLimitItem('400k\$ - 500K\$'),
+  //   InvestmentLimitItem('Above 500K\$'),
+  // ];
 
-  InkWell _createCell(int _index) {
+  InkWell _createCell(
+      slotProvider.InvestmentLimitItem slotLineItem, int index) {
     return InkWell(
       highlightColor: Colors.transparent,
       onTap: () {
         setState(() {
-          selectedIndex = _index;
+          selectedIndex = index;
         });
       },
       child: Container(
         width: 10,
         height: 30,
         decoration: BoxDecoration(
-          color: selectedIndex == _index ? selectedOrange : unselectedGray,
+          color: selectedIndex == index ? selectedOrange : unselectedGray,
           borderRadius: BorderRadius.all(
             const Radius.circular(15.0),
           ),
         ),
         child: Center(
-            child: Text(infoItem[_index].header,
+            child: Text(slotLineItem.header,
                 style: textNormal(
-                    selectedIndex == _index ? Colors.white : Colors.black,
-                    14))),
+                    selectedIndex == index ? Colors.white : Colors.black, 14))),
       ),
     );
   }
 
-  InkWell _createDocumentUI(
+  Widget _createDocumentUI(
     BuildContext ctx,
     String labelText,
     String description,
   ) {
-    return InkWell(
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        onTap: () => _selectFile(context, 0),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  // margin: EdgeInsets.only(bottom: 10.0, right: 10),
-                  // width: 20,
-                  // height: 45,
-                  decoration: BoxDecoration(
-                    color: unselectedGray,
-                    borderRadius: BorderRadius.all(
-                      const Radius.circular(15.0),
+    return ProgressHUD(
+      child: Builder(
+        builder: (context) => InkWell(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onTap: () => _selectFile(context, 0),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      // margin: EdgeInsets.only(bottom: 10.0, right: 10),
+                      // width: 20,
+                      // height: 45,
+                      decoration: BoxDecoration(
+                        color: unselectedGray,
+                        borderRadius: BorderRadius.all(
+                          const Radius.circular(15.0),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 20),
+                        child: Center(
+                            child: (_uploadedDocuments
+                                        .indexWhere((doc) => doc.id == 0) >=
+                                    0)
+                                ? Text('Uploaded',
+                                    style: textNormal(Colors.green, 14))
+                                : Text(labelText,
+                                    style: textNormal(Colors.black, 14))),
+                      ),
                     ),
                   ),
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 5, vertical: 20),
-                    child: Center(
-                        child: (_uploadedDocuments
-                                    .indexWhere((doc) => doc.id == 0) >=
-                                0)
-                            ? Text('Uploaded',
-                                style: textNormal(Colors.green, 14))
-                            : Text(labelText,
-                                style: textNormal(Colors.black, 14))),
-                  ),
                 ),
-              ),
-            ),
-            Expanded(
-                flex: 1,
-                child: Text(
-                  description,
-                  style: textNormal(textGrey, 14),
-                )),
-          ],
-        ));
+                Expanded(
+                    flex: 1,
+                    child: Text(
+                      description,
+                      style: textNormal(textGrey, 14),
+                    )),
+              ],
+            )),
+      ),
+    );
   }
 
   BoxDecoration customDecoration() {
