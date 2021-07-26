@@ -324,6 +324,13 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                                   context, "Please enter the website link.");
                               return;
                             }
+                            bool _validURL =
+                                Uri.parse(_websiteController.text).isAbsolute;
+                            if (!_validURL) {
+                              showSnackBar(context,
+                                  "Please enter a valid website link.");
+                              return;
+                            }
                             FocusScope.of(context).requestFocus(FocusNode());
                             final requestModelInstance =
                                 AddFundRequestModel.instance;

@@ -276,7 +276,7 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                                                 .documents;
                                         print('DocData Len: ${docData.length}');
                                         var documentsMsg = '';
-                                        docData.forEach((option) {
+                                        docData.reversed.forEach((option) {
                                           if (_uploadedDocuments
                                               .indexWhere((doc) =>
                                                   doc.id == option.kycId)

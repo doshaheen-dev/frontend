@@ -1,3 +1,4 @@
+import 'package:acc/providers/fund_provider.dart';
 import 'package:acc/screens/fundraiser/dashboard/add_new_funds.dart';
 import 'package:acc/screens/fundraiser/dashboard/fundraiser_fund_detail.dart';
 import 'package:acc/utilites/hex_color.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/app_strings.dart';
 import 'package:acc/utilites/text_style.dart';
+import 'package:provider/provider.dart';
 
 class FundraiserHome extends StatefulWidget {
   FundraiserHome({Key key}) : super(key: key);
@@ -16,10 +18,19 @@ class FundraiserHome extends StatefulWidget {
 bool _fundsAvailable = false;
 
 class _FundraiserHomeState extends State<FundraiserHome> {
-  List<SubmittedFunds> fundsList = getSubmittedFundsList();
+  List<SubmittedFunds> fundsList = []; // = getSubmittedFundsList();
+
+  @override
+  void initState() {
+    final fundPvdr = Provider.of<FundProvider>(context, listen: false);
+    fundPvdr.fetchAndSetFunds();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final fundPvdr = Provider.of<FundProvider>(context);
+    fundsList = fundPvdr.funds;
     if (fundsList.isEmpty) {
       _fundsAvailable = false;
     } else {
@@ -99,11 +110,11 @@ class _FundraiserHomeState extends State<FundraiserHome> {
 
   InkWell _createCell(SubmittedFunds item, int index) {
     MaterialColor iconColor;
-    if (item.type == "Listed") {
+    if (item.type == "open") {
       iconColor = Colors.green;
     } else if (item.type == "Under Scrutiny") {
       iconColor = Colors.blue;
-    } else if (item.type == "Not Listed") {
+    } else if (item.type == "closed") {
       iconColor = Colors.red;
     }
 

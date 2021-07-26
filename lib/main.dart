@@ -3,12 +3,14 @@ import 'dart:convert';
 
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
+import 'package:acc/providers/fund_provider.dart';
 import 'package:acc/providers/fund_slot_provider.dart';
 import 'package:acc/providers/investor_home_provider.dart';
 import 'package:acc/providers/kyc_docs_provider.dart';
 import 'package:acc/providers/product_type_provider.dart';
 import 'package:acc/providers/country_provider.dart';
 import 'package:acc/providers/city_provider.dart';
+import 'package:acc/screens/fundraiser/dashboard/add_new_funds.dart';
 import 'package:acc/screens/fundraiser/dashboard/fundraiser_dashboard.dart';
 import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
 import 'package:acc/utilites/app_colors.dart';
@@ -63,6 +65,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (ctx) => KYCDocuments(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => FundProvider(),
         ),
       ],
       child: MaterialApp(
