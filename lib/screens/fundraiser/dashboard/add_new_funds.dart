@@ -1,3 +1,4 @@
+import 'package:acc/models/fund/add_fund_request.dart';
 import 'package:acc/screens/fundraiser/dashboard/create_new_funds.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:flutter/cupertino.dart';
@@ -120,6 +121,8 @@ class _AddNewFundsState extends State<AddNewFunds> {
       onTap: () {
         setState(() {
           selectedIndex = index;
+          final requestModelInstance = AddFundRequestModel.instance;
+          requestModelInstance.productId = item.id;
           openCreateNewFunds();
         });
       },

@@ -1,11 +1,16 @@
 import 'dart:io';
 
+import 'package:acc/models/fund/add_fund_request.dart';
+import 'package:acc/models/fund/add_fund_response.dart';
 import 'package:acc/models/upload/upload_document.dart';
 import 'package:acc/providers/fund_slot_provider.dart' as slotProvider;
+import 'package:acc/providers/kyc_docs_provider.dart';
 import 'package:acc/screens/fundraiser/dashboard/success_fund_submit.dart';
+import 'package:acc/services/fund_service.dart';
 import 'package:acc/services/upload_document_service.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
+import 'package:acc/utils/code_utils.dart';
 import 'package:acc/widgets/kyc_document_items.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -22,11 +27,12 @@ class CreateFundsContinue extends StatefulWidget {
 
 class _CreateFundsContinueState extends State<CreateFundsContinue> {
   int selectedIndex;
-  final _fundNameController = TextEditingController();
+  final _fundSponsorNameController = TextEditingController();
   var progress;
   bool _isTermsCheck = false;
   List<DocumentInfo> _uploadedDocuments = [];
   var _isInit = true;
+  var slotId = 0;
 
   Future _fundSlots;
   Future<void> _fetchFundSlots(BuildContext context) async {
@@ -46,7 +52,7 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
 
   @override
   void dispose() {
-    _fundNameController.dispose();
+    _fundSponsorNameController.dispose();
     super.dispose();
   }
 
@@ -158,7 +164,7 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                                     child: inputTextField(
                                         "Fund  General Partner / Managing Partner (GP)",
                                         "Please enter general partner here",
-                                        _fundNameController),
+                                        _fundSponsorNameController),
                                   ),
                                   KYCDocumentItems(
                                       _uploadedDocuments, _selectFile),
@@ -252,10 +258,64 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                                       bottom: 20,
                                     ),
                                     child: ElevatedButton(
-                                      onPressed: () {
+                                      onPressed: () async {
+                                        if (slotId <= 0) {
+                                          showSnackBar(context,
+                                              "Please select minimum investment.");
+                                          return;
+                                        }
+                                        if (_fundSponsorNameController
+                                            .text.isEmpty) {
+                                          showSnackBar(context,
+                                              "Please enter the partner name.");
+                                          return;
+                                        }
+                                        final docData =
+                                            Provider.of<KYCDocuments>(context,
+                                                    listen: false)
+                                                .documents;
+                                        print('DocData Len: ${docData.length}');
+                                        var documentsMsg = '';
+                                        docData.forEach((option) {
+                                          if (_uploadedDocuments
+                                              .indexWhere((doc) =>
+                                                  doc.id == option.kycId)
+                                              .isNegative) {
+                                            documentsMsg =
+                                                'Please upload the ${option.kycDocName}';
+                                          }
+                                        });
+                                        if (documentsMsg.isNotEmpty) {
+                                          showSnackBar(context, documentsMsg);
+                                          return;
+                                        }
+                                        if (_uploadedDocuments
+                                            .indexWhere((doc) => doc.id == 0)
+                                            .isNegative) {
+                                          showSnackBar(context,
+                                              "Please upload the fund brand image.");
+                                          return;
+                                        }
+                                        if (!_isTermsCheck) {
+                                          showSnackBar(context,
+                                              "Please accept the Terms and Privacy Policy.");
+                                          return;
+                                        }
+                                        progress = ProgressHUD.of(context);
+                                        progress?.showWithText(
+                                            'Uploading Fund Details...');
                                         FocusScope.of(context)
                                             .requestFocus(FocusNode());
-                                        openSuccesssFundSubmitted();
+                                        final fundLogo = _uploadedDocuments
+                                            .where((doc) => doc.id == 0)
+                                            .first;
+                                        uploadFundTxnDetails(
+                                          _fundSponsorNameController.text
+                                              .trim(),
+                                          fundLogo.uploadedKey,
+                                          CodeUtils.currentDateWithFormat(
+                                              "yyyy-MM-dd HH:mm:ss"),
+                                        );
                                       },
                                       style: ElevatedButton.styleFrom(
                                           padding: EdgeInsets.all(0.0),
@@ -304,17 +364,23 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
       BuildContext context, int kycDocId, File file, String fileName) async {
     progress = ProgressHUD.of(context);
     progress?.showWithText('Uploading File...');
-    if (file != null) {
-      UploadDocument doc =
-          await UploadDocumentService.uploadDocument(file, fileName);
-      if (doc != null) {
-        _updateUploadedDocs(DocumentInfo(kycDocId, doc.data.fundKYCDocPath));
+    try {
+      if (file != null) {
+        UploadDocument doc =
+            await UploadDocumentService.uploadDocument(file, fileName);
+        if (doc != null) {
+          _updateUploadedDocs(DocumentInfo(kycDocId, doc.data.fundKYCDocPath));
+        }
+      } else {
+        showSnackBar(context, 'Something went wrong.');
       }
-    } else {
+      progress.dismiss();
+      setState(() {});
+    } catch (e) {
       showSnackBar(context, 'Something went wrong.');
+      progress.dismiss();
+      setState(() {});
     }
-    progress.dismiss();
-    setState(() {});
   }
 
   _openDialogToUploadFile(
@@ -397,6 +463,7 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
       highlightColor: Colors.transparent,
       onTap: () {
         setState(() {
+          slotId = slotLineItem.id;
           selectedIndex = index;
         });
       },
@@ -482,6 +549,37 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
         )
       ],
     );
+  }
+
+  void uploadFundTxnDetails(
+    String sponsor,
+    String logoPath,
+    String timestamp,
+  ) async {
+    try {
+      final requestModelInstance = AddFundRequestModel.instance;
+      requestModelInstance.slotId = slotId;
+      requestModelInstance.fundSponsorName = sponsor;
+      requestModelInstance.fundLogo = logoPath;
+      requestModelInstance.termsAgreedTimestamp = timestamp;
+      requestModelInstance.fundKycDocuments = [];
+      _uploadedDocuments.forEach((item) {
+        requestModelInstance.fundKycDocuments
+            .add(DocumentsData(item.id, item.uploadedKey));
+      });
+      AddFundResponse response =
+          await FundService.addFund(requestModelInstance);
+      progress.dismiss();
+      if (response.type == 'success') {
+        requestModelInstance.clear();
+        openSuccesssFundSubmitted();
+      } else {
+        showSnackBar(context, "Something went wrong");
+      }
+    } catch (e) {
+      progress.dismiss();
+      showSnackBar(context, "Something went wrong");
+    }
   }
 
   void openSuccesssFundSubmitted() {

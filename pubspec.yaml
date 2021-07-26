@@ -53,7 +53,8 @@ dependencies:
   path_provider: any
   dropdown_search: ^0.6.3
   file_picker: ^3.0.3
-  webview_flutter: ^0.3.3    
+  webview_flutter: ^0.3.3
+  intl: ^0.17.0  
 
 dev_dependencies:
   flutter_test:

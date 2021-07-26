@@ -1,7 +1,9 @@
 import 'package:acc/constants/font_family.dart';
+import 'package:acc/models/fund/add_fund_request.dart';
 import 'package:acc/screens/fundraiser/dashboard/create_funds_continue.dart';
 import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utilites/text_style.dart';
+import 'package:acc/utilites/ui_widgets.dart';
 import 'package:acc/widgets/toggle_switch.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,18 +23,20 @@ class CreateNewFunds extends StatefulWidget {
 
 class _CreateNewFundsState extends State<CreateNewFunds> {
   final _fundNameController = TextEditingController();
-  final _lastnameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _addressController = TextEditingController();
+  final _fundRegulatorController = TextEditingController();
+  final _objectiveController = TextEditingController();
+  final _existingFundsController = TextEditingController();
+  final _newFundsController = TextEditingController();
+  final _websiteController = TextEditingController();
 
   var progress;
   Future _countries;
   Future _cities;
 
   var _isInit = true;
+  var _isFundRegulated = true;
 
   var country = '';
-  var countryId = 0;
   var cityId = 0;
   var selectedCity;
 
@@ -59,9 +63,11 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
   @override
   void dispose() {
     _fundNameController.dispose();
-    _lastnameController.dispose();
-    _emailController.dispose();
-    _addressController.dispose();
+    _fundRegulatorController.dispose();
+    _objectiveController.dispose();
+    _existingFundsController.dispose();
+    _newFundsController.dispose();
+    _websiteController.dispose();
     super.dispose();
   }
 
@@ -203,6 +209,11 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                                       labels: ['YES', 'No'],
                                       onToggle: (index) {
                                         print('switched to: $index');
+                                        if (index == 0) {
+                                          _isFundRegulated = true;
+                                        } else {
+                                          _isFundRegulated = false;
+                                        }
                                       },
                                     )),
                               ],
@@ -215,7 +226,7 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                               child: inputTextField(
                                   "Fund Regulator (if regulated)",
                                   "Please enter the name of fund regulator here",
-                                  null),
+                                  _fundRegulatorController),
                             ),
 
                             //Investment Objective
@@ -227,7 +238,7 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                               child: multiLineInputTextField(
                                   "Investment Objective",
                                   "Please provide a brief description of the fund here",
-                                  null),
+                                  _objectiveController),
                             ),
 
                             //Funds currently managed by the sponsors
@@ -238,7 +249,7 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                               child: inputTextField(
                                   "Funds currently managed by the sponsors",
                                   "Please enter fund value here in \$",
-                                  null),
+                                  _existingFundsController),
                             ),
 
                             //New Fund for which funds are being raised
@@ -249,15 +260,17 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                               child: inputTextField(
                                   "New Fund for which funds are being raised ",
                                   "Please enter fund value here in \$",
-                                  null),
+                                  _newFundsController),
                             ),
                             //Funds currently managed by the sponsors
                             Container(
                               margin:
                                   const EdgeInsets.only(top: 5.0, bottom: 20),
                               decoration: customDecoration(),
-                              child: inputTextField("Website Link",
-                                  "Please enter website link here", null),
+                              child: inputTextField(
+                                  "Website Link",
+                                  "Please enter website link here",
+                                  _websiteController),
                             ),
                           ],
                         ),
@@ -271,7 +284,66 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                           left: 25.0, bottom: 20, right: 25.0),
                       child: ElevatedButton(
                           onPressed: () {
+                            if (country.isEmpty) {
+                              showSnackBar(context, "Please select a country.");
+                              return;
+                            }
+                            if (_fundNameController.text.isEmpty) {
+                              showSnackBar(
+                                  context, "Please enter the fund name.");
+                              return;
+                            }
+                            if (cityId <= 0) {
+                              showSnackBar(context, "Please select a city.");
+                              return;
+                            }
+                            if (_isFundRegulated) {
+                              if (_fundRegulatorController.text.isEmpty) {
+                                showSnackBar(context,
+                                    "Please enter the regulator name.");
+                                return;
+                              }
+                            }
+                            if (_objectiveController.text.isEmpty) {
+                              showSnackBar(context,
+                                  "Please enter the investment objective.");
+                              return;
+                            }
+                            if (_existingFundsController.text.isEmpty) {
+                              showSnackBar(context,
+                                  "Please enter the existing fund value.");
+                              return;
+                            }
+                            if (_newFundsController.text.isEmpty) {
+                              showSnackBar(
+                                  context, "Please enter the new fund value.");
+                              return;
+                            }
+                            if (_websiteController.text.isEmpty) {
+                              showSnackBar(
+                                  context, "Please enter the website link.");
+                              return;
+                            }
                             FocusScope.of(context).requestFocus(FocusNode());
+                            final requestModelInstance =
+                                AddFundRequestModel.instance;
+                            requestModelInstance.countryCode = country;
+                            requestModelInstance.fundName =
+                                _fundNameController.text.trim();
+                            requestModelInstance.cityId = cityId;
+                            requestModelInstance.fundRegulated =
+                                _isFundRegulated;
+                            requestModelInstance.regulatorName =
+                                _fundRegulatorController.text.trim();
+                            requestModelInstance.fundInvstmtObj =
+                                _objectiveController.text.trim();
+                            requestModelInstance.fundExistVal =
+                                int.parse(_existingFundsController.text.trim());
+                            requestModelInstance.fundNewVal =
+                                int.parse(_newFundsController.text.trim());
+                            requestModelInstance.fundWebsite =
+                                _websiteController.text.trim();
+
                             openCreateNewFundsContinue();
                           },
                           style: ElevatedButton.styleFrom(
@@ -387,6 +459,7 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
         setState(() {
           if (label == "Fund  Location") {
             country = map['value'];
+            cityId = 0;
             _cities = _fetchCities(context, country);
           } else {
             cityId = map['id'];
