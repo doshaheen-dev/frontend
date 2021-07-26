@@ -44,11 +44,15 @@ class _InvestorProfileState extends State<InvestorProfile> {
                 margin: const EdgeInsets.only(
                     top: 150.0, left: 25.0, bottom: 20, right: 25.0),
                 child: ElevatedButton(
-                    onPressed: () async {
-                      final prefs = await SharedPreferences.getInstance();
-                      prefs.setString('UserInfo', '');
-                      openOnBoarding();
+                    onPressed: () {
+                      openLogoutDialog(
+                          context, "Are you sure you want to logout?");
                     },
+                    // onPressed: () async {
+                    //   final prefs = await SharedPreferences.getInstance();
+                    //   prefs.setString('UserInfo', '');
+                    //   openOnBoarding();
+                    // },
                     style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.all(0.0),
                         shape: RoundedRectangleBorder(
@@ -64,5 +68,42 @@ class _InvestorProfileState extends State<InvestorProfile> {
                           child: Text("Logout",
                               style: textNormal(Colors.white, 16))),
                     )))));
+  }
+
+  openLogoutDialog(BuildContext context, String message) {
+    // set up the buttons
+    Widget positiveButton = TextButton(
+        onPressed: () async {
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setString('UserInfo', '');
+          openOnBoarding();
+        },
+        child: Text(
+          "Yes",
+          style: textNormal16(Color(0xff00A699)),
+        ));
+
+    Widget negativeButton = TextButton(
+        onPressed: () {
+          Navigator.of(context, rootNavigator: true).pop();
+        },
+        child: Text(
+          "No",
+          style: textNormal16(Color(0xff00A699)),
+        ));
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: Text(message),
+      actions: [positiveButton, negativeButton],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

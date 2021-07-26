@@ -1,4 +1,6 @@
 import 'package:acc/constants/font_family.dart';
+import 'package:acc/providers/investor_home_provider.dart';
+import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/common/onboarding.dart';
@@ -76,7 +78,7 @@ class _ThankYouInvestorState extends State<ThankYouInvestor> {
                   onTap: () {
                     // on click
 
-                    openOnBoarding();
+                    openDashboard();
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width,
@@ -84,7 +86,7 @@ class _ThankYouInvestorState extends State<ThankYouInvestor> {
                     decoration: appColorButton(),
                     child: Center(
                         child: Text(
-                      "Back to Home",
+                      "Open Dashboard",
                       style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
@@ -96,12 +98,12 @@ class _ThankYouInvestorState extends State<ThankYouInvestor> {
             ]))));
   }
 
-  void openOnBoarding() {
+  void openDashboard() {
     Navigator.pushAndRemoveUntil(
         context,
         PageRouteBuilder(
             pageBuilder: (context, animation, anotherAnimation) {
-              return OnBoarding();
+              return InvestorDashboard();
             },
             transitionDuration: Duration(milliseconds: 2000),
             transitionsBuilder: (context, animation, anotherAnimation, child) {

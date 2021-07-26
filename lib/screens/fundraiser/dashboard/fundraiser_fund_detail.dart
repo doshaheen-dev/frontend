@@ -1,10 +1,17 @@
+import 'dart:io';
+
+import 'package:acc/models/upload/upload_document.dart';
+import 'package:acc/screens/fundraiser/dashboard/create_funds_continue.dart';
 import 'package:acc/screens/fundraiser/dashboard/fundraiser_home.dart';
-import 'package:acc/screens/investor/dashboard/pdf_viewer.dart';
+import 'package:acc/services/upload_document_service.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utilites/text_style.dart';
+import 'package:acc/utilites/ui_widgets.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 
 class FundraiserFundDetail extends StatefulWidget {
   final SubmittedFunds _recommendation;
@@ -17,6 +24,9 @@ class FundraiserFundDetail extends StatefulWidget {
 }
 
 class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
+  final _newFundValueController = TextEditingController();
+  var progress;
+  List<DocumentInfo> _uploadedDocuments = [];
   SubmittedFunds _likedFunds;
   bool _isFundOverview = false;
   bool _isFundDeck = false;
@@ -25,10 +35,12 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
   var _selectedFundDeckTextColor = Colors.black;
   var _selectedTextColor = Colors.black;
   String _pefFilePath = "";
+  bool _isButtonDisabled = false;
 
   @override
   void initState() {
     _likedFunds = widget._recommendation;
+    disableElevatedButton();
     super.initState();
   }
 
@@ -62,6 +74,18 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
         _selectedFundDeckTextColor = Colors.white;
       });
     }
+  }
+
+  void _changeButtonStatus() {
+    setState(() {
+      _isButtonDisabled = true;
+    });
+  }
+
+  disableElevatedButton() {
+    setState(() {
+      _isButtonDisabled = false;
+    });
   }
 
   @override
@@ -141,22 +165,25 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
                       margin: const EdgeInsets.only(
                           top: 5.0, left: 5.0, bottom: 20, right: 5.0),
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed:
+                            !_isButtonDisabled ? null : _performSubmission,
                         style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.all(0.0),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18))),
                         child: Ink(
                           decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                  colors: [kDarkOrange, kLightOrange]),
+                              gradient: !_isButtonDisabled
+                                  ? LinearGradient(
+                                      colors: [textLightGrey, textLightGrey])
+                                  : LinearGradient(
+                                      colors: [kDarkOrange, kLightOrange]),
                               borderRadius: BorderRadius.circular(15)),
                           child: Container(
                             width: MediaQuery.of(context).size.width,
                             height: 50,
                             alignment: Alignment.center,
-                            child: Text("Edit and Submit",
-                                style: textWhiteBold16()),
+                            child: Text("Submit", style: textWhiteBold16()),
                           ),
                         ),
                       ))
@@ -227,11 +254,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
 
   Widget _createFundBody() {
     return Column(
-      children: [
-        _createFundOverview(),
-        _createDocumentUpload(),
-        _createRemarks()
-      ],
+      children: [_createFundOverview(), _addNewFundValue(), _uploadFundDeck()],
     );
   }
 
@@ -343,185 +366,199 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
     ]);
   }
 
-  Widget _createDocumentUpload() {
-    return Column(children: [
-      Card(
-        color: _changeFundDeckBgColor,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        child: Container(
-          alignment: Alignment.center,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Text("Documents Uploaded",
-                      textAlign: TextAlign.start,
-                      style: textBold16(_selectedFundDeckTextColor))),
-              Spacer(),
-              IconButton(
-                  onPressed: () {},
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  icon: Image.asset(
-                    "assets/images/icon_down.png",
-                    color: _selectedFundDeckTextColor,
-                  ))
-            ],
-          ),
-        ),
-      ),
-      Visibility(
-          visible: _isFundDeck,
-          child: Container(
-              child: Card(
-            color: unselectedGray,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            child: Container(
-                alignment: Alignment.center,
-                child: Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Column(children: [
-                      Row(
-                        children: [
-                          Expanded(
-                              flex: 1,
-                              child: Image.asset(
-                                "assets/images/UserProfile.png",
-                                height: 150,
-                                width: 50,
-                                fit: BoxFit.fill,
-                              )),
-                          Expanded(flex: 1, child: Text("Image/PDF Name"))
-                        ],
-                      ),
-                      Container(
-                        alignment: Alignment.centerRight,
-                        margin: const EdgeInsets.only(
-                            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // if image
-                            //else if pdf open pdf view
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        PDFViewer(pdf: _pefFilePath)));
-                          },
-                          style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(0.0),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18))),
-                          child: Ink(
-                            decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                    colors: [kDarkOrange, kLightOrange]),
-                                borderRadius: BorderRadius.circular(15)),
-                            child: Container(
-                                width: 100,
-                                height: 50,
-                                alignment: Alignment.center,
-                                child:
-                                    Text("View", style: textWhiteNormal(16.0))),
-                          ),
-                        ),
-                      ),
-                    ]))),
-          )))
-    ]);
+  TextField inputTextField(text, hint, _controller) {
+    return TextField(
+        onChanged: (text) {
+          // if value is not empty enable the button
+          if (text.length != 0) {
+            print("true");
+            _changeButtonStatus();
+          } else {
+            print("false");
+            disableElevatedButton();
+          }
+        },
+        style: textBlackNormal16(),
+        controller: _controller,
+        decoration: new InputDecoration(
+            contentPadding: EdgeInsets.all(10.0),
+            labelText: text,
+            hintText: hint,
+            hintMaxLines: 2,
+            labelStyle: new TextStyle(color: Colors.grey),
+            border: InputBorder.none,
+            focusedBorder: UnderlineInputBorder(
+                borderSide:
+                    const BorderSide(color: Colors.transparent, width: 2.0),
+                borderRadius: BorderRadius.all(
+                  const Radius.circular(10.0),
+                ))));
   }
 
-  Widget _createRemarks() {
-    return Column(children: [
-      Card(
-        color: _changeFundDeckBgColor,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        child: Container(
-          alignment: Alignment.center,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Text("Remarks (By Amicorp)",
-                      textAlign: TextAlign.start,
-                      style: textBold16(_selectedFundDeckTextColor))),
-              Spacer(),
-              IconButton(
-                  onPressed: () {},
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  icon: Image.asset(
-                    "assets/images/icon_down.png",
-                    color: _selectedFundDeckTextColor,
-                  ))
-            ],
-          ),
-        ),
+  BoxDecoration customDecoration() {
+    return BoxDecoration(
+      color: unselectedGray,
+      borderRadius: BorderRadius.circular(10.0),
+    );
+  }
+
+  Widget _addNewFundValue() {
+    //Fund Name
+    return Container(
+      margin: const EdgeInsets.only(top: 5.0, bottom: 10),
+      decoration: BoxDecoration(
+        color: unselectedGray,
+        borderRadius: BorderRadius.circular(10.0),
       ),
-      Visibility(
-          visible: _isFundDeck,
-          child: Container(
-              child: Card(
-            color: unselectedGray,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            child: Container(
-                alignment: Alignment.center,
-                child: Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Column(children: [
-                      Row(
-                        children: [
-                          Expanded(
-                              flex: 1,
-                              child: Image.asset(
-                                "assets/images/UserProfile.png",
-                                height: 150,
-                                width: 50,
-                                fit: BoxFit.fill,
-                              )),
-                          Expanded(flex: 1, child: Text("Image/PDF Name"))
-                        ],
+      child: inputTextField("New Fund Value",
+          "Please enter new fund value here", _newFundValueController),
+    );
+  }
+
+  Widget _uploadFundDeck() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 10.0, right: 15),
+      child: _createDocumentUI(context, "Upload Fund Deck document",
+          "PDF, JPEG, PNG, JPG, PPT etc."),
+    );
+  }
+
+  Widget _createDocumentUI(
+    BuildContext ctx,
+    String labelText,
+    String description,
+  ) {
+    return ProgressHUD(
+      child: Builder(
+        builder: (context) => InkWell(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onTap: () => {
+                  _selectFile(context, 0),
+                },
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    margin: EdgeInsets.only(right: 10),
+                    decoration: BoxDecoration(
+                      color: unselectedGray,
+                      borderRadius: BorderRadius.all(
+                        const Radius.circular(15.0),
                       ),
-                      Container(
-                        alignment: Alignment.centerRight,
-                        margin: const EdgeInsets.only(
-                            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // if image
-                            //else if pdf open pdf view
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        PDFViewer(pdf: _pefFilePath)));
-                          },
-                          style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(0.0),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18))),
-                          child: Ink(
-                            decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                    colors: [kDarkOrange, kLightOrange]),
-                                borderRadius: BorderRadius.circular(15)),
-                            child: Container(
-                                width: 100,
-                                height: 50,
-                                alignment: Alignment.center,
-                                child:
-                                    Text("View", style: textWhiteNormal(16.0))),
-                          ),
-                        ),
-                      ),
-                    ]))),
-          )))
-    ]);
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Center(
+                          child: (_uploadedDocuments
+                                      .indexWhere((doc) => doc.id == 0) >=
+                                  0)
+                              ? Text('Uploaded',
+                                  textAlign: TextAlign.center,
+                                  style: textNormal(Colors.green, 14))
+                              : Text(labelText,
+                                  textAlign: TextAlign.center,
+                                  style: textNormal(Colors.black, 14))),
+                    ),
+                  ),
+                ),
+                Expanded(
+                    flex: 1,
+                    child: Text(
+                      description,
+                      style: textNormal(textGrey, 14),
+                    )),
+              ],
+            )),
+      ),
+    );
+  }
+
+  Future<void> _selectFile(BuildContext context, int kycDocId) async {
+    FilePickerResult result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      // print('Path: ${result.files.single.path}');
+      // print('Name: ${result.files.single.name}');
+      String fileName = result.files.single.name;
+      File file = File(result.files.single.path);
+      _openDialogToUploadFile(context, kycDocId, file, fileName);
+      // enable button if file is selected
+      _changeButtonStatus();
+    } else {
+      showSnackBar(context, "No file selected.");
+    }
+  }
+
+  _openDialogToUploadFile(
+      BuildContext context, int kycDocId, File file, String fileName) {
+    // set up the buttons
+    Widget positiveButton = TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+          _uploadFile(context, kycDocId, file, fileName);
+        },
+        child: Text(
+          "Ok",
+          style: textNormal16(Color(0xff00A699)),
+        ));
+
+    Widget cancelButton = TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text(
+          "Cancel",
+          style: textNormal16(Color(0xff00A699)),
+        ));
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: Text('Do you want to upload the file?'),
+      actions: [
+        positiveButton,
+        cancelButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  Future<void> _uploadFile(
+      BuildContext context, int kycDocId, File file, String fileName) async {
+    progress = ProgressHUD.of(context);
+    progress?.showWithText('Uploading File...');
+    if (file != null) {
+      UploadDocument doc =
+          await UploadDocumentService.uploadDocument(file, fileName);
+      if (doc != null) {
+        _updateUploadedDocs(DocumentInfo(kycDocId, doc.data.fundKYCDocPath));
+      }
+    } else {
+      showSnackBar(context, 'Something went wrong.');
+    }
+    progress.dismiss();
+    setState(() {});
+  }
+
+  void _updateUploadedDocs(DocumentInfo docInfo) {
+    final docIndex =
+        _uploadedDocuments.indexWhere((doc) => doc.id == docInfo.id);
+    if (docIndex >= 0) {
+      _uploadedDocuments[docIndex] = docInfo;
+      return;
+    }
+    _uploadedDocuments.add(docInfo);
+  }
+
+  _performSubmission() {
+    print("CLICKED");
   }
 }

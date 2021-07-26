@@ -40,29 +40,66 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
     return Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
-            child: Container(
-                margin: const EdgeInsets.only(
-                    top: 150.0, left: 25.0, bottom: 20, right: 25.0),
-                child: ElevatedButton(
-                    onPressed: () async {
-                      final prefs = await SharedPreferences.getInstance();
-                      prefs.setString('UserInfo', '');
-                      openOnBoarding();
-                    },
-                    style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.all(0.0),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18))),
-                    child: Ink(
-                      decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(15)),
-                      child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 60,
-                          alignment: Alignment.center,
-                          child: Text("Logout",
-                              style: textNormal(Colors.white, 16))),
-                    )))));
+          child: Container(
+              margin: const EdgeInsets.only(
+                  top: 150.0, left: 25.0, bottom: 20, right: 25.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  openLogoutDialog(context, "Are you sure you want to logout?");
+                },
+                style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.all(0.0),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18))),
+                child: Ink(
+                  decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(15)),
+                  child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 60,
+                      alignment: Alignment.center,
+                      child:
+                          Text("Logout", style: textNormal(Colors.white, 16))),
+                ),
+              )),
+        ));
+  }
+
+  openLogoutDialog(BuildContext context, String message) {
+    // set up the buttons
+    Widget positiveButton = TextButton(
+        onPressed: () async {
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setString('UserInfo', '');
+          openOnBoarding();
+        },
+        child: Text(
+          "Yes",
+          style: textNormal16(Color(0xff00A699)),
+        ));
+
+    Widget negativeButton = TextButton(
+        onPressed: () {
+          Navigator.of(context, rootNavigator: true).pop();
+        },
+        child: Text(
+          "No",
+          style: textNormal16(Color(0xff00A699)),
+        ));
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: Text(message),
+      actions: [positiveButton, negativeButton],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }
