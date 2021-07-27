@@ -39,13 +39,43 @@ class _FundsDetailHeaderState extends State<FundsDetailHeader> {
             onPressed: () => {Navigator.pop(context)},
           ),
         ),
-        Image(
-          image: widget.likedFunds.fundLogo != ""
-              ? NetworkImage(widget.likedFunds.fundLogo)
-              : AssetImage("assets/images/dummy/investment1.png"),
+
+        Image.network(
+          widget.likedFunds.fundLogo,
           height: 250,
           fit: BoxFit.fill,
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+
+            return Center(
+                child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes
+                        : null));
+            // You can use LinearProgressIndicator or CircularProgressIndicator instead
+          },
+          errorBuilder: (context, error, stackTrace) =>
+              Image.asset("assets/images/dummy/investment1.png"),
         ),
+        // Image(
+        //   image: widget.likedFunds.fundLogo != ""
+        //       ? NetworkImage(widget.likedFunds.fundLogo)
+        //       : AssetImage("assets/images/dummy/investment1.png"),
+        //   height: 250,
+        //   fit: BoxFit.fill,
+        //   loadingBuilder: (context, child, loadingProgress) {
+        //     if (loadingProgress == null) return child;
+        //     return Center(
+        //         child: CircularProgressIndicator(
+        //       backgroundColor: Colors.orange,
+        //       valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
+        //     ));
+        //     // You can use LinearProgressIndicator or CircularProgressIndicator instead
+        //   },
+        //   errorBuilder: (context, error, stackTrace) =>
+        //       Image.asset("assets/images/dummy/investment1.png"),
+        // ),
         SizedBox(
           height: 5,
         ),

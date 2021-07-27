@@ -8,7 +8,7 @@ import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
-import 'package:acc/widgets/fundraiser/fundDetails/createDocumentUpload.dart';
+import 'package:acc/widgets/fundraiser/fundDetails/funds_detail_overview.dart';
 import 'package:acc/widgets/fundraiser/fundDetails/funds_details_header.dart';
 import 'package:acc/widgets/fundraiser/fundDetails/funds_resubmit_header.dart';
 import 'package:file_picker/file_picker.dart';
@@ -41,23 +41,24 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
   var _selectedFundDeckTextColor = Colors.black;
   var _pefFilePath;
 
+  bool isDocumentUploaded = false;
+
   @override
   void initState() {
     _likedFunds = widget._recommendation;
     isResubmit = widget._fundDetailType;
-    disableElevatedButton();
+    _changeButtonStatus();
     super.initState();
   }
 
   void _changeButtonStatus() {
     setState(() {
-      _isButtonDisabled = true;
-    });
-  }
-
-  disableElevatedButton() {
-    setState(() {
-      _isButtonDisabled = false;
+      if (_newFundValueController.text.trim().length != 0 ||
+          isDocumentUploaded) {
+        _isButtonDisabled = true;
+      } else {
+        _isButtonDisabled = false;
+      }
     });
   }
 
@@ -159,98 +160,12 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
         ));
   }
 
-  Widget _createFundHeader() {
-    MaterialColor iconColor;
-    if (_likedFunds.type == "Listed") {
-      iconColor = Colors.green;
-    } else if (_likedFunds.type == "Under Scrutiny") {
-      iconColor = Colors.blue;
-    } else if (_likedFunds.type == "Not Listed") {
-      iconColor = Colors.red;
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: EdgeInsets.only(top: 10, left: 10),
-          child: IconButton(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            icon: Image.asset("assets/images/icon_close.png"),
-            onPressed: () => {Navigator.pop(context)},
-          ),
-        ),
-        Image(
-          image: _likedFunds.fundLogo != ""
-              ? NetworkImage(_likedFunds.fundLogo)
-              : AssetImage("assets/images/dummy/investment1.png"),
-          height: 250,
-          fit: BoxFit.fill,
-        ),
-        SizedBox(
-          height: 5,
-        ),
-        Center(
-            child: Text(
-          _likedFunds.name,
-          style: textBold18(headingBlack),
-        )),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(
-              Icons.circle,
-              color: iconColor,
-              size: 15.0,
-            ),
-            SizedBox(
-              width: 5,
-            ),
-            Text(_likedFunds.type, style: textNormal16(HexColor("#2B2B2B")))
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              "assets/images/map.png",
-              height: 30,
-              width: 30,
-            ),
-            Text(
-              "Pune",
-              // _likedFunds.location,
-              style: textNormal(HexColor("#404040"), 12.0),
-            )
-          ],
-        ),
-        Center(
-          child: Text(
-            // "Minimum Investment : ${_likedFunds.minimumInvestment}",
-            "Minimum Investment : 10000",
-            style: textNormal(HexColor("#404040"), 12.0),
-          ),
-        ),
-        SizedBox(
-          height: 20.0,
-        ),
-        Center(
-            child: Text(
-          _likedFunds.fundInvstmtObj,
-          textAlign: TextAlign.center,
-          style: textNormal(HexColor("#3A3B3F"), 14.0),
-        ))
-      ],
-    );
-  }
-
   Widget _createFundBody() {
     return Container(
       margin: EdgeInsets.only(left: 20.0, right: 20.0),
       child: Column(
         children: [
-          CreateDocumentUpload(_likedFunds),
+          CreateFundOverview(_likedFunds),
           Visibility(visible: !isResubmit, child: _createDocumentUpload()),
           Visibility(visible: !isResubmit, child: _createRemarks()),
           Visibility(visible: isResubmit, child: _addNewFundValue()),
@@ -328,13 +243,14 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
     return TextField(
       onChanged: (text) {
         // if value is not empty enable the button
-        if (text.length != 0) {
-          print("true");
-          _changeButtonStatus();
-        } else {
-          print("false");
-          disableElevatedButton();
-        }
+        // if (text.length != 0) {
+        //   print("true");
+        //   _changeButtonStatus();
+        // } else {
+        //   print("false");
+        //   _changeButtonStatus();
+        // }
+        _changeButtonStatus();
       },
       style: textBlackNormal16(),
       controller: _controller,
@@ -390,6 +306,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onTap: () => {
+                  FocusScope.of(context).requestFocus(FocusNode()),
                   _selectFile(context, 0),
                 },
             child: Row(
@@ -439,8 +356,6 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
       String fileName = result.files.single.name;
       File file = File(result.files.single.path);
       _openDialogToUploadFile(context, kycDocId, file, fileName);
-      // enable button if file is selected
-      _changeButtonStatus();
     } else {
       showSnackBar(context, "No file selected.");
     }
@@ -456,7 +371,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
         },
         child: Text(
           "Ok",
-          style: textNormal16(Color(0xff00A699)),
+          style: textNormal16(selectedOrange),
         ));
 
     Widget cancelButton = TextButton(
@@ -465,7 +380,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
         },
         child: Text(
           "Cancel",
-          style: textNormal16(Color(0xff00A699)),
+          style: textNormal16(selectedOrange),
         ));
 
     // set up the AlertDialog
@@ -512,6 +427,9 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
       return;
     }
     _uploadedDocuments.add(docInfo);
+    isDocumentUploaded = true;
+    // enable button if file is selected
+    _changeButtonStatus();
   }
 
   _performSubmission() {
