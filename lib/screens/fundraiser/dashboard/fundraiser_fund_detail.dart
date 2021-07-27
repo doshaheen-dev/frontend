@@ -15,8 +15,11 @@ import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 
 class FundraiserFundDetail extends StatefulWidget {
   final SubmittedFunds _recommendation;
-  const FundraiserFundDetail({Key key, SubmittedFunds data})
+  final bool _fundDetailType;
+  const FundraiserFundDetail(
+      {Key key, SubmittedFunds data, bool isResubmission})
       : _recommendation = data,
+        _fundDetailType = isResubmission,
         super(key: key);
 
   @override
@@ -28,18 +31,17 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
   var progress;
   List<DocumentInfo> _uploadedDocuments = [];
   SubmittedFunds _likedFunds;
+  bool isResubmit = false;
   bool _isFundOverview = false;
-  bool _isFundDeck = false;
   var _changeBgColor = unselectedGray;
-  var _changeFundDeckBgColor = unselectedGray;
-  var _selectedFundDeckTextColor = Colors.black;
+
   var _selectedTextColor = Colors.black;
-  String _pefFilePath = "";
   bool _isButtonDisabled = false;
 
   @override
   void initState() {
     _likedFunds = widget._recommendation;
+    isResubmit = widget._fundDetailType;
     disableElevatedButton();
     super.initState();
   }
@@ -60,21 +62,24 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
     }
   }
 
-  _displayFundDeck() {
-    if (_isFundDeck == true) {
-      setState(() {
-        _isFundDeck = false;
-        _changeFundDeckBgColor = unselectedGray;
-        _selectedFundDeckTextColor = Colors.black;
-      });
-    } else {
-      setState(() {
-        _isFundDeck = true;
-        _changeFundDeckBgColor = kDarkOrange;
-        _selectedFundDeckTextColor = Colors.white;
-      });
-    }
-  }
+  //  bool _isFundDeck = false;
+  //  var _changeFundDeckBgColor = unselectedGray;
+  // var _selectedFundDeckTextColor = Colors.black;
+  // _displayFundDeck() {
+  //   if (_isFundDeck == true) {
+  //     setState(() {
+  //       _isFundDeck = false;
+  //       _changeFundDeckBgColor = unselectedGray;
+  //       _selectedFundDeckTextColor = Colors.black;
+  //     });
+  //   } else {
+  //     setState(() {
+  //       _isFundDeck = true;
+  //       _changeFundDeckBgColor = kDarkOrange;
+  //       _selectedFundDeckTextColor = Colors.white;
+  //     });
+  //   }
+  // }
 
   void _changeButtonStatus() {
     setState(() {
@@ -161,32 +166,35 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
                   SizedBox(
                     height: 40,
                   ),
-                  Container(
-                      margin: const EdgeInsets.only(
-                          top: 5.0, left: 5.0, bottom: 20, right: 5.0),
-                      child: ElevatedButton(
-                        onPressed:
-                            !_isButtonDisabled ? null : _performSubmission,
-                        style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.all(0.0),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18))),
-                        child: Ink(
-                          decoration: BoxDecoration(
-                              gradient: !_isButtonDisabled
-                                  ? LinearGradient(
-                                      colors: [textLightGrey, textLightGrey])
-                                  : LinearGradient(
-                                      colors: [kDarkOrange, kLightOrange]),
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 50,
-                            alignment: Alignment.center,
-                            child: Text("Submit", style: textWhiteBold16()),
+                  Visibility(
+                    visible: isResubmit,
+                    child: Container(
+                        margin: const EdgeInsets.only(
+                            top: 5.0, left: 5.0, bottom: 20, right: 5.0),
+                        child: ElevatedButton(
+                          onPressed:
+                              !_isButtonDisabled ? null : _performSubmission,
+                          style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.all(0.0),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18))),
+                          child: Ink(
+                            decoration: BoxDecoration(
+                                gradient: !_isButtonDisabled
+                                    ? LinearGradient(
+                                        colors: [textLightGrey, textLightGrey])
+                                    : LinearGradient(
+                                        colors: [kDarkOrange, kLightOrange]),
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 50,
+                              alignment: Alignment.center,
+                              child: Text("Submit", style: textWhiteBold16()),
+                            ),
                           ),
-                        ),
-                      ))
+                        )),
+                  )
                 ]),
           ),
         ));

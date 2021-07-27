@@ -1,9 +1,7 @@
 import 'package:acc/constants/font_family.dart';
-import 'package:acc/providers/investor_home_provider.dart';
 import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:acc/screens/common/onboarding.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 

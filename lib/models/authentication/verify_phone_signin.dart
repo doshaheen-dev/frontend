@@ -155,7 +155,7 @@ class UserSignIn {
       type: valueMap["type"],
       status: valueMap["status"],
       message: valueMap["message"],
-      data: UserData.fromJson(valueMap["data"]),
+      data: UserData.fromNoDecryptionMap(valueMap["data"]),
     );
   }
 }
@@ -216,8 +216,8 @@ class UserData {
         CryptUtils.decryption(json['first_name']),
         CryptUtils.decryption(json['middle_name']),
         CryptUtils.decryption(json['last_name']),
-        CryptUtils.decryption(json['mobile_no']),
         CryptUtils.decryption(json['email_id']),
+        CryptUtils.decryption(json['mobile_no']),
         json['user_type']);
   }
 }

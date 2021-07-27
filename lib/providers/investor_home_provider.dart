@@ -9,25 +9,30 @@ class InvestorHome with ChangeNotifier {
 
   var interestedFundsData;
 
-  Future<void> fetchAndSetRecommendations(String token, int pageNo) async {
+  Future<void> fetchAndSetRecommendations(
+      String token, int pageNo, int pageSize) async {
     final List<FundsInfo> loadedRecommendations = [];
     final Recommendations extractedData =
-        await InvestorHomeService.fetchRecommendation(token, pageNo);
+        await InvestorHomeService.fetchRecommendation(token, pageNo, pageSize);
     if (extractedData == null) {
       return;
     }
-    extractedData.data.option.forEach((option) {
-      loadedRecommendations.add(FundsInfo(
-          option.fundName,
-          option.fundLogo,
-          option.fundExistVal,
-          option.fundNewVal,
-          option.fundTxnId,
-          option.fundSponsorName,
-          option.fundRegulated,
-          option.fundRegulatorName,
-          option.fundWebsite));
-    });
+    if (extractedData.status == 200) {
+      extractedData.data.option.forEach((option) {
+        loadedRecommendations.add(FundsInfo(
+            option.fundName,
+            option.fundLogo,
+            option.fundExistVal,
+            option.fundNewVal,
+            option.fundTxnId,
+            option.fundSponsorName,
+            option.fundRegulated,
+            option.fundRegulatorName,
+            option.fundWebsite));
+      });
+    } else {
+      return;
+    }
 
     recommended = loadedRecommendations.toList();
     notifyListeners();
@@ -40,18 +45,22 @@ class InvestorHome with ChangeNotifier {
     if (extractedData == null) {
       return;
     }
-    extractedData.data.option.forEach((option) {
-      loadedFunds.add(FundsInfo(
-          option.fundName,
-          option.fundLogo,
-          option.fundExistVal,
-          option.fundNewVal,
-          option.fundTxnId,
-          option.fundSponsorName,
-          option.fundRegulated,
-          option.fundRegulatorName,
-          option.fundWebsite));
-    });
+    if (extractedData.status == 200) {
+      extractedData.data.option.forEach((option) {
+        loadedFunds.add(FundsInfo(
+            option.fundName,
+            option.fundLogo,
+            option.fundExistVal,
+            option.fundNewVal,
+            option.fundTxnId,
+            option.fundSponsorName,
+            option.fundRegulated,
+            option.fundRegulatorName,
+            option.fundWebsite));
+      });
+    } else {
+      return;
+    }
 
     interestedFundsData = loadedFunds.toList();
     notifyListeners();

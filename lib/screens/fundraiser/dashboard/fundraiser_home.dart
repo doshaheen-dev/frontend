@@ -155,7 +155,8 @@ class _FundraiserHomeState extends State<FundraiserHome> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => FundraiserFundDetail(
-                                      data: fundsList[index])));
+                                      data: fundsList[index],
+                                      isResubmission: false)));
                         },
                         child: Text(
                           "Show Details",
@@ -166,6 +167,14 @@ class _FundraiserHomeState extends State<FundraiserHome> {
                         width: 15,
                       ),
                       InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => FundraiserFundDetail(
+                                      data: fundsList[index],
+                                      isResubmission: true)));
+                        },
                         child: Text(
                           "Resubmit",
                           style: textNormal12(HexColor("#FB724C")),

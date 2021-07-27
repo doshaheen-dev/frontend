@@ -7,6 +7,7 @@ import 'package:acc/screens/investor/dashboard/fund_detail.dart';
 import 'package:acc/screens/investor/dashboard/product_detail.dart';
 import 'package:acc/services/investor_home_service.dart';
 import 'package:acc/utilites/text_style.dart';
+import 'package:acc/utilites/ui_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/utilites/app_colors.dart';
@@ -24,7 +25,7 @@ class _InvestorHomeState extends State<InvestorHome> {
   var _fundscurrentIndex = 0;
   Future _recommendations;
   Future _interestedFunds;
-  var pageNo = 0;
+
   var fundPageNo = 0;
   var _isInit = true;
   int recommendationListSize;
@@ -33,12 +34,22 @@ class _InvestorHomeState extends State<InvestorHome> {
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
+
   final ItemScrollController fundItemScrollController = ItemScrollController();
   final ItemPositionsListener fundIitemPositionsListener =
       ItemPositionsListener.create();
 
   bool isFundsPresent = false;
   bool isRecommendationPresent = false;
+  var token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGVfbm8iOiJDaFp1bXRFQVNPUXZlWmppQWZQUEx3PT0iLCJlbWFpbF9pZCI6ImUvVTVUaWtzWGV1QjB2WGxndUg1eEhTS2hDSnZsVHczRENpZXY2M2R2WG89IiwiZmlyc3RfbmFtZSI6ImV5ZDJmOE0xb3lUc3h5Y0VRbmRjSGc9PSIsIm1pZGRsZV9uYW1lIjoiIiwibGFzdF9uYW1lIjoiajBtNWg5VE1mWWdKNUxjVktLREdwQT09IiwiaWQiOjEzNywidXNlcl90eXBlIjoiaW52ZXN0b3IiLCJpYXQiOjE2MjczMTA3OTN9.sR8LEOCcX39F6QC06Ac9ITFL-spLBb9txPOwyGjXIco";
+
+  // Recommendations List
+  num _recommendationPageSize = 1;
+  num totalItems = 10;
+  var tempRecommendationSizeList = 0;
+  var recommendationPageNo = 0;
+
   void displayInterestedFunds(bool value) {
     setState(() {
       isFundsPresent = value;
@@ -52,12 +63,14 @@ class _InvestorHomeState extends State<InvestorHome> {
   }
 
   Future<void> _fetchRecommendation(BuildContext context) async {
+    UserData.instance.token = token;
     await Provider.of<investorProvider.InvestorHome>(context, listen: false)
-        .fetchAndSetRecommendations(
-            UserData.instance.token, pageNo); //_userData.token
+        .fetchAndSetRecommendations(UserData.instance.token,
+            recommendationPageNo, _recommendationPageSize); //_userData.token
   }
 
   Future<void> _fetchInterestedFunds(BuildContext context) async {
+    UserData.instance.token = token;
     await Provider.of<investorProvider.InvestorHome>(context, listen: false)
         .fetchAndSetInterestedFunds(
             UserData.instance.token, fundPageNo); //widget.userData.token
@@ -76,18 +89,8 @@ class _InvestorHomeState extends State<InvestorHome> {
 
   @override
   void initState() {
-    var recommendationInfo =
-        InvestorHomeService.fetchRecommendation(UserData.instance.token, 0);
-    recommendationInfo.then((result) {
-      print("recommendationInfo");
-      setState(() {
-        if (result.data.option.length == 0) {
-          displayRecommendations(false);
-        } else {
-          displayRecommendations(true);
-        }
-      });
-    });
+    UserData.instance.token = token;
+    getRecommendationListSize();
 
     Future<Funds> fundsInfo =
         InvestorHomeService.fetchInterestedFunds(UserData.instance.token, 0);
@@ -102,6 +105,26 @@ class _InvestorHomeState extends State<InvestorHome> {
       });
     });
     super.initState();
+  }
+
+  void getRecommendationListSize() {
+    if (recommendationPageNo <= (totalItems - 1)) {
+      var recommendationInfo = InvestorHomeService.fetchRecommendation(
+          UserData.instance.token,
+          recommendationPageNo,
+          _recommendationPageSize);
+      recommendationInfo.then((result) {
+        setState(() {
+          if (result.data.option.length == 0) {
+            displayRecommendations(false);
+          } else {
+            tempRecommendationSizeList =
+                tempRecommendationSizeList + result.data.option.length;
+            displayRecommendations(true);
+          }
+        });
+      });
+    }
   }
 
   @override
@@ -344,20 +367,24 @@ class _InvestorHomeState extends State<InvestorHome> {
                     color: kDarkOrange,
                     onPressed: () {
                       setState(() {
-                        print(currentIndex);
-                        print(itemPositionsListener.itemPositions);
-                        if (currentIndex > 0) {
+                        if (currentIndex >= 1) {
+                          recommendationPageNo--;
+                          _recommendations = _fetchRecommendation(context);
+                          tempRecommendationSizeList =
+                              tempRecommendationSizeList -
+                                  _recommendationPageSize;
+                          if (tempRecommendationSizeList == 0) {
+                            getRecommendationListSize();
+                          }
                           currentIndex--;
                           itemScrollController.scrollTo(
                               index: currentIndex,
-                              duration: Duration(seconds: 1),
+                              duration: Duration(seconds: 2),
                               curve: Curves.easeInOutCubic);
+                        } else {
+                          showSnackBar(
+                              context, "Start of recommendation items");
                         }
-                        // if (currentIndex == 0 && pageNo > 0) {
-                        //   pageNo--;
-                        //   _recommendations =
-                        //       _fetchRecommendation(context);
-                        // }
                       });
                     }),
               ),
@@ -373,23 +400,23 @@ class _InvestorHomeState extends State<InvestorHome> {
                     color: kDarkOrange,
                     onPressed: () {
                       setState(() {
-                        if (currentIndex < recommendationListSize) {
-                          currentIndex++;
-
-                          print(currentIndex);
-                          itemScrollController.scrollTo(
-                              index: currentIndex,
-                              duration: Duration(seconds: 1),
-                              curve: Curves.easeInOutCubic);
+                        if ((totalItems - 1) > (tempRecommendationSizeList)) {
+                          if ((currentIndex + 1) == _recommendationPageSize) {
+                            recommendationPageNo++;
+                            _recommendations = _fetchRecommendation(context);
+                            increaseIndex();
+                          } else if ((currentIndex + 1) >
+                              _recommendationPageSize) {
+                            recommendationPageNo++;
+                            _recommendations = _fetchRecommendation(context);
+                            getRecommendationListSize();
+                            increaseIndex();
+                          } else {
+                            increaseIndex();
+                          }
+                        } else {
+                          showSnackBar(context, "End of recommendation list");
                         }
-                        // if (currentIndex ==
-                        //     recommendationListSize) {
-                        //   setState(() {
-                        //     pageNo++;
-                        //     _recommendations =
-                        //         _fetchRecommendation(context);
-                        //   });
-                        // }
                       });
                     }),
               ),
@@ -410,10 +437,26 @@ class _InvestorHomeState extends State<InvestorHome> {
           return Consumer<investorProvider.InvestorHome>(
             builder: (context, recommededData, child) => Container(
               height: 300.0,
-              child: ScrollablePositionedList.builder(
+              // child: ScrollablePositionedList.builder(
+              //     physics: NeverScrollableScrollPhysics(),
+              //     itemScrollController: itemScrollController,
+              //     itemPositionsListener: itemPositionsListener,
+              //     scrollDirection: Axis.horizontal,
+              //     itemCount: recommededData.recommended.length,
+              //     itemBuilder: (context, index) {
+              //       return Container(
+              //         width: (MediaQuery.of(context).size.width - 40),
+              //         child: _buildRecommendationList(
+              //             context,
+              //             index,
+              //             recommededData.recommended[index],
+              //             recommededData.recommended.length),
+              //       );
+              //     }),
+              child: ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
-                  itemScrollController: itemScrollController,
-                  itemPositionsListener: itemPositionsListener,
+                  // itemScrollController: itemScrollController,
+                  // itemPositionsListener: itemPositionsListener,
                   scrollDirection: Axis.horizontal,
                   itemCount: recommededData.recommended.length,
                   itemBuilder: (context, index) {
@@ -436,6 +479,7 @@ class _InvestorHomeState extends State<InvestorHome> {
   Widget _buildRecommendationList(BuildContext context, int index,
       investorProvider.FundsInfo recommended, int length) {
     recommendationListSize = length;
+
     return GestureDetector(
         onTap: () => {
               print("Name:- ${recommended.fundName}"),
@@ -461,12 +505,14 @@ class _InvestorHomeState extends State<InvestorHome> {
                       topLeft: Radius.circular(8.0),
                       topRight: Radius.circular(8.0),
                     ),
-                    child: Image(
-                      image: recommended.fundLogo != ""
-                          ? NetworkImage("http://${recommended.fundLogo}")
-                          : AssetImage("assets/images/dummy/investment1.png"),
-                      height: 200,
-                      fit: BoxFit.fill,
+                    child: Center(
+                      child: Image(
+                        image: recommended.fundLogo != ""
+                            ? NetworkImage(recommended.fundLogo)
+                            : AssetImage("assets/images/dummy/investment1.png"),
+                        height: 200,
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
                   Container(
@@ -521,5 +567,13 @@ class _InvestorHomeState extends State<InvestorHome> {
     );
   }
 
+  void increaseIndex() {
+    currentIndex++;
+
+    itemScrollController.scrollTo(
+        index: currentIndex,
+        duration: Duration(seconds: 3),
+        curve: Curves.easeInOutCubic);
+  }
   // ------------------------------- end of recommendations -------------------------- //
 }

@@ -10,9 +10,9 @@ import 'http_service.dart';
 class InvestorHomeService {
   // Fetch Recommendations
   static Future<Recommendations> fetchRecommendation(
-      String token, int pageNo) async {
+      String token, int pageNo, num pageSize) async {
     final url = Uri.parse(
-        '${ApiServices.baseUrl}/fund/recommendation?pageNo=$pageNo&pageSize=20');
+        '${ApiServices.baseUrl}/fund/recommendation?pageNo=$pageNo&pageSize=$pageSize');
     final headers = {
       "Content-type": "application/json",
       "authorization": "Bearer $token"

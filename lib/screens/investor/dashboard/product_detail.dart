@@ -86,8 +86,7 @@ class _ProductDetailState extends State<ProductDetail> {
                               ),
                               Image(
                                 image: _recommendation.fundLogo != ""
-                                    ? NetworkImage(
-                                        "http://${_recommendation.fundLogo}")
+                                    ? NetworkImage(_recommendation.fundLogo)
                                     : AssetImage(
                                         "assets/images/dummy/investment1.png"),
                                 height: 250,

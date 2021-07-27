@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:acc/constants/font_family.dart';
+import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/screens/common/webview_container.dart';
+import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
 import 'package:acc/services/signup_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -182,7 +184,11 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                                   await SharedPreferences.getInstance();
                               final userJson = jsonEncode(signedUpUser.data);
                               prefs.setString('UserInfo', userJson);
-                              openNextScreen();
+
+                              // final userModelInstance = UserData.instance;
+                              // userModelInstance.token = userJson.token;
+
+                              openDashboard();
                             } else {
                               showSnackBar(context, "Something went wrong");
                             }
@@ -276,20 +282,40 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
         }));
   }
 
-  void openNextScreen() {
-    Navigator.of(context).push(PageRouteBuilder(
-        pageBuilder: (context, animation, anotherAnimation) {
-          return ThankYouInvestor();
-        },
-        transitionDuration: Duration(milliseconds: 2000),
-        transitionsBuilder: (context, animation, anotherAnimation, child) {
-          animation = CurvedAnimation(
-              curve: Curves.fastLinearToSlowEaseIn, parent: animation);
-          return SlideTransition(
-            position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-                .animate(animation),
-            child: child,
-          );
-        }));
+  void openDashboard() {
+    Navigator.pushAndRemoveUntil(
+        context,
+        PageRouteBuilder(
+            pageBuilder: (context, animation, anotherAnimation) {
+              return InvestorDashboard();
+            },
+            transitionDuration: Duration(milliseconds: 2000),
+            transitionsBuilder: (context, animation, anotherAnimation, child) {
+              animation = CurvedAnimation(
+                  curve: Curves.fastLinearToSlowEaseIn, parent: animation);
+              return SlideTransition(
+                position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                    .animate(animation),
+                child: child,
+              );
+            }),
+        (route) => false);
   }
+
+  // void openNextScreen() {
+  //   Navigator.of(context).push(PageRouteBuilder(
+  //       pageBuilder: (context, animation, anotherAnimation) {
+  //         return ThankYouInvestor();
+  //       },
+  //       transitionDuration: Duration(milliseconds: 2000),
+  //       transitionsBuilder: (context, animation, anotherAnimation, child) {
+  //         animation = CurvedAnimation(
+  //             curve: Curves.fastLinearToSlowEaseIn, parent: animation);
+  //         return SlideTransition(
+  //           position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+  //               .animate(animation),
+  //           child: child,
+  //         );
+  //       }));
+  // }
 }
