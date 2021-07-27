@@ -1,6 +1,8 @@
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/screens/investor/dashboard/investor_profile.dart';
+import 'package:acc/utilites/app_colors.dart';
+import 'package:acc/utilites/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/investor/dashboard/investor_home.dart';
@@ -29,44 +31,47 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
-    return Scaffold(
-      backgroundColor: Color(0xffffffff),
-      body: Container(
-        child: Column(
-          children: [
-            Container(
-                margin:
-                    const EdgeInsets.only(top: 80.0, left: 15.0, right: 25.0),
-                child: Row(
-                  children: [
-                    Image.asset('assets/images/investor/icon_menu.png'),
-                    SizedBox(width: 10.0),
-                    Expanded(
-                        child: Text(
-                      'Hello Investor',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 26.0,
-                          fontFamily: FontFamilyMontserrat.name),
-                    )),
-                    Image.asset('assets/images/investor/icon_investor.png'),
-                  ],
-                )),
-            Expanded(child: buildPageView())
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
         backgroundColor: Color(0xffffffff),
-        elevation: 0.0,
-        currentIndex: bottomSelectedIndex,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        type: BottomNavigationBarType.fixed,
-        onTap: (index) {
-          bottomTapped(index);
-        },
-        items: buildBottomNavBarItems(),
+        body: Container(
+          child: Column(
+            children: [
+              Container(
+                  margin:
+                      const EdgeInsets.only(top: 80.0, left: 15.0, right: 25.0),
+                  child: Row(
+                    children: [
+                      Image.asset('assets/images/investor/icon_menu.png'),
+                      SizedBox(width: 10.0),
+                      Expanded(
+                          child: Text(
+                        'Hello Investor',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 26.0,
+                            fontFamily: FontFamilyMontserrat.name),
+                      )),
+                      Image.asset('assets/images/investor/icon_investor.png'),
+                    ],
+                  )),
+              Expanded(child: buildPageView())
+            ],
+          ),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Color(0xffffffff),
+          elevation: 0.0,
+          currentIndex: bottomSelectedIndex,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          type: BottomNavigationBarType.fixed,
+          onTap: (index) {
+            bottomTapped(index);
+          },
+          items: buildBottomNavBarItems(),
+        ),
       ),
     );
   }
@@ -147,6 +152,37 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
         index,
       ); // duration: Duration(milliseconds: 500), curve: Curves.easeIn
     });
+  }
+
+  Future<bool> _onBackPressed() {
+    return showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Are you sure?', style: textNormal16(headingBlack)),
+            content: new Text('Do you want to exit an App',
+                style: textNormal14(headingBlack)),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text(
+                    "Yes",
+                    style: textNormal14(selectedOrange),
+                  )),
+              SizedBox(height: 16),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: Text(
+                    "No",
+                    style: textNormal14(selectedOrange),
+                  )),
+            ],
+          ),
+        ) ??
+        false;
   }
 }
 

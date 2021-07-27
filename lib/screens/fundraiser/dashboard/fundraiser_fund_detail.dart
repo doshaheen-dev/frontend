@@ -8,9 +8,13 @@ import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
+import 'package:acc/widgets/fundraiser/fundDetails/createDocumentUpload.dart';
+import 'package:acc/widgets/fundraiser/fundDetails/funds_details_header.dart';
+import 'package:acc/widgets/fundraiser/fundDetails/funds_resubmit_header.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 
 class FundraiserFundDetail extends StatefulWidget {
@@ -32,11 +36,10 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
   List<DocumentInfo> _uploadedDocuments = [];
   SubmittedFunds _likedFunds;
   bool isResubmit = false;
-  bool _isFundOverview = false;
-  var _changeBgColor = unselectedGray;
-
-  var _selectedTextColor = Colors.black;
   bool _isButtonDisabled = false;
+  var _changeFundDeckBgColor = unselectedGray;
+  var _selectedFundDeckTextColor = Colors.black;
+  var _pefFilePath;
 
   @override
   void initState() {
@@ -45,41 +48,6 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
     disableElevatedButton();
     super.initState();
   }
-
-  _displayFundOverview() {
-    if (_isFundOverview == true) {
-      setState(() {
-        _isFundOverview = false;
-        _changeBgColor = unselectedGray;
-        _selectedTextColor = Colors.black;
-      });
-    } else {
-      setState(() {
-        _isFundOverview = true;
-        _changeBgColor = kDarkOrange;
-        _selectedTextColor = Colors.white;
-      });
-    }
-  }
-
-  //  bool _isFundDeck = false;
-  //  var _changeFundDeckBgColor = unselectedGray;
-  // var _selectedFundDeckTextColor = Colors.black;
-  // _displayFundDeck() {
-  //   if (_isFundDeck == true) {
-  //     setState(() {
-  //       _isFundDeck = false;
-  //       _changeFundDeckBgColor = unselectedGray;
-  //       _selectedFundDeckTextColor = Colors.black;
-  //     });
-  //   } else {
-  //     setState(() {
-  //       _isFundDeck = true;
-  //       _changeFundDeckBgColor = kDarkOrange;
-  //       _selectedFundDeckTextColor = Colors.white;
-  //     });
-  //   }
-  // }
 
   void _changeButtonStatus() {
     setState(() {
@@ -99,30 +67,21 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Container(
-            margin: const EdgeInsets.only(top: 40.0, left: 15.0, right: 25.0),
+            margin: const EdgeInsets.only(top: 40.0),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    child: IconButton(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      icon: Image.asset("assets/images/icon_close.png"),
-                      onPressed: () => {Navigator.pop(context)},
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Visibility(
+                            visible: !isResubmit,
+                            child: FundsDetailHeader(_likedFunds)),
+                        Visibility(
+                            visible: isResubmit, child: FundsResubmitHeader())
+                      ],
                     ),
-                  ),
-                  Image.asset(
-                    _likedFunds.image,
-                    width: MediaQuery.of(context).size.width,
-                    height: 100,
-                    fit: BoxFit.fill,
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                    child: _createFundHeader(),
                   ),
 
                   Divider(color: HexColor("#E8E8E8")),
@@ -170,7 +129,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
                     visible: isResubmit,
                     child: Container(
                         margin: const EdgeInsets.only(
-                            top: 5.0, left: 5.0, bottom: 20, right: 5.0),
+                            top: 5.0, left: 20.0, bottom: 20, right: 20.0),
                         child: ElevatedButton(
                           onPressed:
                               !_isButtonDisabled ? null : _performSubmission,
@@ -211,12 +170,32 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
     }
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        Container(
+          margin: EdgeInsets.only(top: 10, left: 10),
+          child: IconButton(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            icon: Image.asset("assets/images/icon_close.png"),
+            onPressed: () => {Navigator.pop(context)},
+          ),
+        ),
+        Image(
+          image: _likedFunds.fundLogo != ""
+              ? NetworkImage(_likedFunds.fundLogo)
+              : AssetImage("assets/images/dummy/investment1.png"),
+          height: 250,
+          fit: BoxFit.fill,
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        Center(
+            child: Text(
           _likedFunds.name,
           style: textBold18(headingBlack),
-        ),
+        )),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -240,36 +219,51 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
               width: 30,
             ),
             Text(
-              _likedFunds.location,
+              "Pune",
+              // _likedFunds.location,
               style: textNormal(HexColor("#404040"), 12.0),
             )
           ],
         ),
-        Text(
-          "Minimum Investment : ${_likedFunds.minimumInvestment}",
-          style: textNormal(HexColor("#404040"), 12.0),
+        Center(
+          child: Text(
+            // "Minimum Investment : ${_likedFunds.minimumInvestment}",
+            "Minimum Investment : 10000",
+            style: textNormal(HexColor("#404040"), 12.0),
+          ),
         ),
         SizedBox(
           height: 20.0,
         ),
-        Text(
-          _likedFunds.description,
+        Center(
+            child: Text(
+          _likedFunds.fundInvstmtObj,
+          textAlign: TextAlign.center,
           style: textNormal(HexColor("#3A3B3F"), 14.0),
-        )
+        ))
       ],
     );
   }
 
   Widget _createFundBody() {
-    return Column(
-      children: [_createFundOverview(), _addNewFundValue(), _uploadFundDeck()],
+    return Container(
+      margin: EdgeInsets.only(left: 20.0, right: 20.0),
+      child: Column(
+        children: [
+          CreateDocumentUpload(_likedFunds),
+          Visibility(visible: !isResubmit, child: _createDocumentUpload()),
+          Visibility(visible: !isResubmit, child: _createRemarks()),
+          Visibility(visible: isResubmit, child: _addNewFundValue()),
+          Visibility(visible: isResubmit, child: _uploadFundDeck())
+        ],
+      ),
     );
   }
 
-  Widget _createFundOverview() {
+  Widget _createDocumentUpload() {
     return Column(children: [
       Card(
-        color: _changeBgColor,
+        color: _changeFundDeckBgColor,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         child: Container(
@@ -279,134 +273,88 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
             children: [
               Padding(
                   padding: EdgeInsets.all(10.0),
-                  child: Text("Fund Overview",
+                  child: Text("Documents Uploaded",
                       textAlign: TextAlign.start,
-                      style: textBold16(_selectedTextColor))),
+                      style: textBold16(_selectedFundDeckTextColor))),
               Spacer(),
               IconButton(
-                  onPressed: () {
-                    _displayFundOverview();
-                  },
+                  onPressed: () {},
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   icon: Image.asset(
                     "assets/images/icon_down.png",
-                    color: _selectedTextColor,
+                    color: _selectedFundDeckTextColor,
                   ))
             ],
           ),
         ),
       ),
-      Visibility(
-          visible: _isFundOverview,
-          child: Container(
-              child: Card(
-            color: unselectedGray,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            child: Container(
-                alignment: Alignment.center,
-                child: Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Column(children: [
-                      Row(
-                        children: [
-                          Expanded(flex: 1, child: Text("Fund Regulated")),
-                          Expanded(flex: 1, child: Text("Yes"))
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(flex: 1, child: Text("Fund Regulator")),
-                          Expanded(flex: 1, child: Text("Rahul Roy"))
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(flex: 1, child: Text("Website Link")),
-                          Expanded(flex: 1, child: Text("www.exportbus.com"))
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(flex: 1, child: Text("Fund Sponsor")),
-                          Expanded(flex: 1, child: Text("Alok Mittal"))
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(flex: 1, child: Text("Existing Fund")),
-                          Expanded(flex: 1, child: Text("\$300K"))
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(flex: 1, child: Text("New Fund")),
-                          Expanded(flex: 1, child: Text("\$200K"))
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(flex: 1, child: Text("Product Type")),
-                          Expanded(flex: 1, child: Text("Angel Investment"))
-                        ],
-                      )
-                    ]))),
-          )))
+    ]);
+  }
+
+  Widget _createRemarks() {
+    return Column(children: [
+      Card(
+        color: _changeFundDeckBgColor,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        child: Container(
+          alignment: Alignment.center,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Text("Remarks (By Amicorp)",
+                      textAlign: TextAlign.start,
+                      style: textBold16(_selectedFundDeckTextColor))),
+              Spacer(),
+              IconButton(
+                  onPressed: () {},
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  icon: Image.asset(
+                    "assets/images/icon_down.png",
+                    color: _selectedFundDeckTextColor,
+                  ))
+            ],
+          ),
+        ),
+      ),
     ]);
   }
 
   TextField inputTextField(text, hint, _controller) {
     return TextField(
-        onChanged: (text) {
-          // if value is not empty enable the button
-          if (text.length != 0) {
-            print("true");
-            _changeButtonStatus();
-          } else {
-            print("false");
-            disableElevatedButton();
-          }
-        },
-        style: textBlackNormal16(),
-        controller: _controller,
-        decoration: new InputDecoration(
-            contentPadding: EdgeInsets.all(10.0),
-            labelText: text,
-            hintText: hint,
-            hintMaxLines: 2,
-            labelStyle: new TextStyle(color: Colors.grey),
-            border: InputBorder.none,
-            focusedBorder: UnderlineInputBorder(
-                borderSide:
-                    const BorderSide(color: Colors.transparent, width: 2.0),
-                borderRadius: BorderRadius.all(
-                  const Radius.circular(10.0),
-                ))));
-  }
-
-  BoxDecoration customDecoration() {
-    return BoxDecoration(
-      color: unselectedGray,
-      borderRadius: BorderRadius.circular(10.0),
+      onChanged: (text) {
+        // if value is not empty enable the button
+        if (text.length != 0) {
+          print("true");
+          _changeButtonStatus();
+        } else {
+          print("false");
+          disableElevatedButton();
+        }
+      },
+      style: textBlackNormal16(),
+      controller: _controller,
+      decoration: new InputDecoration(
+          contentPadding: EdgeInsets.all(10.0),
+          labelText: text,
+          hintText: hint,
+          hintMaxLines: 2,
+          labelStyle: new TextStyle(color: Colors.grey),
+          border: InputBorder.none,
+          focusedBorder: UnderlineInputBorder(
+              borderSide:
+                  const BorderSide(color: Colors.transparent, width: 2.0),
+              borderRadius: BorderRadius.all(
+                const Radius.circular(10.0),
+              ))),
+      keyboardType: TextInputType.number,
+      inputFormatters: <TextInputFormatter>[
+        FilteringTextInputFormatter.digitsOnly,
+      ],
     );
   }
 
@@ -415,9 +363,9 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
     return Container(
       margin: const EdgeInsets.only(top: 5.0, bottom: 10),
       decoration: BoxDecoration(
-        color: unselectedGray,
-        borderRadius: BorderRadius.circular(10.0),
-      ),
+          color: unselectedGray,
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(color: textGrey, width: 1)),
       child: inputTextField("New Fund Value",
           "Please enter new fund value here", _newFundValueController),
     );

@@ -17,10 +17,32 @@ class FundProvider with ChangeNotifier {
     if (extractedData == null) {
       return;
     }
+    // extractedData.data.forEach((option) {
+    //   loadedFunds.add(SubmittedFunds(option.fundName, option.fundStatus,
+    //   option.termsAgreedTimestamp, option.fundLogo, '${option.fundCityId}, ${option.fundCountryCode}',
+    //   '${option.slotId}', option.fundInvstmtObj));
+    // });
+
     extractedData.data.forEach((option) {
-      loadedFunds.add(SubmittedFunds(option.fundName, option.fundStatus, 
-      option.termsAgreedTimestamp, option.fundLogo, '${option.fundCityId}, ${option.fundCountryCode}', 
-      '${option.slotId}', option.fundInvstmtObj));
+      loadedFunds.add(SubmittedFunds(
+        option.fundTxnId,
+        option.userId,
+        option.productId,
+        option.slotId,
+        option.fundSponsorName,
+        option.fundName,
+        '${option.fundCountryCode}',
+        option.fundCityId,
+        option.fundRegulated,
+        option.fundRegulatorName,
+        option.fundInvstmtObj,
+        option.fundExistVal,
+        option.fundNewVal,
+        option.fundWebsite,
+        option.fundLogo,
+        option.fundStatus,
+        option.termsAgreedTimestamp,
+      ));
     });
 
     _funds = loadedFunds.toList();

@@ -181,7 +181,7 @@ class _FundraiserHomeState extends State<FundraiserHome> {
                         ),
                       ),
                       SizedBox(
-                        width: 15,
+                        width: 10,
                       ),
                       InkWell(
                         child: Text(
@@ -300,74 +300,74 @@ class _FundraiserHomeState extends State<FundraiserHome> {
     );
   }
 
-  static List<SubmittedFunds> getSubmittedFundsList() {
-    return <SubmittedFunds>[
-      const SubmittedFunds(
-          "Helion Ventures Partners",
-          "Not Listed",
-          "21/09/2020",
-          "assets/images/dummy/investment1.png",
-          "Pune , India",
-          "\$400K-\$500K",
-          "Elite Specia; Exporter & supplier engaged in offering a varied range of quality products; Already exported 26+ containers valued at \$170k+; Imported Kiwis & Apples valued at \$200k+; Strong sales team in the Middle East; Already raised Rs. 5mn+"),
-      const SubmittedFunds(
-          "Accel Partners",
-          "Listed",
-          "24/09/2020",
-          "assets/images/dummy/funds1.png",
-          "Pune , India",
-          "\$400K-\$500K",
-          "Elite Specia; Exporter & supplier engaged in offering a varied range of quality products; Already exported 26+ containers valued at \$170k+; Imported Kiwis & Apples valued at \$200k+; Strong sales team in the Middle East; Already raised Rs. 5mn+"),
-      const SubmittedFunds(
-          "Big Data Saas Platform",
-          "Under Scrutiny",
-          "24/09/2020",
-          "assets/images/dummy/investment3.png",
-          "Pune , India",
-          "\$400K-\$500K",
-          "Elite Specia; Exporter & supplier engaged in offering a varied range of quality products; Already exported 26+ containers valued at \$170k+; Imported Kiwis & Apples valued at \$200k+; Strong sales team in the Middle East; Already raised Rs. 5mn+"),
-      const SubmittedFunds(
-          "Always Stay Connected",
-          "Listed",
-          "14/09/2020",
-          "assets/images/dummy/investment4.png",
-          "Pune , India",
-          "\$400K-\$500K",
-          "Elite Specia; Exporter & supplier engaged in offering a varied range of quality products; Already exported 26+ containers valued at \$170k+; Imported Kiwis & Apples valued at \$200k+; Strong sales team in the Middle East; Already raised Rs. 5mn+"),
-      const SubmittedFunds(
-          "Cloud Kitchen",
-          "Listed",
-          "14/09/2020",
-          "assets/images/dummy/funds2.png",
-          "Pune , India",
-          "\$400K-\$500K",
-          "Elite Specia; Exporter & supplier engaged in offering a varied range of quality products; Already exported 26+ containers valued at \$170k+; Imported Kiwis & Apples valued at \$200k+; Strong sales team in the Middle East; Already raised Rs. 5mn+"),
-      const SubmittedFunds(
-          "Helion Ventures Partners",
-          "Not Listed",
-          "21/09/2020",
-          "assets/images/dummy/funds3.png",
-          "Pune , India",
-          "\$400K-\$500K",
-          "Elite Specia; Exporter & supplier engaged in offering a varied range of quality products; Already exported 26+ containers valued at \$170k+; Imported Kiwis & Apples valued at \$200k+; Strong sales team in the Middle East; Already raised Rs. 5mn+"),
-      const SubmittedFunds(
-          "Accel Partners",
-          "Listed",
-          "24/09/2020",
-          "assets/images/dummy/funds1.png",
-          "Pune , India",
-          "\$400K-\$500K",
-          "Elite Specia; Exporter & supplier engaged in offering a varied range of quality products; Already exported 26+ containers valued at \$170k+; Imported Kiwis & Apples valued at \$200k+; Strong sales team in the Middle East; Already raised Rs. 5mn+"),
-      const SubmittedFunds(
-          "Big Data Saas Platform",
-          "Under Scrutiny",
-          "24/09/2020",
-          "assets/images/dummy/funds2.png",
-          "Pune , India",
-          "\$400K-\$500K",
-          "Elite Specia; Exporter & supplier engaged in offering a varied range of quality products; Already exported 26+ containers valued at \$170k+; Imported Kiwis & Apples valued at \$200k+; Strong sales team in the Middle East; Already raised Rs. 5mn+"),
-    ];
-  }
+  // static List<SubmittedFunds> getSubmittedFundsList() {
+  //   return <SubmittedFunds>[
+  //     const SubmittedFunds(
+  //         "Helion Ventures Partners",
+  //         "Not Listed",
+  //         "21/09/2020",
+  //         "assets/images/dummy/investment1.png",
+  //         "Pune , India",
+  //         "\$400K-\$500K",
+  //         "Elite Specia; Exporter & supplier engaged in offering a varied range of quality products; Already exported 26+ containers valued at \$170k+; Imported Kiwis & Apples valued at \$200k+; Strong sales team in the Middle East; Already raised Rs. 5mn+"),
+  //     const SubmittedFunds(
+  //         "Accel Partners",
+  //         "Listed",
+  //         "24/09/2020",
+  //         "assets/images/dummy/funds1.png",
+  //         "Pune , India",
+  //         "\$400K-\$500K",
+  //         "Elite Specia; Exporter & supplier engaged in offering a varied range of quality products; Already exported 26+ containers valued at \$170k+; Imported Kiwis & Apples valued at \$200k+; Strong sales team in the Middle East; Already raised Rs. 5mn+"),
+  //     const SubmittedFunds(
+  //         "Big Data Saas Platform",
+  //         "Under Scrutiny",
+  //         "24/09/2020",
+  //         "assets/images/dummy/investment3.png",
+  //         "Pune , India",
+  //         "\$400K-\$500K",
+  //         "Elite Specia; Exporter & supplier engaged in offering a varied range of quality products; Already exported 26+ containers valued at \$170k+; Imported Kiwis & Apples valued at \$200k+; Strong sales team in the Middle East; Already raised Rs. 5mn+"),
+  //     const SubmittedFunds(
+  //         "Always Stay Connected",
+  //         "Listed",
+  //         "14/09/2020",
+  //         "assets/images/dummy/investment4.png",
+  //         "Pune , India",
+  //         "\$400K-\$500K",
+  //         "Elite Specia; Exporter & supplier engaged in offering a varied range of quality products; Already exported 26+ containers valued at \$170k+; Imported Kiwis & Apples valued at \$200k+; Strong sales team in the Middle East; Already raised Rs. 5mn+"),
+  //     const SubmittedFunds(
+  //         "Cloud Kitchen",
+  //         "Listed",
+  //         "14/09/2020",
+  //         "assets/images/dummy/funds2.png",
+  //         "Pune , India",
+  //         "\$400K-\$500K",
+  //         "Elite Specia; Exporter & supplier engaged in offering a varied range of quality products; Already exported 26+ containers valued at \$170k+; Imported Kiwis & Apples valued at \$200k+; Strong sales team in the Middle East; Already raised Rs. 5mn+"),
+  //     const SubmittedFunds(
+  //         "Helion Ventures Partners",
+  //         "Not Listed",
+  //         "21/09/2020",
+  //         "assets/images/dummy/funds3.png",
+  //         "Pune , India",
+  //         "\$400K-\$500K",
+  //         "Elite Specia; Exporter & supplier engaged in offering a varied range of quality products; Already exported 26+ containers valued at \$170k+; Imported Kiwis & Apples valued at \$200k+; Strong sales team in the Middle East; Already raised Rs. 5mn+"),
+  //     const SubmittedFunds(
+  //         "Accel Partners",
+  //         "Listed",
+  //         "24/09/2020",
+  //         "assets/images/dummy/funds1.png",
+  //         "Pune , India",
+  //         "\$400K-\$500K",
+  //         "Elite Specia; Exporter & supplier engaged in offering a varied range of quality products; Already exported 26+ containers valued at \$170k+; Imported Kiwis & Apples valued at \$200k+; Strong sales team in the Middle East; Already raised Rs. 5mn+"),
+  //     const SubmittedFunds(
+  //         "Big Data Saas Platform",
+  //         "Under Scrutiny",
+  //         "24/09/2020",
+  //         "assets/images/dummy/funds2.png",
+  //         "Pune , India",
+  //         "\$400K-\$500K",
+  //         "Elite Specia; Exporter & supplier engaged in offering a varied range of quality products; Already exported 26+ containers valued at \$170k+; Imported Kiwis & Apples valued at \$200k+; Strong sales team in the Middle East; Already raised Rs. 5mn+"),
+  //   ];
+  // }
 
   void openAddNewFunds() {
     Navigator.of(context).push(PageRouteBuilder(
@@ -387,14 +387,53 @@ class _FundraiserHomeState extends State<FundraiserHome> {
   }
 }
 
+//class SubmittedFunds {
+//   const SubmittedFunds(this.name, this.type, this.date, this.image,
+//       this.location, this.minimumInvestment, this.description);
+//   final String name;
+//   final String type;
+//   final String date;
+//   final String image;
+//   final String location;
+//   final String minimumInvestment;
+//   final String description;
+// }
+//}
+
 class SubmittedFunds {
-  const SubmittedFunds(this.name, this.type, this.date, this.image,
-      this.location, this.minimumInvestment, this.description);
+  const SubmittedFunds(
+      this.fundTxnId,
+      this.userId,
+      this.productId,
+      this.slotId,
+      this.fundSponsorName,
+      this.name,
+      this.fundCountryCode,
+      this.fundCityId,
+      this.fundRegulated,
+      this.fundRegulatorName,
+      this.fundInvstmtObj,
+      this.fundExistVal,
+      this.fundNewVal,
+      this.fundWebsite,
+      this.fundLogo,
+      this.type,
+      this.date);
+  final int fundTxnId;
+  final int userId;
+  final int productId;
+  final int slotId;
+  final String fundSponsorName;
   final String name;
+  final String fundCountryCode;
+  final int fundCityId;
+  final int fundRegulated;
+  final String fundRegulatorName;
+  final String fundInvstmtObj;
+  final int fundExistVal;
+  final int fundNewVal;
+  final String fundWebsite;
+  final String fundLogo;
   final String type;
   final String date;
-  final String image;
-  final String location;
-  final String minimumInvestment;
-  final String description;
 }

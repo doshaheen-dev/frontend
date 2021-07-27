@@ -21,41 +21,44 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
-    return Scaffold(
-      backgroundColor: Color(0xffffffff),
-      body: Container(
-        child: Column(
-          children: [
-            Container(
-                margin:
-                    const EdgeInsets.only(top: 80.0, left: 15.0, right: 25.0),
-                child: Row(
-                  children: [
-                    Image.asset('assets/images/investor/icon_menu.png'),
-                    SizedBox(width: 10.0),
-                    Expanded(
-                        child: Text(
-                      'Hello  Fundraiser',
-                      style: textBold26(headingBlack),
-                    )),
-                    Image.asset('assets/images/investor/icon_investor.png'),
-                  ],
-                )),
-            Expanded(child: buildPageView())
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
         backgroundColor: Color(0xffffffff),
-        elevation: 0.0,
-        currentIndex: bottomSelectedIndex,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        type: BottomNavigationBarType.fixed,
-        onTap: (index) {
-          bottomTapped(index);
-        },
-        items: buildBottomNavBarItems(),
+        body: Container(
+          child: Column(
+            children: [
+              Container(
+                  margin:
+                      const EdgeInsets.only(top: 80.0, left: 15.0, right: 25.0),
+                  child: Row(
+                    children: [
+                      Image.asset('assets/images/investor/icon_menu.png'),
+                      SizedBox(width: 10.0),
+                      Expanded(
+                          child: Text(
+                        'Hello  Fundraiser',
+                        style: textBold26(headingBlack),
+                      )),
+                      Image.asset('assets/images/investor/icon_investor.png'),
+                    ],
+                  )),
+              Expanded(child: buildPageView())
+            ],
+          ),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Color(0xffffffff),
+          elevation: 0.0,
+          currentIndex: bottomSelectedIndex,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          type: BottomNavigationBarType.fixed,
+          onTap: (index) {
+            bottomTapped(index);
+          },
+          items: buildBottomNavBarItems(),
+        ),
       ),
     );
   }
@@ -141,6 +144,67 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
         index,
       );
     });
+  }
+
+  Future<bool> _onBackPressed() {
+    return showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Are you sure?'),
+            content: new Text('Do you want to exit an App'),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text(
+                    "Yes",
+                    style: textNormal16(selectedOrange),
+                  )),
+              SizedBox(height: 16),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: Text(
+                    "No",
+                    style: textNormal16(selectedOrange),
+                  )),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
+  openDialog() {
+    // set up the AlertDialog
+    Widget positiveButton = new GestureDetector(
+      onTap: () => Navigator.of(context).pop(false),
+      child: Text(
+        "Yes",
+      ),
+    );
+    Widget negativeButton = TextButton(
+      onPressed: () {
+        Navigator.of(context).pop(false);
+      },
+      child: Text("No", style: textNormal16(selectedOrange)),
+    );
+    AlertDialog alert = AlertDialog(
+      title: new Text('Are you sure?', style: textNormal16(headingBlack)),
+      content: new Text('Do you want to exit an App',
+          style: textNormal14(headingBlack)),
+      actions: <Widget>[positiveButton, SizedBox(height: 16), negativeButton],
+    );
+
+    // show the dialog
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }
 
