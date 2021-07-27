@@ -401,6 +401,24 @@ class _FundraiserHomeState extends State<FundraiserHome> {
 //}
 
 class SubmittedFunds {
+  final int fundTxnId;
+  final int userId;
+  final int productId;
+  final int slotId;
+  final String fundSponsorName;
+  final String name;
+  final String fundCountryCode;
+  final int fundCityId;
+  final int fundRegulated;
+  final String fundRegulatorName;
+  final String fundInvstmtObj;
+  final int fundExistVal;
+  final int fundNewVal;
+  final String fundWebsite;
+  final String fundLogo;
+  final String type;
+  final String date;
+
   const SubmittedFunds(
       this.fundTxnId,
       this.userId,
@@ -419,21 +437,4 @@ class SubmittedFunds {
       this.fundLogo,
       this.type,
       this.date);
-  final int fundTxnId;
-  final int userId;
-  final int productId;
-  final int slotId;
-  final String fundSponsorName;
-  final String name;
-  final String fundCountryCode;
-  final int fundCityId;
-  final int fundRegulated;
-  final String fundRegulatorName;
-  final String fundInvstmtObj;
-  final int fundExistVal;
-  final int fundNewVal;
-  final String fundWebsite;
-  final String fundLogo;
-  final String type;
-  final String date;
 }

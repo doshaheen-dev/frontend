@@ -13,7 +13,7 @@ class FundProvider with ChangeNotifier {
   Future<void> fetchAndSetFunds() async {
     final List<SubmittedFunds> loadedFunds = [];
     final Fund extractedData = await FundService.fetchFunds();
-    print('fund: ${extractedData.data.length}');
+    // print('fund: ${extractedData.data.length}');
     if (extractedData == null) {
       return;
     }

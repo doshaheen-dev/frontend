@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:acc/models/fund/add_fund_request.dart';
+import 'package:acc/models/fund/add_fund_response.dart';
 import 'package:acc/models/upload/upload_document.dart';
 import 'package:acc/screens/fundraiser/dashboard/create_funds_continue.dart';
 import 'package:acc/screens/fundraiser/dashboard/fundraiser_home.dart';
+import 'package:acc/services/fund_service.dart';
 import 'package:acc/services/upload_document_service.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/hex_color.dart';
@@ -16,6 +19,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
+
+import 'fundraiser_dashboard.dart';
 
 class FundraiserFundDetail extends StatefulWidget {
   final SubmittedFunds _recommendation;
@@ -132,8 +137,9 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
                         margin: const EdgeInsets.only(
                             top: 5.0, left: 20.0, bottom: 20, right: 20.0),
                         child: ElevatedButton(
-                          onPressed:
-                              !_isButtonDisabled ? null : _performSubmission,
+                          onPressed: !_isButtonDisabled
+                              ? null
+                              : _performSubmission(context),
                           style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.all(0.0),
                               shape: RoundedRectangleBorder(
@@ -432,7 +438,49 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
     _changeButtonStatus();
   }
 
-  _performSubmission() {
-    print("CLICKED");
+  _performSubmission(BuildContext context) async {
+    try {
+      progress = ProgressHUD.of(context);
+      progress?.showWithText('Submitting Updates...');
+      final requestModelInstance = AddFundRequestModel.instance;
+      requestModelInstance.fundNewVal =
+          int.parse(_newFundValueController.text.trim());
+      requestModelInstance.fundKycDocuments = [];
+      _uploadedDocuments.forEach((item) {
+        requestModelInstance.fundKycDocuments
+            .add(DocumentsData(item.id, item.uploadedKey));
+      });
+      AddFundResponse response = await FundService.updateFund(
+          requestModelInstance, _likedFunds.fundTxnId);
+      progress.dismiss();
+      if (response.type == 'success') {
+        requestModelInstance.clear();
+        _navigateToFundHome();
+      } else {
+        showSnackBar(context, "Something went wrong");
+      }
+    } catch (e) {
+      progress.dismiss();
+      showSnackBar(context, "Something went wrong");
+    }
+  }
+
+  void _navigateToFundHome() {
+    Navigator.of(context).pushAndRemoveUntil(
+        PageRouteBuilder(
+            pageBuilder: (context, animation, anotherAnimation) {
+              return FundraiserDashboard();
+            },
+            transitionDuration: Duration(milliseconds: 2000),
+            transitionsBuilder: (context, animation, anotherAnimation, child) {
+              animation = CurvedAnimation(
+                  curve: Curves.fastLinearToSlowEaseIn, parent: animation);
+              return SlideTransition(
+                position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                    .animate(animation),
+                child: child,
+              );
+            }),
+        (Route<dynamic> route) => false);
   }
 }
