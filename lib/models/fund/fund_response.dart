@@ -16,8 +16,8 @@ class Fund {
 
   factory Fund.fromMap(Map<String, dynamic> json) {
     List<OptionsData> optionsData = [];
-    if (json['options'] != null) {
-      for (Map map in json['options']) {
+    if (json['data'] != null) {
+      for (Map map in json['data']) {
         optionsData.add(OptionsData.fromMap(map));
       }
     }
@@ -31,8 +31,8 @@ class Fund {
 
   factory Fund.fromJson(Map<String, dynamic> json) {
     List<OptionsData> optionsData = [];
-    if (json['options'] != null) {
-      for (Map map in json['options']) {
+    if (json['data'] != null) {
+      for (Map map in json['data']) {
         optionsData.add(OptionsData.fromMap(map));
       }
     }
@@ -46,8 +46,8 @@ class Fund {
 
   static Fund from(Map valueMap) {
     List<OptionsData> optionsData = [];
-    if (valueMap['options'] != null) {
-      for (Map map in valueMap['options']) {
+    if (valueMap['data'] != null) {
+      for (Map map in valueMap['data']) {
         optionsData.add(OptionsData.fromMap(map));
       }
     }
