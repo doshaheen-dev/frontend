@@ -5,7 +5,7 @@ class Fund {
   final String type;
   final int status;
   final String message;
-  final List<OptionsData> data;
+  final FundData data;
 
   Fund({
     this.type,
@@ -15,47 +15,69 @@ class Fund {
   });
 
   factory Fund.fromMap(Map<String, dynamic> json) {
-    List<OptionsData> optionsData = [];
-    if (json['data'] != null) {
-      for (Map map in json['data']) {
-        optionsData.add(OptionsData.fromMap(map));
-      }
-    }
     return Fund(
       type: json["type"],
       status: json["status"],
       message: json["message"],
-      data: optionsData,
+      data: FundData.fromJson(json["data"]),
     );
   }
 
   factory Fund.fromJson(Map<String, dynamic> json) {
-    List<OptionsData> optionsData = [];
-    if (json['data'] != null) {
-      for (Map map in json['data']) {
-        optionsData.add(OptionsData.fromMap(map));
-      }
-    }
     return Fund(
       type: json["type"],
       status: json["status"],
       message: json["message"],
-      data: optionsData,
+      data: FundData.fromJson(json["data"]),
     );
   }
 
   static Fund from(Map valueMap) {
-    List<OptionsData> optionsData = [];
-    if (valueMap['data'] != null) {
-      for (Map map in valueMap['data']) {
-        optionsData.add(OptionsData.fromMap(map));
-      }
-    }
     return Fund(
       type: valueMap["type"],
       status: valueMap["status"],
       message: valueMap["message"],
-      data: optionsData,
+      data: FundData.fromJson(valueMap["data"]),
+    );
+  }
+}
+
+class FundData {
+  final List<OptionsData> options;
+  final int pageNo;
+  final int totalCount;
+
+  FundData(
+    this.options,
+    this.pageNo,
+    this.totalCount,
+  );
+
+  factory FundData.fromMap(Map<String, dynamic> json) {
+    List<OptionsData> optionsData = [];
+    if (json['option'] != null) {
+      for (Map map in json['option']) {
+        optionsData.add(OptionsData.fromMap(map));
+      }
+    }
+    return FundData(
+      optionsData,
+      json['pageNo'],
+      json['totalCount'],
+    );
+  }
+
+  factory FundData.fromJson(Map<String, dynamic> json) {
+    List<OptionsData> optionsData = [];
+    if (json['option'] != null) {
+      for (Map map in json['option']) {
+        optionsData.add(OptionsData.fromMap(map));
+      }
+    }
+    return FundData(
+      optionsData,
+      json['pageNo'],
+      json['totalCount'],
     );
   }
 }
@@ -77,8 +99,12 @@ class OptionsData {
   final String fundWebsite;
   final String fundLogo;
   final String fundStatus;
-  final int fundInternalApproved;
+  final String fundInternalApproved;
   final String termsAgreedTimestamp;
+  final String fundRange;
+  final String minPerInvestor;
+  final String countryName;
+  final String cityName;
 
   OptionsData(
     this.fundTxnId,
@@ -99,6 +125,10 @@ class OptionsData {
     this.fundStatus,
     this.fundInternalApproved,
     this.termsAgreedTimestamp,
+    this.fundRange,
+    this.minPerInvestor,
+    this.countryName,
+    this.cityName,
   );
 
   factory OptionsData.fromMap(Map<String, dynamic> json) {
@@ -121,6 +151,10 @@ class OptionsData {
       json["fund_status"],
       json["fund_internal_approved"],
       json["fund_terms_agreed_date_time"],
+      json["fund_range"],
+      json["min_per_investor"],
+      json["country_name"],
+      json["city_name"],
     );
   }
   factory OptionsData.fromJson(Map<String, dynamic> json) {
@@ -143,6 +177,10 @@ class OptionsData {
       json["fund_status"],
       json["fund_internal_approved"],
       json["fund_terms_agreed_date_time"],
+      json["fund_range"],
+      json["min_per_investor"],
+      json["country_name"],
+      json["city_name"],
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/app_strings.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:provider/provider.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class FundraiserHome extends StatefulWidget {
   FundraiserHome({Key key}) : super(key: key);
@@ -15,42 +16,78 @@ class FundraiserHome extends StatefulWidget {
   State<StatefulWidget> createState() => _FundraiserHomeState();
 }
 
-bool _fundsAvailable = false;
+bool _fundsAvailable = true;
 
 class _FundraiserHomeState extends State<FundraiserHome> {
   List<SubmittedFunds> fundsList = []; // = getSubmittedFundsList();
+  // Funds List
+  static const fundPageSize = 10;
+
+  final PagingController<int, SubmittedFunds> _pagingController =
+      PagingController(firstPageKey: 0);
+
+  Future<void> _fetchPage(int pageKey) async {
+    try {
+      // print('Page: $pageKey');
+      final fundPvdr = Provider.of<FundProvider>(context, listen: false);
+      fundPvdr.fetchAndSetFunds(pageKey, fundPageSize).then((result) {
+        final funds = fundPvdr.funds;
+        // print('Funds: ${funds.length}');
+        fundsList.addAll(funds);
+        // print('FundsList: ${fundsList.length}');
+        setState(() {
+          if (funds.isEmpty) {
+            _fundsAvailable = false;
+          } else {
+            _fundsAvailable = true;
+          }
+
+          final isLastPage = funds.length < fundPageSize;
+          if (isLastPage) {
+            _pagingController.appendLastPage(funds);
+            _fundsAvailable = true;
+          } else {
+            final nextPageKey = pageKey + funds.length;
+            _pagingController.appendPage(funds, nextPageKey);
+          }
+        });
+      });
+    } catch (error) {
+      _pagingController.error = error;
+    }
+  }
 
   @override
   void initState() {
-    final fundPvdr = Provider.of<FundProvider>(context, listen: false);
-    fundPvdr.fetchAndSetFunds();
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
-    final fundPvdr = Provider.of<FundProvider>(context);
-    fundsList = fundPvdr.funds;
-    if (fundsList.isEmpty) {
-      _fundsAvailable = false;
-    } else {
-      _fundsAvailable = true;
-    }
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-            child: Container(
-          margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
-          child: Column(
-            children: [
-              Visibility(
-                  visible: !_fundsAvailable, child: addNewFundsCell(context)),
-              Visibility(
-                  visible: _fundsAvailable, child: addSubmittedList(context)),
-            ],
-          ),
-        )));
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+          child: Container(
+        margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
+        child: Column(
+          children: [
+            Visibility(
+                visible: !_fundsAvailable, child: addNewFundsCell(context)),
+            Visibility(
+                visible: _fundsAvailable, child: addSubmittedList(context)),
+          ],
+        ),
+      )),
+    );
   }
 
   Stack addSubmittedList(BuildContext context) {
@@ -64,15 +101,32 @@ class _FundraiserHomeState extends State<FundraiserHome> {
             ),
             Container(
               margin:
-                  const EdgeInsets.only(left: 25.0, right: 25.0, bottom: 25.0),
-              child: ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (ctx, index) {
-                  return _createCell(fundsList[index], index);
-                },
-                itemCount: fundsList.length,
-                shrinkWrap: true,
+                  const EdgeInsets.only(left: 25.0, right: 25.0, bottom: 20.0),
+              child: RefreshIndicator(
+                onRefresh: () => Future.sync(
+                  () => _pagingController.refresh(),
+                ),
+                child: PagedListView<int, SubmittedFunds>.separated(
+                  pagingController: _pagingController,
+                  builderDelegate: PagedChildBuilderDelegate<SubmittedFunds>(
+                    animateTransitions: true,
+                    itemBuilder: (context, item, index) =>
+                        _createCell(item, index),
+                  ),
+                  separatorBuilder: (context, index) => const Divider(
+                    color: Colors.transparent,
+                  ),
+                  shrinkWrap: true,
+                ),
               ),
+              // child: ListView.builder(
+              //   physics: NeverScrollableScrollPhysics(),
+              //   itemBuilder: (ctx, index) {
+              //     return _createCell(fundsList[index], index);
+              //   },
+              //   itemCount: fundsList.length,
+              //   shrinkWrap: true,
+              // ),
             ),
             Align(
               child: Container(
@@ -108,13 +162,13 @@ class _FundraiserHomeState extends State<FundraiserHome> {
     );
   }
 
-  InkWell _createCell(SubmittedFunds item, int index) {
+  Widget _createCell(SubmittedFunds item, int index) {
     MaterialColor iconColor;
-    if (item.type == "open") {
+    if (item.type == "Approve") {
       iconColor = Colors.green;
-    } else if (item.type == "Under Scrutiny") {
+    } else if (item.type == "UnderScrutiny") {
       iconColor = Colors.blue;
-    } else if (item.type == "closed") {
+    } else if (item.type == "Reject") {
       iconColor = Colors.red;
     }
 
@@ -127,7 +181,7 @@ class _FundraiserHomeState extends State<FundraiserHome> {
         setState(() {});
       },
       child: Container(
-        margin: EdgeInsets.only(top: 10.0),
+        margin: EdgeInsets.only(top: 8.0),
         height: 80,
         decoration: BoxDecoration(
           color: unselectedGray,
@@ -166,6 +220,7 @@ class _FundraiserHomeState extends State<FundraiserHome> {
                       SizedBox(
                         width: 15,
                       ),
+                      // if (item.type == "Reject")
                       InkWell(
                         onTap: () {
                           Navigator.push(
@@ -407,8 +462,8 @@ class SubmittedFunds {
   final int slotId;
   final String fundSponsorName;
   final String name;
-  final String fundCountryCode;
-  final int fundCityId;
+  final String fundCountryName;
+  final String fundCityName;
   final int fundRegulated;
   final String fundRegulatorName;
   final String fundInvstmtObj;
@@ -418,23 +473,26 @@ class SubmittedFunds {
   final String fundLogo;
   final String type;
   final String date;
+  final String minimumInvestment;
 
   const SubmittedFunds(
-      this.fundTxnId,
-      this.userId,
-      this.productId,
-      this.slotId,
-      this.fundSponsorName,
-      this.name,
-      this.fundCountryCode,
-      this.fundCityId,
-      this.fundRegulated,
-      this.fundRegulatorName,
-      this.fundInvstmtObj,
-      this.fundExistVal,
-      this.fundNewVal,
-      this.fundWebsite,
-      this.fundLogo,
-      this.type,
-      this.date);
+    this.fundTxnId,
+    this.userId,
+    this.productId,
+    this.slotId,
+    this.fundSponsorName,
+    this.name,
+    this.fundCountryName,
+    this.fundCityName,
+    this.fundRegulated,
+    this.fundRegulatorName,
+    this.fundInvstmtObj,
+    this.fundExistVal,
+    this.fundNewVal,
+    this.fundWebsite,
+    this.fundLogo,
+    this.type,
+    this.date,
+    this.minimumInvestment,
+  );
 }

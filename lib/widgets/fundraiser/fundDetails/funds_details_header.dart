@@ -19,11 +19,11 @@ class _FundsDetailHeaderState extends State<FundsDetailHeader> {
   @override
   Widget build(BuildContext context) {
     MaterialColor iconColor;
-    if (widget.likedFunds.type == "Listed") {
+    if (widget.likedFunds.type == "Approve") {
       iconColor = Colors.green;
-    } else if (widget.likedFunds.type == "Under Scrutiny") {
+    } else if (widget.likedFunds.type == "UnderScrutiny") {
       iconColor = Colors.blue;
-    } else if (widget.likedFunds.type == "Not Listed") {
+    } else if (widget.likedFunds.type == "Reject") {
       iconColor = Colors.red;
     }
 
@@ -108,28 +108,31 @@ class _FundsDetailHeaderState extends State<FundsDetailHeader> {
               width: 30,
             ),
             Text(
-              "Pune",
-              // _likedFunds.location,
+              // "Pune",
+              "${widget.likedFunds.fundCityName}, ${widget.likedFunds.fundCountryName}",
               style: textNormal(HexColor("#404040"), 12.0),
             )
           ],
         ),
         Center(
           child: Text(
-            // "Minimum Investment : ${_likedFunds.minimumInvestment}",
-            "Minimum Investment : 10000",
+            "Minimum Investment : ${widget.likedFunds.minimumInvestment}",
+            // "Minimum Investment : 10000",
             style: textNormal(HexColor("#404040"), 12.0),
           ),
         ),
         SizedBox(
           height: 20.0,
         ),
-        Center(
-            child: Text(
-          widget.likedFunds.fundInvstmtObj,
-          textAlign: TextAlign.center,
-          style: textNormal(HexColor("#3A3B3F"), 14.0),
-        ))
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+          child: Center(
+              child: Text(
+            widget.likedFunds.fundInvstmtObj,
+            textAlign: TextAlign.left,
+            style: textNormal(HexColor("#3A3B3F"), 14.0),
+          )),
+        )
       ],
     );
   }

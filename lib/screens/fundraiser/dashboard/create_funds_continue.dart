@@ -378,7 +378,9 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
       setState(() {});
     } catch (e) {
       showSnackBar(context, 'Something went wrong.');
-      progress.dismiss();
+      if (progress != null) {
+        progress.dismiss();
+      }
       setState(() {});
     }
   }

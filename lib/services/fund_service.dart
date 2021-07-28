@@ -13,7 +13,7 @@ class FundService {
   static Future<AddFundResponse> addFund(AddFundRequestModel request) async {
     final url = Uri.parse("${ApiServices.baseUrl}/fund");
     UserData.instance.token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGVfbm8iOiJDaFp1bXRFQVNPUXZlWmppQWZQUEx3PT0iLCJlbWFpbF9pZCI6ImUvVTVUaWtzWGV1QjB2WGxndUg1eEhTS2hDSnZsVHczRENpZXY2M2R2WG89IiwiZmlyc3RfbmFtZSI6ImV5ZDJmOE0xb3lUc3h5Y0VRbmRjSGc9PSIsIm1pZGRsZV9uYW1lIjoiIiwibGFzdF9uYW1lIjoiajBtNWg5VE1mWWdKNUxjVktLREdwQT09IiwiaWQiOjEzNywidXNlcl90eXBlIjoiaW52ZXN0b3IiLCJpYXQiOjE2MjczMTA3OTN9.sR8LEOCcX39F6QC06Ac9ITFL-spLBb9txPOwyGjXIco";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGVfbm8iOiI1MGl5NnJMZCtyenRERmt0L2hqaHJnPT0iLCJlbWFpbF9pZCI6ImFKakp2UGUvQUhUaHREV2tLYjZaalB4MG9MVzNkOXdyNi9KSUpoMlZTeGs9IiwiZmlyc3RfbmFtZSI6IkNQMmFxMmVZVEdtTjJXWkMvbmdUdXc9PSIsIm1pZGRsZV9uYW1lIjpudWxsLCJsYXN0X25hbWUiOiJVZ3dYTmR5NGNmaDNFUXVUQThSaHhBPT0iLCJpZCI6MTQ5LCJ1c2VyX3R5cGUiOiJmdW5kcmFpc2VyIiwiaWF0IjoxNjI3Mzk5NDU0fQ.SqlBLUSp5etHMC-DiOXJ0eHdEG_KoQGPWMTlQ0Vl0ws";
 
     final headers = {
       "Content-type": "application/json",
@@ -32,17 +32,21 @@ class FundService {
     return fundTxnDetails;
   }
 
-  static Future<Fund> fetchFunds() async {
+  static Future<Fund> fetchFunds(
+    int pageNo,
+    int pageSize,
+  ) async {
     UserData.instance.token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGVfbm8iOiJDaFp1bXRFQVNPUXZlWmppQWZQUEx3PT0iLCJlbWFpbF9pZCI6ImUvVTVUaWtzWGV1QjB2WGxndUg1eEhTS2hDSnZsVHczRENpZXY2M2R2WG89IiwiZmlyc3RfbmFtZSI6ImV5ZDJmOE0xb3lUc3h5Y0VRbmRjSGc9PSIsIm1pZGRsZV9uYW1lIjoiIiwibGFzdF9uYW1lIjoiajBtNWg5VE1mWWdKNUxjVktLREdwQT09IiwiaWQiOjEzNywidXNlcl90eXBlIjoiaW52ZXN0b3IiLCJpYXQiOjE2MjczMTA3OTN9.sR8LEOCcX39F6QC06Ac9ITFL-spLBb9txPOwyGjXIco";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGVfbm8iOiI1MGl5NnJMZCtyenRERmt0L2hqaHJnPT0iLCJlbWFpbF9pZCI6ImFKakp2UGUvQUhUaHREV2tLYjZaalB4MG9MVzNkOXdyNi9KSUpoMlZTeGs9IiwiZmlyc3RfbmFtZSI6IkNQMmFxMmVZVEdtTjJXWkMvbmdUdXc9PSIsIm1pZGRsZV9uYW1lIjpudWxsLCJsYXN0X25hbWUiOiJVZ3dYTmR5NGNmaDNFUXVUQThSaHhBPT0iLCJpZCI6MTQ5LCJ1c2VyX3R5cGUiOiJmdW5kcmFpc2VyIiwiaWF0IjoxNjI3Mzk5NDU0fQ.SqlBLUSp5etHMC-DiOXJ0eHdEG_KoQGPWMTlQ0Vl0ws";
 
     final headers = {
       "Content-type": "application/json",
       "authorization": "Bearer ${UserData.instance.token}",
     };
-    final response = await http.get(Uri.parse('${ApiServices.baseUrl}/fund'),
-        headers: headers);
-// print('resp: ${response.body}');
+    final url = Uri.parse(
+        '${ApiServices.baseUrl}/fund?pageNo=$pageNo&pageSize=$pageSize');
+    final response = await http.get(url, headers: headers);
+    // print('resp: ${response.body}');
     Map valueMap = jsonDecode(response.body);
     Fund funds = Fund.from(valueMap);
     return funds;
@@ -54,7 +58,7 @@ class FundService {
   ) async {
     final url = Uri.parse("${ApiServices.baseUrl}/fund/$fundId");
     UserData.instance.token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGVfbm8iOiJDaFp1bXRFQVNPUXZlWmppQWZQUEx3PT0iLCJlbWFpbF9pZCI6ImUvVTVUaWtzWGV1QjB2WGxndUg1eEhTS2hDSnZsVHczRENpZXY2M2R2WG89IiwiZmlyc3RfbmFtZSI6ImV5ZDJmOE0xb3lUc3h5Y0VRbmRjSGc9PSIsIm1pZGRsZV9uYW1lIjoiIiwibGFzdF9uYW1lIjoiajBtNWg5VE1mWWdKNUxjVktLREdwQT09IiwiaWQiOjEzNywidXNlcl90eXBlIjoiaW52ZXN0b3IiLCJpYXQiOjE2MjczMTA3OTN9.sR8LEOCcX39F6QC06Ac9ITFL-spLBb9txPOwyGjXIco";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGVfbm8iOiI1MGl5NnJMZCtyenRERmt0L2hqaHJnPT0iLCJlbWFpbF9pZCI6ImFKakp2UGUvQUhUaHREV2tLYjZaalB4MG9MVzNkOXdyNi9KSUpoMlZTeGs9IiwiZmlyc3RfbmFtZSI6IkNQMmFxMmVZVEdtTjJXWkMvbmdUdXc9PSIsIm1pZGRsZV9uYW1lIjpudWxsLCJsYXN0X25hbWUiOiJVZ3dYTmR5NGNmaDNFUXVUQThSaHhBPT0iLCJpZCI6MTQ5LCJ1c2VyX3R5cGUiOiJmdW5kcmFpc2VyIiwiaWF0IjoxNjI3Mzk5NDU0fQ.SqlBLUSp5etHMC-DiOXJ0eHdEG_KoQGPWMTlQ0Vl0ws";
 
     final headers = {
       "Content-type": "application/json",

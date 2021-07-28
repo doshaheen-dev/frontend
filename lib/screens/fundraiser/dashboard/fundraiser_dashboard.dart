@@ -1,3 +1,4 @@
+import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/screens/fundraiser/dashboard/fundraiser_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,10 +37,15 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
                       Image.asset('assets/images/investor/icon_menu.png'),
                       SizedBox(width: 10.0),
                       Expanded(
-                          child: Text(
-                        'Hello  Fundraiser',
-                        style: textBold26(headingBlack),
-                      )),
+                          child: UserData.instance.firstName != null
+                              ? Text(
+                                  'Hello  ${UserData.instance.firstName}',
+                                  style: textBold26(headingBlack),
+                                )
+                              : Text(
+                                  'Hello  Fundraiser',
+                                  style: textBold26(headingBlack),
+                                )),
                       Image.asset('assets/images/investor/icon_investor.png'),
                     ],
                   )),

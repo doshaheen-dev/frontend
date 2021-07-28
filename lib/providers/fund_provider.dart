@@ -10,10 +10,12 @@ class FundProvider with ChangeNotifier {
     return [..._funds];
   }
 
-  Future<void> fetchAndSetFunds() async {
+  Future<void> fetchAndSetFunds(
+    int pageNo,
+    int pageSize,
+  ) async {
     final List<SubmittedFunds> loadedFunds = [];
-    final Fund extractedData = await FundService.fetchFunds();
-    // print('fund: ${extractedData.data.length}');
+    final Fund extractedData = await FundService.fetchFunds(pageNo, pageSize);
     if (extractedData == null) {
       return;
     }
@@ -23,7 +25,7 @@ class FundProvider with ChangeNotifier {
     //   '${option.slotId}', option.fundInvstmtObj));
     // });
 
-    extractedData.data.forEach((option) {
+    extractedData.data.options.forEach((option) {
       loadedFunds.add(SubmittedFunds(
         option.fundTxnId,
         option.userId,
@@ -31,8 +33,8 @@ class FundProvider with ChangeNotifier {
         option.slotId,
         option.fundSponsorName,
         option.fundName,
-        '${option.fundCountryCode}',
-        option.fundCityId,
+        option.countryName,
+        option.cityName,
         option.fundRegulated,
         option.fundRegulatorName,
         option.fundInvstmtObj,
@@ -40,8 +42,9 @@ class FundProvider with ChangeNotifier {
         option.fundNewVal,
         option.fundWebsite,
         option.fundLogo,
-        option.fundStatus,
+        option.fundInternalApproved,
         option.termsAgreedTimestamp,
+        option.minPerInvestor,
       ));
     });
 
