@@ -185,8 +185,8 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                               final userJson = jsonEncode(signedUpUser.data);
                               prefs.setString('UserInfo', userJson);
 
-                              // final userModelInstance = UserData.instance;
-                              // userModelInstance.token = userJson.token;
+                              final userModelInstance = UserData.instance;
+                              userModelInstance.token = signedUpUser.data.token;
 
                               openDashboard();
                             } else {

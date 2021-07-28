@@ -28,7 +28,9 @@ class InvestorHome with ChangeNotifier {
             option.fundSponsorName,
             option.fundRegulated,
             option.fundRegulatorName,
-            option.fundWebsite));
+            option.fundWebsite,
+            option.fundInvstmtObj,
+            option.cityName));
       });
     } else {
       return;
@@ -38,10 +40,11 @@ class InvestorHome with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchAndSetInterestedFunds(String token, int pageNo) async {
+  Future<void> fetchAndSetInterestedFunds(
+      String token, int pageNo, int pageSize) async {
     final List<FundsInfo> loadedFunds = [];
     final Funds extractedData =
-        await InvestorHomeService.fetchInterestedFunds(token, pageNo);
+        await InvestorHomeService.fetchInterestedFunds(token, pageNo, pageSize);
     if (extractedData == null) {
       return;
     }
@@ -56,7 +59,9 @@ class InvestorHome with ChangeNotifier {
             option.fundSponsorName,
             option.fundRegulated,
             option.fundRegulatorName,
-            option.fundWebsite));
+            option.fundWebsite,
+            option.fundInvstmtObj,
+            option.city_name));
       });
     } else {
       return;
@@ -77,6 +82,8 @@ class FundsInfo {
   final int fundRegulated;
   final String fundRegulatorName;
   final String fundWebsite;
+  final String fund_invstmt_obj;
+  final String city_name;
 
   FundsInfo(
       this.fundName,
@@ -87,5 +94,7 @@ class FundsInfo {
       this.fundSponsorName,
       this.fundRegulated,
       this.fundRegulatorName,
-      this.fundWebsite);
+      this.fundWebsite,
+      this.fund_invstmt_obj,
+      this.city_name);
 }

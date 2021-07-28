@@ -45,9 +45,10 @@ class InvestorHomeService {
   }
 
   // Fetch Recommendations
-  static Future<Funds> fetchInterestedFunds(String token, int pageNo) async {
+  static Future<Funds> fetchInterestedFunds(
+      String token, int pageNo, num pageSize) async {
     final url = Uri.parse(
-        '${ApiServices.baseUrl}/fund/liked?pageNo=$pageNo&pageSize=10');
+        '${ApiServices.baseUrl}/fund/liked?pageNo=$pageNo&pageSize=$pageSize');
     final headers = {
       "Content-type": "application/json",
       "authorization": "Bearer $token"

@@ -69,7 +69,8 @@ class Option {
   String fundWebsite;
   String fundLogo;
   String fundStatus;
-  Null fundInternalApproved;
+  String cityName;
+//  Null fundInternalApproved;
 
   Option(
       {this.fundTxnId,
@@ -89,7 +90,9 @@ class Option {
       this.fundWebsite,
       this.fundLogo,
       this.fundStatus,
-      this.fundInternalApproved});
+      this.cityName
+      //  this.fundInternalApproved
+      });
 
   Option.fromJson(Map<String, dynamic> json) {
     fundTxnId = json['fund_txn_id'];
@@ -109,7 +112,8 @@ class Option {
     fundWebsite = json['fund_website'];
     fundLogo = json['fund_logo'];
     fundStatus = json['fund_status'];
-    fundInternalApproved = json['fund_internal_approved'];
+    cityName = json['city_name'];
+    // fundInternalApproved = json['fund_internal_approved'];
   }
 
   Map<String, dynamic> toJson() {
@@ -131,7 +135,8 @@ class Option {
     data['fund_website'] = this.fundWebsite;
     data['fund_logo'] = this.fundLogo;
     data['fund_status'] = this.fundStatus;
-    data['fund_internal_approved'] = this.fundInternalApproved;
+    data['city_name'] = this.cityName;
+    //  data['fund_internal_approved'] = this.fundInternalApproved;
     return data;
   }
 }

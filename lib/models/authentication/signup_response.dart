@@ -44,6 +44,7 @@ class User {
 }
 
 class ResponseData {
+  final String token;
   final int id;
   final String firstName;
   final String lastName;
@@ -60,6 +61,7 @@ class ResponseData {
   final int mobileNoVerified;
 
   ResponseData(
+    this.token,
     this.id,
     this.firstName,
     this.lastName,
@@ -77,6 +79,7 @@ class ResponseData {
   );
 
   Map<String, dynamic> toJson() => {
+        "token": this.token,
         "id": this.id,
         "first_name": this.firstName,
         "last_name": this.lastName,
@@ -95,6 +98,7 @@ class ResponseData {
 
   factory ResponseData.fromMap(Map<String, dynamic> json) {
     return ResponseData(
+      json['token'],
       json['id'],
       CryptUtils.decryption(json['first_name']),
       CryptUtils.decryption(json['last_name']),
@@ -113,6 +117,7 @@ class ResponseData {
   }
   factory ResponseData.fromJson(Map<String, dynamic> json) {
     return ResponseData(
+      json['token'],
       json['id'],
       CryptUtils.decryption(json['first_name']),
       CryptUtils.decryption(json['last_name']),

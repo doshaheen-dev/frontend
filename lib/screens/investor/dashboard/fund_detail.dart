@@ -97,8 +97,9 @@ class _FundDetailState extends State<FundDetail> {
                   ),
                   Image(
                     image: _likedFunds.fundLogo != ""
-                        ? NetworkImage("http://${_likedFunds.fundLogo}")
+                        ? NetworkImage(_likedFunds.fundLogo)
                         : AssetImage("assets/images/dummy/investment1.png"),
+                    width: MediaQuery.of(context).size.width,
                     height: 100,
                     fit: BoxFit.fill,
                   ),
@@ -171,7 +172,7 @@ class _FundDetailState extends State<FundDetail> {
               width: 30,
             ),
             Text(
-              "Pune",
+              _likedFunds.city_name,
               style: textNormal(HexColor("#404040"), 12.0),
             )
           ],
@@ -184,7 +185,7 @@ class _FundDetailState extends State<FundDetail> {
           height: 20.0,
         ),
         Text(
-          description,
+          _likedFunds.fund_invstmt_obj,
           style: textNormal(HexColor("#3A3B3F"), 14.0),
         )
       ],

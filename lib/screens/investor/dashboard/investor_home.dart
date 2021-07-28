@@ -41,8 +41,6 @@ class _InvestorHomeState extends State<InvestorHome> {
 
   bool isFundsPresent = false;
   bool isRecommendationPresent = false;
-  // var token =
-  //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGVfbm8iOiJDaFp1bXRFQVNPUXZlWmppQWZQUEx3PT0iLCJlbWFpbF9pZCI6ImUvVTVUaWtzWGV1QjB2WGxndUg1eEhTS2hDSnZsVHczRENpZXY2M2R2WG89IiwiZmlyc3RfbmFtZSI6ImV5ZDJmOE0xb3lUc3h5Y0VRbmRjSGc9PSIsIm1pZGRsZV9uYW1lIjoiIiwibGFzdF9uYW1lIjoiajBtNWg5VE1mWWdKNUxjVktLREdwQT09IiwiaWQiOjEzNywidXNlcl90eXBlIjoiaW52ZXN0b3IiLCJpYXQiOjE2MjczMTA3OTN9.sR8LEOCcX39F6QC06Ac9ITFL-spLBb9txPOwyGjXIco";
 
   // Recommendations List
   num _recommendationPageSize = 1;
@@ -69,17 +67,15 @@ class _InvestorHomeState extends State<InvestorHome> {
   }
 
   Future<void> _fetchRecommendation(BuildContext context) async {
-    //UserData.instance.token = token;
     await Provider.of<investorProvider.InvestorHome>(context, listen: false)
         .fetchAndSetRecommendations(UserData.instance.token,
             recommendationPageNo, _recommendationPageSize); //_userData.token
   }
 
   Future<void> _fetchInterestedFunds(BuildContext context) async {
-    // UserData.instance.token = token;
     await Provider.of<investorProvider.InvestorHome>(context, listen: false)
-        .fetchAndSetInterestedFunds(
-            UserData.instance.token, fundPageNo); //widget.userData.token
+        .fetchAndSetInterestedFunds(UserData.instance.token, fundPageNo,
+            _fundsPageSize); //widget.userData.token
   }
 
   @override
@@ -102,8 +98,8 @@ class _InvestorHomeState extends State<InvestorHome> {
   }
 
   void getFundsListSize() {
-    Future<Funds> fundsInfo =
-        InvestorHomeService.fetchInterestedFunds(UserData.instance.token, 0);
+    Future<Funds> fundsInfo = InvestorHomeService.fetchInterestedFunds(
+        UserData.instance.token, fundPageNo, _fundsPageSize);
     fundsInfo.then((result) {
       print("Funds");
       setState(() {
@@ -165,6 +161,7 @@ class _InvestorHomeState extends State<InvestorHome> {
 
   Column fundsUI() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
             margin: const EdgeInsets.only(top: 20.0, left: 25.0, right: 25.0),
@@ -240,21 +237,37 @@ class _InvestorHomeState extends State<InvestorHome> {
                     color: kDarkOrange,
                     onPressed: () {
                       setState(() {
-                        if ((fundsTotalItems - 1) > (tempFundsSizeList)) {
-                          if ((_fundscurrentIndex + 1) == tempFundsSizeList) {
+                        if ((fundsTotalItems - 3) > (tempFundsSizeList)) {
+                          if ((_fundscurrentIndex + 3) == tempFundsSizeList) {
                             fundPageNo++;
                             _interestedFunds = _fetchInterestedFunds(context);
-                            increaseIndex(_fundscurrentIndex);
-                          } else if ((currentIndex + 1) > _fundsPageSize) {
+                            _fundscurrentIndex++;
+
+                            fundItemScrollController.scrollTo(
+                                index: _fundscurrentIndex,
+                                duration: Duration(seconds: 3),
+                                curve: Curves.easeInOutCubic);
+                          } else if ((_fundscurrentIndex + 3) >
+                              _fundsPageSize) {
                             fundsPageNo++;
                             _interestedFunds = _fetchInterestedFunds(context);
                             getFundsListSize();
-                            increaseIndex(_fundscurrentIndex);
+                            _fundscurrentIndex++;
+
+                            fundItemScrollController.scrollTo(
+                                index: _fundscurrentIndex,
+                                duration: Duration(seconds: 3),
+                                curve: Curves.easeInOutCubic);
                           } else {
-                            increaseIndex(_fundscurrentIndex);
+                            _fundscurrentIndex++;
+
+                            fundItemScrollController.scrollTo(
+                                index: _fundscurrentIndex,
+                                duration: Duration(seconds: 3),
+                                curve: Curves.easeInOutCubic);
                           }
                         } else {
-                          showSnackBar(context, "End of recommendation list");
+                          showSnackBar(context, "End of funds list");
                         }
                       });
                     }),
@@ -306,15 +319,14 @@ class _InvestorHomeState extends State<InvestorHome> {
   Widget _buildFundsList(
       BuildContext context, int index, interestedFundsData, length) {
     interestedFundsSize = length;
-    if (length == 0) {
-      setState(() {
-        isFundsPresent = false;
-      });
-    } else {
-      setState(() {
-        isFundsPresent = true;
-      });
-    }
+
+    // setState(() {
+    //   if (length == 0) {
+    //     isFundsPresent = false;
+    //   } else {
+    //     isFundsPresent = true;
+    //   }
+    // });
     return GestureDetector(
         onTap: () => {
               Navigator.push(
@@ -334,21 +346,31 @@ class _InvestorHomeState extends State<InvestorHome> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(8.0),
-                        topRight: Radius.circular(8.0),
-                      ),
-                      child: Image.asset(
-                        interestedFundsData.image,
-                        height: 80.0,
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        fit: BoxFit.fill,
-                      )),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8.0),
+                      topRight: Radius.circular(8.0),
+                    ),
+                    child: Image(
+                      image: interestedFundsData.fundLogo != ""
+                          ? NetworkImage(interestedFundsData.fundLogo)
+                          : AssetImage("assets/images/dummy/investment1.png"),
+                      height: 80.0,
+                      width: MediaQuery.of(context).size.width * 0.5,
+                      fit: BoxFit.fill,
+                    ),
+                    // child:
+                    // Image.asset(
+                    //   interestedFundsData.fundLogo,
+                    //   height: 80.0,
+                    //   width: MediaQuery.of(context).size.width * 0.5,
+                    //   fit: BoxFit.fill,
+                    // )
+                  ),
                   SizedBox(
                     height: 5.0,
                   ),
                   Center(
-                    child: Text(interestedFundsData.name,
+                    child: Text(interestedFundsData.fundName,
                         style: textBold(headingBlack, 12.0)),
                   )
                 ],
