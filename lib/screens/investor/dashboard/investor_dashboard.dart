@@ -1,8 +1,10 @@
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
+import 'package:acc/screens/common/profile_picture.dart';
 import 'package:acc/screens/investor/dashboard/investor_profile.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/text_style.dart';
+import 'package:acc/widgets/image_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/investor/dashboard/investor_home.dart';
@@ -30,6 +32,8 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
+    final double bRadius = 60;
+    final double iHeight = 65;
 
     return WillPopScope(
       onWillPop: _onBackPressed,
@@ -46,14 +50,75 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                       Image.asset('assets/images/investor/icon_menu.png'),
                       SizedBox(width: 10.0),
                       Expanded(
-                          child: Text(
-                        'Hello Investor',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 26.0,
-                            fontFamily: FontFamilyMontserrat.name),
-                      )),
-                      Image.asset('assets/images/investor/icon_investor.png'),
+                        child: UserData.instance.firstName != null
+                            ? Text(
+                                'Hello  ${UserData.instance.firstName}',
+                                style: textBold26(headingBlack),
+                              )
+                            : Text(
+                                'Hello Investor',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 26.0,
+                                    fontFamily: FontFamilyMontserrat.name),
+                              ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(
+                                PageRouteBuilder(
+                                    pageBuilder:
+                                        (context, animation, anotherAnimation) {
+                                      return ProfilePicScreen(
+                                          UserData.instance.profileImage);
+                                    },
+                                    transitionDuration:
+                                        Duration(milliseconds: 2000),
+                                    transitionsBuilder: (context, animation,
+                                        anotherAnimation, child) {
+                                      animation = CurvedAnimation(
+                                          curve: Curves.fastLinearToSlowEaseIn,
+                                          parent: animation);
+                                      return SlideTransition(
+                                        position: Tween(
+                                                begin: Offset(1.0, 0.0),
+                                                end: Offset(0.0, 0.0))
+                                            .animate(animation),
+                                        child: child,
+                                      );
+                                    }),
+                              )
+                              .then((_) => setState(() {}));
+                        },
+                        child: Container(
+                          height: 70,
+                          width: 70,
+                          child: CircleAvatar(
+                            radius: bRadius,
+                            backgroundColor: Colors.orange,
+                            child: (UserData.instance.profileImage == null ||
+                                    UserData.instance.profileImage == '')
+                                ? ImageCircle(
+                                    borderRadius: bRadius,
+                                    image: Image.asset(
+                                      'assets/images/UserProfile.png',
+                                      width: iHeight,
+                                      height: iHeight,
+                                      fit: BoxFit.fill,
+                                    ),
+                                  )
+                                : ImageCircle(
+                                    borderRadius: bRadius,
+                                    image: Image.network(
+                                      UserData.instance.profileImage,
+                                      width: iHeight,
+                                      height: iHeight,
+                                      fit: BoxFit.fill,
+                                    )),
+                          ),
+                        ),
+                      ),
                     ],
                   )),
               Expanded(child: buildPageView())

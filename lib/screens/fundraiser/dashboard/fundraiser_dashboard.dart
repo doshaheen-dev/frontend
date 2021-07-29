@@ -1,5 +1,7 @@
 import 'package:acc/models/authentication/verify_phone_signin.dart';
+import 'package:acc/screens/common/profile_picture.dart';
 import 'package:acc/screens/fundraiser/dashboard/fundraiser_profile.dart';
+import 'package:acc/widgets/image_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/utilites/app_colors.dart';
@@ -37,16 +39,72 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
                       Image.asset('assets/images/investor/icon_menu.png'),
                       SizedBox(width: 10.0),
                       Expanded(
-                          child: UserData.instance.firstName != null
-                              ? Text(
-                                  'Hello  ${UserData.instance.firstName}',
-                                  style: textBold26(headingBlack),
-                                )
-                              : Text(
-                                  'Hello  Fundraiser',
-                                  style: textBold26(headingBlack),
-                                )),
-                      Image.asset('assets/images/investor/icon_investor.png'),
+                        child: UserData.instance.firstName != null
+                            ? Text(
+                                'Hello  ${UserData.instance.firstName}',
+                                style: textBold26(headingBlack),
+                              )
+                            : Text(
+                                'Hello  Fundraiser',
+                                style: textBold26(headingBlack),
+                              ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(
+                                PageRouteBuilder(
+                                    pageBuilder:
+                                        (context, animation, anotherAnimation) {
+                                      return ProfilePicScreen(
+                                          UserData.instance.profileImage);
+                                    },
+                                    transitionDuration:
+                                        Duration(milliseconds: 2000),
+                                    transitionsBuilder: (context, animation,
+                                        anotherAnimation, child) {
+                                      animation = CurvedAnimation(
+                                          curve: Curves.fastLinearToSlowEaseIn,
+                                          parent: animation);
+                                      return SlideTransition(
+                                        position: Tween(
+                                                begin: Offset(1.0, 0.0),
+                                                end: Offset(0.0, 0.0))
+                                            .animate(animation),
+                                        child: child,
+                                      );
+                                    }),
+                              )
+                              .then((_) => setState(() {}));
+                        },
+                        child: Container(
+                          height: 70,
+                          width: 70,
+                          child: CircleAvatar(
+                            radius: 60,
+                            backgroundColor: Colors.orange,
+                            child: (UserData.instance.profileImage == null ||
+                                    UserData.instance.profileImage == '')
+                                ? ImageCircle(
+                                    borderRadius: 60,
+                                    image: Image.asset(
+                                      'assets/images/UserProfile.png',
+                                      width: 50,
+                                      height: 50,
+                                      fit: BoxFit.fill,
+                                    ),
+                                  )
+                                : ImageCircle(
+                                    borderRadius: 60,
+                                    image: Image.network(
+                                      UserData.instance.profileImage,
+                                      width: 50,
+                                      height: 50,
+                                      fit: BoxFit.fill,
+                                    )),
+                          ),
+                        ),
+                      ),
                     ],
                   )),
               Expanded(child: buildPageView())

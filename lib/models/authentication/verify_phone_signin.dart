@@ -169,6 +169,7 @@ class UserData {
   String mobileNo;
   String emailId;
   String userType;
+  String profileImage;
 
   UserData._privateConstructor();
 
@@ -177,7 +178,7 @@ class UserData {
   static UserData get instance => _instance;
 
   UserData(this.token, this.firstName, this.middleName, this.lastName,
-      this.mobileNo, this.emailId, this.userType);
+      this.mobileNo, this.emailId, this.userType, this.profileImage);
 
   Map<String, dynamic> toJson() => {
         "token": this.token,
@@ -187,38 +188,45 @@ class UserData {
         "email_id": this.emailId,
         "mobile_no": this.mobileNo,
         "user_type": this.userType,
+        "user_profile_image_path": this.profileImage,
       };
 
   factory UserData.fromMap(Map<String, dynamic> json) {
     return UserData(
-        json['token'],
-        CryptUtils.decryption(json['first_name']),
-        CryptUtils.decryption(json['middle_name']),
-        CryptUtils.decryption(json['last_name']),
-        CryptUtils.decryption(json['mobile_no']),
-        CryptUtils.decryption(json['email_id']),
-        json['user_type']);
+      json['token'],
+      CryptUtils.decryption(json['first_name']),
+      CryptUtils.decryption(json['middle_name']),
+      CryptUtils.decryption(json['last_name']),
+      CryptUtils.decryption(json['mobile_no']),
+      CryptUtils.decryption(json['email_id']),
+      json['user_type'],
+      json['user_profile_image_path'],
+    );
   }
 
   factory UserData.fromNoDecryptionMap(Map<String, dynamic> json) {
     return UserData(
-        json['token'],
-        json['first_name'],
-        json['middle_name'],
-        json['last_name'],
-        json['mobile_no'],
-        json['email_id'],
-        json['user_type']);
+      json['token'],
+      json['first_name'],
+      json['middle_name'],
+      json['last_name'],
+      json['mobile_no'],
+      json['email_id'],
+      json['user_type'],
+      json['user_profile_image_path'],
+    );
   }
   factory UserData.fromJson(Map<String, dynamic> json) {
     return UserData(
-        json['token'],
-        CryptUtils.decryption(json['first_name']),
-        CryptUtils.decryption(json['middle_name']),
-        CryptUtils.decryption(json['last_name']),
-        CryptUtils.decryption(json['email_id']),
-        CryptUtils.decryption(json['mobile_no']),
-        json['user_type']);
+      json['token'],
+      CryptUtils.decryption(json['first_name']),
+      CryptUtils.decryption(json['middle_name']),
+      CryptUtils.decryption(json['last_name']),
+      CryptUtils.decryption(json['email_id']),
+      CryptUtils.decryption(json['mobile_no']),
+      json['user_type'],
+      json['user_profile_image_path'],
+    );
   }
 }
 
