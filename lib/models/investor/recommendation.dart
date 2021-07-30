@@ -28,6 +28,7 @@ class Recommendations {
 class Data {
   List<Option> option;
   int pageNo;
+  int totalCount;
 
   Data({this.option, this.pageNo});
 
@@ -39,6 +40,7 @@ class Data {
       });
     }
     pageNo = json['pageNo'];
+    totalCount = json['totalCount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -47,6 +49,7 @@ class Data {
       data['option'] = this.option.map((v) => v.toJson()).toList();
     }
     data['pageNo'] = this.pageNo;
+    data['totalCount'] = this.totalCount;
     return data;
   }
 }

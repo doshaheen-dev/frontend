@@ -34,7 +34,7 @@ class CryptUtils {
 
     final decrypted =
         encrypter.decrypt(crypt.Encrypted.fromBase64(plainText), iv: iv);
-    print('Decrypted: $decrypted');
+    // print('Decrypted: $decrypted');
 
     return decrypted;
   }

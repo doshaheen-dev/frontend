@@ -25,7 +25,7 @@ class ProfileService {
         "${ApiServices.baseUrl}/sign-up/basic_detail/${prefs.getInt("userId")}");
     final headers = {
       "Content-type": "application/json",
-      "authorization": UserData.instance.token
+      "authorization": UserData.instance.userInfo.token
     };
     final _body = {
       "first_name": firstName,
@@ -55,7 +55,8 @@ class ProfileService {
     final url = Uri.parse("${ApiServices.baseUrl}/user/user-profile");
     // print('URL: $url');
     var request = http.MultipartRequest('POST', url);
-    request.headers["authorization"] = "Bearer ${UserData.instance.token}";
+    request.headers["authorization"] =
+        "Bearer ${UserData.instance.userInfo.token}";
     request.files.add(http.MultipartFile(
         'profilepic', file.readAsBytes().asStream(), file.lengthSync(),
         filename: fileName));

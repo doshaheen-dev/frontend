@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
+import 'package:acc/services/investor_home_service.dart';
 import 'package:acc/utils/crypt_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -42,6 +43,8 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
 
   TextEditingController otpController = new TextEditingController();
   var progress;
+
+  int totalRecommendationItems;
 
   @override
   void initState() {
@@ -190,9 +193,7 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
       Navigator.of(context).pushAndRemoveUntil(
           PageRouteBuilder(
               pageBuilder: (context, animation, anotherAnimation) {
-                return InvestorDashboard(
-                  userData: data,
-                );
+                return InvestorDashboard(userData: data);
               },
               transitionDuration: Duration(milliseconds: 2000),
               transitionsBuilder:
@@ -237,7 +238,6 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
 
     if (verifyPhoneNumber.type == "success") {
       saveUserInfo(verifyPhoneNumber.data);
-
       openHome(verifyPhoneNumber.data);
     } else {
       _openDialog(context, verifyPhoneNumber.message);
@@ -245,14 +245,14 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
   }
 
   Future<void> saveUserInfo(UserData data) async {
-    final requestModelInstance = UserData.instance;
-    requestModelInstance.token = data.token;
-   // print("SignIn:- ${requestModelInstance.token}");
+    // final requestModelInstance = UserData.instance;
+    // requestModelInstance.token = data.token;
+
     final prefs = await SharedPreferences.getInstance();
     final userJson = jsonEncode(data);
     prefs.setString('UserInfo', userJson);
-        print("SignIn:- ${userJson}");
-
+    print("SIGN IN : $data");
+    UserData.instance.userInfo = data;
   }
 
   _openDialog(BuildContext context, String message) {

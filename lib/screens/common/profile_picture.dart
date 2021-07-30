@@ -52,7 +52,7 @@ class _ProfilePicScreenState extends State<ProfilePicScreen> {
               await ProfileService.uploadProfileImage(file, fileName);
           if (imgResponse.type == 'success') {
             _imageUrl = imgResponse.data.userProfileImagePath;
-            UserData.instance.profileImage =
+            UserData.instance.userInfo.profileImage =
                 imgResponse.data.userProfileImagePath;
           }
         } else {

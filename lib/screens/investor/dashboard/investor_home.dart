@@ -80,14 +80,14 @@ class _InvestorHomeState extends State<InvestorHome> {
 
   Future<void> _fetchRecommendation(BuildContext context) async {
     await Provider.of<investorProvider.InvestorHome>(context, listen: false)
-        .fetchAndSetRecommendations(UserData.instance.token,
+        .fetchAndSetRecommendations(UserData.instance.userInfo.token,
             recommendationPageNo, _recommendationPageSize); //_userData.token
   }
 
   Future<void> _fetchInterestedFunds(BuildContext context) async {
     await Provider.of<investorProvider.InvestorHome>(context, listen: false)
-        .fetchAndSetInterestedFunds(UserData.instance.token, fundPageNo,
-            _fundsPageSize); //widget.userData.token
+        .fetchAndSetInterestedFunds(UserData.instance.userInfo.token,
+            fundPageNo, _fundsPageSize); //widget.userData.token
   }
 
   @override
@@ -111,7 +111,7 @@ class _InvestorHomeState extends State<InvestorHome> {
 
   void getFundsListSize() {
     Future<Funds> fundsInfo = InvestorHomeService.fetchInterestedFunds(
-        UserData.instance.token, fundPageNo, _fundsPageSize);
+        UserData.instance.userInfo.token, fundPageNo, _fundsPageSize);
     fundsInfo.then((result) {
       print("Funds");
       setState(() {
@@ -133,7 +133,7 @@ class _InvestorHomeState extends State<InvestorHome> {
   void getRecommendationListSize() {
     if (recommendationPageNo <= (totalItems - 1)) {
       var recommendationInfo = InvestorHomeService.fetchRecommendation(
-          UserData.instance.token,
+          UserData.instance.userInfo.token,
           recommendationPageNo,
           _recommendationPageSize);
       recommendationInfo.then((result) {

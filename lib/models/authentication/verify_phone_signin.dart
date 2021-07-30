@@ -177,8 +177,29 @@ class UserData {
 
   static UserData get instance => _instance;
 
+  UserData get userInfo => UserData(
+      this.token,
+      CryptUtils.decryption(this.firstName),
+      CryptUtils.decryption(this.middleName),
+      CryptUtils.decryption(this.lastName),
+      CryptUtils.decryption(this.mobileNo),
+      CryptUtils.decryption(this.emailId),
+      this.userType,
+      this.profileImage);
+
   UserData(this.token, this.firstName, this.middleName, this.lastName,
       this.mobileNo, this.emailId, this.userType, this.profileImage);
+
+  set userInfo(UserData userInfo) {
+    this.token = userInfo.token;
+    this.firstName = userInfo.firstName;
+    this.middleName = userInfo.middleName;
+    this.lastName = userInfo.lastName;
+    this.mobileNo = userInfo.mobileNo;
+    this.emailId = userInfo.emailId;
+    this.userType = userInfo.userType;
+    this.profileImage = userInfo.profileImage;
+  }
 
   Map<String, dynamic> toJson() => {
         "token": this.token,

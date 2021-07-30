@@ -50,9 +50,9 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                       Image.asset('assets/images/investor/icon_menu.png'),
                       SizedBox(width: 10.0),
                       Expanded(
-                        child: UserData.instance.firstName != null
+                        child: UserData.instance.userInfo.firstName != null
                             ? Text(
-                                'Hello  ${UserData.instance.firstName}',
+                                'Hello  ${UserData.instance.userInfo.firstName}',
                                 style: textBold26(headingBlack),
                               )
                             : Text(
@@ -97,8 +97,10 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                           child: CircleAvatar(
                             radius: bRadius,
                             backgroundColor: Colors.orange,
-                            child: (UserData.instance.profileImage == null ||
-                                    UserData.instance.profileImage == '')
+                            child: (UserData.instance.userInfo.profileImage ==
+                                        null ||
+                                    UserData.instance.userInfo.profileImage ==
+                                        '')
                                 ? ImageCircle(
                                     borderRadius: bRadius,
                                     image: Image.asset(
@@ -111,7 +113,7 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                                 : ImageCircle(
                                     borderRadius: bRadius,
                                     image: Image.network(
-                                      UserData.instance.profileImage,
+                                      UserData.instance.userInfo.profileImage,
                                       width: iHeight,
                                       height: iHeight,
                                       fit: BoxFit.fill,
