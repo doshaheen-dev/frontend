@@ -4,7 +4,7 @@ import 'package:encrypt/encrypt.dart' as crypt;
 
 class CryptUtils {
   static String encryption(String plainText) {
-    if (plainText == null) {
+    if (plainText == null || plainText == '') {
       return '';
     }
     Uint8List ivData = Uint8List.fromList(
@@ -21,7 +21,7 @@ class CryptUtils {
   }
 
   static String decryption(String plainText) {
-    if (plainText == null) {
+    if (plainText == null || plainText == '') {
       return '';
     }
     Uint8List ivData = Uint8List.fromList(

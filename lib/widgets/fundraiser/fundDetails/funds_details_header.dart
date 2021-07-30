@@ -43,6 +43,7 @@ class _FundsDetailHeaderState extends State<FundsDetailHeader> {
         Image.network(
           widget.likedFunds.fundLogo,
           height: 250,
+          width: double.infinity,
           fit: BoxFit.fill,
           loadingBuilder: (context, child, loadingProgress) {
             if (loadingProgress == null) return child;

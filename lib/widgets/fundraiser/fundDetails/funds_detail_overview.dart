@@ -131,7 +131,7 @@ class _CreateFundOverviewState extends State<CreateFundOverview> {
                           Expanded(
                               flex: 1,
                               child:
-                                  Text("\$${widget.likedFunds.fundExistVal}K"))
+                                  Text("\$${widget.likedFunds.fundExistVal}"))
                         ],
                       ),
                       SizedBox(
@@ -142,7 +142,7 @@ class _CreateFundOverviewState extends State<CreateFundOverview> {
                           Expanded(flex: 1, child: Text("New Fund")),
                           Expanded(
                               flex: 1,
-                              child: Text("\$${widget.likedFunds.fundNewVal}K"))
+                              child: Text("\$${widget.likedFunds.fundNewVal}"))
                         ],
                       ),
                       SizedBox(
