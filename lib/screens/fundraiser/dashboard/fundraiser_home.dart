@@ -2,6 +2,7 @@ import 'package:acc/providers/fund_provider.dart';
 import 'package:acc/screens/fundraiser/dashboard/add_new_funds.dart';
 import 'package:acc/screens/fundraiser/dashboard/fundraiser_fund_detail.dart';
 import 'package:acc/utilites/hex_color.dart';
+import 'package:acc/utils/date_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/app_strings.dart';
@@ -240,7 +241,7 @@ class _FundraiserHomeState extends State<FundraiserHome> {
                       ),
                       InkWell(
                         child: Text(
-                          item.date,
+                          DateUtilsExt.dateFromUTCToLocal(item.date),
                           style: textNormal12(HexColor("#468FFD")),
                         ),
                       )

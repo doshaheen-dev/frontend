@@ -41,9 +41,9 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
                       Image.asset('assets/images/investor/icon_menu.png'),
                       SizedBox(width: 10.0),
                       Expanded(
-                        child: UserData.instance.firstName != null
+                        child: UserData.instance.userInfo.firstName != null
                             ? Text(
-                                'Hello  ${UserData.instance.firstName}',
+                                'Hello  ${UserData.instance.userInfo.firstName}',
                                 style: textBold26(headingBlack),
                               )
                             : Text(
@@ -58,8 +58,8 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
                                 PageRouteBuilder(
                                     pageBuilder:
                                         (context, animation, anotherAnimation) {
-                                      return ProfilePicScreen(
-                                          UserData.instance.profileImage);
+                                      return ProfilePicScreen(UserData
+                                          .instance.userInfo.profileImage);
                                     },
                                     transitionDuration:
                                         Duration(milliseconds: 2000),
@@ -85,8 +85,10 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
                           child: CircleAvatar(
                             radius: bRadius,
                             backgroundColor: Colors.orange,
-                            child: (UserData.instance.profileImage == null ||
-                                    UserData.instance.profileImage == '')
+                            child: (UserData.instance.userInfo.profileImage ==
+                                        null ||
+                                    UserData.instance.userInfo.profileImage ==
+                                        '')
                                 ? ImageCircle(
                                     borderRadius: bRadius,
                                     image: Image.asset(
@@ -99,7 +101,7 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
                                 : ImageCircle(
                                     borderRadius: bRadius,
                                     image: Image.network(
-                                      UserData.instance.profileImage,
+                                      UserData.instance.userInfo.profileImage,
                                       width: iHeight,
                                       height: iHeight,
                                       fit: BoxFit.fill,

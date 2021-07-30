@@ -10,7 +10,7 @@ import 'package:acc/services/fund_service.dart';
 import 'package:acc/services/upload_document_service.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
-import 'package:acc/utils/code_utils.dart';
+import 'package:acc/utils/date_utils.dart';
 import 'package:acc/widgets/kyc_document_items.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -313,7 +313,7 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                                           _fundSponsorNameController.text
                                               .trim(),
                                           fundLogo.uploadedKey,
-                                          CodeUtils.currentDateWithFormat(
+                                          DateUtilsExt.currentDateWithFormat(
                                               "yyyy-MM-dd HH:mm:ss"),
                                         );
                                       },

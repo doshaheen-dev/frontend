@@ -71,7 +71,7 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                                     pageBuilder:
                                         (context, animation, anotherAnimation) {
                                       return ProfilePicScreen(
-                                          UserData.instance.profileImage);
+                                          UserData.instance.userInfo.profileImage);
                                     },
                                     transitionDuration:
                                         Duration(milliseconds: 2000),

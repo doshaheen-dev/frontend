@@ -13,11 +13,6 @@ class CodeUtils {
       RegExp(r'^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$')
           .hasMatch(input);
 
-  static String currentDateWithFormat(String format) {
-    DateFormat dateFormat = DateFormat(format);
-    return dateFormat.format(DateTime.now());
-  }
-
   static Future<bool> syncUserPreferencesWithData(UserData data) async {
     final prefs = await SharedPreferences.getInstance();
     final userJson = jsonEncode(data);

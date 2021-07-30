@@ -52,18 +52,14 @@ class _ProfilePicScreenState extends State<ProfilePicScreen> {
           UploadProfileImage imgResponse =
               await ProfileService.uploadProfileImage(file, fileName);
           if (imgResponse.type == 'success') {
-            final oldValue = UserData.instance.profileImage;
             final userData = await CodeUtils.getUserInfo();
             if (userData != null) {
               userData.profileImage = imgResponse.data.userProfileImagePath;
               final isSynced =
                   await CodeUtils.syncUserPreferencesWithData(userData);
               if (isSynced) {
-                UserData.instance.profileImage =
-                    imgResponse.data.userProfileImagePath;
+                UserData.instance.userInfo = await CodeUtils.getUserInfo();
               }
-            } else {
-              UserData.instance.profileImage = oldValue;
             }
           }
         } else {
