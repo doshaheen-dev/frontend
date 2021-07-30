@@ -22,8 +22,8 @@ class FundDetail extends StatefulWidget {
 }
 
 class _FundDetailState extends State<FundDetail> {
-  String description =
-      "Elite Specia; Exporter & supplier engaged in offering a varied range of quality products; Already exported 26+ containers valued at \$170k+; Imported Kiwis & Apples valued at \$200k+; Strong sales team in the Middle East; Already raised Rs. 5mn";
+  // String description =
+  //     "Elite Specia; Exporter & supplier engaged in offering a varied range of quality products; Already exported 26+ containers valued at \$170k+; Imported Kiwis & Apples valued at \$200k+; Strong sales team in the Middle East; Already raised Rs. 5mn";
   FundsInfo _likedFunds;
   bool _isFundOverview = false;
   bool _isFundDeck = false;
@@ -129,7 +129,7 @@ class _FundDetailState extends State<FundDetail> {
                             child: Column(
                               children: [
                                 Text(
-                                  "\$15,000,000",
+                                  "\$${_likedFunds.fundNewVal}",
                                   style: textBlackNormal16(),
                                 ),
                                 Text("Target", style: textNormal16(kDarkOrange))
@@ -140,7 +140,7 @@ class _FundDetailState extends State<FundDetail> {
                             child: Column(
                               children: [
                                 Text(
-                                  "\$15,000,000",
+                                  _likedFunds.minimumInvestment,
                                   style: textBlackNormal16(),
                                 ),
                                 Text("Min Per Investor",
@@ -172,13 +172,13 @@ class _FundDetailState extends State<FundDetail> {
               width: 30,
             ),
             Text(
-              _likedFunds.city_name,
+              "${_likedFunds.city_name}, ${_likedFunds.country_name}",
               style: textNormal(HexColor("#404040"), 12.0),
             )
           ],
         ),
         Text(
-          "Minimum Investment : ${_likedFunds.fundExistVal}",
+          "Minimum Investment : ${_likedFunds.minimumInvestment}",
           style: textNormal(HexColor("#404040"), 12.0),
         ),
         SizedBox(

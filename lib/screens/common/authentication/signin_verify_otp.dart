@@ -247,10 +247,12 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
   Future<void> saveUserInfo(UserData data) async {
     final requestModelInstance = UserData.instance;
     requestModelInstance.token = data.token;
-    print("SignIn:- ${requestModelInstance.token}");
-    // final prefs = await SharedPreferences.getInstance();
-    // final userJson = jsonEncode(data);
-    // prefs.setString('UserInfo', userJson);
+   // print("SignIn:- ${requestModelInstance.token}");
+    final prefs = await SharedPreferences.getInstance();
+    final userJson = jsonEncode(data);
+    prefs.setString('UserInfo', userJson);
+        print("SignIn:- ${userJson}");
+
   }
 
   _openDialog(BuildContext context, String message) {

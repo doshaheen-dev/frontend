@@ -70,29 +70,33 @@ class Option {
   String fundLogo;
   String fundStatus;
   String cityName;
+  String country_name;
+  String minimumInvestment;
 //  Null fundInternalApproved;
 
-  Option(
-      {this.fundTxnId,
-      this.userId,
-      this.productId,
-      this.slotId,
-      this.fundSponsorName,
-      this.fundTermsAgreedDateTime,
-      this.fundName,
-      this.fundCountryId,
-      this.fundCityId,
-      this.fundRegulated,
-      this.fundRegulatorName,
-      this.fundInvstmtObj,
-      this.fundExistVal,
-      this.fundNewVal,
-      this.fundWebsite,
-      this.fundLogo,
-      this.fundStatus,
-      this.cityName
-      //  this.fundInternalApproved
-      });
+  Option({
+    this.fundTxnId,
+    this.userId,
+    this.productId,
+    this.slotId,
+    this.fundSponsorName,
+    this.fundTermsAgreedDateTime,
+    this.fundName,
+    this.fundCountryId,
+    this.fundCityId,
+    this.fundRegulated,
+    this.fundRegulatorName,
+    this.fundInvstmtObj,
+    this.fundExistVal,
+    this.fundNewVal,
+    this.fundWebsite,
+    this.fundLogo,
+    this.fundStatus,
+    this.cityName,
+    this.country_name,
+    this.minimumInvestment,
+    //  this.fundInternalApproved
+  });
 
   Option.fromJson(Map<String, dynamic> json) {
     fundTxnId = json['fund_txn_id'];
@@ -113,6 +117,8 @@ class Option {
     fundLogo = json['fund_logo'];
     fundStatus = json['fund_status'];
     cityName = json['city_name'];
+    country_name = json['country_name'];
+    minimumInvestment = json['min_per_investor'];
     // fundInternalApproved = json['fund_internal_approved'];
   }
 
@@ -136,6 +142,8 @@ class Option {
     data['fund_logo'] = this.fundLogo;
     data['fund_status'] = this.fundStatus;
     data['city_name'] = this.cityName;
+    data['country_name'] = this.country_name;
+    data['min_per_investor'] = this.minimumInvestment;
     //  data['fund_internal_approved'] = this.fundInternalApproved;
     return data;
   }

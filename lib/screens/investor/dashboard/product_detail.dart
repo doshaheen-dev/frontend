@@ -275,7 +275,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                         child: Column(
                                           children: [
                                             Text(
-                                              "\$15,000,000",
+                                              "\$${_recommendation.fundNewVal}",
                                               style: textBlackNormal16(),
                                             ),
                                             Text("Target",
@@ -288,7 +288,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                         child: Column(
                                           children: [
                                             Text(
-                                              "\$15,000,000",
+                                              _recommendation.minimumInvestment,
                                               style: textBlackNormal16(),
                                             ),
                                             Text("Min Per Investor",

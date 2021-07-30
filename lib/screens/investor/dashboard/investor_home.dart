@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/models/investor/funds.dart';
@@ -41,15 +39,17 @@ class _InvestorHomeState extends State<InvestorHome> {
 
   bool isFundsPresent = false;
   bool isRecommendationPresent = false;
+  bool isRecommendationNavigation = false;
+  bool isFundsNavigation = false;
 
   // Recommendations List
-  num _recommendationPageSize = 1;
+  num _recommendationPageSize = 5;
   num totalItems = 10;
   var tempRecommendationSizeList = 0;
   var recommendationPageNo = 0;
 
   // Funds List
-  num _fundsPageSize = 1;
+  num _fundsPageSize = 5;
   num fundsTotalItems = 10;
   var tempFundsSizeList = 0;
   var fundsPageNo = 0;
@@ -63,6 +63,18 @@ class _InvestorHomeState extends State<InvestorHome> {
   void displayRecommendations(bool value) {
     setState(() {
       isRecommendationPresent = value;
+    });
+  }
+
+  void displayRecommendationNavigation(bool value) {
+    setState(() {
+      isRecommendationNavigation = value;
+    });
+  }
+
+  void displayFundsNavigation(bool value) {
+    setState(() {
+      isFundsNavigation = value;
     });
   }
 
@@ -106,6 +118,11 @@ class _InvestorHomeState extends State<InvestorHome> {
         if (result.data.option.length == 0) {
           displayInterestedFunds(false);
         } else {
+          // if (result.data.option.length > 3) {
+          //   displayFundsNavigation(true);
+          // } else {
+          //   displayFundsNavigation(false);
+          // }
           tempFundsSizeList = tempFundsSizeList + result.data.option.length;
           displayInterestedFunds(true);
         }
@@ -124,6 +141,11 @@ class _InvestorHomeState extends State<InvestorHome> {
           if (result.data.option.length == 0) {
             displayRecommendations(false);
           } else {
+            // if (result.data.option.length >= 1) {
+            //   displayRecommendationNavigation(true);
+            // } else {
+            //   displayRecommendationNavigation(false);
+            // }
             tempRecommendationSizeList =
                 tempRecommendationSizeList + result.data.option.length;
             displayRecommendations(true);
@@ -196,82 +218,94 @@ class _InvestorHomeState extends State<InvestorHome> {
               Positioned(
                 left: 0,
                 top: 100 / 2,
-                child: IconButton(
-                    padding: EdgeInsets.only(right: 30),
-                    icon:
-                        Image.asset("assets/images/navigation/arrow_left.png"),
-                    iconSize: 20,
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    color: kDarkOrange,
-                    onPressed: () {
-                      setState(() {
-                        if (_fundscurrentIndex >= 1) {
-                          fundsPageNo--;
-                          _interestedFunds = _fetchInterestedFunds(context);
-                          tempFundsSizeList =
-                              tempFundsSizeList - _fundsPageSize;
-                          if (tempFundsSizeList == 0) {
-                            getFundsListSize();
-                          }
-                          _fundscurrentIndex--;
-                          fundItemScrollController.scrollTo(
-                              index: currentIndex,
-                              duration: Duration(seconds: 2),
-                              curve: Curves.easeInOutCubic);
-                        } else {
-                          showSnackBar(context, "Start of funds items");
-                        }
-                      });
-                    }),
+                child:
+                    // Visibility(
+                    //   visible: isFundsNavigation,
+                    //   child:
+                    IconButton(
+                        padding: EdgeInsets.only(right: 30),
+                        icon: Image.asset(
+                            "assets/images/navigation/arrow_left.png"),
+                        iconSize: 20,
+                        highlightColor: Colors.transparent,
+                        splashColor: Colors.transparent,
+                        color: kDarkOrange,
+                        onPressed: () {
+                          setState(() {
+                            if (_fundscurrentIndex >= 1) {
+                              fundsPageNo--;
+                              _interestedFunds = _fetchInterestedFunds(context);
+                              tempFundsSizeList =
+                                  tempFundsSizeList - _fundsPageSize;
+                              if (tempFundsSizeList == 0) {
+                                getFundsListSize();
+                              }
+                              _fundscurrentIndex--;
+                              fundItemScrollController.scrollTo(
+                                  index: currentIndex,
+                                  duration: Duration(seconds: 2),
+                                  curve: Curves.easeInOutCubic);
+                            } else {
+                              showSnackBar(context, "Start of funds items");
+                            }
+                          });
+                        }),
               ),
+              //   ),
               Positioned(
-                right: 0,
-                top: 100 / 2,
-                child: IconButton(
-                    padding: EdgeInsets.only(left: 30),
-                    icon:
-                        Image.asset("assets/images/navigation/arrow_right.png"),
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    color: kDarkOrange,
-                    onPressed: () {
-                      setState(() {
-                        if ((fundsTotalItems - 3) > (tempFundsSizeList)) {
-                          if ((_fundscurrentIndex + 3) == tempFundsSizeList) {
-                            fundPageNo++;
-                            _interestedFunds = _fetchInterestedFunds(context);
-                            _fundscurrentIndex++;
+                  right: 0,
+                  top: 100 / 2,
+                  child:
+                      // Visibility(
+                      //     visible: isFundsNavigation,
+                      //     child:
+                      IconButton(
+                          padding: EdgeInsets.only(left: 30),
+                          icon: Image.asset(
+                              "assets/images/navigation/arrow_right.png"),
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
+                          color: kDarkOrange,
+                          onPressed: () {
+                            setState(() {
+                              if ((fundsTotalItems - 3) > (tempFundsSizeList)) {
+                                if ((_fundscurrentIndex + 3) ==
+                                    tempFundsSizeList) {
+                                  fundPageNo++;
+                                  _interestedFunds =
+                                      _fetchInterestedFunds(context);
+                                  _fundscurrentIndex++;
 
-                            fundItemScrollController.scrollTo(
-                                index: _fundscurrentIndex,
-                                duration: Duration(seconds: 3),
-                                curve: Curves.easeInOutCubic);
-                          } else if ((_fundscurrentIndex + 3) >
-                              _fundsPageSize) {
-                            fundsPageNo++;
-                            _interestedFunds = _fetchInterestedFunds(context);
-                            getFundsListSize();
-                            _fundscurrentIndex++;
+                                  fundItemScrollController.scrollTo(
+                                      index: _fundscurrentIndex,
+                                      duration: Duration(seconds: 3),
+                                      curve: Curves.easeInOutCubic);
+                                } else if ((_fundscurrentIndex + 3) >
+                                    _fundsPageSize) {
+                                  fundsPageNo++;
+                                  _interestedFunds =
+                                      _fetchInterestedFunds(context);
+                                  getFundsListSize();
+                                  _fundscurrentIndex++;
 
-                            fundItemScrollController.scrollTo(
-                                index: _fundscurrentIndex,
-                                duration: Duration(seconds: 3),
-                                curve: Curves.easeInOutCubic);
-                          } else {
-                            _fundscurrentIndex++;
+                                  fundItemScrollController.scrollTo(
+                                      index: _fundscurrentIndex,
+                                      duration: Duration(seconds: 3),
+                                      curve: Curves.easeInOutCubic);
+                                } else {
+                                  _fundscurrentIndex++;
 
-                            fundItemScrollController.scrollTo(
-                                index: _fundscurrentIndex,
-                                duration: Duration(seconds: 3),
-                                curve: Curves.easeInOutCubic);
-                          }
-                        } else {
-                          showSnackBar(context, "End of funds list");
-                        }
-                      });
-                    }),
-              )
+                                  fundItemScrollController.scrollTo(
+                                      index: _fundscurrentIndex,
+                                      duration: Duration(seconds: 3),
+                                      curve: Curves.easeInOutCubic);
+                                }
+                              } else {
+                                showSnackBar(context, "End of funds list");
+                              }
+                            });
+                          })),
+              // )
             ],
           ),
         ),
@@ -358,19 +392,13 @@ class _InvestorHomeState extends State<InvestorHome> {
                       width: MediaQuery.of(context).size.width * 0.5,
                       fit: BoxFit.fill,
                     ),
-                    // child:
-                    // Image.asset(
-                    //   interestedFundsData.fundLogo,
-                    //   height: 80.0,
-                    //   width: MediaQuery.of(context).size.width * 0.5,
-                    //   fit: BoxFit.fill,
-                    // )
                   ),
                   SizedBox(
                     height: 5.0,
                   ),
                   Center(
                     child: Text(interestedFundsData.fundName,
+                        textAlign: TextAlign.center,
                         style: textBold(headingBlack, 12.0)),
                   )
                 ],
@@ -401,87 +429,101 @@ class _InvestorHomeState extends State<InvestorHome> {
                 child: setRecommendations(),
               ),
               Positioned(
-                left: 0,
-                top: 150 / 2,
-                child: IconButton(
-                    padding: EdgeInsets.only(right: 30),
-                    icon:
-                        Image.asset("assets/images/navigation/arrow_left.png"),
-                    iconSize: 20,
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    color: kDarkOrange,
-                    onPressed: () {
-                      setState(() {
-                        if (currentIndex >= 1) {
-                          recommendationPageNo--;
-                          _recommendations = _fetchRecommendation(context);
-                          tempRecommendationSizeList =
-                              tempRecommendationSizeList -
-                                  _recommendationPageSize;
-                          if (tempRecommendationSizeList == 0) {
-                            getRecommendationListSize();
-                          }
-                          currentIndex--;
-                          itemScrollController.scrollTo(
-                              index: currentIndex,
-                              duration: Duration(seconds: 2),
-                              curve: Curves.easeInOutCubic);
-                        } else {
-                          showSnackBar(
-                              context, "Start of recommendation items");
-                        }
-                      });
-                    }),
-              ),
+                  left: 0,
+                  top: 150 / 2,
+                  child:
+                      // Visibility(
+                      //     visible: isRecommendationNavigation,
+                      //     child:
+                      IconButton(
+                          padding: EdgeInsets.only(right: 30),
+                          icon: Image.asset(
+                              "assets/images/navigation/arrow_left.png"),
+                          iconSize: 20,
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
+                          color: kDarkOrange,
+                          onPressed: () {
+                            setState(() {
+                              if (currentIndex >= 1) {
+                                recommendationPageNo--;
+                                _recommendations =
+                                    _fetchRecommendation(context);
+                                tempRecommendationSizeList =
+                                    tempRecommendationSizeList -
+                                        _recommendationPageSize;
+                                if (tempRecommendationSizeList == 0) {
+                                  getRecommendationListSize();
+                                }
+                                currentIndex--;
+                                itemScrollController.scrollTo(
+                                    index: currentIndex,
+                                    duration: Duration(seconds: 2),
+                                    curve: Curves.easeInOutCubic);
+                              } else {
+                                showSnackBar(
+                                    context, "Start of recommendation items");
+                              }
+                            });
+                          })),
+              // ),
               Positioned(
-                right: 0,
-                top: 150 / 2,
-                child: IconButton(
-                    padding: EdgeInsets.only(left: 30),
-                    icon:
-                        Image.asset("assets/images/navigation/arrow_right.png"),
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    color: kDarkOrange,
-                    onPressed: () {
-                      setState(() {
-                        if ((totalItems - 1) > (tempRecommendationSizeList)) {
-                          if ((currentIndex + 1) == _recommendationPageSize) {
-                            recommendationPageNo++;
-                            _recommendations = _fetchRecommendation(context);
-                            //  increaseIndex(currentIndex);
-                            currentIndex++;
+                  right: 0,
+                  top: 150 / 2,
+                  child:
+                      // Visibility(
+                      //     visible: isRecommendationNavigation,
+                      //     child:
+                      IconButton(
+                          padding: EdgeInsets.only(left: 30),
+                          icon: Image.asset(
+                              "assets/images/navigation/arrow_right.png"),
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
+                          color: kDarkOrange,
+                          onPressed: () {
+                            setState(() {
+                              if ((totalItems - 1) >
+                                  (tempRecommendationSizeList)) {
+                                if ((currentIndex + 1) ==
+                                    _recommendationPageSize) {
+                                  recommendationPageNo++;
+                                  _recommendations =
+                                      _fetchRecommendation(context);
+                                  //  increaseIndex(currentIndex);
+                                  currentIndex++;
 
-                            itemScrollController.scrollTo(
-                                index: currentIndex,
-                                duration: Duration(seconds: 3),
-                                curve: Curves.easeInOutCubic);
-                          } else if ((currentIndex + 1) >
-                              _recommendationPageSize) {
-                            recommendationPageNo++;
-                            _recommendations = _fetchRecommendation(context);
-                            getRecommendationListSize();
-                            currentIndex++;
+                                  itemScrollController.scrollTo(
+                                      index: currentIndex,
+                                      duration: Duration(seconds: 3),
+                                      curve: Curves.easeInOutCubic);
+                                } else if ((currentIndex + 1) >
+                                    _recommendationPageSize) {
+                                  recommendationPageNo++;
+                                  _recommendations =
+                                      _fetchRecommendation(context);
+                                  getRecommendationListSize();
+                                  currentIndex++;
 
-                            itemScrollController.scrollTo(
-                                index: currentIndex,
-                                duration: Duration(seconds: 3),
-                                curve: Curves.easeInOutCubic);
-                          } else {
-                            currentIndex++;
+                                  itemScrollController.scrollTo(
+                                      index: currentIndex,
+                                      duration: Duration(seconds: 3),
+                                      curve: Curves.easeInOutCubic);
+                                } else {
+                                  currentIndex++;
 
-                            itemScrollController.scrollTo(
-                                index: currentIndex,
-                                duration: Duration(seconds: 3),
-                                curve: Curves.easeInOutCubic);
-                          }
-                        } else {
-                          showSnackBar(context, "End of recommendation list");
-                        }
-                      });
-                    }),
-              ),
+                                  itemScrollController.scrollTo(
+                                      index: currentIndex,
+                                      duration: Duration(seconds: 3),
+                                      curve: Curves.easeInOutCubic);
+                                }
+                              } else {
+                                showSnackBar(
+                                    context, "End of recommendation list");
+                              }
+                            });
+                          })),
+              // ),
             ],
           ),
         ),
