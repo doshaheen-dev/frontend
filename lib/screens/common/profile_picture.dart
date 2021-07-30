@@ -35,6 +35,7 @@ class _ProfilePicScreenState extends State<ProfilePicScreen> {
   @override
   void initState() {
     _imageUrl = widget.imageUrl;
+    print('ImageURL: $_imageUrl');
     super.initState();
   }
 
@@ -174,7 +175,7 @@ class _ProfilePicScreenState extends State<ProfilePicScreen> {
                   radius: circleRadius,
                   backgroundColor: Colors.orange,
                   child: profilePhoto == null
-                      ? _imageUrl != null
+                      ? (_imageUrl != null && _imageUrl != '')
                           ? ImageCircle(
                               borderRadius: circleRadius,
                               image: Image.network(

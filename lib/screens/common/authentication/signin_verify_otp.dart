@@ -251,8 +251,9 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
     final prefs = await SharedPreferences.getInstance();
     final userJson = jsonEncode(data);
     prefs.setString('UserInfo', userJson);
-    print("SIGN IN : $data");
     UserData.instance.userInfo = data;
+    print("SIGN IN : ${UserData.instance.userInfo.firstName}");
+    print("SIGN IN : ${data.firstName}");
   }
 
   _openDialog(BuildContext context, String message) {

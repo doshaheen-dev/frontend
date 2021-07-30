@@ -524,9 +524,9 @@ class _CorporateDetailsState extends State<CorporateDetails> {
     progress.dismiss();
     if (signedUpUser.type == 'success') {
       requestModelInstance.clear();
-      final prefs = await SharedPreferences.getInstance();
-      final userJson = jsonEncode(signedUpUser.data);
-      prefs.setString('UserInfo', userJson);
+      // final prefs = await SharedPreferences.getInstance();
+      // final userJson = jsonEncode(signedUpUser.data);
+      // prefs.setString('UserInfo', userJson);
 
       // UserData userData = UserData(
       //     signedUpUser.data.token,

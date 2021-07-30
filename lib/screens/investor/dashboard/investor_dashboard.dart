@@ -50,17 +50,18 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                       Image.asset('assets/images/investor/icon_menu.png'),
                       SizedBox(width: 10.0),
                       Expanded(
-                        child: UserData.instance.userInfo.firstName != null
+                        child: (UserData.instance.userInfo.firstName == null ||
+                                UserData.instance.userInfo.firstName == '')
                             ? Text(
-                                'Hello  ${UserData.instance.userInfo.firstName}',
-                                style: textBold26(headingBlack),
-                              )
-                            : Text(
                                 'Hello Investor',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 26.0,
                                     fontFamily: FontFamilyMontserrat.name),
+                              )
+                            : Text(
+                                'Hello  ${UserData.instance.userInfo.firstName}',
+                                style: textBold26(headingBlack),
                               ),
                       ),
                       GestureDetector(
@@ -70,8 +71,8 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                                 PageRouteBuilder(
                                     pageBuilder:
                                         (context, animation, anotherAnimation) {
-                                      return ProfilePicScreen(
-                                          UserData.instance.userInfo.profileImage);
+                                      return ProfilePicScreen(UserData
+                                          .instance.userInfo.profileImage);
                                     },
                                     transitionDuration:
                                         Duration(milliseconds: 2000),

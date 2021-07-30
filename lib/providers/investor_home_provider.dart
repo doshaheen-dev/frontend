@@ -2,6 +2,7 @@ import 'package:acc/models/investor/recommendation.dart';
 import 'package:acc/models/investor/funds.dart';
 
 import 'package:acc/services/investor_home_service.dart';
+import 'package:acc/utils/crypt_utils.dart';
 import 'package:flutter/foundation.dart';
 
 class InvestorHome with ChangeNotifier {
@@ -27,7 +28,7 @@ class InvestorHome with ChangeNotifier {
             option.fundExistVal,
             option.fundNewVal,
             option.fundTxnId,
-            option.fundSponsorName,
+            CryptUtils.decryption(option.fundSponsorName),
             option.fundRegulated,
             option.fundRegulatorName,
             option.fundWebsite,

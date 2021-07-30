@@ -181,25 +181,24 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                             progress.dismiss();
                             if (signedUpUser.type == 'success') {
                               requestModelInstance.clear();
-                              final prefs =
-                                  await SharedPreferences.getInstance();
-                              final userJson = jsonEncode(signedUpUser.data);
-                              prefs.setString('UserInfo', userJson);
-
+                              print("Firstn: ${signedUpUser.data.firstName}");
                               UserData userData = UserData(
                                   signedUpUser.data.token,
-                                  CryptUtils.encryption(
-                                      signedUpUser.data.firstName.trim()),
+                                  signedUpUser.data.firstName,
                                   "",
-                                  CryptUtils.encryption(
-                                      signedUpUser.data.lastName.trim()),
-                                  CryptUtils.encryption(
-                                      signedUpUser.data.mobileNo.trim()),
-                                  CryptUtils.encryption(
-                                      signedUpUser.data.emailId.trim()),
+                                  signedUpUser.data.lastName,
+                                  signedUpUser.data.mobileNo,
+                                  signedUpUser.data.emailId,
                                   signedUpUser.data.userType,
                                   "");
+                              final prefs =
+                                  await SharedPreferences.getInstance();
+                              final userJson = jsonEncode(userData);
+                              prefs.setString('UserInfo', userJson);
                               UserData.instance.userInfo = userData;
+                              print('${userData.firstName}');
+                              print(
+                                  'Ins:${UserData.instance.userInfo.firstName}');
 
                               openDashboard();
                             } else {

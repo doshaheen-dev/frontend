@@ -155,7 +155,7 @@ class UserSignIn {
       type: valueMap["type"],
       status: valueMap["status"],
       message: valueMap["message"],
-      data: UserData.fromNoDecryptionMap(valueMap["data"]),
+      data: UserData.fromJson(valueMap["data"]),
     );
   }
 }
@@ -179,26 +179,26 @@ class UserData {
 
   UserData get userInfo => UserData(
       this.token,
-      CryptUtils.decryption(this.firstName),
-      CryptUtils.decryption(this.middleName),
-      CryptUtils.decryption(this.lastName),
-      CryptUtils.decryption(this.mobileNo),
-      CryptUtils.decryption(this.emailId),
+      this.firstName,
+      this.middleName,
+      this.lastName,
+      this.mobileNo,
+      this.emailId,
       this.userType,
       this.profileImage);
 
   UserData(this.token, this.firstName, this.middleName, this.lastName,
       this.mobileNo, this.emailId, this.userType, this.profileImage);
 
-  set userInfo(UserData userInfo) {
-    this.token = userInfo.token;
-    this.firstName = userInfo.firstName;
-    this.middleName = userInfo.middleName;
-    this.lastName = userInfo.lastName;
-    this.mobileNo = userInfo.mobileNo;
-    this.emailId = userInfo.emailId;
-    this.userType = userInfo.userType;
-    this.profileImage = userInfo.profileImage;
+  set userInfo(UserData info) {
+    this.token = info.token;
+    this.firstName = info.firstName;
+    this.middleName = info.middleName;
+    this.lastName = info.lastName;
+    this.mobileNo = info.mobileNo;
+    this.emailId = info.emailId;
+    this.userType = info.userType;
+    this.profileImage = info.profileImage;
   }
 
   Map<String, dynamic> toJson() => {
@@ -206,8 +206,8 @@ class UserData {
         "first_name": this.firstName,
         "middle_name": this.middleName,
         "last_name": this.lastName,
-        "email_id": this.emailId,
         "mobile_no": this.mobileNo,
+        "email_id": this.emailId,
         "user_type": this.userType,
         "user_profile_image_path": this.profileImage,
       };
@@ -243,8 +243,8 @@ class UserData {
       CryptUtils.decryption(json['first_name']),
       CryptUtils.decryption(json['middle_name']),
       CryptUtils.decryption(json['last_name']),
-      CryptUtils.decryption(json['email_id']),
       CryptUtils.decryption(json['mobile_no']),
+      CryptUtils.decryption(json['email_id']),
       json['user_type'],
       json['user_profile_image_path'],
     );
