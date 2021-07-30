@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/signup_request.dart';
 import 'package:acc/models/authentication/signup_response.dart' as response;
+import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/services/signup_service.dart';
 import 'package:acc/utils/crypt_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -526,6 +527,18 @@ class _CorporateDetailsState extends State<CorporateDetails> {
       final prefs = await SharedPreferences.getInstance();
       final userJson = jsonEncode(signedUpUser.data);
       prefs.setString('UserInfo', userJson);
+
+      // UserData userData = UserData(
+      //     signedUpUser.data.token,
+      //     CryptUtils.encryption(signedUpUser.data.firstName),
+      //     "",
+      //     CryptUtils.encryption(signedUpUser.data.lastName),
+      //     CryptUtils.encryption(signedUpUser.data.mobileNo),
+      //     CryptUtils.encryption(signedUpUser.data.emailId),
+      //     signedUpUser.data.userType,
+      //     "");
+      // UserData.instance.userInfo = userData;
+
       // print('Saved UserInfo: ${prefs.getString('UserInfo')}');
       showConfirmationText();
       nextButtonText = 'Back to Home';

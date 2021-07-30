@@ -5,6 +5,7 @@ import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/screens/common/webview_container.dart';
 import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
 import 'package:acc/services/signup_service.dart';
+import 'package:acc/utils/crypt_utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -185,8 +186,20 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                               final userJson = jsonEncode(signedUpUser.data);
                               prefs.setString('UserInfo', userJson);
 
-                              final userModelInstance = UserData.instance;
-                              userModelInstance.token = signedUpUser.data.token;
+                              UserData userData = UserData(
+                                  signedUpUser.data.token,
+                                  CryptUtils.encryption(
+                                      signedUpUser.data.firstName),
+                                  "",
+                                  CryptUtils.encryption(
+                                      signedUpUser.data.lastName),
+                                  CryptUtils.encryption(
+                                      signedUpUser.data.mobileNo),
+                                  CryptUtils.encryption(
+                                      signedUpUser.data.emailId),
+                                  signedUpUser.data.userType,
+                                  "");
+                              UserData.instance.userInfo = userData;
 
                               openDashboard();
                             } else {

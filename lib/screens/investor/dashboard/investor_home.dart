@@ -278,7 +278,7 @@ class _InvestorHomeState extends State<InvestorHome> {
 
                                   fundItemScrollController.scrollTo(
                                       index: _fundscurrentIndex,
-                                      duration: Duration(seconds: 3),
+                                      duration: Duration(seconds: 1),
                                       curve: Curves.easeInOutCubic);
                                 } else if ((_fundscurrentIndex + 3) >
                                     _fundsPageSize) {
@@ -290,14 +290,14 @@ class _InvestorHomeState extends State<InvestorHome> {
 
                                   fundItemScrollController.scrollTo(
                                       index: _fundscurrentIndex,
-                                      duration: Duration(seconds: 3),
+                                      duration: Duration(seconds: 1),
                                       curve: Curves.easeInOutCubic);
                                 } else {
                                   _fundscurrentIndex++;
 
                                   fundItemScrollController.scrollTo(
                                       index: _fundscurrentIndex,
-                                      duration: Duration(seconds: 3),
+                                      duration: Duration(seconds: 1),
                                       curve: Curves.easeInOutCubic);
                                 }
                               } else {
@@ -458,7 +458,7 @@ class _InvestorHomeState extends State<InvestorHome> {
                                 currentIndex--;
                                 itemScrollController.scrollTo(
                                     index: currentIndex,
-                                    duration: Duration(seconds: 2),
+                                    duration: Duration(seconds: 1),
                                     curve: Curves.easeInOutCubic);
                               } else {
                                 showSnackBar(
@@ -495,7 +495,7 @@ class _InvestorHomeState extends State<InvestorHome> {
 
                                   itemScrollController.scrollTo(
                                       index: currentIndex,
-                                      duration: Duration(seconds: 3),
+                                      duration: Duration(seconds: 1),
                                       curve: Curves.easeInOutCubic);
                                 } else if ((currentIndex + 1) >
                                     _recommendationPageSize) {
@@ -507,14 +507,14 @@ class _InvestorHomeState extends State<InvestorHome> {
 
                                   itemScrollController.scrollTo(
                                       index: currentIndex,
-                                      duration: Duration(seconds: 3),
+                                      duration: Duration(seconds: 1),
                                       curve: Curves.easeInOutCubic);
                                 } else {
                                   currentIndex++;
 
                                   itemScrollController.scrollTo(
                                       index: currentIndex,
-                                      duration: Duration(seconds: 3),
+                                      duration: Duration(seconds: 1),
                                       curve: Curves.easeInOutCubic);
                                 }
                               } else {
