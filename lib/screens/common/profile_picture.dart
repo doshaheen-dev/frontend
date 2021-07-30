@@ -5,6 +5,7 @@ import 'package:acc/models/profile/profile_image.dart';
 import 'package:acc/services/ProfileService.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
+import 'package:acc/utils/code_utils.dart';
 import 'package:acc/widgets/circular_container.dart';
 import 'package:acc/widgets/image_circle.dart';
 import 'package:flutter/material.dart';
@@ -51,9 +52,19 @@ class _ProfilePicScreenState extends State<ProfilePicScreen> {
           UploadProfileImage imgResponse =
               await ProfileService.uploadProfileImage(file, fileName);
           if (imgResponse.type == 'success') {
-            _imageUrl = imgResponse.data.userProfileImagePath;
-            UserData.instance.userInfo.profileImage =
-                imgResponse.data.userProfileImagePath;
+            final oldValue = UserData.instance.profileImage;
+            final userData = await CodeUtils.getUserInfo();
+            if (userData != null) {
+              userData.profileImage = imgResponse.data.userProfileImagePath;
+              final isSynced =
+                  await CodeUtils.syncUserPreferencesWithData(userData);
+              if (isSynced) {
+                UserData.instance.profileImage =
+                    imgResponse.data.userProfileImagePath;
+              }
+            } else {
+              UserData.instance.profileImage = oldValue;
+            }
           }
         } else {
           showSnackBar(context, 'Something went wrong.');

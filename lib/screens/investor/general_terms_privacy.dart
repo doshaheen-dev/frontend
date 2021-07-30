@@ -189,14 +189,14 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                               UserData userData = UserData(
                                   signedUpUser.data.token,
                                   CryptUtils.encryption(
-                                      signedUpUser.data.firstName),
+                                      signedUpUser.data.firstName.trim()),
                                   "",
                                   CryptUtils.encryption(
-                                      signedUpUser.data.lastName),
+                                      signedUpUser.data.lastName.trim()),
                                   CryptUtils.encryption(
-                                      signedUpUser.data.mobileNo),
+                                      signedUpUser.data.mobileNo.trim()),
                                   CryptUtils.encryption(
-                                      signedUpUser.data.emailId),
+                                      signedUpUser.data.emailId.trim()),
                                   signedUpUser.data.userType,
                                   "");
                               UserData.instance.userInfo = userData;
