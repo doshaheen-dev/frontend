@@ -307,50 +307,40 @@ class _FundraiserHomeState extends State<FundraiserHome> {
         SizedBox(
           height: 30,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-                // Replace with a Row for horizontal icon + text
-                children: <Widget>[
-                  Icon(Icons.circle, color: Colors.green, size: 15.0),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text("Listed", style: textNormal16(HexColor("#2B2B2B")))
-                ]),
-            SizedBox(
-              width: 10,
-            ),
-            Row(
-                // Replace with a Row for horizontal icon + text
-                children: <Widget>[
-                  Icon(Icons.circle, color: Colors.blue, size: 15.0),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text("Under Scrutiny",
-                      style: textNormal16(HexColor("#2B2B2B")))
-                ]),
-            SizedBox(
-              width: 10,
-            ),
-            Row(
+        Row(children: [
+          Row(
               // Replace with a Row for horizontal icon + text
               children: <Widget>[
-                Icon(
-                  Icons.circle,
-                  color: Colors.red,
-                  size: 15.0,
-                ),
+                Icon(Icons.circle, color: Colors.green, size: 15.0),
                 SizedBox(
                   width: 5,
                 ),
-                Text("Not Listed", style: textNormal16(HexColor("#2B2B2B")))
-              ],
-            )
-          ],
-        )
+                Text("Listed", style: textNormal16(HexColor("#2B2B2B")))
+              ]),
+          Row(
+              // Replace with a Row for horizontal icon + text
+              children: <Widget>[
+                Icon(Icons.circle, color: Colors.blue, size: 15.0),
+                SizedBox(
+                  width: 5,
+                ),
+                Text("Under Scrutiny", style: textNormal16(HexColor("#2B2B2B")))
+              ]),
+          Row(
+            // Replace with a Row for horizontal icon + text
+            children: <Widget>[
+              Icon(
+                Icons.circle,
+                color: Colors.red,
+                size: 15.0,
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Text("Not Listed", style: textNormal16(HexColor("#2B2B2B")))
+            ],
+          ),
+        ]),
       ],
     );
   }
