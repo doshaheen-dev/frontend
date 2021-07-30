@@ -111,8 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (userStr != null && userStr != "") {
       userMap = jsonDecode(userStr) as Map<String, dynamic>;
       UserData userData = UserData.fromNoDecryptionMap(userMap);
-      final requestModelInstance = UserData.instance;
-      requestModelInstance.token = userData.token;
+      UserData.instance.userInfo = userData;
 
       if (userData != null) {
         openHome(userData);

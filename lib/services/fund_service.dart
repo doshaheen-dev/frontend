@@ -17,7 +17,7 @@ class FundService {
 
     final headers = {
       "Content-type": "application/json",
-      "authorization": "Bearer ${UserData.instance.token}",
+      "authorization": "Bearer ${UserData.instance.userInfo.token}",
     };
     final jsonBody = jsonEncode(request);
 
@@ -41,7 +41,7 @@ class FundService {
 
     final headers = {
       "Content-type": "application/json",
-      "authorization": "Bearer ${UserData.instance.token}",
+      "authorization": "Bearer ${UserData.instance.userInfo.token}",
     };
     final url = Uri.parse(
         '${ApiServices.baseUrl}/fund?pageNo=$pageNo&pageSize=$pageSize');
@@ -62,7 +62,7 @@ class FundService {
     // print('URL: $url');
     final headers = {
       "Content-type": "application/json",
-      "authorization": "Bearer ${UserData.instance.token}",
+      "authorization": "Bearer ${UserData.instance.userInfo.token}",
     };
     final jsonBody = jsonEncode(request);
 

@@ -14,7 +14,7 @@ class KYCDocumentService {
 
     final headers = {
       "Content-type": "application/json",
-      "authorization": "Bearer ${UserData.instance.token}",
+      "authorization": "Bearer ${UserData.instance.userInfo.token}",
     };
     final response = await http.get(
         Uri.parse('${ApiServices.baseUrl}/fund/kyc_document/list'),

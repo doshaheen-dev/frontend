@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 
 class InvestorHome with ChangeNotifier {
   List<FundsInfo> recommended;
+  int totalRecommendations = 0;
 
   var interestedFundsData;
 
@@ -18,6 +19,7 @@ class InvestorHome with ChangeNotifier {
       return;
     }
     if (extractedData.status == 200) {
+      totalRecommendations = extractedData.data.totalCount;
       extractedData.data.option.forEach((option) {
         loadedRecommendations.add(FundsInfo(
             option.fundName,
@@ -39,6 +41,7 @@ class InvestorHome with ChangeNotifier {
     }
 
     recommended = loadedRecommendations.toList();
+    print("Size: ${recommended.length}");
     notifyListeners();
   }
 
