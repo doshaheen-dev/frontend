@@ -1,6 +1,7 @@
 import 'package:acc/models/fund/fund_response.dart';
 import 'package:acc/screens/fundraiser/dashboard/fundraiser_home.dart';
 import 'package:acc/services/fund_service.dart';
+import 'package:acc/utils/crypt_utils.dart';
 import 'package:flutter/foundation.dart';
 
 class FundProvider with ChangeNotifier {
@@ -31,7 +32,7 @@ class FundProvider with ChangeNotifier {
         option.userId,
         option.productId,
         option.slotId,
-        option.fundSponsorName,
+        CryptUtils.decryption(option.fundSponsorName),
         option.fundName,
         option.countryName,
         option.cityName,

@@ -18,6 +18,8 @@ class FundraiserDashboard extends StatefulWidget {
 
 class _FundraiserDashboardState extends State<FundraiserDashboard> {
   int bottomSelectedIndex = 0;
+  final double bRadius = 60;
+  final double iHeight = 65;
 
   @override
   Widget build(BuildContext context) {
@@ -81,25 +83,25 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
                           height: 70,
                           width: 70,
                           child: CircleAvatar(
-                            radius: 60,
+                            radius: bRadius,
                             backgroundColor: Colors.orange,
                             child: (UserData.instance.profileImage == null ||
                                     UserData.instance.profileImage == '')
                                 ? ImageCircle(
-                                    borderRadius: 60,
+                                    borderRadius: bRadius,
                                     image: Image.asset(
                                       'assets/images/UserProfile.png',
-                                      width: 50,
-                                      height: 50,
+                                      width: iHeight,
+                                      height: iHeight,
                                       fit: BoxFit.fill,
                                     ),
                                   )
                                 : ImageCircle(
-                                    borderRadius: 60,
+                                    borderRadius: bRadius,
                                     image: Image.network(
                                       UserData.instance.profileImage,
-                                      width: 50,
-                                      height: 50,
+                                      width: iHeight,
+                                      height: iHeight,
                                       fit: BoxFit.fill,
                                     )),
                           ),

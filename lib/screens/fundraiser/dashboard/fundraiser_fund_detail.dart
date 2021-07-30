@@ -110,7 +110,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
                                 child: Column(
                                   children: [
                                     Text(
-                                      "${_likedFunds.fundNewVal}",
+                                      "\$${_likedFunds.fundNewVal}",
                                       style: textBlackNormal16(),
                                     ),
                                     Text("Target",
@@ -459,6 +459,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
       final requestModelInstance = AddFundRequestModel.instance;
       requestModelInstance.fundNewVal =
           int.parse(_newFundValueController.text.trim());
+      requestModelInstance.fundKycDocuments = null;
       if (_uploadedDocuments.isNotEmpty) {
         requestModelInstance.fundKycDocuments = [];
         _uploadedDocuments.forEach((item) {
@@ -481,6 +482,8 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
         progress.dismiss();
       }
       showSnackBar(context, "Something went wrong");
+      // showSnackBar(context, "${e.toString()}");
+      // print(e.toString());
     }
   }
 

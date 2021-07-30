@@ -220,21 +220,21 @@ class _FundraiserHomeState extends State<FundraiserHome> {
                       SizedBox(
                         width: 15,
                       ),
-                      // if (item.type == "Reject")
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => FundraiserFundDetail(
-                                      data: fundsList[index],
-                                      isResubmission: true)));
-                        },
-                        child: Text(
-                          "Resubmit",
-                          style: textNormal12(HexColor("#FB724C")),
+                      if (item.type == "Reject")
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => FundraiserFundDetail(
+                                        data: fundsList[index],
+                                        isResubmission: true)));
+                          },
+                          child: Text(
+                            "Resubmit",
+                            style: textNormal12(HexColor("#FB724C")),
+                          ),
                         ),
-                      ),
                       SizedBox(
                         width: 10,
                       ),
