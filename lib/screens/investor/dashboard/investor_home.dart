@@ -43,7 +43,7 @@ class _InvestorHomeState extends State<InvestorHome> {
   bool isFundsNavigation = false;
 
   // Recommendations List
-  num _recommendationPageSize = 1;
+  num _recommendationPageSize = 5;
   num totalItems = 0;
   var tempRecommendationSizeList = 0;
   var recommendationPageNo = 0;
@@ -94,6 +94,8 @@ class _InvestorHomeState extends State<InvestorHome> {
   void didChangeDependencies() {
     if (_isInit) {
       setState(() {});
+      Provider.of<investorProvider.InvestorHome>(context, listen: false)
+          .clearRecommendations();
       _recommendations = _fetchRecommendation(context);
       _interestedFunds = _fetchInterestedFunds(context);
     }
@@ -148,8 +150,10 @@ class _InvestorHomeState extends State<InvestorHome> {
           // } else {
           //   displayRecommendationNavigation(false);
           // }
-          tempRecommendationSizeList =
-              tempRecommendationSizeList + result.data.option.length;
+          // print("Before tempRecList: $tempRecommendationSizeList");
+          // tempRecommendationSizeList =
+          //     tempRecommendationSizeList + result.data.option.length;
+          // print("After tempRecList: $tempRecommendationSizeList");
           displayRecommendations(true);
         }
       });
@@ -447,17 +451,22 @@ class _InvestorHomeState extends State<InvestorHome> {
                           color: kDarkOrange,
                           onPressed: () {
                             setState(() {
-                              if (currentIndex >= 1) {
-                                recommendationPageNo--;
-                                _recommendations =
-                                    _fetchRecommendation(context);
-                                tempRecommendationSizeList =
-                                    tempRecommendationSizeList -
-                                        _recommendationPageSize;
-                                if (tempRecommendationSizeList == 0) {
-                                  getRecommendationListSize();
+                              if (currentIndex > 0) {
+                                if ((currentIndex + 1) %
+                                        _recommendationPageSize ==
+                                    0) {
+                                  recommendationPageNo--;
                                 }
+                                // _recommendations =
+                                //     _fetchRecommendation(context);
+                                // tempRecommendationSizeList =
+                                //     tempRecommendationSizeList -
+                                //         _recommendationPageSize;
+                                // if (tempRecommendationSizeList == 0) {
+                                //   getRecommendationListSize();
+                                // }
                                 currentIndex--;
+                                print("CIdx: $currentIndex");
                                 itemScrollController.scrollTo(
                                     index: currentIndex,
                                     duration: Duration(seconds: 1),
@@ -485,35 +494,33 @@ class _InvestorHomeState extends State<InvestorHome> {
                           color: kDarkOrange,
                           onPressed: () {
                             setState(() {
-                              if ((totalItems - 1) >
-                                  (tempRecommendationSizeList)) {
-                                if ((currentIndex + 1) ==
-                                    _recommendationPageSize) {
+                              int itemsCount =
+                                  Provider.of<investorProvider.InvestorHome>(
+                                          context,
+                                          listen: false)
+                                      .totalRecommendations;
+                              if (currentIndex < (itemsCount - 1)) {
+                                if ((currentIndex + 1) %
+                                        _recommendationPageSize ==
+                                    0) {
                                   recommendationPageNo++;
                                   _recommendations =
                                       _fetchRecommendation(context);
                                   //  increaseIndex(currentIndex);
                                   currentIndex++;
-
-                                  itemScrollController.scrollTo(
-                                      index: currentIndex,
-                                      duration: Duration(seconds: 3),
-                                      curve: Curves.easeInOutCubic);
-                                } else if ((currentIndex + 1) >
-                                    _recommendationPageSize) {
-                                  recommendationPageNo++;
-                                  _recommendations =
-                                      _fetchRecommendation(context);
-                                  getRecommendationListSize();
+                                  print("CIdx: $currentIndex");
+                                }
+                                // else if ((currentIndex + 1) >
+                                //     _recommendationPageSize) {
+                                //   recommendationPageNo++;
+                                //   _recommendations =
+                                //       _fetchRecommendation(context);
+                                //   getRecommendationListSize();
+                                //   currentIndex++;
+                                // }
+                                else {
                                   currentIndex++;
-
-                                  itemScrollController.scrollTo(
-                                      index: currentIndex,
-                                      duration: Duration(seconds: 3),
-                                      curve: Curves.easeInOutCubic);
-                                } else {
-                                  currentIndex++;
-
+                                  print("CIdx: $currentIndex");
                                   itemScrollController.scrollTo(
                                       index: currentIndex,
                                       duration: Duration(seconds: 3),
@@ -537,7 +544,14 @@ class _InvestorHomeState extends State<InvestorHome> {
     return FutureBuilder(
       future: _recommendations,
       builder: (context, dataSnapshot) {
-        if (dataSnapshot.error != null) {
+        if (dataSnapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+              child: CircularProgressIndicator(
+            backgroundColor: Colors.orange,
+            valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
+          ));
+        } else if (dataSnapshot.error != null) {
+          print("Err: ${dataSnapshot.error.toString()}");
           return Center(child: Text("An error occurred!"));
         } else {
           return Consumer<investorProvider.InvestorHome>(
@@ -549,6 +563,7 @@ class _InvestorHomeState extends State<InvestorHome> {
                   itemPositionsListener: itemPositionsListener,
                   scrollDirection: Axis.horizontal,
                   itemCount: recommededData.recommended.length,
+                  initialScrollIndex: currentIndex,
                   itemBuilder: (context, index) {
                     return Container(
                       width: (MediaQuery.of(context).size.width - 40),

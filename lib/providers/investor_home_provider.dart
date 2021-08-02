@@ -41,8 +41,13 @@ class InvestorHome with ChangeNotifier {
       return;
     }
 
-    recommended = loadedRecommendations.toList();
-    //print("Size: ${recommended.length}");
+    recommended.addAll(loadedRecommendations.toList());
+    print("Size: ${recommended.length}");
+    notifyListeners();
+  }
+
+  void clearRecommendations() {
+    recommended = [];
     notifyListeners();
   }
 

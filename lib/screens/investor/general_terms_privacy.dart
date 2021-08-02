@@ -181,7 +181,7 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                             progress.dismiss();
                             if (signedUpUser.type == 'success') {
                               requestModelInstance.clear();
-                              print("Firstn: ${signedUpUser.data.firstName}");
+                              // print("Firstn: ${signedUpUser.data.firstName}");
                               UserData userData = UserData(
                                   signedUpUser.data.token,
                                   signedUpUser.data.firstName,
