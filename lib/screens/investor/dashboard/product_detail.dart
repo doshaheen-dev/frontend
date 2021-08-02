@@ -90,6 +90,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                     : AssetImage(
                                         "assets/images/dummy/investment1.png"),
                                 height: 250,
+                                width: MediaQuery.of(context).size.width,
                                 fit: BoxFit.fill,
                               ),
 

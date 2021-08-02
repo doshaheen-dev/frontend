@@ -11,6 +11,7 @@ class InvestorHomeService {
   // Fetch Recommendations
   static Future<Recommendations> fetchRecommendation(
       String token, int pageNo, num pageSize) async {
+    //print("fetchRecommendation pageNo:- ${pageNo}");
     final url = Uri.parse(
         '${ApiServices.baseUrl}/fund/recommendation?pageNo=$pageNo&pageSize=$pageSize');
     final headers = {

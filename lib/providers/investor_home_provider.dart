@@ -42,7 +42,7 @@ class InvestorHome with ChangeNotifier {
     }
 
     recommended = loadedRecommendations.toList();
-    print("Size: ${recommended.length}");
+    //print("Size: ${recommended.length}");
     notifyListeners();
   }
 
@@ -62,7 +62,7 @@ class InvestorHome with ChangeNotifier {
             option.fundExistVal,
             option.fundNewVal,
             option.fundTxnId,
-            option.fundSponsorName,
+            CryptUtils.decryption(option.fundSponsorName),
             option.fundRegulated,
             option.fundRegulatorName,
             option.fundWebsite,
