@@ -302,6 +302,7 @@ class _FundraiserHomeState extends State<FundraiserHome> {
 
   Column _createHeader() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text("Select the products you want to raise funds for.",
             style: textNormal(textGrey, 17.0)),
@@ -310,6 +311,7 @@ class _FundraiserHomeState extends State<FundraiserHome> {
         ),
         Row(children: [
           Row(
+
               // Replace with a Row for horizontal icon + text
               children: <Widget>[
                 Icon(Icons.circle, color: Colors.green, size: 15.0),
@@ -318,6 +320,9 @@ class _FundraiserHomeState extends State<FundraiserHome> {
                 ),
                 Text("Listed", style: textNormal16(HexColor("#2B2B2B")))
               ]),
+          SizedBox(
+            width: 10,
+          ),
           Row(
               // Replace with a Row for horizontal icon + text
               children: <Widget>[
@@ -327,6 +332,9 @@ class _FundraiserHomeState extends State<FundraiserHome> {
                 ),
                 Text("Under Scrutiny", style: textNormal16(HexColor("#2B2B2B")))
               ]),
+          SizedBox(
+            width: 10,
+          ),
           Row(
             // Replace with a Row for horizontal icon + text
             children: <Widget>[

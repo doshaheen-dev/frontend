@@ -43,15 +43,13 @@ class _InvestorHomeState extends State<InvestorHome> {
   bool isFundsNavigation = false;
 
   // Recommendations List
-  num _recommendationPageSize = 5;
+  num _recommendationPageSize = 10;
   num totalItems = 0;
-  var tempRecommendationSizeList = 0;
   var recommendationPageNo = 0;
 
   // Funds List
-  num _fundsPageSize = 1;
+  num _fundsPageSize = 10;
   num fundsTotalItems = 0;
-  var tempFundsSizeList = 0;
   var fundsPageNo = 0;
 
   void displayInterestedFunds(bool value) {
@@ -63,18 +61,6 @@ class _InvestorHomeState extends State<InvestorHome> {
   void displayRecommendations(bool value) {
     setState(() {
       isRecommendationPresent = value;
-    });
-  }
-
-  void displayRecommendationNavigation(bool value) {
-    setState(() {
-      isRecommendationNavigation = value;
-    });
-  }
-
-  void displayFundsNavigation(bool value) {
-    setState(() {
-      isFundsNavigation = value;
     });
   }
 
@@ -96,6 +82,8 @@ class _InvestorHomeState extends State<InvestorHome> {
       setState(() {});
       Provider.of<investorProvider.InvestorHome>(context, listen: false)
           .clearRecommendations();
+      Provider.of<investorProvider.InvestorHome>(context, listen: false)
+          .clearInterestedFunds();
       _recommendations = _fetchRecommendation(context);
       _interestedFunds = _fetchInterestedFunds(context);
     }
@@ -105,7 +93,6 @@ class _InvestorHomeState extends State<InvestorHome> {
 
   @override
   void initState() {
-    // UserData.instance.token = token;
     getRecommendationListSize();
     getFundsListSize();
     super.initState();
@@ -115,18 +102,11 @@ class _InvestorHomeState extends State<InvestorHome> {
     Future<Funds> fundsInfo = InvestorHomeService.fetchInterestedFunds(
         UserData.instance.userInfo.token, fundPageNo, _fundsPageSize);
     fundsInfo.then((result) {
-      print("Funds");
       setState(() {
         fundsTotalItems = result.data.totalCount;
         if (fundsTotalItems == 0) {
           displayInterestedFunds(false);
         } else {
-          // if (result.data.option.length > 3) {
-          //   displayFundsNavigation(true);
-          // } else {
-          //   displayFundsNavigation(false);
-          // }
-          tempFundsSizeList = tempFundsSizeList + result.data.option.length;
           displayInterestedFunds(true);
         }
       });
@@ -134,7 +114,6 @@ class _InvestorHomeState extends State<InvestorHome> {
   }
 
   void getRecommendationListSize() {
-    // if (recommendationPageNo <= (totalItems - 1)) {
     var recommendationInfo = InvestorHomeService.fetchRecommendation(
         UserData.instance.userInfo.token,
         recommendationPageNo,
@@ -145,20 +124,10 @@ class _InvestorHomeState extends State<InvestorHome> {
         if (totalItems == 0) {
           displayRecommendations(false);
         } else {
-          // if (result.data.option.length >= 1) {
-          //   displayRecommendationNavigation(true);
-          // } else {
-          //   displayRecommendationNavigation(false);
-          // }
-          // print("Before tempRecList: $tempRecommendationSizeList");
-          // tempRecommendationSizeList =
-          //     tempRecommendationSizeList + result.data.option.length;
-          // print("After tempRecList: $tempRecommendationSizeList");
           displayRecommendations(true);
         }
       });
     });
-    //   }
   }
 
   @override
@@ -218,100 +187,73 @@ class _InvestorHomeState extends State<InvestorHome> {
             children: <Widget>[
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                // color: Colors.red,
                 child: setInterestedFund(),
               ),
               Positioned(
                 left: 0,
                 top: 100 / 2,
-                child:
-                    // Visibility(
-                    //   visible: isFundsNavigation,
-                    //   child:
-                    IconButton(
-                        padding: EdgeInsets.only(right: 30),
-                        icon: Image.asset(
-                            "assets/images/navigation/arrow_left.png"),
-                        iconSize: 20,
-                        highlightColor: Colors.transparent,
-                        splashColor: Colors.transparent,
-                        color: kDarkOrange,
-                        onPressed: () {
-                          setState(() {
-                            if (_fundscurrentIndex >= 1) {
-                              fundsPageNo--;
+                child: IconButton(
+                    padding: EdgeInsets.only(right: 30),
+                    icon:
+                        Image.asset("assets/images/navigation/arrow_left.png"),
+                    iconSize: 20,
+                    highlightColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    color: kDarkOrange,
+                    onPressed: () {
+                      setState(() {
+                        if (_fundscurrentIndex > 0) {
+                          if ((_fundscurrentIndex + 3) % _fundsPageSize == 0) {
+                            fundPageNo--;
+                          }
+
+                          _fundscurrentIndex = _fundscurrentIndex - 3;
+                          fundItemScrollController.scrollTo(
+                              index: _fundscurrentIndex,
+                              duration: Duration(seconds: 1),
+                              curve: Curves.easeInOutCubic);
+                        } else {
+                          showSnackBar(context, "Start of funds items");
+                        }
+                      });
+                    }),
+              ),
+              Positioned(
+                  right: 0,
+                  top: 100 / 2,
+                  child: IconButton(
+                      padding: EdgeInsets.only(left: 30),
+                      icon: Image.asset(
+                          "assets/images/navigation/arrow_right.png"),
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      color: kDarkOrange,
+                      onPressed: () {
+                        setState(() {
+                          int itemsCount =
+                              Provider.of<investorProvider.InvestorHome>(
+                                      context,
+                                      listen: false)
+                                  .totalFunds;
+                          if (_fundscurrentIndex < (itemsCount - 1)) {
+                            if ((_fundscurrentIndex + 3) % _fundsPageSize ==
+                                0) {
+                              fundPageNo++;
                               _interestedFunds = _fetchInterestedFunds(context);
-                              tempFundsSizeList =
-                                  tempFundsSizeList - _fundsPageSize;
-                              if (tempFundsSizeList == 0) {
-                                getFundsListSize();
-                              }
-                              _fundscurrentIndex = _fundscurrentIndex - 3;
+                              _fundscurrentIndex = _fundscurrentIndex + 3;
+                            } else {
+                              _fundscurrentIndex = _fundscurrentIndex + 3;
+
                               fundItemScrollController.scrollTo(
                                   index: _fundscurrentIndex,
                                   duration: Duration(seconds: 1),
                                   curve: Curves.easeInOutCubic);
-                            } else {
-                              showSnackBar(context, "Start of funds items");
                             }
-                          });
-                        }),
-              ),
-              //   ),
-              Positioned(
-                  right: 0,
-                  top: 100 / 2,
-                  child:
-                      // Visibility(
-                      //     visible: isFundsNavigation,
-                      //     child:
-                      IconButton(
-                          padding: EdgeInsets.only(left: 30),
-                          icon: Image.asset(
-                              "assets/images/navigation/arrow_right.png"),
-                          highlightColor: Colors.transparent,
-                          splashColor: Colors.transparent,
-                          color: kDarkOrange,
-                          onPressed: () {
-                            setState(() {
-                              if ((fundsTotalItems - 3) > (tempFundsSizeList)) {
-                                if ((_fundscurrentIndex + 3) ==
-                                    tempFundsSizeList) {
-                                  fundPageNo++;
-                                  _interestedFunds =
-                                      _fetchInterestedFunds(context);
-                                  _fundscurrentIndex++;
-
-                                  fundItemScrollController.scrollTo(
-                                      index: _fundscurrentIndex,
-                                      duration: Duration(seconds: 1),
-                                      curve: Curves.easeInOutCubic);
-                                } else if ((_fundscurrentIndex + 3) >
-                                    _fundsPageSize) {
-                                  fundsPageNo++;
-                                  _interestedFunds =
-                                      _fetchInterestedFunds(context);
-                                  getFundsListSize();
-                                  _fundscurrentIndex = _fundscurrentIndex + 3;
-
-                                  fundItemScrollController.scrollTo(
-                                      index: _fundscurrentIndex,
-                                      duration: Duration(seconds: 1),
-                                      curve: Curves.easeInOutCubic);
-                                } else {
-                                  _fundscurrentIndex = _fundscurrentIndex + 3;
-
-                                  fundItemScrollController.scrollTo(
-                                      index: _fundscurrentIndex,
-                                      duration: Duration(seconds: 1),
-                                      curve: Curves.easeInOutCubic);
-                                }
-                              } else {
-                                showSnackBar(context, "End of funds list");
-                              }
-                            });
-                          })),
-              // )
+                          } else {
+                            showSnackBar(context, "End of recommendation list");
+                          }
+                        });
+                      })),
             ],
           ),
         ),
@@ -325,17 +267,26 @@ class _InvestorHomeState extends State<InvestorHome> {
         child: FutureBuilder(
           future: _interestedFunds,
           builder: (context, dataSnapshot) {
-            if (dataSnapshot.error != null) {
+            if (dataSnapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                  child: CircularProgressIndicator(
+                backgroundColor: Colors.orange,
+                valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
+              ));
+            } else if (dataSnapshot.error != null) {
+              print("Err: ${dataSnapshot.error.toString()}");
               return Center(child: Text("An error occurred!"));
             } else {
               return Consumer<investorProvider.InvestorHome>(
                 builder: (context, fundsData, child) => Container(
                   height: 300.0,
                   child: ScrollablePositionedList.builder(
+                      physics: NeverScrollableScrollPhysics(),
                       padding: const EdgeInsets.all(0.0),
                       itemScrollController: fundItemScrollController,
                       itemPositionsListener: fundIitemPositionsListener,
                       scrollDirection: Axis.horizontal,
+                      initialScrollIndex: _fundscurrentIndex,
                       itemCount: fundsData.interestedFundsData.length,
                       itemBuilder: (context, index) {
                         return Container(
@@ -360,13 +311,6 @@ class _InvestorHomeState extends State<InvestorHome> {
       BuildContext context, int index, interestedFundsData, length) {
     interestedFundsSize = length;
 
-    // setState(() {
-    //   if (length == 0) {
-    //     isFundsPresent = false;
-    //   } else {
-    //     isFundsPresent = true;
-    //   }
-    // });
     return GestureDetector(
         onTap: () => {
               Navigator.push(
@@ -437,102 +381,72 @@ class _InvestorHomeState extends State<InvestorHome> {
               Positioned(
                   left: 0,
                   top: 150 / 2,
-                  child:
-                      // Visibility(
-                      //     visible: isRecommendationNavigation,
-                      //     child:
-                      IconButton(
-                          padding: EdgeInsets.only(right: 30),
-                          icon: Image.asset(
-                              "assets/images/navigation/arrow_left.png"),
-                          iconSize: 20,
-                          highlightColor: Colors.transparent,
-                          splashColor: Colors.transparent,
-                          color: kDarkOrange,
-                          onPressed: () {
-                            setState(() {
-                              if (currentIndex > 0) {
-                                if ((currentIndex + 1) %
-                                        _recommendationPageSize ==
-                                    0) {
-                                  recommendationPageNo--;
-                                }
-                                // _recommendations =
-                                //     _fetchRecommendation(context);
-                                // tempRecommendationSizeList =
-                                //     tempRecommendationSizeList -
-                                //         _recommendationPageSize;
-                                // if (tempRecommendationSizeList == 0) {
-                                //   getRecommendationListSize();
-                                // }
-                                currentIndex--;
-                                print("CIdx: $currentIndex");
-                                itemScrollController.scrollTo(
-                                    index: currentIndex,
-                                    duration: Duration(seconds: 1),
-                                    curve: Curves.easeInOutCubic);
-                              } else {
-                                showSnackBar(
-                                    context, "Start of recommendation items");
-                              }
-                            });
-                          })),
-              // ),
+                  child: IconButton(
+                      padding: EdgeInsets.only(right: 30),
+                      icon: Image.asset(
+                          "assets/images/navigation/arrow_left.png"),
+                      iconSize: 20,
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      color: kDarkOrange,
+                      onPressed: () {
+                        setState(() {
+                          if (currentIndex > 0) {
+                            if ((currentIndex + 1) % _recommendationPageSize ==
+                                0) {
+                              recommendationPageNo--;
+                            }
+
+                            currentIndex--;
+                            print("CIdx: $currentIndex");
+                            itemScrollController.scrollTo(
+                                index: currentIndex,
+                                duration: Duration(seconds: 1),
+                                curve: Curves.easeInOutCubic);
+                          } else {
+                            showSnackBar(
+                                context, "Start of recommendation items");
+                          }
+                        });
+                      })),
               Positioned(
                   right: 0,
                   top: 150 / 2,
-                  child:
-                      // Visibility(
-                      //     visible: isRecommendationNavigation,
-                      //     child:
-                      IconButton(
-                          padding: EdgeInsets.only(left: 30),
-                          icon: Image.asset(
-                              "assets/images/navigation/arrow_right.png"),
-                          highlightColor: Colors.transparent,
-                          splashColor: Colors.transparent,
-                          color: kDarkOrange,
-                          onPressed: () {
-                            setState(() {
-                              int itemsCount =
-                                  Provider.of<investorProvider.InvestorHome>(
-                                          context,
-                                          listen: false)
-                                      .totalRecommendations;
-                              if (currentIndex < (itemsCount - 1)) {
-                                if ((currentIndex + 1) %
-                                        _recommendationPageSize ==
-                                    0) {
-                                  recommendationPageNo++;
-                                  _recommendations =
-                                      _fetchRecommendation(context);
-                                  //  increaseIndex(currentIndex);
-                                  currentIndex++;
-                                  print("CIdx: $currentIndex");
-                                }
-                                // else if ((currentIndex + 1) >
-                                //     _recommendationPageSize) {
-                                //   recommendationPageNo++;
-                                //   _recommendations =
-                                //       _fetchRecommendation(context);
-                                //   getRecommendationListSize();
-                                //   currentIndex++;
-                                // }
-                                else {
-                                  currentIndex++;
-                                  print("CIdx: $currentIndex");
-                                  itemScrollController.scrollTo(
-                                      index: currentIndex,
-                                      duration: Duration(seconds: 3),
-                                      curve: Curves.easeInOutCubic);
-                                }
-                              } else {
-                                showSnackBar(
-                                    context, "End of recommendation list");
-                              }
-                            });
-                          })),
-              // ),
+                  child: IconButton(
+                      padding: EdgeInsets.only(left: 30),
+                      icon: Image.asset(
+                          "assets/images/navigation/arrow_right.png"),
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      color: kDarkOrange,
+                      onPressed: () {
+                        setState(() {
+                          int itemsCount =
+                              Provider.of<investorProvider.InvestorHome>(
+                                      context,
+                                      listen: false)
+                                  .totalRecommendations;
+                          if (currentIndex < (itemsCount - 1)) {
+                            if ((currentIndex + 1) % _recommendationPageSize ==
+                                0) {
+                              recommendationPageNo++;
+                              _recommendations = _fetchRecommendation(context);
+
+                              currentIndex++;
+                              print("CIdx: $currentIndex");
+                            } else {
+                              currentIndex++;
+                              print("CIdx: $currentIndex");
+                              itemScrollController.scrollTo(
+                                  index: currentIndex,
+                                  duration: Duration(seconds: 1),
+                                  curve: Curves.easeInOutCubic);
+                            }
+                          } else {
+                            showSnackBar(context, "End of recommendation list");
+                          }
+                        });
+                      })),
             ],
           ),
         ),
@@ -671,15 +585,5 @@ class _InvestorHomeState extends State<InvestorHome> {
       ),
     );
   }
-
-  void increaseIndex(int index) {
-    index++;
-
-    itemScrollController.scrollTo(
-        index: index,
-        duration: Duration(seconds: 3),
-        curve: Curves.easeInOutCubic);
-  }
-
   // ------------------------------- end of recommendations -------------------------- //
 }

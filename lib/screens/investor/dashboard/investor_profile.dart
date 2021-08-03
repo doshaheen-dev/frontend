@@ -1,11 +1,14 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/signup_request.dart';
+import 'package:acc/models/authentication/signup_response.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/models/local_countries.dart';
 import 'package:acc/screens/common/onboarding.dart';
 import 'package:acc/services/OtpService.dart';
+import 'package:acc/services/signup_service.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/app_strings.dart';
 import 'package:acc/utilites/text_style.dart';
@@ -104,9 +107,17 @@ class _InvestorProfileState extends State<InvestorProfile> {
     if (_isInit) {
       setState(() {});
       _countries = _fetchCountries(context);
+      setUserInformation();
     }
     _isInit = false;
     super.didChangeDependencies();
+  }
+
+  void updateInfo(newSelectedCountry, String phoneNumber) {
+    setState(() {
+      selectedCountry = newSelectedCountry;
+      _mobileController.text = phoneNumber;
+    });
   }
 
   // @override
@@ -121,24 +132,10 @@ class _InvestorProfileState extends State<InvestorProfile> {
   //   super.dispose();
   // }
 
-  void changeOtpView(bool value) {
-    setState(() {
-      isOtpReceived = value;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    // selectedCountry = countryList[0];
-    String code = "";
-    for (var i = 0; i < 6; i++) {
-      code = code + Random().nextInt(9).toString();
-    }
-
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
-
-    setUserInformation();
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -160,16 +157,17 @@ class _InvestorProfileState extends State<InvestorProfile> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18))),
                   child: Ink(
-                    decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 60,
-                        alignment: Alignment.center,
-                        child: Text("Logout",
-                            style: textNormal(Colors.white, 16))),
-                  )),
+                      decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 60,
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Logout",
+                            style: textWhiteBold16(),
+                          )))),
             ),
           ],
         ))));
@@ -191,9 +189,27 @@ class _InvestorProfileState extends State<InvestorProfile> {
         ? ''
         : UserData.instance.userInfo.emailId ?? '';
 
-    String countryCode = UserData.instance.userInfo.mobileNo.substring(1, 3);
-    String mobileNo = UserData.instance.userInfo.mobileNo
-        .substring(3, UserData.instance.userInfo.mobileNo.length);
+    String countryCode;
+    if (UserData.instance.userInfo.mobileNo.length == 13 ||
+        UserData.instance.userInfo.mobileNo.length == 15) {
+      //IN and SG
+      countryCode = UserData.instance.userInfo.mobileNo.substring(1, 3);
+    } else if (UserData.instance.userInfo.mobileNo.length == 12) {
+      // US
+      countryCode = UserData.instance.userInfo.mobileNo.substring(1, 2);
+    }
+    String mobileNo;
+    if (UserData.instance.userInfo.mobileNo.length == 13 ||
+        UserData.instance.userInfo.mobileNo.length == 15) {
+      //IN and SG
+      mobileNo = UserData.instance.userInfo.mobileNo
+          .substring(3, UserData.instance.userInfo.mobileNo.length);
+    } else if (UserData.instance.userInfo.mobileNo.length == 12) {
+      // US
+      mobileNo = UserData.instance.userInfo.mobileNo
+          .substring(2, UserData.instance.userInfo.mobileNo.length);
+    }
+
     for (var i = 0; i < countryList.length; i++) {
       if (countryCode == countryList[i].dialCode.toString()) {
         selectedCountry = countryList[i];
@@ -269,7 +285,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
       Container(
         margin: const EdgeInsets.only(
             top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-        decoration: customDecoration(),
+        //decoration: customDecoration(),
         child: _createMobileFields(),
       ),
       Container(
@@ -399,7 +415,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
               width: MediaQuery.of(context).size.width,
               height: 60,
               alignment: Alignment.center,
-              child: Text("Update", style: textWhiteBold18()),
+              child: Text("Update", style: textWhiteBold16()),
             ),
           ),
         ),
@@ -476,51 +492,54 @@ class _InvestorProfileState extends State<InvestorProfile> {
               decoration: customDecoration(),
               child: _buildCodeDropDown(),
             )),
-        SizedBox(width: 30.0),
-        Flexible(
+        Expanded(
             flex: 2,
-            child: Stack(
-              children: [
-                TextField(
-                  enabled: false,
-                  style: textBlackNormal18(),
-                  onChanged: (value) => mobileNumber = value,
-                  controller: _mobileController,
-                  decoration: new InputDecoration(
-                    contentPadding: EdgeInsets.all(15.0),
-                    labelText: "Mobile No.",
-                    labelStyle: new TextStyle(color: Colors.grey[600]),
-                    border: InputBorder.none,
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: const BorderSide(
-                          color: Colors.transparent, width: 2.0),
-                      borderRadius: BorderRadius.all(
-                        const Radius.circular(10.0),
+            child: Container(
+              margin: EdgeInsets.only(left: 10.0),
+              decoration: customDecoration(),
+              child: Stack(
+                children: [
+                  TextField(
+                    enabled: false,
+                    style: textBlackNormal18(),
+                    onChanged: (value) => mobileNumber = value,
+                    controller: _mobileController,
+                    decoration: new InputDecoration(
+                      contentPadding: EdgeInsets.all(15.0),
+                      labelText: "Mobile No.",
+                      labelStyle: new TextStyle(color: Colors.grey[600]),
+                      border: InputBorder.none,
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: const BorderSide(
+                            color: Colors.transparent, width: 2.0),
+                        borderRadius: BorderRadius.all(
+                          const Radius.circular(10.0),
+                        ),
                       ),
                     ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
                   ),
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly,
-                  ],
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    margin: EdgeInsets.all(20.0),
-                    child: InkWell(
-                        onTap: () {
-                          print("UPDATE MOBILE");
-                          // open Bottom sheet
-                          showUpdationView();
-                        },
-                        child: Text(
-                          "Update",
-                          style: textNormal16(Colors.blue),
-                        )),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      margin:
+                          EdgeInsets.only(left: 25.0, right: 20.0, top: 25.0),
+                      child: InkWell(
+                          onTap: () {
+                            // open Bottom sheet
+                            showUpdationView();
+                          },
+                          child: Text(
+                            "Update",
+                            style: textNormal16(Colors.blue),
+                          )),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ))
       ],
     );
@@ -537,11 +556,6 @@ class _InvestorProfileState extends State<InvestorProfile> {
                   borderRadius: BorderRadius.all(const Radius.circular(10.0)),
                   borderSide: BorderSide(color: Colors.transparent))),
           value: selectedCountry,
-          onChanged: (Countries countries) {
-            setState(() {
-              selectedCountry = countries;
-            });
-          },
           items: countryList.map((Countries countries) {
             return DropdownMenuItem<Countries>(
               value: countries,
@@ -558,12 +572,12 @@ class _InvestorProfileState extends State<InvestorProfile> {
         ));
   }
 
-  void submitDetails(String firstName, String lastName, String email,
-      String mobileNo, String country, String address) {}
+  // -------------------- BOTTOM SHEET ---------------------------------- \\
+
   final GlobalKey<ScaffoldState> _modelScaffoldKey = GlobalKey<ScaffoldState>();
 
-  void showUpdationView() {
-    newSelectedCountry = countryList[0];
+  Future<void> showUpdationView() async {
+    newSelectedCountry = selectedCountry;
     _newMobileController = TextEditingController();
     otpController = new TextEditingController();
 
@@ -575,207 +589,222 @@ class _InvestorProfileState extends State<InvestorProfile> {
         ),
         context: context,
         builder: (context) {
-          return Scaffold(
-              key: _modelScaffoldKey,
-              body: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(children: [
-                          Text(
-                            "Update Your Mobile Number",
-                            textAlign: TextAlign.start,
-                            style: textBold18(headingBlack),
-                          ),
-                          Spacer(),
-                          InkWell(
-                              onTap: () {
-                                _newMobileController.clear();
-                                otpController.clear();
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                "Close",
-                                style: textNormal16(headingBlack),
-                              ))
-                        ]),
-                      ),
-                      Container(
-                        margin:
-                            EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
-                        width: MediaQuery.of(context).size.width,
-                        child: _createNewMobileFields(),
-                      ),
-                      Visibility(
-                        visible: !isOtpReceived,
-                        child: Container(
-                            alignment: Alignment.center,
-                            margin:
-                                const EdgeInsets.only(top: 20.0, bottom: 20),
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  FocusScope.of(context)
-                                      .requestFocus(FocusNode());
-                                  if (newSelectedCountry == null) {
-                                    _modelScaffoldKey.currentState.showSnackBar(
-                                        SnackBar(
-                                            content: Text(errorCountryCode)));
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return Scaffold(
+                key: _modelScaffoldKey,
+                body: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(children: [
+                            Text(
+                              "Update Your Mobile Number",
+                              textAlign: TextAlign.start,
+                              style: textBold18(headingBlack),
+                            ),
+                            Spacer(),
+                            InkWell(
+                                onTap: () {
+                                  _newMobileController.clear();
+                                  otpController.clear();
 
-                                    return;
-                                  }
-
-                                  if (_newMobileController.text.isEmpty) {
-                                    _modelScaffoldKey.currentState.showSnackBar(
-                                        SnackBar(content: Text(correctMobile)));
-                                    return;
-                                  }
-
-                                  if (newSelectedCountry.maxLength !=
-                                      _newMobileController.text.length) {
-                                    _modelScaffoldKey.currentState.showSnackBar(
-                                        SnackBar(
-                                            content: Text(
-                                                "Phone number should be of ${selectedCountry.maxLength} digits.")));
-
-                                    return;
-                                  }
-
-                                  //  progress = ProgressHUD.of(context);
-                                  // progress?.showWithText(sendingOtp);
-                                  _getOtp(_newMobileController.text,
-                                      newSelectedCountry);
+                                  setState(() {
+                                    isOtpReceived = false;
+                                  });
+                                  Navigator.pop(context);
                                 },
-                                style: ElevatedButton.styleFrom(
-                                    padding: EdgeInsets.all(0.0),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18))),
-                                child: Ink(
-                                    decoration: BoxDecoration(
-                                        gradient: LinearGradient(colors: [
-                                          kDarkOrange,
-                                          kLightOrange
-                                        ]),
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    child: Container(
-                                        width: 240,
-                                        height: 50,
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          sendOtpSecret,
-                                          style: textWhiteBold18(),
-                                        ))))),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Visibility(
-                          visible: isOtpReceived,
-                          child: Column(
-                            children: [
-                              Container(
-                                  alignment: Alignment.topLeft,
+                                child: Text(
+                                  "Close",
+                                  style: textNormal16(headingBlack),
+                                ))
+                          ]),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                              left: 15.0, right: 15.0, top: 10.0),
+                          width: MediaQuery.of(context).size.width,
+                          child: _createNewMobileFields(),
+                        ),
+                        Visibility(
+                          visible: !isOtpReceived,
+                          child: Container(
+                              alignment: Alignment.center,
+                              margin:
+                                  const EdgeInsets.only(top: 20.0, bottom: 20),
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    FocusScope.of(context)
+                                        .requestFocus(FocusNode());
+                                    if (newSelectedCountry == null) {
+                                      _modelScaffoldKey.currentState
+                                          .showSnackBar(SnackBar(
+                                              duration: Duration(seconds: 1),
+                                              content: Text(errorCountryCode)));
+
+                                      return;
+                                    }
+
+                                    if (_newMobileController.text.isEmpty) {
+                                      _modelScaffoldKey.currentState
+                                          .showSnackBar(SnackBar(
+                                              duration: Duration(seconds: 1),
+                                              content: Text(correctMobile)));
+                                      return;
+                                    }
+
+                                    if (newSelectedCountry.maxLength !=
+                                        _newMobileController.text.length) {
+                                      _modelScaffoldKey.currentState
+                                          .showSnackBar(SnackBar(
+                                              duration: Duration(seconds: 1),
+                                              content: Text(
+                                                  "Phone number should be of ${newSelectedCountry.maxLength} digits.")));
+
+                                      return;
+                                    }
+
+                                    //  progress = ProgressHUD.of(context);
+                                    // progress?.showWithText(sendingOtp);
+                                    _getOtp(_newMobileController.text,
+                                        newSelectedCountry, setState);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.all(0.0),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(18))),
+                                  child: Ink(
+                                      decoration: BoxDecoration(
+                                          gradient: LinearGradient(colors: [
+                                            kDarkOrange,
+                                            kLightOrange
+                                          ]),
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: Container(
+                                          width: 240,
+                                          height: 50,
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            sendOtpSecret,
+                                            style: textWhiteBold18(),
+                                          ))))),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Visibility(
+                            visible: isOtpReceived,
+                            child: Column(
+                              children: [
+                                Container(
+                                    alignment: Alignment.topLeft,
+                                    margin: const EdgeInsets.only(
+                                        top: 5.0, left: 25.0),
+                                    child: Text(
+                                      otpMobileLabel,
+                                      style: textNormal16(Colors.black),
+                                    )),
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
                                   margin: const EdgeInsets.only(
-                                      top: 5.0, left: 25.0),
-                                  child: Text(
-                                    otpMobileLabel,
-                                    style: textNormal16(Colors.black),
-                                  )),
-                              Container(
-                                width: MediaQuery.of(context).size.width,
-                                margin: const EdgeInsets.only(
-                                    top: 5.0,
-                                    left: 40.0,
-                                    bottom: 20,
-                                    right: 40.0),
-                                child: PinCodeTextField(
-                                  controller: otpController,
-                                  appContext: context,
-                                  pastedTextStyle: TextStyle(
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.normal,
+                                      top: 5.0,
+                                      left: 40.0,
+                                      bottom: 20,
+                                      right: 40.0),
+                                  child: PinCodeTextField(
+                                    controller: otpController,
+                                    appContext: context,
+                                    pastedTextStyle: TextStyle(
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                    length: 6,
+                                    animationType: AnimationType.none,
+                                    pinTheme: PinTheme(
+                                      shape: PinCodeFieldShape.underline,
+                                      selectedColor: Colors.grey,
+                                      inactiveColor: Colors.grey,
+                                      activeColor: Colors.orange,
+                                      activeFillColor: Colors.orange,
+                                    ),
+                                    cursorColor: Colors.black,
+                                    enableActiveFill: false,
+                                    keyboardType: TextInputType.number,
+                                    onCompleted: (v) {
+                                      print("Completed " + v);
+                                    },
+                                    onChanged: (value) {
+                                      print(value);
+                                      setState(() {
+                                        otpText = value;
+                                      });
+                                    },
+                                    beforeTextPaste: (text) {
+                                      print("Allowing to paste $text");
+                                      //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
+                                      //but you can show anything you want here, like your pop up saying wrong paste format or etc
+                                      return false;
+                                    },
                                   ),
-                                  length: 6,
-                                  animationType: AnimationType.none,
-                                  pinTheme: PinTheme(
-                                    shape: PinCodeFieldShape.underline,
-                                    selectedColor: Colors.grey,
-                                    inactiveColor: Colors.grey,
-                                    activeColor: Colors.orange,
-                                    activeFillColor: Colors.orange,
-                                  ),
-                                  cursorColor: Colors.black,
-                                  enableActiveFill: false,
-                                  keyboardType: TextInputType.number,
-                                  onCompleted: (v) {
-                                    print("Completed " + v);
-                                  },
-                                  onChanged: (value) {
-                                    print(value);
-                                    setState(() {
-                                      otpText = value;
-                                    });
-                                  },
-                                  beforeTextPaste: (text) {
-                                    print("Allowing to paste $text");
-                                    //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                                    //but you can show anything you want here, like your pop up saying wrong paste format or etc
-                                    return false;
-                                  },
                                 ),
-                              ),
-                              Container(
-                                  alignment: Alignment.center,
-                                  margin: const EdgeInsets.only(
-                                      top: 20.0, bottom: 20),
-                                  child: ElevatedButton(
-                                      onPressed: () {
-                                        FocusScope.of(context)
-                                            .requestFocus(FocusNode());
-                                        if (otpController.text.isEmpty) {
-                                          _modelScaffoldKey.currentState
-                                              .showSnackBar(SnackBar(
-                                                  content: Text(warningOTP)));
-                                          return;
-                                        }
-                                        // verify otp
-                                        _verifySignUpOTP(
-                                            otpController.text,
-                                            _verificationId,
-                                            _newMobileController.text.trim());
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                          padding: EdgeInsets.all(0.0),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(18))),
-                                      child: Ink(
-                                          decoration: BoxDecoration(
-                                              gradient: LinearGradient(colors: [
-                                                kDarkOrange,
-                                                kLightOrange
-                                              ]),
-                                              borderRadius:
-                                                  BorderRadius.circular(15)),
-                                          child: Container(
-                                              width: 240,
-                                              height: 50,
-                                              alignment: Alignment.center,
-                                              child: Text(
-                                                verifyOtp,
-                                                style: textWhiteBold18(),
-                                              )))))
-                            ],
-                          )),
-                    ],
+                                Container(
+                                    alignment: Alignment.center,
+                                    margin: const EdgeInsets.only(
+                                        top: 20.0, bottom: 20),
+                                    child: ElevatedButton(
+                                        onPressed: () {
+                                          FocusScope.of(context)
+                                              .requestFocus(FocusNode());
+                                          if (otpController.text.isEmpty) {
+                                            _modelScaffoldKey.currentState
+                                                .showSnackBar(SnackBar(
+                                                    duration:
+                                                        Duration(seconds: 1),
+                                                    content: Text(warningOTP)));
+                                            return;
+                                          }
+                                          // verify otp
+                                          _verifySignUpOTP(
+                                              otpController.text,
+                                              _verificationId,
+                                              _newMobileController.text.trim(),
+                                              setState);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            padding: EdgeInsets.all(0.0),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(18))),
+                                        child: Ink(
+                                            decoration: BoxDecoration(
+                                                gradient: LinearGradient(
+                                                    colors: [
+                                                      kDarkOrange,
+                                                      kLightOrange
+                                                    ]),
+                                                borderRadius:
+                                                    BorderRadius.circular(15)),
+                                            child: Container(
+                                                width: 240,
+                                                height: 50,
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  verifyOtp,
+                                                  style: textWhiteBold16(),
+                                                )))))
+                              ],
+                            )),
+                      ],
+                    ),
                   ),
-                ),
-              ));
+                ));
+          });
         });
   }
 
@@ -787,7 +816,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
             flex: 1,
             child: Container(
               decoration: customDecoration(),
-              child: _buildCodeDropDown(),
+              child: _buildBottomSheetCodeDropDown(),
             )),
         SizedBox(width: 30.0),
         Expanded(
@@ -821,10 +850,9 @@ class _InvestorProfileState extends State<InvestorProfile> {
     );
   }
 
-  Future<void> _getOtp(String phoneNumber, newSelectedCountry) async {
-    //changeOtpView(true);
+  Future<void> _getOtp(
+      String phoneNumber, newSelectedCountry, StateSetter setState) async {
     String _phoneNumber =
-
         "+${newSelectedCountry.dialCode}" + phoneNumber.toString().trim();
     print(_phoneNumber);
     VerificationIdSignIn verificationIdSignIn =
@@ -834,34 +862,115 @@ class _InvestorProfileState extends State<InvestorProfile> {
       Future.delayed(Duration(milliseconds: 2), () {
         // progress.dismiss();
         _verificationId = verificationIdSignIn.data.verificationId;
-        changeOtpView(true);
+        setState(() {
+          isOtpReceived = true;
+        });
       });
     } else {
       // progress.dismiss();
-      changeOtpView(false);
+      setState(() {
+        isOtpReceived = false;
+      });
       showSnackBar(context, verificationIdSignIn.message);
     }
   }
 
-  Future<void> _verifySignUpOTP(
-      String otpCode, String verificationId, String phoneNumber) async {
-    _mobileController.text = phoneNumber;
-   // Navigator.pop(context);
+  Future<void> _verifySignUpOTP(String otpCode, String verificationId,
+      String phoneNumber, StateSetter setState) async {
+    selectedCountry = newSelectedCountry;
+    String _phoneNumber =
+        "+${newSelectedCountry.dialCode}" + phoneNumber.toString().trim();
+
     SignUpInvestor verificationIdSignIn = await OtpService.getVerifySignUpOtp(
-        phoneNumber, verificationId, otpCode);
+        _phoneNumber, verificationId, otpCode);
     if (verificationIdSignIn.status == 200) {
-      progress?.showWithText(successOTP);
-      final requestModelInstance = InvestorSignupRequestModel.instance;
-      requestModelInstance.mobileNo = CryptUtils.encryption(phoneNumber);
-      requestModelInstance.verificationId = verificationId;
+//      progress?.showWithText(successOTP);
+
       Future.delayed(Duration(milliseconds: 2), () async {
         // progress.dismiss();
+        setState(() {
+          isOtpReceived = false;
+        });
         _mobileController.text = phoneNumber;
+        selectedCountry = newSelectedCountry;
+        updateInfo(selectedCountry, phoneNumber);
+
         Navigator.pop(context);
       });
     } else {
-      progress.dismiss();
+      //progress.dismiss();
       showSnackBar(context, verificationIdSignIn.message);
+    }
+  }
+
+  Widget _buildBottomSheetCodeDropDown() {
+    return Padding(
+        padding: EdgeInsets.only(left: 10.0, right: 5.0),
+        child: DropdownButtonFormField<Countries>(
+          decoration: InputDecoration(
+              labelText: 'Country Code',
+              labelStyle: new TextStyle(color: Colors.grey[600]),
+              enabledBorder: UnderlineInputBorder(
+                  borderRadius: BorderRadius.all(const Radius.circular(10.0)),
+                  borderSide: BorderSide(color: Colors.transparent))),
+          value: newSelectedCountry,
+          onChanged: (Countries countries) {
+            setState(() {
+              newSelectedCountry = countries;
+            });
+          },
+          items: countryList.map((Countries countries) {
+            return DropdownMenuItem<Countries>(
+              value: countries,
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    "+${countries.dialCode}",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ));
+  }
+
+  // ------------------------------------------------------------------//
+  Future<void> submitDetails(String firstName, String lastName, String emailId,
+      String mobileNo, String countryCode, String address) async {
+    String _phoneNumber =
+        "+${selectedCountry.dialCode}" + mobileNo.toString().trim();
+
+    final requestModelInstance = InvestorSignupRequestModel.instance;
+    requestModelInstance.firstName = CryptUtils.encryption(firstName);
+    requestModelInstance.lastName = CryptUtils.encryption(lastName);
+    requestModelInstance.emailId = CryptUtils.encryption(emailId);
+    requestModelInstance.mobileNo = CryptUtils.encryption(_phoneNumber);
+    requestModelInstance.countryCode = countryCode;
+    requestModelInstance.address = address;
+    User signedUpUser =
+        await SignUpService.uploadUserDetails(requestModelInstance);
+    progress.dismiss();
+    if (signedUpUser.type == 'success') {
+      requestModelInstance.clear();
+      // print("Firstn: ${signedUpUser.data.firstName}");
+      UserData userData = UserData(
+          signedUpUser.data.token,
+          signedUpUser.data.firstName,
+          "",
+          signedUpUser.data.lastName,
+          signedUpUser.data.mobileNo,
+          signedUpUser.data.emailId,
+          signedUpUser.data.userType,
+          "");
+      final prefs = await SharedPreferences.getInstance();
+      final userJson = jsonEncode(userData);
+      prefs.setString('UserInfo', userJson);
+      UserData.instance.userInfo = userData;
+      print('${userData.firstName}');
+      print('Ins:${UserData.instance.userInfo.firstName}');
+    } else {
+      showSnackBar(context, "Something went wrong");
     }
   }
 }

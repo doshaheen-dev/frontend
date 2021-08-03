@@ -9,7 +9,8 @@ class InvestorHome with ChangeNotifier {
   List<FundsInfo> recommended;
   int totalRecommendations = 0;
 
-  var interestedFundsData;
+  List<FundsInfo> interestedFundsData;
+  int totalFunds = 0;
 
   Future<void> fetchAndSetRecommendations(
       String token, int pageNo, int pageSize) async {
@@ -60,6 +61,7 @@ class InvestorHome with ChangeNotifier {
       return;
     }
     if (extractedData.status == 200) {
+      totalFunds = extractedData.data.totalCount;
       extractedData.data.option.forEach((option) {
         loadedFunds.add(FundsInfo(
             option.fundName,
@@ -80,7 +82,12 @@ class InvestorHome with ChangeNotifier {
       return;
     }
 
-    interestedFundsData = loadedFunds.toList();
+    interestedFundsData.addAll(loadedFunds.toList());
+    notifyListeners();
+  }
+
+  void clearInterestedFunds() {
+    interestedFundsData = [];
     notifyListeners();
   }
 }
