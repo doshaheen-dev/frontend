@@ -56,6 +56,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _mobileController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
+  TextEditingController _countryController = TextEditingController();
   String firstname = "";
   String lastname = "";
   String email = "";
@@ -219,6 +220,9 @@ class _InvestorProfileState extends State<InvestorProfile> {
             UserData.instance.userInfo.mobileNo == 'null')
         ? ''
         : mobileNo ?? '';
+
+    _addressController.text = UserData.instance.userInfo.address;
+    _countryController.text = UserData.instance.countryName;
   }
 
   openLogoutDialog(BuildContext context, String message) {
@@ -692,7 +696,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
                                           alignment: Alignment.center,
                                           child: Text(
                                             sendOtpSecret,
-                                            style: textWhiteBold18(),
+                                            style: textWhiteBold16(),
                                           ))))),
                         ),
                         SizedBox(
@@ -948,29 +952,34 @@ class _InvestorProfileState extends State<InvestorProfile> {
     requestModelInstance.mobileNo = CryptUtils.encryption(_phoneNumber);
     requestModelInstance.countryCode = countryCode;
     requestModelInstance.address = address;
-    User signedUpUser =
-        await SignUpService.uploadUserDetails(requestModelInstance);
-    progress.dismiss();
-    if (signedUpUser.type == 'success') {
-      requestModelInstance.clear();
-      // print("Firstn: ${signedUpUser.data.firstName}");
-      UserData userData = UserData(
-          signedUpUser.data.token,
-          signedUpUser.data.firstName,
-          "",
-          signedUpUser.data.lastName,
-          signedUpUser.data.mobileNo,
-          signedUpUser.data.emailId,
-          signedUpUser.data.userType,
-          "");
-      final prefs = await SharedPreferences.getInstance();
-      final userJson = jsonEncode(userData);
-      prefs.setString('UserInfo', userJson);
-      UserData.instance.userInfo = userData;
-      print('${userData.firstName}');
-      print('Ins:${UserData.instance.userInfo.firstName}');
-    } else {
-      showSnackBar(context, "Something went wrong");
-    }
+
+    // User signedUpUser =
+    //     await SignUpService.uploadUserDetails(requestModelInstance);
+    // progress.dismiss();
+    // if (signedUpUser.type == 'success') {
+    //   requestModelInstance.clear();
+    //   // print("Firstn: ${signedUpUser.data.firstName}");
+    //   UserData userData = UserData(
+    //       signedUpUser.data.token,
+    //       signedUpUser.data.firstName,
+    //       "",
+    //       signedUpUser.data.lastName,
+    //       signedUpUser.data.mobileNo,
+    //       signedUpUser.data.emailId,
+    //       signedUpUser.data.userType,
+    //       "",
+    //       signedUpUser.data.designation,
+    //      signedUpUser.data.designation,
+    //      signedUpUser.data.designation,
+    //      signedUpUser.data.designation, );
+    //   final prefs = await SharedPreferences.getInstance();
+    //   final userJson = jsonEncode(userData);
+    //   prefs.setString('UserInfo', userJson);
+    //   UserData.instance.userInfo = userData;
+    //   print('${userData.firstName}');
+    //   print('Ins:${UserData.instance.userInfo.firstName}');
+    // } else {
+    //   showSnackBar(context, "Something went wrong");
+    // }
   }
 }

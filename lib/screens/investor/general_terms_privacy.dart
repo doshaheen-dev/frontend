@@ -190,6 +190,10 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                                   signedUpUser.data.mobileNo,
                                   signedUpUser.data.emailId,
                                   signedUpUser.data.userType,
+                                  "",
+                                  "",
+                                  "",
+                                  "",
                                   "");
                               final prefs =
                                   await SharedPreferences.getInstance();

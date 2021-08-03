@@ -170,6 +170,10 @@ class UserData {
   String emailId;
   String userType;
   String profileImage;
+  String designation;
+  String companyName;
+  String address;
+  String countryName;
 
   UserData._privateConstructor();
 
@@ -185,10 +189,25 @@ class UserData {
       this.mobileNo,
       this.emailId,
       this.userType,
-      this.profileImage);
+      this.profileImage,
+      this.designation,
+      this.companyName,
+      this.address,
+      this.countryName);
 
-  UserData(this.token, this.firstName, this.middleName, this.lastName,
-      this.mobileNo, this.emailId, this.userType, this.profileImage);
+  UserData(
+      this.token,
+      this.firstName,
+      this.middleName,
+      this.lastName,
+      this.mobileNo,
+      this.emailId,
+      this.userType,
+      this.profileImage,
+      this.designation,
+      this.companyName,
+      this.address,
+      this.countryName);
 
   set userInfo(UserData info) {
     this.token = info.token;
@@ -199,6 +218,10 @@ class UserData {
     this.emailId = info.emailId;
     this.userType = info.userType;
     this.profileImage = info.profileImage;
+    this.designation = info.designation;
+    this.companyName = info.companyName;
+    this.address = info.address;
+    this.countryName = info.countryName;
   }
 
   Map<String, dynamic> toJson() => {
@@ -210,6 +233,10 @@ class UserData {
         "email_id": this.emailId,
         "user_type": this.userType,
         "user_profile_image_path": this.profileImage,
+        "designation": this.designation,
+        "company_name": this.companyName,
+        "address": this.address,
+        "country_name": this.countryName,
       };
 
   factory UserData.fromMap(Map<String, dynamic> json) {
@@ -222,6 +249,10 @@ class UserData {
       CryptUtils.decryption(json['email_id']),
       json['user_type'],
       json['user_profile_image_path'],
+      json['designation'],
+      json['company_name'],
+      json['address'],
+      json['country_name'],
     );
   }
 
@@ -235,6 +266,10 @@ class UserData {
       json['email_id'],
       json['user_type'],
       json['user_profile_image_path'],
+      json['designation'],
+      json['company_name'],
+      json['address'],
+      json['country_name'],
     );
   }
   factory UserData.fromJson(Map<String, dynamic> json) {
@@ -247,6 +282,10 @@ class UserData {
       CryptUtils.decryption(json['email_id']),
       json['user_type'],
       json['user_profile_image_path'],
+      json['designation'],
+      json['company_name'],
+      json['address'],
+      json['country_name'],
     );
   }
 }

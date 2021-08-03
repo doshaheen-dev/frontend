@@ -222,6 +222,10 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
             UserData.instance.userInfo.mobileNo == 'null')
         ? ''
         : mobileNo ?? '';
+
+    country = UserData.instance.userInfo.countryName;
+    _companyNameController.text = UserData.instance.userInfo.companyName;
+    _titleController.text = UserData.instance.designation;
   }
 
   openLogoutDialog(BuildContext context, String message) {
