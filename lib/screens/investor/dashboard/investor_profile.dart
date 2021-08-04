@@ -63,7 +63,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
   String country = "";
   String address = "";
   String mobileNumber = "";
-
+  String savedcountryName = "";
   var selectedCountry;
 
 //---------- bottom sheet ---------------------------//
@@ -222,7 +222,8 @@ class _InvestorProfileState extends State<InvestorProfile> {
         : mobileNo ?? '';
 
     _addressController.text = UserData.instance.userInfo.address;
-    _countryController.text = UserData.instance.countryName;
+    savedcountryName = UserData.instance.userInfo.countryName;
+    print("country: $savedcountryName");
   }
 
   openLogoutDialog(BuildContext context, String message) {
@@ -463,8 +464,10 @@ class _InvestorProfileState extends State<InvestorProfile> {
       items: items,
       itemAsString: (Map<String, dynamic> i) => i['text'],
       hint: "",
+      label: savedcountryName != "" ? savedcountryName : 'Country',
       onChanged: (map) {
         setState(() {
+          savedcountryName = "";
           country = map['value'];
           print(country);
         });

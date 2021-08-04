@@ -58,7 +58,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
   String company_email = "";
   String country = "";
   String mobileNumber = "";
-
+  String savedcountryName = "";
   File profilePhoto;
   var progress;
   var _firstNameController = TextEditingController();
@@ -223,7 +223,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
         ? ''
         : mobileNo ?? '';
 
-    country = UserData.instance.userInfo.countryName;
+    savedcountryName = UserData.instance.userInfo.countryName;
     _companyNameController.text = UserData.instance.userInfo.companyName;
     _titleController.text = UserData.instance.designation;
   }
@@ -466,8 +466,10 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
       items: items,
       itemAsString: (Map<String, dynamic> i) => i['text'],
       hint: "",
+      label: savedcountryName != "" ? savedcountryName : 'Country',
       onChanged: (map) {
         setState(() {
+          savedcountryName = "";
           country = map['value'];
           print(country);
         });

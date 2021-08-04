@@ -213,7 +213,8 @@ class _InvestorHomeState extends State<InvestorHome> {
                               duration: Duration(seconds: 1),
                               curve: Curves.easeInOutCubic);
                         } else {
-                          showSnackBar(context, "Start of funds items");
+                          showSnackBar(
+                              context, "Start of interested funds items");
                         }
                       });
                     }),
@@ -250,7 +251,8 @@ class _InvestorHomeState extends State<InvestorHome> {
                                   curve: Curves.easeInOutCubic);
                             }
                           } else {
-                            showSnackBar(context, "End of recommendation list");
+                            showSnackBar(
+                                context, "End of interested funds list");
                           }
                         });
                       })),
