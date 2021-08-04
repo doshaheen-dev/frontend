@@ -43,9 +43,10 @@ class _InvestorHomeState extends State<InvestorHome> {
   bool isFundsNavigation = false;
 
   // Recommendations List
-  num _recommendationPageSize = 10;
+  num _recommendationPageSize = 5;
   num totalItems = 0;
   var recommendationPageNo = 0;
+  List<investorProvider.FundsInfo> recommendList = [];
 
   // Funds List
   num _fundsPageSize = 10;
@@ -86,6 +87,31 @@ class _InvestorHomeState extends State<InvestorHome> {
           .clearInterestedFunds();
       _recommendations = _fetchRecommendation(context);
       _interestedFunds = _fetchInterestedFunds(context);
+
+      itemPositionsListener.itemPositions.addListener(() {
+        final positions = itemPositionsListener.itemPositions.value;
+        final lastPosition = positions.last;
+        // print("L: $lastPosition");
+        int itemsCount =
+            Provider.of<investorProvider.InvestorHome>(context, listen: false)
+                .totalRecommendations;
+        int loadedItemsCount =
+            Provider.of<investorProvider.InvestorHome>(context, listen: false)
+                .recommended
+                .length;
+        if (loadedItemsCount < itemsCount) {
+          if (lastPosition.itemTrailingEdge >= 1.0) {
+            if (lastPosition.index < (itemsCount - 1)) {
+              if ((lastPosition.index + 1) % _recommendationPageSize == 0) {
+                if ((recommendationPageNo * _recommendationPageSize) <
+                    loadedItemsCount) {
+                  _fetchRecommendationPage(lastPosition);
+                }
+              }
+            }
+          }
+        }
+      });
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -128,6 +154,17 @@ class _InvestorHomeState extends State<InvestorHome> {
         }
       });
     });
+  }
+
+  Future<void> _fetchRecommendationPage(ItemPosition position) async {
+    try {
+      currentIndex = position.index;
+      recommendationPageNo++;
+      _recommendations = _fetchRecommendation(context);
+      currentIndex++;
+      print("CIdx: $currentIndex");
+      setState(() {});
+    } catch (error) {}
   }
 
   @override
@@ -380,75 +417,75 @@ class _InvestorHomeState extends State<InvestorHome> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: setRecommendations(),
               ),
-              Positioned(
-                  left: 0,
-                  top: 150 / 2,
-                  child: IconButton(
-                      padding: EdgeInsets.only(right: 30),
-                      icon: Image.asset(
-                          "assets/images/navigation/arrow_left.png"),
-                      iconSize: 20,
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      color: kDarkOrange,
-                      onPressed: () {
-                        setState(() {
-                          if (currentIndex > 0) {
-                            if ((currentIndex + 1) % _recommendationPageSize ==
-                                0) {
-                              recommendationPageNo--;
-                            }
+              // Positioned(
+              //     left: 0,
+              //     top: 150 / 2,
+              //     child: IconButton(
+              //         padding: EdgeInsets.only(right: 30),
+              //         icon: Image.asset(
+              //             "assets/images/navigation/arrow_left.png"),
+              //         iconSize: 20,
+              //         highlightColor: Colors.transparent,
+              //         splashColor: Colors.transparent,
+              //         color: kDarkOrange,
+              //         onPressed: () {
+              //           setState(() {
+              //             if (currentIndex > 0) {
+              //               if ((currentIndex + 1) % _recommendationPageSize ==
+              //                   0) {
+              //                 recommendationPageNo--;
+              //               }
 
-                            currentIndex--;
-                            print("CIdx: $currentIndex");
-                            itemScrollController.scrollTo(
-                                index: currentIndex,
-                                duration: Duration(seconds: 1),
-                                curve: Curves.easeInOutCubic);
-                          } else {
-                            showSnackBar(
-                                context, "Start of recommendation items");
-                          }
-                        });
-                      })),
-              Positioned(
-                  right: 0,
-                  top: 150 / 2,
-                  child: IconButton(
-                      padding: EdgeInsets.only(left: 30),
-                      icon: Image.asset(
-                          "assets/images/navigation/arrow_right.png"),
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      color: kDarkOrange,
-                      onPressed: () {
-                        setState(() {
-                          int itemsCount =
-                              Provider.of<investorProvider.InvestorHome>(
-                                      context,
-                                      listen: false)
-                                  .totalRecommendations;
-                          if (currentIndex < (itemsCount - 1)) {
-                            if ((currentIndex + 1) % _recommendationPageSize ==
-                                0) {
-                              recommendationPageNo++;
-                              _recommendations = _fetchRecommendation(context);
+              //               currentIndex--;
+              //               print("CIdx: $currentIndex");
+              //               itemScrollController.scrollTo(
+              //                   index: currentIndex,
+              //                   duration: Duration(seconds: 1),
+              //                   curve: Curves.easeInOutCubic);
+              //             } else {
+              //               showSnackBar(
+              //                   context, "Start of recommendation items");
+              //             }
+              //           });
+              //         })),
+              // Positioned(
+              //     right: 0,
+              //     top: 150 / 2,
+              //     child: IconButton(
+              //         padding: EdgeInsets.only(left: 30),
+              //         icon: Image.asset(
+              //             "assets/images/navigation/arrow_right.png"),
+              //         highlightColor: Colors.transparent,
+              //         splashColor: Colors.transparent,
+              //         color: kDarkOrange,
+              //         onPressed: () {
+              //           setState(() {
+              //             int itemsCount =
+              //                 Provider.of<investorProvider.InvestorHome>(
+              //                         context,
+              //                         listen: false)
+              //                     .totalRecommendations;
+              //             if (currentIndex < (itemsCount - 1)) {
+              //               if ((currentIndex + 1) % _recommendationPageSize ==
+              //                   0) {
+              //                 recommendationPageNo++;
+              //                 _recommendations = _fetchRecommendation(context);
 
-                              currentIndex++;
-                              print("CIdx: $currentIndex");
-                            } else {
-                              currentIndex++;
-                              print("CIdx: $currentIndex");
-                              itemScrollController.scrollTo(
-                                  index: currentIndex,
-                                  duration: Duration(seconds: 1),
-                                  curve: Curves.easeInOutCubic);
-                            }
-                          } else {
-                            showSnackBar(context, "End of recommendation list");
-                          }
-                        });
-                      })),
+              //                 currentIndex++;
+              //                 print("CIdx: $currentIndex");
+              //               } else {
+              //                 currentIndex++;
+              //                 print("CIdx: $currentIndex");
+              //                 itemScrollController.scrollTo(
+              //                     index: currentIndex,
+              //                     duration: Duration(seconds: 1),
+              //                     curve: Curves.easeInOutCubic);
+              //               }
+              //             } else {
+              //               showSnackBar(context, "End of recommendation list");
+              //             }
+              //           });
+              //         })),
             ],
           ),
         ),
@@ -474,7 +511,7 @@ class _InvestorHomeState extends State<InvestorHome> {
             builder: (context, recommededData, child) => Container(
               height: 300.0,
               child: ScrollablePositionedList.builder(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: AlwaysScrollableScrollPhysics(),
                   itemScrollController: itemScrollController,
                   itemPositionsListener: itemPositionsListener,
                   scrollDirection: Axis.horizontal,

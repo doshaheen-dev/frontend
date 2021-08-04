@@ -206,7 +206,7 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
 
                               openDashboard();
                             } else {
-                              showSnackBar(context, "Something went wrong");
+                              showSnackBar(context, signedUpUser.message);
                             }
                           },
                           child: Container(
