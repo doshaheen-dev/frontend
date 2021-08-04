@@ -70,6 +70,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        bottomNavigationBar: _createButtonLayout(context),
         backgroundColor: Colors.white,
         body: ProgressHUD(
           child: Builder(
@@ -135,51 +136,46 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
                       SizedBox(
                         height: 40,
                       ),
-                      Visibility(
-                        visible: isResubmit,
-                        child: Container(
-                            margin: const EdgeInsets.only(
-                                top: 5.0, left: 20.0, bottom: 20, right: 20.0),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                if (_isButtonDisabled) {
-                                  progress = ProgressHUD.of(context);
-                                  progress
-                                      ?.showWithText('Submitting Updates...');
-                                  _performSubmission(context);
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.all(0.0),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18))),
-                              child: Ink(
-                                decoration: BoxDecoration(
-                                    gradient: !_isButtonDisabled
-                                        ? LinearGradient(colors: [
-                                            textLightGrey,
-                                            textLightGrey
-                                          ])
-                                        : LinearGradient(colors: [
-                                            kDarkOrange,
-                                            kLightOrange
-                                          ]),
-                                    borderRadius: BorderRadius.circular(15)),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 50,
-                                  alignment: Alignment.center,
-                                  child:
-                                      Text("Submit", style: textWhiteBold16()),
-                                ),
-                              ),
-                            )),
-                      )
                     ]),
               ),
             ),
           ),
         ));
+  }
+
+  _createButtonLayout(BuildContext context) {
+    return Visibility(
+      visible: isResubmit,
+      child: Container(
+          margin: const EdgeInsets.only(
+              top: 5.0, left: 20.0, bottom: 20, right: 20.0),
+          child: ElevatedButton(
+            onPressed: () {
+              if (_isButtonDisabled) {
+                progress = ProgressHUD.of(context);
+                progress?.showWithText('Submitting Updates...');
+                _performSubmission(context);
+              }
+            },
+            style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.all(0.0),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18))),
+            child: Ink(
+              decoration: BoxDecoration(
+                  gradient: !_isButtonDisabled
+                      ? LinearGradient(colors: [textLightGrey, textLightGrey])
+                      : LinearGradient(colors: [kDarkOrange, kLightOrange]),
+                  borderRadius: BorderRadius.circular(15)),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: 50,
+                alignment: Alignment.center,
+                child: Text("Submit", style: textWhiteBold16()),
+              ),
+            ),
+          )),
+    );
   }
 
   Widget _createFundBody() {

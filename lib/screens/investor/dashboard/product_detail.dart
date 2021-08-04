@@ -63,7 +63,7 @@ class _ProductDetailState extends State<ProductDetail> {
           elevation: 0.0,
           backgroundColor: Color(0xffffffff),
         ),
-        bottomNavigationBar: BottomAppBar(),
+        bottomNavigationBar: _createButtonLayout(context),
         backgroundColor: Colors.white,
         body: ProgressHUD(
             child: Builder(
@@ -301,103 +301,72 @@ class _ProductDetailState extends State<ProductDetail> {
                                 ),
                               ),
                               SizedBox(height: 20.0),
-                              Row(
-                                children: [
-                                  Expanded(
-                                      flex: 1,
-                                      child: Container(
-                                        margin: const EdgeInsets.only(
-                                            top: 5.0,
-                                            left: 5.0,
-                                            bottom: 20,
-                                            right: 5.0),
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            progress = ProgressHUD.of(context);
-                                            progress
-                                                ?.showWithText("Please wait");
-                                            respondRecommendation(
-                                                _recommendation.fundTxnId,
-                                                0,
-                                                _token);
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                              padding: EdgeInsets.all(0.0),
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          18))),
-                                          child: Ink(
-                                            decoration: BoxDecoration(
-                                                gradient: LinearGradient(
-                                                    colors: [
-                                                      kDarkOrange,
-                                                      kLightOrange
-                                                    ]),
-                                                borderRadius:
-                                                    BorderRadius.circular(15)),
-                                            child: Container(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                height: 50,
-                                                alignment: Alignment.center,
-                                                child: Text("Reject",
-                                                    style: textWhiteBold16())),
-                                          ),
-                                        ),
-                                      )),
-                                  Expanded(
-                                      flex: 1,
-                                      child: Container(
-                                          margin: const EdgeInsets.only(
-                                              top: 5.0,
-                                              left: 5.0,
-                                              bottom: 20,
-                                              right: 5.0),
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              progress =
-                                                  ProgressHUD.of(context);
-                                              progress
-                                                  ?.showWithText("Please wait");
-                                              respondRecommendation(
-                                                  _recommendation.fundTxnId,
-                                                  1,
-                                                  _token);
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                                padding: EdgeInsets.all(0.0),
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            18))),
-                                            child: Ink(
-                                              decoration: BoxDecoration(
-                                                  gradient: LinearGradient(
-                                                      colors: [
-                                                        kDarkOrange,
-                                                        kLightOrange
-                                                      ]),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          15)),
-                                              child: Container(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                height: 50,
-                                                alignment: Alignment.center,
-                                                child: Text("Show Interest",
-                                                    style: textWhiteBold16()),
-                                              ),
-                                            ),
-                                          )))
-                                ],
-                              )
                             ]),
                       ),
                     )))));
+  }
+
+  Row _createButtonLayout(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+            flex: 1,
+            child: Container(
+              margin: const EdgeInsets.only(
+                  top: 5.0, left: 5.0, bottom: 20, right: 5.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  progress = ProgressHUD.of(context);
+                  progress?.showWithText("Please wait");
+                  respondRecommendation(_recommendation.fundTxnId, 0, _token);
+                },
+                style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.all(0.0),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18))),
+                child: Ink(
+                  decoration: BoxDecoration(
+                      gradient:
+                          LinearGradient(colors: [kDarkOrange, kLightOrange]),
+                      borderRadius: BorderRadius.circular(15)),
+                  child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 50,
+                      alignment: Alignment.center,
+                      child: Text("Reject", style: textWhiteBold16())),
+                ),
+              ),
+            )),
+        Expanded(
+            flex: 1,
+            child: Container(
+                margin: const EdgeInsets.only(
+                    top: 5.0, left: 5.0, bottom: 20, right: 5.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    progress = ProgressHUD.of(context);
+                    progress?.showWithText("Please wait");
+                    respondRecommendation(_recommendation.fundTxnId, 1, _token);
+                  },
+                  style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.all(0.0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18))),
+                  child: Ink(
+                    decoration: BoxDecoration(
+                        gradient:
+                            LinearGradient(colors: [kDarkOrange, kLightOrange]),
+                        borderRadius: BorderRadius.circular(15)),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 50,
+                      alignment: Alignment.center,
+                      child: Text("Show Interest", style: textWhiteBold16()),
+                    ),
+                  ),
+                )))
+      ],
+    );
   }
 
   Future<void> respondRecommendation(
