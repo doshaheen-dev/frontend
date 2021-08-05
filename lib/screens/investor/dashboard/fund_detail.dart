@@ -83,7 +83,7 @@ class _FundDetailState extends State<FundDetail> {
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Container(
-            margin: const EdgeInsets.only(top: 40.0, left: 15.0, right: 25.0),
+            margin: const EdgeInsets.only(top: 40.0, left: 15.0, right: 15.0),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[

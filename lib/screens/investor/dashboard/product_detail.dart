@@ -71,7 +71,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         child: SingleChildScrollView(
                       child: Container(
                         margin: const EdgeInsets.only(
-                            top: 40.0, left: 15.0, right: 25.0),
+                            top: 40.0, left: 15.0, right: 15.0),
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
@@ -306,47 +306,21 @@ class _ProductDetailState extends State<ProductDetail> {
                     )))));
   }
 
-  Row _createButtonLayout(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-            flex: 1,
-            child: Container(
-              margin: const EdgeInsets.only(
-                  top: 5.0, left: 5.0, bottom: 20, right: 5.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  progress = ProgressHUD.of(context);
-                  progress?.showWithText("Please wait");
-                  respondRecommendation(_recommendation.fundTxnId, 0, _token);
-                },
-                style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(0.0),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18))),
-                child: Ink(
-                  decoration: BoxDecoration(
-                      gradient:
-                          LinearGradient(colors: [kDarkOrange, kLightOrange]),
-                      borderRadius: BorderRadius.circular(15)),
-                  child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      alignment: Alignment.center,
-                      child: Text("Reject", style: textWhiteBold16())),
-                ),
-              ),
-            )),
-        Expanded(
-            flex: 1,
-            child: Container(
+  Padding _createButtonLayout(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          Expanded(
+              flex: 1,
+              child: Container(
                 margin: const EdgeInsets.only(
                     top: 5.0, left: 5.0, bottom: 20, right: 5.0),
                 child: ElevatedButton(
                   onPressed: () {
                     progress = ProgressHUD.of(context);
                     progress?.showWithText("Please wait");
-                    respondRecommendation(_recommendation.fundTxnId, 1, _token);
+                    respondRecommendation(_recommendation.fundTxnId, 0, _token);
                   },
                   style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.all(0.0),
@@ -358,14 +332,44 @@ class _ProductDetailState extends State<ProductDetail> {
                             LinearGradient(colors: [kDarkOrange, kLightOrange]),
                         borderRadius: BorderRadius.circular(15)),
                     child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      alignment: Alignment.center,
-                      child: Text("Show Interest", style: textWhiteBold16()),
-                    ),
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        alignment: Alignment.center,
+                        child: Text("Reject", style: textWhiteBold16())),
                   ),
-                )))
-      ],
+                ),
+              )),
+          Expanded(
+              flex: 1,
+              child: Container(
+                  margin: const EdgeInsets.only(
+                      top: 5.0, left: 5.0, bottom: 20, right: 5.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      progress = ProgressHUD.of(context);
+                      progress?.showWithText("Please wait");
+                      respondRecommendation(
+                          _recommendation.fundTxnId, 1, _token);
+                    },
+                    style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.all(0.0),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18))),
+                    child: Ink(
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [kDarkOrange, kLightOrange]),
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        alignment: Alignment.center,
+                        child: Text("Show Interest", style: textWhiteBold16()),
+                      ),
+                    ),
+                  )))
+        ],
+      ),
     );
   }
 
