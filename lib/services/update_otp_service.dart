@@ -1,25 +1,44 @@
 import 'dart:convert';
 
 import 'package:acc/models/authentication/otp_response.dart';
+import 'package:acc/models/default.dart';
 import 'package:http/http.dart';
-import 'package:acc/models/authentication/verify_phone.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 
 import 'http_service.dart';
 
-class OtpService {
-  static Future<VerifyPhoneNumber> verifyUser(
-      String token, String phoneNumber) async {
-    final url =
-        Uri.parse("${ApiServices.baseUrl}/sign-up/verify/firebase/mobile_no");
-    final headers = {"Content-type": "application/json"};
-    final _body = '{"mobile_no": "$phoneNumber", "idToken": "$token"}';
+class UpdateProfileOtpService {
+  //GET OTP
+  static Future<VerificationIdSignIn> getOtp(
+      String text, String otpType) async {
+    final url = Uri.parse("${ApiServices.baseUrl}/user/send_otp");
+    final headers = {
+      "Content-type": "application/json",
+      "authorization": "Bearer ${UserData.instance.userInfo.token}"
+    };
+
+    var _body = '{"$otpType": "$text"}';
+    final response = await post(url, headers: headers, body: _body);
+    final responseBody = response.body;
+    Map valueMap = jsonDecode(responseBody);
+    VerificationIdSignIn userDetails = VerificationIdSignIn.from(valueMap);
+    return userDetails;
+  }
+
+  static Future<Default> verifyOtp(
+      String verificationId, String smsCode) async {
+    final url = Uri.parse("${ApiServices.baseUrl}/user/verify_otp");
+    final headers = {
+      "Content-type": "application/json",
+      "authorization": "Bearer ${UserData.instance.userInfo.token}"
+    };
+    final _body =
+        '{"verificationId": "$verificationId", "smsCode": "$smsCode"}';
     // make POST request
     final response = await post(url, headers: headers, body: _body);
     final responseBody = response.body;
     Map valueMap = jsonDecode(responseBody);
-    VerifyPhoneNumber userDetails = VerifyPhoneNumber.from(valueMap);
-    return userDetails;
+    return Default.from(valueMap);
   }
 
   // VERIFY OTP FOR SIGN IN
@@ -62,20 +81,6 @@ class OtpService {
     } else {
       _body = '{"email_id": "$phoneNumber"}';
     }
-    final response = await post(url, headers: headers, body: _body);
-    final responseBody = response.body;
-    Map valueMap = jsonDecode(responseBody);
-    VerificationIdSignIn userDetails = VerificationIdSignIn.from(valueMap);
-    return userDetails;
-  }
-
-  //Sign up - Investor
-  static Future<VerificationIdSignIn> getSignUpOtp(String phoneNumber) async {
-    final url = Uri.parse("${ApiServices.baseUrl}/sign-up/send_otp");
-    final headers = {
-      "Content-type": "application/json",
-    };
-    var _body = '{"mobile_no": "$phoneNumber"}';
     final response = await post(url, headers: headers, body: _body);
     final responseBody = response.body;
     Map valueMap = jsonDecode(responseBody);

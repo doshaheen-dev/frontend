@@ -1,20 +1,17 @@
 import 'dart:io';
 
-import 'package:acc/models/authentication/signup_request.dart';
-import 'package:acc/models/authentication/signup_response.dart';
+import 'package:acc/models/authentication/otp_response.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
+import 'package:acc/models/default.dart';
 import 'package:acc/models/local_countries.dart';
 import 'package:acc/screens/common/onboarding.dart';
 import 'package:acc/services/OtpService.dart';
-import 'package:acc/services/signup_service.dart';
+import 'package:acc/services/update_otp_service.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/app_strings.dart';
-import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
-import 'package:acc/utils/class_navigation.dart';
 import 'package:acc/utils/code_utils.dart';
-import 'package:acc/utils/crypt_utils.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -54,8 +51,8 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
   String firstname = "";
   String lastname = "";
   String title = "";
-  String company_name = "";
-  String company_email = "";
+  String companyName = "";
+  String companyEmail = "";
   String country = "";
   String mobileNumber = "";
   String savedcountryName = "";
@@ -67,22 +64,26 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
   var _companyNameController = TextEditingController();
   var _companyEmailController = TextEditingController();
   var _mobileController = TextEditingController();
-
-  bool _displayConfirmationText = false;
-  String nextButtonText = "Submit for Verification";
   var selectedCountry;
 
   // NEW EMAIL AND MOBILE NO UPDATION BOTTOM SHEET
   var _companyNewEmailController = TextEditingController();
   var _newMobileController = TextEditingController();
   var otpController = new TextEditingController();
+  var emailOtpController = new TextEditingController();
   bool isEmailLinkSent = false;
   bool isOtpReceived = false;
+  bool isEmailOtpReceived = false;
   String newMobileNo = "";
   String otpText = "";
   var newSelectedCountry;
-  String _verificationId;
+  String _verificationId = "";
+  String _emailVerificationId = "";
+
   String companyNewEmail = "";
+  final GlobalKey<ScaffoldState> _mobileScaffoldKey =
+      GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _emailScaffoldKey = GlobalKey<ScaffoldState>();
 
   // ------------------------------------------------ //
 
@@ -100,17 +101,17 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
         .fetchAndSetCountries();
   }
 
-  void showConfirmationText() {
-    setState(() {
-      _displayConfirmationText = true;
-    });
-  }
-
   void updateInfo(newSelectedCountry, String phoneNumber) {
     setState(() {
       selectedCountry = newSelectedCountry;
       _mobileController.text = phoneNumber;
+      isOtpReceived = false;
     });
+  }
+
+  void updateEmail(String emailId) {
+    _companyEmailController.text = emailId;
+    isEmailOtpReceived = false;
   }
 
   @override
@@ -341,7 +342,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
         child: TextField(
           style: textBlackNormal18(),
           controller: _companyNameController,
-          onChanged: (value) => company_name = value,
+          onChanged: (value) => companyName = value,
           decoration: _setTextFieldDecoration("Company Name"),
         ),
       ),
@@ -494,7 +495,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
         TextField(
             enabled: false,
             style: textBlackNormal18(),
-            onChanged: (value) => company_email = value,
+            onChanged: (value) => companyEmail = value,
             controller: _companyEmailController,
             decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(10.0),
@@ -527,8 +528,8 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
     );
   }
 
-  final GlobalKey<ScaffoldState> _modelScaffoldKey = GlobalKey<ScaffoldState>();
   void showUpdationView() {
+    emailOtpController = TextEditingController();
     showModalBottomSheet(
         isDismissible: false,
         enableDrag: false,
@@ -540,7 +541,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
             return Scaffold(
-                key: _modelScaffoldKey,
+                key: _emailScaffoldKey,
                 body: SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -559,9 +560,9 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                             InkWell(
                                 onTap: () {
                                   _companyNewEmailController.clear();
-                                  otpController.clear();
+                                  emailOtpController.clear();
                                   setState(() {
-                                    isOtpReceived = false;
+                                    isEmailOtpReceived = false;
                                   });
                                   Navigator.pop(context);
                                 },
@@ -595,17 +596,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                                   ))),
                         ),
                         Visibility(
-                            visible: isEmailLinkSent,
-                            child: Container(
-                                margin: EdgeInsets.only(
-                                    left: 30.0, right: 30.0, bottom: 10.0),
-                                child: Text(
-                                  corporateVerificationText,
-                                  textAlign: TextAlign.center,
-                                  style: textNormal16(HexColor("#FE904B")),
-                                ))),
-                        Visibility(
-                          visible: !isEmailLinkSent,
+                          visible: !isEmailOtpReceived,
                           child: Container(
                               alignment: Alignment.center,
                               margin:
@@ -617,7 +608,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
 
                                     if (_companyNewEmailController
                                         .text.isEmpty) {
-                                      _modelScaffoldKey.currentState
+                                      _emailScaffoldKey.currentState
                                           .showSnackBar(SnackBar(
                                               duration: Duration(seconds: 1),
                                               content: Text(
@@ -627,24 +618,18 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
 
                                     if (!CodeUtils.emailValid(
                                         _companyNewEmailController.text)) {
-                                      _modelScaffoldKey.currentState
+                                      _emailScaffoldKey.currentState
                                           .showSnackBar(SnackBar(
                                               duration: Duration(seconds: 1),
                                               content: Text(
                                                   "Please enter a valid email id.")));
                                       return;
                                     }
+                                    emailOtpController =
+                                        TextEditingController();
 
-                                    //  progress = ProgressHUD.of(context);
-                                    // progress?.showWithText(sendingOtp);
-                                    sendVerificationEmail(
-                                      _firstNameController.text.trim(),
-                                      _lastnameController.text.trim(),
-                                      _titleController.text.trim(),
-                                      country,
-                                      _companyNameController.text,
-                                      _companyNewEmailController.text,
-                                    );
+                                    _getOtp(_companyNewEmailController.text, "",
+                                        setState, "email_id");
                                   },
                                   style: ElevatedButton.styleFrom(
                                       padding: EdgeInsets.all(0.0),
@@ -668,77 +653,114 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                                             style: textWhiteBold16(),
                                           ))))),
                         ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Visibility(
+                            visible: isEmailOtpReceived,
+                            child: Column(
+                              children: [
+                                Container(
+                                    alignment: Alignment.topLeft,
+                                    margin: const EdgeInsets.only(
+                                        top: 5.0, left: 25.0),
+                                    child: Text(
+                                      otpMobileLabel,
+                                      style: textNormal16(Colors.black),
+                                    )),
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  margin: const EdgeInsets.only(
+                                      top: 5.0,
+                                      left: 40.0,
+                                      bottom: 20,
+                                      right: 40.0),
+                                  child: PinCodeTextField(
+                                    controller: emailOtpController,
+                                    appContext: context,
+                                    pastedTextStyle: TextStyle(
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                    length: 6,
+                                    animationType: AnimationType.none,
+                                    pinTheme: PinTheme(
+                                      shape: PinCodeFieldShape.underline,
+                                      selectedColor: Colors.grey,
+                                      inactiveColor: Colors.grey,
+                                      activeColor: Colors.orange,
+                                      activeFillColor: Colors.orange,
+                                    ),
+                                    cursorColor: Colors.black,
+                                    enableActiveFill: false,
+                                    keyboardType: TextInputType.number,
+                                    onCompleted: (v) {
+                                      print("Completed " + v);
+                                    },
+                                    onChanged: (value) {
+                                      print(value);
+                                      setState(() {
+                                        otpText = value;
+                                      });
+                                    },
+                                    beforeTextPaste: (text) {
+                                      print("Allowing to paste $text");
+                                      //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
+                                      //but you can show anything you want here, like your pop up saying wrong paste format or etc
+                                      return false;
+                                    },
+                                  ),
+                                ),
+                                Container(
+                                    alignment: Alignment.center,
+                                    margin: const EdgeInsets.only(
+                                        top: 20.0, bottom: 20),
+                                    child: ElevatedButton(
+                                        onPressed: () {
+                                          FocusScope.of(context)
+                                              .requestFocus(FocusNode());
+                                          if (emailOtpController.text.isEmpty) {
+                                            _emailScaffoldKey.currentState
+                                                .showSnackBar(SnackBar(
+                                                    content: Text(warningOTP)));
+                                            return;
+                                          }
+                                          // verify otp for email id
+                                          verifyEmailOTP(
+                                              _emailVerificationId,
+                                              emailOtpController.text,
+                                              _companyNewEmailController.text);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            padding: EdgeInsets.all(0.0),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(18))),
+                                        child: Ink(
+                                            decoration: BoxDecoration(
+                                                gradient: LinearGradient(
+                                                    colors: [
+                                                      kDarkOrange,
+                                                      kLightOrange
+                                                    ]),
+                                                borderRadius:
+                                                    BorderRadius.circular(15)),
+                                            child: Container(
+                                                width: 240,
+                                                height: 50,
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  verifyOtp,
+                                                  style: textWhiteBold18(),
+                                                )))))
+                              ],
+                            )),
                       ],
                     ),
                   ),
                 ));
           });
         });
-  }
-
-  Future<void> sendVerificationEmail(
-      String firstName,
-      String lastName,
-      String title,
-      String countryCode,
-      String companyName,
-      String newEmailId) async {
-    Navigator.pop(context);
-    //if success
-    // _companyNewEmailController.text = newEmailId;
-    // final requestModelInstance = InvestorSignupRequestModel.instance;
-    // requestModelInstance.firstName = CryptUtils.encryption(firstName);
-    // requestModelInstance.lastName = CryptUtils.encryption(lastName);
-    // requestModelInstance.emailId = CryptUtils.encryption(newEmailId);
-    // requestModelInstance.countryCode = countryCode;
-    // requestModelInstance.companyName = companyName;
-    // requestModelInstance.designation = title;
-    // requestModelInstance.userType = 'fundraiser';
-
-    // User signedUpUser =
-    //     await SignUpService.uploadUserDetails(requestModelInstance);
-    // //progress.dismiss();
-    // if (signedUpUser.type == 'success') {
-    //   requestModelInstance.clear();
-    //   // close bottom sheet and show message
-    //   setVerificationSentLink(true);
-    // } else {
-    //   setVerificationSentLink(false);
-    // }
-
-    Widget positiveButton = TextButton(
-        onPressed: () async {
-          final prefs = await SharedPreferences.getInstance();
-          prefs.setString('UserInfo', '');
-          Navigation.openOnBoarding(context);
-        },
-        child: Text(
-          "Sign In",
-          style: textNormal16(Color(0xff00A699)),
-        ));
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      content: Text("Email sent to your email id. Verify your email"),
-      actions: [
-        positiveButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
-  void setVerificationSentLink(bool value) {
-    setState(() {
-      isEmailLinkSent = value;
-    });
   }
 
 //  ------------------ MOBILE NO --------------------------- //
@@ -853,7 +875,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
             return Scaffold(
-                key: _modelScaffoldKey,
+                key: _mobileScaffoldKey,
                 body: SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -873,6 +895,9 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                                 onTap: () {
                                   _newMobileController.clear();
                                   otpController.clear();
+                                  setState(() {
+                                    isOtpReceived = false;
+                                  });
                                   Navigator.pop(context);
                                 },
                                 child: Text(
@@ -898,7 +923,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                                     FocusScope.of(context)
                                         .requestFocus(FocusNode());
                                     if (newSelectedCountry == null) {
-                                      _modelScaffoldKey.currentState
+                                      _mobileScaffoldKey.currentState
                                           .showSnackBar(SnackBar(
                                               content: Text(errorCountryCode)));
 
@@ -906,7 +931,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                                     }
 
                                     if (_newMobileController.text.isEmpty) {
-                                      _modelScaffoldKey.currentState
+                                      _mobileScaffoldKey.currentState
                                           .showSnackBar(SnackBar(
                                               content: Text(correctMobile)));
                                       return;
@@ -914,8 +939,9 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
 
                                     if (newSelectedCountry.maxLength !=
                                         _newMobileController.text.length) {
-                                      _modelScaffoldKey.currentState
+                                      _mobileScaffoldKey.currentState
                                           .showSnackBar(SnackBar(
+                                              duration: Duration(seconds: 1),
                                               content: Text(
                                                   "Phone number should be of ${newSelectedCountry.maxLength} digits.")));
 
@@ -924,8 +950,12 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
 
                                     //  progress = ProgressHUD.of(context);
                                     // progress?.showWithText(sendingOtp);
-                                    _getOtp(_newMobileController.text,
-                                        newSelectedCountry, setState);
+                                    otpController = TextEditingController();
+                                    _getOtp(
+                                        _newMobileController.text,
+                                        newSelectedCountry,
+                                        setState,
+                                        "mobile_no");
                                   },
                                   style: ElevatedButton.styleFrom(
                                       padding: EdgeInsets.all(0.0),
@@ -1017,16 +1047,19 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                                           FocusScope.of(context)
                                               .requestFocus(FocusNode());
                                           if (otpController.text.isEmpty) {
-                                            _modelScaffoldKey.currentState
+                                            _mobileScaffoldKey.currentState
                                                 .showSnackBar(SnackBar(
+                                                    duration:
+                                                        Duration(seconds: 1),
                                                     content: Text(warningOTP)));
                                             return;
                                           }
                                           // verify otp
-                                          _verifySignUpOTP(
+                                          verifyMobileOTP(
                                               otpController.text,
                                               _verificationId,
-                                              _newMobileController.text.trim());
+                                              _newMobileController.text.trim(),
+                                              setState);
                                         },
                                         style: ElevatedButton.styleFrom(
                                             padding: EdgeInsets.all(0.0),
@@ -1102,55 +1135,6 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
     );
   }
 
-  Future<void> _getOtp(
-      String phoneNumber, newSelectedCountry, StateSetter setState) async {
-    String _phoneNumber =
-        "+${newSelectedCountry.dialCode}" + phoneNumber.toString().trim();
-    print(_phoneNumber);
-    VerificationIdSignIn verificationIdSignIn =
-        await OtpService.getSignUpOtp(_phoneNumber);
-    if (verificationIdSignIn.status == 200) {
-      //progress?.showWithText(successOTP);
-      Future.delayed(Duration(milliseconds: 2), () {
-        // progress.dismiss();
-        _verificationId = verificationIdSignIn.data.verificationId;
-        setState(() {
-          isOtpReceived = true;
-        });
-      });
-    } else {
-      // progress.dismiss();
-      setState(() {
-        isOtpReceived = false;
-      });
-      showSnackBar(context, verificationIdSignIn.message);
-    }
-  }
-
-  Future<void> _verifySignUpOTP(
-      String otpCode, String verificationId, String phoneNumber) async {
-    String _phoneNumber =
-        "+${newSelectedCountry.dialCode}" + phoneNumber.toString().trim();
-    print(_phoneNumber);
-
-    SignUpInvestor verificationIdSignIn = await OtpService.getVerifySignUpOtp(
-        _phoneNumber, verificationId, otpCode);
-    if (verificationIdSignIn.status == 200) {
-      //progress?.showWithText(successOTP);
-
-      Future.delayed(Duration(milliseconds: 2), () async {
-        // progress.dismiss();
-        _mobileController.text = phoneNumber;
-        selectedCountry = newSelectedCountry;
-        updateInfo(selectedCountry, phoneNumber);
-        Navigator.pop(context);
-      });
-    } else {
-      //progress.dismiss();
-      showSnackBar(context, verificationIdSignIn.message);
-    }
-  }
-
   Widget _buildBottomSheetCodeDropDown() {
     return Padding(
         padding: EdgeInsets.only(left: 10.0, right: 5.0),
@@ -1164,6 +1148,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
           value: newSelectedCountry,
           onChanged: (Countries countries) {
             setState(() {
+              isOtpReceived = false;
               newSelectedCountry = countries;
             });
           },
@@ -1181,5 +1166,101 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
             );
           }).toList(),
         ));
+  }
+
+  Future<void> _getOtp(String text, newSelectedCountry, StateSetter setState,
+      String otpType) async {
+    String _phoneNumber = text;
+    if (otpType == "mobile_no") {
+      _phoneNumber = "+${newSelectedCountry.dialCode}" + text.toString().trim();
+    }
+
+    print(_phoneNumber);
+    VerificationIdSignIn verificationIdSignIn =
+        await UpdateProfileOtpService.getOtp(_phoneNumber, otpType);
+    if (verificationIdSignIn.status == 200) {
+      progress?.showWithText(successOTP);
+      Future.delayed(Duration(milliseconds: 2), () {
+        // progress.dismiss();
+        if (otpType == "mobile_no") {
+          _verificationId = verificationIdSignIn.data.verificationId;
+        } else {
+          _emailVerificationId = verificationIdSignIn.data.verificationId;
+        }
+
+        setState(() {
+          if (otpType == "mobile_no") {
+            isOtpReceived = true;
+          } else {
+            isEmailOtpReceived = true;
+          }
+        });
+      });
+    } else {
+      // progress.dismiss();
+      setState(() {
+        isOtpReceived = false;
+        isEmailOtpReceived = false;
+      });
+      showSnackBar(context, verificationIdSignIn.message);
+    }
+  }
+
+  Future<void> verifyMobileOTP(String otpCode, String verificationId,
+      String phoneNumber, StateSetter setState) async {
+    Default updateProfileOtpService =
+        await UpdateProfileOtpService.verifyOtp(verificationId, otpCode);
+    if (updateProfileOtpService.status == 200) {
+//      progress?.showWithText(successOTP);
+
+      Future.delayed(Duration(milliseconds: 2), () async {
+        // progress.dismiss();
+        setState(() {
+          isOtpReceived = false;
+        });
+        _mobileController.text = phoneNumber;
+        selectedCountry = newSelectedCountry;
+        updateInfo(selectedCountry, phoneNumber);
+        _mobileScaffoldKey.currentState.showSnackBar(SnackBar(
+            duration: Duration(seconds: 1),
+            content: Text(updateProfileOtpService.message)));
+      });
+
+      Future.delayed(Duration(milliseconds: 2), () async {
+        Navigator.pop(context);
+      });
+    } else {
+      //progress.dismiss();
+      verificationId = "";
+      showSnackBar(context, updateProfileOtpService.message);
+    }
+  }
+
+  Future<void> verifyEmailOTP(
+      String emailVerificationId, String otpCode, String emailId) async {
+    Default updateProfileOtpService =
+        await UpdateProfileOtpService.verifyOtp(emailVerificationId, otpCode);
+    if (updateProfileOtpService.status == 200) {
+//      progress?.showWithText(successOTP);
+
+      Future.delayed(Duration(milliseconds: 2), () async {
+        print("id:- $emailVerificationId");
+        // progress.dismiss();
+        setState(() {
+          isEmailOtpReceived = false;
+        });
+        updateEmail(emailId);
+        _companyNewEmailController.clear();
+        emailOtpController.clear();
+        _emailScaffoldKey.currentState.showSnackBar(SnackBar(
+            duration: Duration(seconds: 1),
+            content: Text(updateProfileOtpService.message)));
+        Navigator.pop(context);
+      });
+    } else {
+      //progress.dismiss();
+      emailVerificationId = "";
+      showSnackBar(context, updateProfileOtpService.message);
+    }
   }
 }
