@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:acc/constants/font_family.dart';
-import 'package:acc/models/authentication/verify_phone_signin.dart';
+import 'package:acc/models/authentication/otp_response.dart';
 import 'package:acc/models/local_countries.dart';
 import 'package:acc/services/OtpService.dart';
 import 'package:acc/utilites/app_strings.dart';
