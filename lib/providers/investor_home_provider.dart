@@ -42,7 +42,7 @@ class InvestorHome with ChangeNotifier {
       return;
     }
 
-    recommended.addAll(loadedRecommendations.toList());
+    recommended = loadedRecommendations.toList();
     print("Size: ${recommended.length}");
     notifyListeners();
   }
@@ -82,7 +82,7 @@ class InvestorHome with ChangeNotifier {
       return;
     }
 
-    interestedFundsData.addAll(loadedFunds.toList());
+    interestedFundsData = loadedFunds.toList();
     notifyListeners();
   }
 

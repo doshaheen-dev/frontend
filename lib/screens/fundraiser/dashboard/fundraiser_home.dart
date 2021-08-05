@@ -23,6 +23,7 @@ class _FundraiserHomeState extends State<FundraiserHome> {
   List<SubmittedFunds> fundsList = []; // = getSubmittedFundsList();
   // Funds List
   static const fundPageSize = 10;
+  var pageNo = 0;
 
   final PagingController<int, SubmittedFunds> _pagingController =
       PagingController(firstPageKey: 0);
@@ -31,7 +32,7 @@ class _FundraiserHomeState extends State<FundraiserHome> {
     try {
       // print('Page: $pageKey');
       final fundPvdr = Provider.of<FundProvider>(context, listen: false);
-      fundPvdr.fetchAndSetFunds(pageKey, fundPageSize).then((result) {
+      fundPvdr.fetchAndSetFunds(pageNo, fundPageSize).then((result) {
         final funds = fundPvdr.funds;
         // print('Funds: ${funds.length}');
         fundsList.addAll(funds);
@@ -49,6 +50,7 @@ class _FundraiserHomeState extends State<FundraiserHome> {
             _fundsAvailable = true;
           } else {
             final nextPageKey = pageKey + funds.length;
+            pageNo++;
             _pagingController.appendPage(funds, nextPageKey);
           }
         });

@@ -12,6 +12,7 @@ import 'package:acc/utilites/app_colors.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/investor_home_provider.dart' as investorProvider;
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class InvestorHome extends StatefulWidget {
   @override
@@ -43,15 +44,20 @@ class _InvestorHomeState extends State<InvestorHome> {
   bool isFundsNavigation = false;
 
   // Recommendations List
-  num _recommendationPageSize = 5;
+  num _recommendationPageSize = 10;
   num totalItems = 0;
   var recommendationPageNo = 0;
   List<investorProvider.FundsInfo> recommendList = [];
+  final PagingController<int, investorProvider.FundsInfo> _recPagingController =
+      PagingController(firstPageKey: 0);
 
   // Funds List
   num _fundsPageSize = 10;
   num fundsTotalItems = 0;
   var fundsPageNo = 0;
+  List<investorProvider.FundsInfo> fundsList = [];
+  final PagingController<int, investorProvider.FundsInfo>
+      _intFundsPagingController = PagingController(firstPageKey: 0);
 
   void displayInterestedFunds(bool value) {
     setState(() {
@@ -65,52 +71,92 @@ class _InvestorHomeState extends State<InvestorHome> {
     });
   }
 
-  Future<void> _fetchRecommendation(BuildContext context) async {
-    await Provider.of<investorProvider.InvestorHome>(context, listen: false)
-        .fetchAndSetRecommendations(UserData.instance.userInfo.token,
-            recommendationPageNo, _recommendationPageSize); //_userData.token
+  // Future<void> _fetchRecommendation(BuildContext context) async {
+  //   await Provider.of<investorProvider.InvestorHome>(context, listen: false)
+  //       .fetchAndSetRecommendations(UserData.instance.userInfo.token,
+  //           recommendationPageNo, _recommendationPageSize); //_userData.token
+  // }
+
+  // Future<void> _fetchInterestedFunds(BuildContext context) async {
+  //   await Provider.of<investorProvider.InvestorHome>(context, listen: false)
+  //       .fetchAndSetInterestedFunds(UserData.instance.userInfo.token,
+  //           fundPageNo, _fundsPageSize); //widget.userData.token
+  // }
+
+  void clearAll() {
+    Provider.of<investorProvider.InvestorHome>(context, listen: false)
+        .clearRecommendations();
+    Provider.of<investorProvider.InvestorHome>(context, listen: false)
+        .clearInterestedFunds();
   }
 
-  Future<void> _fetchInterestedFunds(BuildContext context) async {
-    await Provider.of<investorProvider.InvestorHome>(context, listen: false)
-        .fetchAndSetInterestedFunds(UserData.instance.userInfo.token,
-            fundPageNo, _fundsPageSize); //widget.userData.token
+  Future<void> _fetchRecPage(int pageKey) async {
+    try {
+      final invHomePvdr =
+          Provider.of<investorProvider.InvestorHome>(context, listen: false);
+      invHomePvdr
+          .fetchAndSetRecommendations(UserData.instance.userInfo.token,
+              recommendationPageNo, _recommendationPageSize)
+          .then((_) {
+        final list = invHomePvdr.recommended;
+        print('List: ${list.length}');
+        recommendList.addAll(list);
+        print('RecList: ${recommendList.length}');
+        setState(() {
+          final isLastPage = list.length < _recommendationPageSize;
+          if (isLastPage) {
+            _recPagingController.appendLastPage(list);
+          } else {
+            final nextPageKey = pageKey + list.length;
+            recommendationPageNo++;
+            _recPagingController.appendPage(list, nextPageKey);
+          }
+        });
+      });
+    } catch (error) {
+      print("RefreshErr: ${error.toString()}");
+      _recPagingController.error = error;
+    }
+  }
+
+  Future<void> _fetchInterestedFundsPage(int pageKey) async {
+    try {
+      final invHomePvdr =
+          Provider.of<investorProvider.InvestorHome>(context, listen: false);
+      invHomePvdr
+          .fetchAndSetInterestedFunds(
+              UserData.instance.userInfo.token, fundPageNo, _fundsPageSize)
+          .then((_) {
+        final list = invHomePvdr.interestedFundsData;
+        print('FList: ${list.length}');
+        fundsList.addAll(list);
+        print('IFList: ${fundsList.length}');
+        setState(() {
+          final isLastPage = list.length < _fundsPageSize;
+          if (isLastPage) {
+            _intFundsPagingController.appendLastPage(list);
+          } else {
+            final nextPageKey = pageKey + list.length;
+            fundPageNo++;
+            _intFundsPagingController.appendPage(list, nextPageKey);
+          }
+        });
+      });
+    } catch (error) {
+      print("RefreshErr: ${error.toString()}");
+      _intFundsPagingController.error = error;
+    }
   }
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
       setState(() {});
-      Provider.of<investorProvider.InvestorHome>(context, listen: false)
-          .clearRecommendations();
-      Provider.of<investorProvider.InvestorHome>(context, listen: false)
-          .clearInterestedFunds();
-      _recommendations = _fetchRecommendation(context);
-      _interestedFunds = _fetchInterestedFunds(context);
-
-      itemPositionsListener.itemPositions.addListener(() {
-        final positions = itemPositionsListener.itemPositions.value;
-        final lastPosition = positions.last;
-        // print("L: $lastPosition");
-        int itemsCount =
-            Provider.of<investorProvider.InvestorHome>(context, listen: false)
-                .totalRecommendations;
-        int loadedItemsCount =
-            Provider.of<investorProvider.InvestorHome>(context, listen: false)
-                .recommended
-                .length;
-        if (loadedItemsCount < itemsCount) {
-          if (lastPosition.itemTrailingEdge >= 1.0) {
-            if (lastPosition.index < (itemsCount - 1)) {
-              if ((lastPosition.index + 1) % _recommendationPageSize == 0) {
-                if ((recommendationPageNo * _recommendationPageSize) <
-                    loadedItemsCount) {
-                  _fetchRecommendationPage(lastPosition);
-                }
-              }
-            }
-          }
-        }
+      _recPagingController.addPageRequestListener((pageKey) {
+        _fetchRecPage(pageKey);
+      });
+      _intFundsPagingController.addPageRequestListener((pageKey) {
+        _fetchInterestedFundsPage(pageKey);
       });
     }
     _isInit = false;
@@ -121,7 +167,15 @@ class _InvestorHomeState extends State<InvestorHome> {
   void initState() {
     getRecommendationListSize();
     getFundsListSize();
+    clearAll();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _recPagingController.dispose();
+    _intFundsPagingController.dispose();
+    super.dispose();
   }
 
   void getFundsListSize() {
@@ -156,17 +210,6 @@ class _InvestorHomeState extends State<InvestorHome> {
     });
   }
 
-  Future<void> _fetchRecommendationPage(ItemPosition position) async {
-    try {
-      currentIndex = position.index;
-      recommendationPageNo++;
-      _recommendations = _fetchRecommendation(context);
-      currentIndex++;
-      print("CIdx: $currentIndex");
-      setState(() {});
-    } catch (error) {}
-  }
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -186,7 +229,10 @@ class _InvestorHomeState extends State<InvestorHome> {
                     ),
 
                     //FUNDS
-                    Visibility(visible: isFundsPresent, child: fundsUI()),
+                    Visibility(
+                      visible: isFundsPresent,
+                      child: fundsUI(),
+                    ),
                   ])),
         ));
   }
@@ -211,7 +257,7 @@ class _InvestorHomeState extends State<InvestorHome> {
               SizedBox(
                 height: 10.0,
               ),
-              Text("Your Recently Liked these Funds",
+              Text("You Recently Liked these Funds",
                   style: TextStyle(
                     color: textGrey,
                     fontWeight: FontWeight.normal,
@@ -226,73 +272,6 @@ class _InvestorHomeState extends State<InvestorHome> {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: setInterestedFund(),
               ),
-              Positioned(
-                left: 0,
-                top: 100 / 2,
-                child: IconButton(
-                    padding: EdgeInsets.only(right: 30),
-                    icon:
-                        Image.asset("assets/images/navigation/arrow_left.png"),
-                    iconSize: 20,
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    color: kDarkOrange,
-                    onPressed: () {
-                      setState(() {
-                        if (_fundscurrentIndex > 0) {
-                          if ((_fundscurrentIndex + 3) % _fundsPageSize == 0) {
-                            fundPageNo--;
-                          }
-
-                          _fundscurrentIndex = _fundscurrentIndex - 3;
-                          fundItemScrollController.scrollTo(
-                              index: _fundscurrentIndex,
-                              duration: Duration(seconds: 1),
-                              curve: Curves.easeInOutCubic);
-                        } else {
-                          showSnackBar(
-                              context, "Start of interested funds items");
-                        }
-                      });
-                    }),
-              ),
-              Positioned(
-                  right: 0,
-                  top: 100 / 2,
-                  child: IconButton(
-                      padding: EdgeInsets.only(left: 30),
-                      icon: Image.asset(
-                          "assets/images/navigation/arrow_right.png"),
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      color: kDarkOrange,
-                      onPressed: () {
-                        setState(() {
-                          int itemsCount =
-                              Provider.of<investorProvider.InvestorHome>(
-                                      context,
-                                      listen: false)
-                                  .totalFunds;
-                          if (_fundscurrentIndex < (itemsCount - 1)) {
-                            if ((_fundscurrentIndex + 3) % _fundsPageSize ==
-                                0) {
-                              fundPageNo++;
-                              _interestedFunds = _fetchInterestedFunds(context);
-                              _fundscurrentIndex = _fundscurrentIndex + 3;
-                            } else {
-                              _fundscurrentIndex = _fundscurrentIndex + 3;
-
-                              fundItemScrollController.scrollTo(
-                                  index: _fundscurrentIndex,
-                                  duration: Duration(seconds: 1),
-                                  curve: Curves.easeInOutCubic);
-                            }
-                          } else {
-                            showSnackBar(
-                                context, "End of interested funds list");
-                          }
-                        });
-                      })),
             ],
           ),
         ),
@@ -300,56 +279,46 @@ class _InvestorHomeState extends State<InvestorHome> {
     );
   }
 
-  Container setInterestedFund() {
+  Widget setInterestedFund() {
     return Container(
-        height: 150.0,
-        child: FutureBuilder(
-          future: _interestedFunds,
-          builder: (context, dataSnapshot) {
-            if (dataSnapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                  child: CircularProgressIndicator(
+      height: 150.0,
+      child: RefreshIndicator(
+        onRefresh: () => Future.sync(
+          () => _intFundsPagingController.refresh(),
+        ),
+        color: Colors.orange,
+        child: PagedListView<int, investorProvider.FundsInfo>.separated(
+          pagingController: _intFundsPagingController,
+          scrollDirection: Axis.horizontal,
+          builderDelegate:
+              PagedChildBuilderDelegate<investorProvider.FundsInfo>(
+            animateTransitions: true,
+            firstPageProgressIndicatorBuilder: (ctx) => Center(
+              child: CircularProgressIndicator(
                 backgroundColor: Colors.orange,
                 valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
-              ));
-            } else if (dataSnapshot.error != null) {
-              print("Err: ${dataSnapshot.error.toString()}");
-              return Center(child: Text("An error occurred!"));
-            } else {
-              return Consumer<investorProvider.InvestorHome>(
-                builder: (context, fundsData, child) => Container(
-                  height: 300.0,
-                  child: ScrollablePositionedList.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.all(0.0),
-                      itemScrollController: fundItemScrollController,
-                      itemPositionsListener: fundIitemPositionsListener,
-                      scrollDirection: Axis.horizontal,
-                      initialScrollIndex: _fundscurrentIndex,
-                      itemCount: fundsData.interestedFundsData.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          margin: EdgeInsets.symmetric(
-                              horizontal: 4.0, vertical: 5.0),
-                          width: MediaQuery.of(context).size.width * 0.3,
-                          child: _buildFundsList(
-                              context,
-                              index,
-                              fundsData.interestedFundsData[index],
-                              fundsData.interestedFundsData.length),
-                        );
-                      }),
-                ),
-              );
-            }
-          },
-        ));
+              ),
+            ),
+            firstPageErrorIndicatorBuilder: (ctx) => Center(
+              child: Text("An error occurred"),
+            ),
+            itemBuilder: (context, item, index) => Container(
+              margin:
+                  const EdgeInsets.symmetric(horizontal: 4.0, vertical: 5.0),
+              width: MediaQuery.of(context).size.width * 0.3,
+              child: _buildFundsList(context, index, item),
+            ),
+          ),
+          separatorBuilder: (context, index) => const Divider(
+            color: Colors.transparent,
+          ),
+          shrinkWrap: true,
+        ),
+      ),
+    );
   }
 
-  Widget _buildFundsList(
-      BuildContext context, int index, interestedFundsData, length) {
-    interestedFundsSize = length;
-
+  Widget _buildFundsList(BuildContext context, int index, interestedFundsData) {
     return GestureDetector(
         onTap: () => {
               Navigator.push(
@@ -417,75 +386,6 @@ class _InvestorHomeState extends State<InvestorHome> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: setRecommendations(),
               ),
-              // Positioned(
-              //     left: 0,
-              //     top: 150 / 2,
-              //     child: IconButton(
-              //         padding: EdgeInsets.only(right: 30),
-              //         icon: Image.asset(
-              //             "assets/images/navigation/arrow_left.png"),
-              //         iconSize: 20,
-              //         highlightColor: Colors.transparent,
-              //         splashColor: Colors.transparent,
-              //         color: kDarkOrange,
-              //         onPressed: () {
-              //           setState(() {
-              //             if (currentIndex > 0) {
-              //               if ((currentIndex + 1) % _recommendationPageSize ==
-              //                   0) {
-              //                 recommendationPageNo--;
-              //               }
-
-              //               currentIndex--;
-              //               print("CIdx: $currentIndex");
-              //               itemScrollController.scrollTo(
-              //                   index: currentIndex,
-              //                   duration: Duration(seconds: 1),
-              //                   curve: Curves.easeInOutCubic);
-              //             } else {
-              //               showSnackBar(
-              //                   context, "Start of recommendation items");
-              //             }
-              //           });
-              //         })),
-              // Positioned(
-              //     right: 0,
-              //     top: 150 / 2,
-              //     child: IconButton(
-              //         padding: EdgeInsets.only(left: 30),
-              //         icon: Image.asset(
-              //             "assets/images/navigation/arrow_right.png"),
-              //         highlightColor: Colors.transparent,
-              //         splashColor: Colors.transparent,
-              //         color: kDarkOrange,
-              //         onPressed: () {
-              //           setState(() {
-              //             int itemsCount =
-              //                 Provider.of<investorProvider.InvestorHome>(
-              //                         context,
-              //                         listen: false)
-              //                     .totalRecommendations;
-              //             if (currentIndex < (itemsCount - 1)) {
-              //               if ((currentIndex + 1) % _recommendationPageSize ==
-              //                   0) {
-              //                 recommendationPageNo++;
-              //                 _recommendations = _fetchRecommendation(context);
-
-              //                 currentIndex++;
-              //                 print("CIdx: $currentIndex");
-              //               } else {
-              //                 currentIndex++;
-              //                 print("CIdx: $currentIndex");
-              //                 itemScrollController.scrollTo(
-              //                     index: currentIndex,
-              //                     duration: Duration(seconds: 1),
-              //                     curve: Curves.easeInOutCubic);
-              //               }
-              //             } else {
-              //               showSnackBar(context, "End of recommendation list");
-              //             }
-              //           });
-              //         })),
             ],
           ),
         ),
@@ -493,51 +393,41 @@ class _InvestorHomeState extends State<InvestorHome> {
     ));
   }
 
-  FutureBuilder<dynamic> setRecommendations() {
-    return FutureBuilder(
-      future: _recommendations,
-      builder: (context, dataSnapshot) {
-        if (dataSnapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-              child: CircularProgressIndicator(
-            backgroundColor: Colors.orange,
-            valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
-          ));
-        } else if (dataSnapshot.error != null) {
-          print("Err: ${dataSnapshot.error.toString()}");
-          return Center(child: Text("An error occurred!"));
-        } else {
-          return Consumer<investorProvider.InvestorHome>(
-            builder: (context, recommededData, child) => Container(
-              height: 300.0,
-              child: ScrollablePositionedList.builder(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  itemScrollController: itemScrollController,
-                  itemPositionsListener: itemPositionsListener,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: recommededData.recommended.length,
-                  initialScrollIndex: currentIndex,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      width: (MediaQuery.of(context).size.width - 40),
-                      child: _buildRecommendationList(
-                          context,
-                          index,
-                          recommededData.recommended[index],
-                          recommededData.recommended.length),
-                    );
-                  }),
+  Widget setRecommendations() {
+    return RefreshIndicator(
+      onRefresh: () => Future.sync(
+        () => _recPagingController.refresh(),
+      ),
+      color: Colors.orange,
+      child: PagedListView<int, investorProvider.FundsInfo>.separated(
+        pagingController: _recPagingController,
+        scrollDirection: Axis.horizontal,
+        builderDelegate: PagedChildBuilderDelegate<investorProvider.FundsInfo>(
+          animateTransitions: true,
+          firstPageProgressIndicatorBuilder: (ctx) => Center(
+            child: CircularProgressIndicator(
+              backgroundColor: Colors.orange,
+              valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
             ),
-          );
-        }
-      },
+          ),
+          firstPageErrorIndicatorBuilder: (ctx) => Center(
+            child: Text("An error occurred"),
+          ),
+          itemBuilder: (context, item, index) => Container(
+            width: (MediaQuery.of(context).size.width - 40),
+            child: _buildRecommendationList(context, index, item),
+          ),
+        ),
+        separatorBuilder: (context, index) => const Divider(
+          color: Colors.transparent,
+        ),
+        shrinkWrap: true,
+      ),
     );
   }
 
-  Widget _buildRecommendationList(BuildContext context, int index,
-      investorProvider.FundsInfo recommended, int length) {
-    recommendationListSize = length;
-
+  Widget _buildRecommendationList(
+      BuildContext context, int index, investorProvider.FundsInfo recommended) {
     return GestureDetector(
         onTap: () => {
               print("Name:- ${recommended.fundName}"),
