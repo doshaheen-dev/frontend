@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import '../../../providers/investor_home_provider.dart' as investorProvider;
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class InvestorHome extends StatefulWidget {
   @override
@@ -342,14 +343,19 @@ class _InvestorHomeState extends State<InvestorHome> {
                       topLeft: Radius.circular(8.0),
                       topRight: Radius.circular(8.0),
                     ),
-                    child: Image(
-                      image: interestedFundsData.fundLogo != ""
-                          ? NetworkImage(interestedFundsData.fundLogo)
-                          : AssetImage("assets/images/dummy/investment1.png"),
+                    child: CachedNetworkImage(
                       height: 80.0,
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      fit: BoxFit.fill,
+                      imageUrl: interestedFundsData.fundLogo,
+                      errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
+                    // Image(
+                    //   image: interestedFundsData.fundLogo != ""
+                    //       ? NetworkImage(interestedFundsData.fundLogo)
+                    //       : AssetImage("assets/images/dummy/investment1.png"),
+                    //   height: 80.0,
+                    //   width: MediaQuery.of(context).size.width * 0.5,
+                    //   fit: BoxFit.fill,
+                    // ),
                   ),
                   SizedBox(
                     height: 5.0,
@@ -454,13 +460,21 @@ class _InvestorHomeState extends State<InvestorHome> {
                       topRight: Radius.circular(8.0),
                     ),
                     child: Center(
-                      child: Image(
-                        image: recommended.fundLogo != ""
-                            ? NetworkImage(recommended.fundLogo)
-                            : AssetImage("assets/images/dummy/investment1.png"),
-                        height: 200,
-                        fit: BoxFit.fill,
+                      child: CachedNetworkImage(
+                        height: 200.0,
+                        imageUrl: recommended.fundLogo,
+                        // fit: BoxFit.cover,
+                        // placeholder: (context, url) =>
+                        //     CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
                       ),
+                      // Image(
+                      //   image: recommended.fundLogo != ""
+                      //       ? NetworkImage(recommended.fundLogo)
+                      //       : AssetImage("assets/images/dummy/investment1.png"),
+                      //   height: 200,
+                      //   fit: BoxFit.fill,
+                      // ),
                     ),
                   ),
                   Container(
