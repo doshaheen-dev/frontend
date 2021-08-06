@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
+import 'package:acc/models/refresh_token.dart';
 import 'package:acc/providers/fund_provider.dart';
 import 'package:acc/providers/fund_slot_provider.dart';
 import 'package:acc/providers/investor_home_provider.dart';
@@ -13,8 +14,11 @@ import 'package:acc/providers/city_provider.dart';
 import 'package:acc/screens/fundraiser/dashboard/add_new_funds.dart';
 import 'package:acc/screens/fundraiser/dashboard/fundraiser_dashboard.dart';
 import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
+import 'package:acc/services/TokenRefreshService.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/hex_color.dart';
+import 'package:acc/utilites/text_style.dart';
+import 'package:acc/utils/class_navigation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -115,6 +119,12 @@ class _MyHomePageState extends State<MyHomePage> {
       print("Token: ${UserData.instance.userInfo.token}");
 
       if (userData != null) {
+        AppToken token = await TokenRefreshService.refreshToken();
+        if (token.status != 200) {
+          _openDialog(
+              context, "Your session has expired. Please Sign In again.");
+          return;
+        }
         openHome(userData);
       } else {
         Timer(
@@ -191,5 +201,35 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => OnBoarding()));
     }
+  }
+
+  _openDialog(BuildContext context, String message) {
+    // set up the buttons
+    Widget positiveButton = TextButton(
+        onPressed: () async {
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setString('UserInfo', '');
+          Navigation.openOnBoarding(context);
+        },
+        child: Text(
+          "Login",
+          style: textNormal16(selectedOrange),
+        ));
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: Text(message, style: textNormal18(headingBlack)),
+      actions: [
+        positiveButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

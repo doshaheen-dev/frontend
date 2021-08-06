@@ -1,27 +1,21 @@
-import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/otp_response.dart';
-import 'package:acc/models/authentication/signup_request.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/models/default.dart';
 import 'package:acc/models/local_countries.dart';
-import 'package:acc/models/profile/update_profile_request.dart';
-import 'package:acc/screens/common/onboarding.dart';
-import 'package:acc/services/OtpService.dart';
+import 'package:acc/services/UpdateProfileService.dart';
 import 'package:acc/services/update_otp_service.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/app_strings.dart';
-import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
+import 'package:acc/utils/class_navigation.dart';
 import 'package:acc/utils/code_utils.dart';
 import 'package:acc/utils/crypt_utils.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../providers/country_provider.dart' as countryProvider;
 
 class InvestorProfile extends StatefulWidget {
   InvestorProfile({Key key}) : super(key: key);
@@ -31,31 +25,12 @@ class InvestorProfile extends StatefulWidget {
 }
 
 class _InvestorProfileState extends State<InvestorProfile> {
-  void openOnBoarding() {
-    Navigator.pushAndRemoveUntil(
-        context,
-        PageRouteBuilder(
-            pageBuilder: (context, animation, anotherAnimation) {
-              return OnBoarding();
-            },
-            transitionDuration: Duration(milliseconds: 2000),
-            transitionsBuilder: (context, animation, anotherAnimation, child) {
-              animation = CurvedAnimation(
-                  curve: Curves.fastLinearToSlowEaseIn, parent: animation);
-              return SlideTransition(
-                position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-                    .animate(animation),
-                child: child,
-              );
-            }),
-        (route) => false);
-  }
-
   TextEditingController _firstNameController = TextEditingController();
   TextEditingController _lastnameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _mobileController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
+  TextEditingController _countryController = TextEditingController();
   String firstname = "";
   String lastname = "";
   String email = "";
@@ -90,13 +65,13 @@ class _InvestorProfileState extends State<InvestorProfile> {
   ];
 
   var progress;
-  Future _countries;
+  // Future _countries;
   var _isInit = true;
 
-  Future<void> _fetchCountries(BuildContext context) async {
-    await Provider.of<countryProvider.Countries>(context, listen: false)
-        .fetchAndSetCountries();
-  }
+  // Future<void> _fetchCountries(BuildContext context) async {
+  //   await Provider.of<countryProvider.Countries>(context, listen: false)
+  //       .fetchAndSetCountries();
+  // }
 
   @override
   void initState() {
@@ -113,8 +88,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      setState(() {});
-      _countries = _fetchCountries(context);
+      //  _countries = _fetchCountries(context);
       setUserInformation();
     }
     _isInit = false;
@@ -153,49 +127,44 @@ class _InvestorProfileState extends State<InvestorProfile> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-            child: Container(
-                child: Column(
-          children: [
-            Container(child: setUserProfileView()),
-            Container(
-              margin: const EdgeInsets.only(
-                  top: 5.0, left: 25.0, bottom: 10, right: 25.0),
-              child: ElevatedButton(
-                  onPressed: () {
-                    openLogoutDialog(
-                        context, "Are you sure you want to logout?");
-                  },
-                  style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.all(0.0),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18))),
-                  child: Ink(
-                      decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(15)),
-                      child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 60,
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Logout",
-                            style: textWhiteBold16(),
-                          )))),
-            ),
-          ],
-        ))));
+        body: ProgressHUD(
+            child: Builder(
+                builder: (context) => SafeArea(
+                        child: SingleChildScrollView(
+                            child: Container(
+                                child: Column(
+                      children: [
+                        Container(child: setUserProfileView()),
+                        Container(
+                          margin: const EdgeInsets.only(
+                              top: 5.0, left: 25.0, bottom: 10, right: 25.0),
+                          child: ElevatedButton(
+                              onPressed: () {
+                                openLogoutDialog(context,
+                                    "Are you sure you want to logout?");
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.all(0.0),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18))),
+                              child: Ink(
+                                  decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 60,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "Logout",
+                                        style: textWhiteBold16(),
+                                      )))),
+                        ),
+                      ],
+                    )))))));
   }
 
   void setUserInformation() {
-    print(
-        "UserData:- ${UserData.instance.userInfo.firstName}, LastName: -${UserData.instance.userInfo.lastName}");
-    print(
-        "MobileNo:- ${CryptUtils.encryption(UserData.instance.userInfo.mobileNo)}, emailId: -${CryptUtils.encryption("test1234@mailinator.com")}");
-    String text =
-        CryptUtils.decryption("JkLVXZVc/tXIIg3yUPHZKAj1POYfmQCHy217e5uxL+8=");
-    print(text);
-
     _firstNameController.text = (UserData.instance.userInfo.firstName == null ||
             UserData.instance.userInfo.firstName == 'null')
         ? ''
@@ -243,7 +212,9 @@ class _InvestorProfileState extends State<InvestorProfile> {
         : mobileNo ?? '';
 
     _addressController.text = UserData.instance.userInfo.address;
+    _countryController.text = UserData.instance.userInfo.countryName;
     savedcountryName = UserData.instance.userInfo.countryName;
+    country = UserData.instance.userInfo.countryName;
     print("country: $savedcountryName");
   }
 
@@ -253,11 +224,11 @@ class _InvestorProfileState extends State<InvestorProfile> {
         onPressed: () async {
           final prefs = await SharedPreferences.getInstance();
           prefs.setString('UserInfo', '');
-          openOnBoarding();
+          Navigation.openOnBoarding(context);
         },
         child: Text(
           "Yes",
-          style: textNormal16(Color(0xff00A699)),
+          style: textNormal16(selectedOrange),
         ));
 
     Widget negativeButton = TextButton(
@@ -266,12 +237,15 @@ class _InvestorProfileState extends State<InvestorProfile> {
         },
         child: Text(
           "No",
-          style: textNormal16(Color(0xff00A699)),
+          style: textNormal16(selectedOrange),
         ));
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      content: Text(message),
+      content: Text(
+        message,
+        style: textNormal18(headingBlack),
+      ),
       actions: [positiveButton, negativeButton],
     );
 
@@ -327,38 +301,49 @@ class _InvestorProfileState extends State<InvestorProfile> {
 
       Container(
         margin: const EdgeInsets.only(
-            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-        width: MediaQuery.of(context).size.width,
-        height: 80,
+            top: 5.0, left: 25.0, right: 25.0, bottom: 20),
         decoration: customDecoration(),
-        child: FutureBuilder(
-            future: _countries,
-            builder: (ctx, dataSnapshot) {
-              if (dataSnapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                    child: CircularProgressIndicator(
-                  backgroundColor: Colors.orange,
-                  valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
-                ));
-              } else {
-                if (dataSnapshot.error != null) {
-                  return Center(child: Text("An error occurred!"));
-                } else {
-                  return Consumer<countryProvider.Countries>(
-                    builder: (ctx, countryData, child) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: getDropDownSearch(countryData.countries
-                          .map((info) => {
-                                'text': info.name,
-                                'value': info.abbreviation,
-                              })
-                          .toList()),
-                    ),
-                  );
-                }
-              }
-            }),
+        child: TextField(
+          style: textBlackNormal18(),
+          onChanged: (value) => country = value,
+          controller: _countryController,
+          decoration: _setTextFieldDecoration("Country"),
+        ),
       ),
+      // Container(
+      //   margin: const EdgeInsets.only(
+      //       top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+      //   width: MediaQuery.of(context).size.width,
+      //   height: 80,
+      //   decoration: customDecoration(),
+      //   child: FutureBuilder(
+      //       future: _countries,
+      //       builder: (ctx, dataSnapshot) {
+      //         if (dataSnapshot.connectionState == ConnectionState.waiting) {
+      //           return Center(
+      //               child: CircularProgressIndicator(
+      //             backgroundColor: Colors.orange,
+      //             valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
+      //           ));
+      //         } else {
+      //           if (dataSnapshot.error != null) {
+      //             return Center(child: Text("An error occurred!"));
+      //           } else {
+      //             return Consumer<countryProvider.Countries>(
+      //               builder: (ctx, countryData, child) => Padding(
+      //                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      //                 child: getDropDownSearch(countryData.countries
+      //                     .map((info) => {
+      //                           'text': info.name,
+      //                           'value': info.abbreviation,
+      //                         })
+      //                     .toList()),
+      //               ),
+      //             );
+      //           }
+      //         }
+      //       }),
+      // ),
       Container(
         margin: const EdgeInsets.only(top: 5.0, left: 25.0, right: 25.0),
         decoration: customDecoration(),
@@ -379,46 +364,18 @@ class _InvestorProfileState extends State<InvestorProfile> {
           onPressed: () {
             FocusScope.of(context).requestFocus(FocusNode());
             // on click
-            // if (_firstNameController.text.isEmpty) {
-            //   showSnackBar(context, "Please enter the Firstname.");
-            //   return;
-            // }
-            // if (_lastnameController.text.isEmpty) {
-            //   showSnackBar(context, "Please enter the Lastname.");
-            //   return;
-            // }
-            // if (_mobileController.text.isEmpty) {
-            //   showSnackBar(context, "Please enter the mobile no.");
-            //   return;
-            // }
-            // if (selectedCountry == null) {
-            //   showSnackBar(context, errorCountryCode);
-            //   return;
-            // }
+            // progress = ProgressHUD.of(context);
+            // progress?.showWithText('Updating Profile...');
 
-            // if (selectedCountry.maxLength != _mobileController.text.length) {
-            //   showSnackBar(context,
-            //       "Phone number should be of ${selectedCountry.maxLength} digits.");
-            //   return;
-            // }
+            String _phoneNumber = "+${selectedCountry.dialCode}" +
+                _mobileController.text.toString().trim();
 
-            // if (_emailController.text.isEmpty) {
-            //   showSnackBar(context, "Please enter the email id.");
-            //   return;
-            // }
-            // if (!CodeUtils.emailValid(_emailController.text)) {
-            //   showSnackBar(context, "Please enter a valid email id.");
-            //   return;
-            // }
-            // if (country.isEmpty) {
-            //   showSnackBar(context, "Please select a country.");
-            //   return;
-            // }
-            // if (_addressController.text.isEmpty) {
-            //   showSnackBar(context, "Please enter the address.");
-            //   return;
-            // }
-            FocusScope.of(context).requestFocus(FocusNode());
+            if (_phoneNumber == UserData.instance.userInfo.mobileNo ||
+                _emailController.text == UserData.instance.userInfo.emailId) {
+              showSnackBar(context, "Please enter any new data for updation.");
+              return;
+            }
+
             submitDetails(
                 _firstNameController.text.trim(),
                 _lastnameController.text.trim(),
@@ -464,6 +421,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
 
   InputDecoration _setTextFieldDecoration(_text) {
     return InputDecoration(
+      enabled: false,
       contentPadding: EdgeInsets.all(10.0),
       labelText: _text,
       labelStyle: new TextStyle(color: Colors.grey[600]),
@@ -477,38 +435,38 @@ class _InvestorProfileState extends State<InvestorProfile> {
     );
   }
 
-  Widget getDropDownSearch(List<Map<String, dynamic>> items) {
-    return DropdownSearch<Map<String, dynamic>>(
-      mode: Mode.BOTTOM_SHEET,
-      showSearchBox: true,
-      showSelectedItem: false,
-      items: items,
-      itemAsString: (Map<String, dynamic> i) => i['text'],
-      hint: "",
-      label: savedcountryName != "" ? savedcountryName : 'Country',
-      onChanged: (map) {
-        setState(() {
-          savedcountryName = "";
-          country = map['value'];
-          print(country);
-        });
-      },
-      dropdownSearchDecoration: InputDecoration(
-        labelText: 'Country',
-        labelStyle: new TextStyle(
-          color: Colors.grey[600],
-          fontFamily: FontFamilyMontserrat.name,
-          fontSize: 18,
-        ),
-        enabledBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.all(const Radius.circular(10.0)),
-          borderSide: BorderSide(color: Colors.transparent),
-        ),
-      ),
-      selectedItem: null,
-      maxHeight: 700,
-    );
-  }
+  // Widget getDropDownSearch(List<Map<String, dynamic>> items) {
+  //   return DropdownSearch<Map<String, dynamic>>(
+  //     mode: Mode.BOTTOM_SHEET,
+  //     showSearchBox: true,
+  //     showSelectedItem: false,
+  //     items: items,
+  //     itemAsString: (Map<String, dynamic> i) => i['text'],
+  //     hint: "",
+  //     label: savedcountryName != "" ? savedcountryName : 'Country',
+  //     onChanged: (map) {
+  //       setState(() {
+  //         savedcountryName = "";
+  //         country = map['value'];
+  //         print(country);
+  //       });
+  //     },
+  //     dropdownSearchDecoration: InputDecoration(
+  //       labelText: 'Country',
+  //       labelStyle: new TextStyle(
+  //         color: Colors.grey[600],
+  //         fontFamily: FontFamilyMontserrat.name,
+  //         fontSize: 18,
+  //       ),
+  //       enabledBorder: UnderlineInputBorder(
+  //         borderRadius: BorderRadius.all(const Radius.circular(10.0)),
+  //         borderSide: BorderSide(color: Colors.transparent),
+  //       ),
+  //     ),
+  //     selectedItem: null,
+  //     maxHeight: 700,
+  //   );
+  // }
 
   Row _createMobileFields() {
     return Row(
@@ -1301,66 +1259,106 @@ class _InvestorProfileState extends State<InvestorProfile> {
       String _countryCode,
       String _address,
       String _verificationId,
-      String emailVerificationId) async {
+      String _emailVerificationId) async {
     String _phoneNumber =
         "+${selectedCountry.dialCode}" + _mobileNo.toString().trim();
 
-    final requestModelInstance = UpdateProfileRequestModel.instance;
-    if (_firstName != UserData.instance.userInfo.firstName) {
-      requestModelInstance.firstName = CryptUtils.encryption(_firstName);
-    }
+    Map<String, dynamic> requestMap = Map();
+    bool isSignInRequired = false;
 
-    if (_lastName != UserData.instance.userInfo.lastName) {
-      requestModelInstance.lastName = CryptUtils.encryption(_lastName);
-    }
+    // if (_firstName != UserData.instance.userInfo.firstName) {
+    //   requestMap["first_name"] = CryptUtils.encryption(_firstName);
+    // }
+
+    // if (_lastName != UserData.instance.userInfo.lastName) {
+    //   requestMap["last_name"] = CryptUtils.encryption(_lastName);
+    // }
+
+    //  if (UserData.instance.userInfo.countryName != null &&
+    //     country != UserData.instance.userInfo.countryName) {
+    //   requestMap["country_code"] = _countryCode;
+    // }
+
+    // if (_address != UserData.instance.userInfo.address) {
+    //   requestMap["address"] = _address;
+    // }
 
     if (_emailId != UserData.instance.userInfo.emailId) {
-      requestModelInstance.emailId = CryptUtils.encryption(_emailId);
-      requestModelInstance.emailVerificationId = emailVerificationId;
+      isSignInRequired = true;
+      requestMap["email_id"] = CryptUtils.encryption(_emailId);
+      requestMap["email_verificationId"] = _emailVerificationId;
     }
 
     if (_phoneNumber != UserData.instance.userInfo.mobileNo) {
-      requestModelInstance.mobileNo = CryptUtils.encryption(_phoneNumber);
-      requestModelInstance.mobileVerificationId = _verificationId;
+      isSignInRequired = true;
+      requestMap["mobile_no"] = CryptUtils.encryption(_phoneNumber);
+      requestMap["mobile_verificationId"] = _verificationId;
     }
 
-    if (country != UserData.instance.userInfo.countryName) {
-      requestModelInstance.countryCode = _countryCode;
+    Default updateResponse =
+        await UpdateProfileService.updateUserInfo(requestMap);
+    if (updateResponse.status == 200) {
+      // progress.dismiss();
+
+      _openDialog(context, updateResponse.message);
+      // if (isSignInRequired) {
+      //   _openDialog(context, updateResponse.message);
+      // } else {
+      //   UserData userData = UserData(
+      //       UserData.instance.userInfo.token,
+      //       _firstName,
+      //       "",
+      //       _lastName,
+      //       UserData.instance.userInfo.mobileNo,
+      //       UserData.instance.userInfo.emailId,
+      //       UserData.instance.userInfo.userType,
+      //       "",
+      //       "",
+      //       "",
+      //       _address,
+      //       _countryCode);
+      //   final prefs = await SharedPreferences.getInstance();
+      //   final userJson = jsonEncode(userData);
+      //   prefs.setString('UserInfo', userJson);
+      //   UserData.instance.userInfo = userData;
+
+      //   showSnackBar(context, updateResponse.message);
+      // }
+    } else {
+      // if (progress != null) {
+      //   progress.dismiss();
+      // }
+      showSnackBar(context, updateResponse.message);
     }
+  }
 
-    if (_address != UserData.instance.userInfo.address) {
-      requestModelInstance.address = address;
-    }
+  _openDialog(BuildContext context, String message) {
+    // set up the buttons
+    Widget positiveButton = TextButton(
+        onPressed: () async {
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setString('UserInfo', '');
+          Navigation.openOnBoarding(context);
+        },
+        child: Text(
+          "Ok",
+          style: textNormal16(selectedOrange),
+        ));
 
-    print("Model User:- ${requestModelInstance}");
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: Text(message, style: textNormal18(headingBlack)),
+      actions: [
+        positiveButton,
+      ],
+    );
 
-    // User signedUpUser =
-    //     await SignUpService.uploadUserDetails(requestModelInstance);
-    // progress.dismiss();
-    // if (signedUpUser.type == 'success') {
-    //   requestModelInstance.clear();
-    //   // print("Firstn: ${signedUpUser.data.firstName}");
-    //   UserData userData = UserData(
-    //       signedUpUser.data.token,
-    //       signedUpUser.data.firstName,
-    //       "",
-    //       signedUpUser.data.lastName,
-    //       signedUpUser.data.mobileNo,
-    //       signedUpUser.data.emailId,
-    //       signedUpUser.data.userType,
-    //       "",
-    //       signedUpUser.data.designation,
-    //      signedUpUser.data.designation,
-    //      signedUpUser.data.designation,
-    //      signedUpUser.data.designation, );
-    //   final prefs = await SharedPreferences.getInstance();
-    //   final userJson = jsonEncode(userData);
-    //   prefs.setString('UserInfo', userJson);
-    //   UserData.instance.userInfo = userData;
-    //   print('${userData.firstName}');
-    //   print('Ins:${UserData.instance.userInfo.firstName}');
-    // } else {
-    //   showSnackBar(context, "Something went wrong");
-    // }
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

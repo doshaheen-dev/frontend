@@ -9,14 +9,14 @@ class UpdateProfileRequestModel {
 
   static UpdateProfileRequestModel get instance => _instance;
 
-  String firstName;
-  String lastName;
-  String countryCode;
-  String address;
-  String mobileNo;
-  String emailId;
-  String mobileVerificationId;
-  String emailVerificationId;
+  String firstName = "";
+  String lastName = "";
+  String countryCode = "";
+  String address = "";
+  String mobileNo = "";
+  String emailId = "";
+  String mobileVerificationId = "";
+  String emailVerificationId = "";
 
   Map<String, dynamic> toJson() => {
         "first_name": this.firstName,

@@ -4,21 +4,21 @@ import 'package:acc/models/authentication/otp_response.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/models/default.dart';
 import 'package:acc/models/local_countries.dart';
-import 'package:acc/screens/common/onboarding.dart';
-import 'package:acc/services/OtpService.dart';
+import 'package:acc/services/UpdateProfileService.dart';
 import 'package:acc/services/update_otp_service.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/app_strings.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
+import 'package:acc/utils/class_navigation.dart';
 import 'package:acc/utils/code_utils.dart';
+import 'package:acc/utils/crypt_utils.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../providers/country_provider.dart' as countryProvider;
 
 class FundraiserProfile extends StatefulWidget {
   FundraiserProfile({Key key}) : super(key: key);
@@ -28,26 +28,6 @@ class FundraiserProfile extends StatefulWidget {
 }
 
 class _FundraiserProfileState extends State<FundraiserProfile> {
-  void openOnBoarding() {
-    Navigator.pushAndRemoveUntil(
-        context,
-        PageRouteBuilder(
-            pageBuilder: (context, animation, anotherAnimation) {
-              return OnBoarding();
-            },
-            transitionDuration: Duration(milliseconds: 2000),
-            transitionsBuilder: (context, animation, anotherAnimation, child) {
-              animation = CurvedAnimation(
-                  curve: Curves.fastLinearToSlowEaseIn, parent: animation);
-              return SlideTransition(
-                position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-                    .animate(animation),
-                child: child,
-              );
-            }),
-        (route) => false);
-  }
-
   String firstname = "";
   String lastname = "";
   String title = "";
@@ -64,6 +44,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
   var _companyNameController = TextEditingController();
   var _companyEmailController = TextEditingController();
   var _mobileController = TextEditingController();
+  var _countryController = TextEditingController();
   var selectedCountry;
 
   // NEW EMAIL AND MOBILE NO UPDATION BOTTOM SHEET
@@ -93,13 +74,13 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
     const Countries("United States", "US", 1, 10),
   ];
 
-  Future _countries;
+  //Future _countries;
   var _isInit = true;
 
-  Future<void> _fetchCountries(BuildContext context) async {
-    await Provider.of<countryProvider.Countries>(context, listen: false)
-        .fetchAndSetCountries();
-  }
+  // Future<void> _fetchCountries(BuildContext context) async {
+  //   await Provider.of<countryProvider.Countries>(context, listen: false)
+  //       .fetchAndSetCountries();
+  // }
 
   void updateInfo(newSelectedCountry, String phoneNumber) {
     setState(() {
@@ -117,8 +98,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      setState(() {});
-      _countries = _fetchCountries(context);
+      //_countries = _fetchCountries(context);
       setUserInformation();
     }
     _isInit = false;
@@ -127,11 +107,11 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
 
   @override
   void dispose() {
-    _firstNameController.dispose();
-    _lastnameController.dispose();
-    _titleController.dispose();
-    _companyNameController.dispose();
-    _companyEmailController.dispose();
+    // _firstNameController.dispose();
+    // _lastnameController.dispose();
+    // _titleController.dispose();
+    // _companyNameController.dispose();
+    // _companyEmailController.dispose();
     super.dispose();
   }
 
@@ -142,38 +122,48 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          child: Container(
-              margin: const EdgeInsets.only(bottom: 20),
-              child: Column(
-                children: [
-                  Container(child: setUserProfileView()),
-                  Container(
-                    margin: const EdgeInsets.only(
-                        top: 5.0, left: 25.0, bottom: 10, right: 25.0),
-                    child: ElevatedButton(
-                        onPressed: () {
-                          openLogoutDialog(
-                              context, "Are you sure you want to logout?");
-                        },
-                        style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.all(0.0),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18))),
-                        child: Ink(
-                          decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 60,
-                              alignment: Alignment.center,
-                              child: Text("Logout", style: textWhiteBold16())),
-                        )),
-                  ),
-                ],
-              )),
-        ));
+        body: ProgressHUD(
+            child: Builder(
+                builder: (context) => SafeArea(
+                        child: SingleChildScrollView(
+                      child: Container(
+                          margin: const EdgeInsets.only(bottom: 20),
+                          child: Column(
+                            children: [
+                              Container(child: setUserProfileView()),
+                              Container(
+                                margin: const EdgeInsets.only(
+                                    top: 5.0,
+                                    left: 25.0,
+                                    bottom: 10,
+                                    right: 25.0),
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      openLogoutDialog(context,
+                                          "Are you sure you want to logout?");
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.all(0.0),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(18))),
+                                    child: Ink(
+                                      decoration: BoxDecoration(
+                                          color: Colors.red,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: Container(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          height: 60,
+                                          alignment: Alignment.center,
+                                          child: Text("Logout",
+                                              style: textWhiteBold16())),
+                                    )),
+                              ),
+                            ],
+                          )),
+                    )))));
   }
 
   void setUserInformation() {
@@ -224,7 +214,8 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
         ? ''
         : mobileNo ?? '';
 
-    savedcountryName = UserData.instance.userInfo.countryName;
+    _countryController.text = UserData.instance.userInfo.countryName;
+    // savedcountryName = UserData.instance.userInfo.countryName;
     _companyNameController.text = UserData.instance.userInfo.companyName;
     _titleController.text = UserData.instance.designation;
   }
@@ -235,11 +226,11 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
         onPressed: () async {
           final prefs = await SharedPreferences.getInstance();
           prefs.setString('UserInfo', '');
-          openOnBoarding();
+          Navigation.openOnBoarding(context);
         },
         child: Text(
           "Yes",
-          style: textNormal16(Color(0xff00A699)),
+          style: textNormal16(selectedOrange),
         ));
 
     Widget negativeButton = TextButton(
@@ -248,12 +239,15 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
         },
         child: Text(
           "No",
-          style: textNormal16(Color(0xff00A699)),
+          style: textNormal16(selectedOrange),
         ));
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      content: Text(message),
+      content: Text(
+        message,
+        style: textNormal18(headingBlack),
+      ),
       actions: [positiveButton, negativeButton],
     );
 
@@ -301,40 +295,52 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
           decoration: _setTextFieldDecoration("Title"),
         ),
       ),
+
       Container(
         margin: const EdgeInsets.only(
-            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-        width: MediaQuery.of(context).size.width,
-        height: 80,
+            top: 5.0, left: 25.0, right: 25.0, bottom: 20),
         decoration: customDecoration(),
-        child: FutureBuilder(
-            future: _countries,
-            builder: (ctx, dataSnapshot) {
-              if (dataSnapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                    child: CircularProgressIndicator(
-                  backgroundColor: Colors.orange,
-                  valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
-                ));
-              } else {
-                if (dataSnapshot.error != null) {
-                  return Center(child: Text("An error occurred!"));
-                } else {
-                  return Consumer<countryProvider.Countries>(
-                    builder: (ctx, countryData, child) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: getDropDownSearch(countryData.countries
-                          .map((info) => {
-                                'text': info.name,
-                                'value': info.abbreviation,
-                              })
-                          .toList()),
-                    ),
-                  );
-                }
-              }
-            }),
+        child: TextField(
+          style: textBlackNormal18(),
+          onChanged: (value) => country = value,
+          controller: _countryController,
+          decoration: _setTextFieldDecoration("Country"),
+        ),
       ),
+      // Container(
+      //   margin: const EdgeInsets.only(
+      //       top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+      //   width: MediaQuery.of(context).size.width,
+      //   height: 80,
+      //   decoration: customDecoration(),
+      //   child: FutureBuilder(
+      //       future: _countries,
+      //       builder: (ctx, dataSnapshot) {
+      //         if (dataSnapshot.connectionState == ConnectionState.waiting) {
+      //           return Center(
+      //               child: CircularProgressIndicator(
+      //             backgroundColor: Colors.orange,
+      //             valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
+      //           ));
+      //         } else {
+      //           if (dataSnapshot.error != null) {
+      //             return Center(child: Text("An error occurred!"));
+      //           } else {
+      //             return Consumer<countryProvider.Countries>(
+      //               builder: (ctx, countryData, child) => Padding(
+      //                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      //                 child: getDropDownSearch(countryData.countries
+      //                     .map((info) => {
+      //                           'text': info.name,
+      //                           'value': info.abbreviation,
+      //                         })
+      //                     .toList()),
+      //               ),
+      //             );
+      //           }
+      //         }
+      //       }),
+      // ),
       Container(
         margin: const EdgeInsets.only(
             top: 5.0, left: 25.0, bottom: 20, right: 25.0),
@@ -366,49 +372,22 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
           child: ElevatedButton(
             onPressed: () {
               // on click
-              if (_firstNameController.text.isEmpty) {
-                showSnackBar(context, "Please enter the Firstname.");
-                return;
-              }
-              if (_lastnameController.text.isEmpty) {
-                showSnackBar(context, "Please enter the Lastname.");
-                return;
-              }
-              if (_titleController.text.isEmpty) {
-                showSnackBar(context, "Please enter the title.");
-                return;
-              }
-              if (_companyNameController.text.isEmpty) {
-                showSnackBar(context, "Please enter the company name.");
-                return;
-              }
-              if (_companyEmailController.text.isEmpty) {
-                showSnackBar(context, "Please enter the email id.");
-                return;
-              }
-              if (!CodeUtils.emailValid(_companyEmailController.text)) {
-                showSnackBar(context, "Please enter a valid email id.");
-                return;
-              }
-              if (country.isEmpty) {
-                showSnackBar(context, "Please select a country.");
-                return;
-              }
-              FocusScope.of(context).requestFocus(FocusNode());
+              // progress = ProgressHUD.of(context);
+              // progress?.showWithText('Updating Profile...');
 
-              setState(() {
-                // progress = ProgressHUD.of(context);
-                // progress?.showWithText(
-                //     'Uploading Details...');
-                // submitDetails(
-                //   _firstNameController.text.trim(),
-                //   _lastnameController.text.trim(),
-                //   _titleController.text.trim(),
-                //   country,
-                //   _companyNameController.text,
-                //   _companyEmailController.text,
-                //);
-              });
+              FocusScope.of(context).requestFocus(FocusNode());
+              String _phoneNumber = "+${selectedCountry.dialCode}" +
+                  _mobileController.text.toString().trim();
+
+              if (_phoneNumber != UserData.instance.userInfo.mobileNo ||
+                  _companyEmailController.text.toString().trim() !=
+                      UserData.instance.userInfo.emailId) {
+                submitDetails(_companyEmailController.text.trim(), _phoneNumber,
+                    _verificationId, _emailVerificationId);
+
+                return;
+              }
+              showSnackBar(context, "Please enter any new data for updation.");
             },
             style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.all(0.0),
@@ -446,6 +425,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
 
   InputDecoration _setTextFieldDecoration(_text) {
     return InputDecoration(
+      enabled: false,
       contentPadding: EdgeInsets.all(10.0),
       labelText: _text,
       labelStyle: new TextStyle(color: Colors.grey[600]),
@@ -829,7 +809,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
 
   Widget _buildCodeDropDown() {
     return Padding(
-        padding: EdgeInsets.only(left: 10.0, right: 5.0),
+        padding: EdgeInsets.only(left: 10.0, right: 5.0, bottom: 5.0),
         child: DropdownButtonFormField<Countries>(
           decoration: InputDecoration(
               labelText: 'Country Code',
@@ -1168,6 +1148,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
         ));
   }
 
+// -------------------------------------------------------------------------f\\
   Future<void> _getOtp(String text, newSelectedCountry, StateSetter setState,
       String otpType) async {
     String _phoneNumber = text;
@@ -1262,5 +1243,62 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
       emailVerificationId = "";
       showSnackBar(context, updateProfileOtpService.message);
     }
+  }
+
+  Future<void> submitDetails(String _email, String _phoneNumber,
+      String _verificationId, String _emailVerificationId) async {
+    Map<String, dynamic> requestMap = Map();
+
+    if (_email != UserData.instance.userInfo.emailId) {
+      requestMap["email_id"] = CryptUtils.encryption(_email);
+      requestMap["email_verificationId"] = _emailVerificationId;
+    }
+
+    if (_phoneNumber != UserData.instance.userInfo.mobileNo) {
+      requestMap["mobile_no"] = CryptUtils.encryption(_phoneNumber);
+      requestMap["mobile_verificationId"] = _verificationId;
+    }
+
+    Default updateResponse =
+        await UpdateProfileService.updateUserInfo(requestMap);
+    if (updateResponse.status == 200) {
+      // progress.dismiss();
+      _openDialog(context, updateResponse.message);
+    } else {
+      // if (progress != null) {
+      //   progress.dismiss();
+      // }
+      showSnackBar(context, updateResponse.message);
+    }
+  }
+
+  _openDialog(BuildContext context, String message) {
+    // set up the buttons
+    Widget positiveButton = TextButton(
+        onPressed: () async {
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setString('UserInfo', '');
+          Navigation.openOnBoarding(context);
+        },
+        child: Text(
+          "Ok",
+          style: textNormal16(selectedOrange),
+        ));
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: Text(message, style: textNormal18(headingBlack)),
+      actions: [
+        positiveButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }
