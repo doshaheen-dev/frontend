@@ -543,7 +543,7 @@ class _CorporateDetailsState extends State<CorporateDetails> {
       showConfirmationText();
       nextButtonText = 'Back to Home';
     } else {
-      showSnackBar(context, "Something went wrong");
+      showSnackBar(context, signedUpUser.message);
     }
   }
 

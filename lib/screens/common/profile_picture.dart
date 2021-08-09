@@ -62,14 +62,16 @@ class _ProfilePicScreenState extends State<ProfilePicScreen> {
                 UserData.instance.userInfo = await CodeUtils.getUserInfo();
               }
             }
+          } else {
+            showSnackBar(context, imgResponse.message);
           }
         } else {
-          showSnackBar(context, 'Something went wrong.');
+          showSnackBar(context, 'File was corrupt');
         }
         progress.dismiss();
         setState(() {});
       } catch (e) {
-        showSnackBar(context, 'Something went wrong.');
+        showSnackBar(context, e.toString());
         if (progress != null) {
           progress.dismiss();
         }

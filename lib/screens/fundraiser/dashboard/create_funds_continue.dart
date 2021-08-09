@@ -370,14 +370,16 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
             await UploadDocumentService.uploadDocument(file, fileName);
         if (doc != null) {
           _updateUploadedDocs(DocumentInfo(kycDocId, doc.data.fundKYCDocPath));
+        } else {
+          showSnackBar(context, doc.message);
         }
       } else {
-        showSnackBar(context, 'Something went wrong.');
+        showSnackBar(context, 'File was corrupt.');
       }
       progress.dismiss();
       setState(() {});
     } catch (e) {
-      showSnackBar(context, 'Something went wrong.');
+      showSnackBar(context, e.toString());
       if (progress != null) {
         progress.dismiss();
       }
@@ -576,11 +578,11 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
         requestModelInstance.clear();
         openSuccesssFundSubmitted();
       } else {
-        showSnackBar(context, "Something went wrong");
+        showSnackBar(context, response.message);
       }
     } catch (e) {
       progress.dismiss();
-      showSnackBar(context, "Something went wrong");
+      showSnackBar(context, e.toString());
     }
   }
 

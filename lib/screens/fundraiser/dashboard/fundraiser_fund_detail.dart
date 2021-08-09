@@ -432,9 +432,11 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
           await UploadDocumentService.uploadDocument(file, fileName);
       if (doc != null) {
         _updateUploadedDocs(DocumentInfo(kycDocId, doc.data.fundKYCDocPath));
+      } else {
+        showSnackBar(context, doc.message);
       }
     } else {
-      showSnackBar(context, 'Something went wrong.');
+      showSnackBar(context, 'File was corrupt.');
     }
     progress.dismiss();
     setState(() {});
@@ -474,13 +476,13 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
         requestModelInstance.clear();
         _navigateToFundHome();
       } else {
-        showSnackBar(context, "Something went wrong");
+        showSnackBar(context, response.message);
       }
     } catch (e) {
       if (progress != null) {
         progress.dismiss();
       }
-      showSnackBar(context, "Something went wrong");
+      showSnackBar(context, e.toString());
       // showSnackBar(context, "${e.toString()}");
       // print(e.toString());
     }
