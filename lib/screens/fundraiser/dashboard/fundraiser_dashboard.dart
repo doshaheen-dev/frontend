@@ -38,8 +38,8 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
                       const EdgeInsets.only(top: 80.0, left: 15.0, right: 25.0),
                   child: Row(
                     children: [
-                      Image.asset('assets/images/investor/icon_menu.png'),
-                      SizedBox(width: 10.0),
+                      // Image.asset('assets/images/investor/icon_menu.png'),
+                      // SizedBox(width: 10.0),
                       Expanded(
                         child: UserData.instance.userInfo.firstName != null
                             ? Text(

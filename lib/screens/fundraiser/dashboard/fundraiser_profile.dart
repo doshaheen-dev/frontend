@@ -217,7 +217,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
     _countryController.text = UserData.instance.userInfo.countryName;
     // savedcountryName = UserData.instance.userInfo.countryName;
     _companyNameController.text = UserData.instance.userInfo.companyName;
-    _titleController.text = UserData.instance.designation;
+    _titleController.text = UserData.instance.userInfo.designation;
   }
 
   openLogoutDialog(BuildContext context, String message) {

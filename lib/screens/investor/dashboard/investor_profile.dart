@@ -215,7 +215,6 @@ class _InvestorProfileState extends State<InvestorProfile> {
     _countryController.text = UserData.instance.userInfo.countryName;
     savedcountryName = UserData.instance.userInfo.countryName;
     country = UserData.instance.userInfo.countryName;
-    print("country: $savedcountryName");
   }
 
   openLogoutDialog(BuildContext context, String message) {
