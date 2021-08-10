@@ -88,21 +88,31 @@ class _SignUpDetailsState extends State<SignUpDetails> {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
-    print("info, ${_user}");
+    // print("info, ${_user}");
+
+    void _setFirstAndLastName(int idx, String displayName) {
+      _firstNameController.text = (displayName == null ||
+              displayName.substring(0, idx).trim() == 'null')
+          ? ''
+          : displayName.substring(0, idx).trim() ?? '';
+      _lastnameController.text = (displayName == null ||
+              displayName.substring(idx + 1).trim() == 'null')
+          ? ''
+          : displayName.substring(idx + 1).trim() ?? '';
+    }
 
     if (_user != null) {
-      var idx;
-      idx = (_user.displayName == null) ? 0 : _user.displayName.indexOf(" ");
-      // Or check if appState.username != null or what ever your use case is.
-      _firstNameController.text = (_user.displayName == null ||
-              _user.displayName.substring(0, idx).trim() == 'null')
-          ? ''
-          : _user.displayName.substring(0, idx).trim() ?? '';
-      _lastnameController.text = (_user.displayName == null ||
-              _user.displayName.substring(idx + 1).trim() == 'null')
-          ? ''
-          : _user.displayName.substring(idx + 1).trim() ?? '';
-      _emailController.text = _user.email == null ? '' : _user.email ?? '';
+      if (_user.displayName != null &&
+          _user.displayName != '' &&
+          _user.displayName != 'null') {
+        int idx = _user.displayName.indexOf(" ");
+        _setFirstAndLastName(idx, _user.displayName);
+      }
+
+      _emailController.text =
+          (_user.email == null || _user.email == '' || _user.email == 'null')
+              ? ''
+              : _user.email ?? '';
     }
 
     void _imgFromCamera() async {

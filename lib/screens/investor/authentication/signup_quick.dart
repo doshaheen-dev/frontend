@@ -12,6 +12,7 @@ import 'package:acc/services/AuthenticationService.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 
 class QuickSignUp extends StatefulWidget {
   @override
@@ -19,6 +20,8 @@ class QuickSignUp extends StatefulWidget {
 }
 
 class _QuickSignUpState extends State<QuickSignUp> {
+  var progress;
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -33,133 +36,137 @@ class _QuickSignUpState extends State<QuickSignUp> {
         ),
         bottomNavigationBar: BottomAppBar(),
         backgroundColor: Color(0xffffffff),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back, size: 30),
-                    onPressed: () => {_onBackPressed()},
-                  ),
-                ),
-                Column(
+        body: ProgressHUD(
+          child: Builder(
+            builder: (context) => SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      margin: const EdgeInsets.only(top: 10.0, left: 25.0),
-                      child: Text(
-                        "Register Your Email",
-                        style: TextStyle(
-                            color: headingBlack,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 26.0,
-                            fontFamily: FontFamilyMontserrat.name),
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_back, size: 30),
+                        onPressed: () => {_onBackPressed()},
                       ),
                     ),
-
-                    SizedBox(
-                      height: 30,
-                    ),
-                    // Apple Login
-                    Container(
-                        margin: const EdgeInsets.only(
-                          top: 15.0,
-                          bottom: 5,
-                        ),
-                        child: createButton("Apple")),
-                    //Google Button
-                    Container(
-                      margin: const EdgeInsets.only(
-                        top: 5.0,
-                      ),
-                      child: createButton("Google"),
-                    ),
-                    Center(
-                      child: Text(
-                        "or",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.0,
-                            fontFamily: FontFamilyMontserrat.name),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    Center(
-                      child: Text(
-                        "Use your email address to register",
-                        style: TextStyle(
-                            color: textGrey,
-                            fontSize: 16.0,
-                            fontFamily: FontFamilyMontserrat.name),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-
-                    //SIGN UP BUTTON
-                    Container(
-                      margin: const EdgeInsets.only(
-                          top: 5.0, left: 40.0, bottom: 20, right: 40.0),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(40),
-                        onTap: () {
-                          // on sign up click
-                          openSignUpDetails(null);
-                        },
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 60,
-                          decoration: appColorButton(),
-                          child: Center(
-                              child: Text(
-                            "Register",
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          margin: const EdgeInsets.only(top: 10.0, left: 25.0),
+                          child: Text(
+                            "Register Your Email",
                             style: TextStyle(
-                                fontSize: 18.0,
+                                color: headingBlack,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          )),
+                                fontSize: 26.0,
+                                fontFamily: FontFamilyMontserrat.name),
+                          ),
                         ),
-                      ),
+
+                        SizedBox(
+                          height: 30,
+                        ),
+                        // Apple Login
+                        Container(
+                            margin: const EdgeInsets.only(
+                              top: 15.0,
+                              bottom: 5,
+                            ),
+                            child: createButton(context, "Apple")),
+                        //Google Button
+                        Container(
+                          margin: const EdgeInsets.only(
+                            top: 5.0,
+                          ),
+                          child: createButton(context, "Google"),
+                        ),
+                        Center(
+                          child: Text(
+                            "or",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0,
+                                fontFamily: FontFamilyMontserrat.name),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20.0,
+                        ),
+                        Center(
+                          child: Text(
+                            "Use your email address to register",
+                            style: TextStyle(
+                                color: textGrey,
+                                fontSize: 16.0,
+                                fontFamily: FontFamilyMontserrat.name),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+
+                        //SIGN UP BUTTON
+                        Container(
+                          margin: const EdgeInsets.only(
+                              top: 5.0, left: 40.0, bottom: 20, right: 40.0),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(40),
+                            onTap: () {
+                              // on sign up click
+                              openSignUpDetails(null);
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 60,
+                              decoration: appColorButton(),
+                              child: Center(
+                                  child: Text(
+                                "Register",
+                                style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              )),
+                            ),
+                          ),
+                        ),
+                        // // TERMS AND CONDITIONS
+                        // Align(
+                        //   alignment: Alignment.center,
+                        //   child: RichText(
+                        //     textAlign: TextAlign.center,
+                        //     text: TextSpan(
+                        //         text: "By signing in, I agree with ",
+                        //         style: setTextStyle(textLightGrey),
+                        //         children: [
+                        //           TextSpan(
+                        //               text: "Terms of Use ",
+                        //               style: setTextStyle(Colors.black),
+                        //               recognizer: TapGestureRecognizer()
+                        //                 ..onTap = () {
+                        //                   //openSignIn(context);
+                        //                 }),
+                        //           TextSpan(
+                        //             text: "\n and ",
+                        //             style: setTextStyle(textLightGrey),
+                        //           ),
+                        //           TextSpan(
+                        //               text: "Privacy Poicy",
+                        //               style: setTextStyle(Colors.black),
+                        //               recognizer: TapGestureRecognizer()
+                        //                 ..onTap = () {
+                        //                   //openSignIn(context);
+                        //                 })
+                        //         ]),
+                        //   ),
+                        // ),
+                      ],
                     ),
-                    // // TERMS AND CONDITIONS
-                    // Align(
-                    //   alignment: Alignment.center,
-                    //   child: RichText(
-                    //     textAlign: TextAlign.center,
-                    //     text: TextSpan(
-                    //         text: "By signing in, I agree with ",
-                    //         style: setTextStyle(textLightGrey),
-                    //         children: [
-                    //           TextSpan(
-                    //               text: "Terms of Use ",
-                    //               style: setTextStyle(Colors.black),
-                    //               recognizer: TapGestureRecognizer()
-                    //                 ..onTap = () {
-                    //                   //openSignIn(context);
-                    //                 }),
-                    //           TextSpan(
-                    //             text: "\n and ",
-                    //             style: setTextStyle(textLightGrey),
-                    //           ),
-                    //           TextSpan(
-                    //               text: "Privacy Poicy",
-                    //               style: setTextStyle(Colors.black),
-                    //               recognizer: TapGestureRecognizer()
-                    //                 ..onTap = () {
-                    //                   //openSignIn(context);
-                    //                 })
-                    //         ]),
-                    //   ),
-                    // ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
@@ -217,11 +224,14 @@ class _QuickSignUpState extends State<QuickSignUp> {
         (Route<dynamic> route) => false);
   }
 
-  InkWell createButton(type) {
+  InkWell createButton(BuildContext context, type) {
     print(type);
     return InkWell(
       borderRadius: BorderRadius.circular(40),
       onTap: () async {
+        progress = ProgressHUD.of(context);
+        progress?.showWithText('Loading...');
+
         if (type == "Apple") {
           User user;
           if (Platform.isAndroid) {
@@ -264,6 +274,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
   }
 
   void checkUserAndNavigate(User user) {
+    progress.dismiss();
     if (user != null) {
       openSignUpDetails(user);
     } else {
@@ -304,22 +315,27 @@ class _QuickSignUpState extends State<QuickSignUp> {
   }
 
   void openSignUpDetails(User user) {
-    Navigator.of(context).push(PageRouteBuilder(
-        pageBuilder: (context, animation, anotherAnimation) {
-          return SignUpDetails(
-            user: user,
-            userAvatar: user != null ? user.photoURL : '',
-          );
-        },
-        transitionDuration: Duration(milliseconds: 2000),
-        transitionsBuilder: (context, animation, anotherAnimation, child) {
-          animation = CurvedAnimation(
-              curve: Curves.fastLinearToSlowEaseIn, parent: animation);
-          return SlideTransition(
-            position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-                .animate(animation),
-            child: child,
-          );
-        }));
+    // print("User: $user");
+    try {
+      Navigator.of(context).push(PageRouteBuilder(
+          pageBuilder: (context, animation, anotherAnimation) {
+            return SignUpDetails(
+              user: user,
+              userAvatar: user != null ? user.photoURL : '',
+            );
+          },
+          transitionDuration: Duration(milliseconds: 2000),
+          transitionsBuilder: (context, animation, anotherAnimation, child) {
+            animation = CurvedAnimation(
+                curve: Curves.fastLinearToSlowEaseIn, parent: animation);
+            return SlideTransition(
+              position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                  .animate(animation),
+              child: child,
+            );
+          }));
+    } catch (e) {
+      print("Err: ${e.toString()}");
+    }
   }
 }
