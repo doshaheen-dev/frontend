@@ -345,6 +345,7 @@ class _InvestorHomeState extends State<InvestorHome> {
                     ),
                     child: CachedNetworkImage(
                       height: 80.0,
+                      width: MediaQuery.of(context).size.width,
                       imageUrl: interestedFundsData.fundLogo,
                       errorWidget: (context, url, error) => Icon(Icons.error),
                     ),

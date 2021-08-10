@@ -57,6 +57,14 @@ TextStyle textWhiteBold20() {
       fontWeight: FontWeight.bold);
 }
 
+TextStyle textBlackNormal14() {
+  return TextStyle(
+      fontSize: 14.0,
+      color: Colors.black,
+      fontFamily: FontFamilyMontserrat.name,
+      fontWeight: FontWeight.normal);
+}
+
 TextStyle textBlackNormal16() {
   return TextStyle(
       fontSize: 16.0,
@@ -95,6 +103,14 @@ TextStyle textNormal12(Color colorName) {
       color: colorName,
       fontFamily: FontFamilyMontserrat.name,
       fontWeight: FontWeight.normal);
+}
+
+TextStyle textBold14(Color colorName) {
+  return TextStyle(
+      fontSize: 14.0,
+      color: colorName,
+      fontFamily: FontFamilyMontserrat.name,
+      fontWeight: FontWeight.bold);
 }
 
 TextStyle textBold16(Color colorName) {

@@ -130,13 +130,17 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                           margin: const EdgeInsets.only(bottom: 20),
                           child: Column(
                             children: [
-                              Container(child: setUserProfileView()),
+                              Container(
+                                child: setUserProfileView(context),
+                                margin:
+                                    EdgeInsets.only(left: 25.0, right: 25.0),
+                              ),
                               Container(
                                 margin: const EdgeInsets.only(
                                     top: 5.0,
-                                    left: 25.0,
+                                    left: 50.0,
                                     bottom: 10,
-                                    right: 25.0),
+                                    right: 50.0),
                                 child: ElevatedButton(
                                     onPressed: () {
                                       openLogoutDialog(context,
@@ -155,7 +159,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                                       child: Container(
                                           width:
                                               MediaQuery.of(context).size.width,
-                                          height: 60,
+                                          height: 45,
                                           alignment: Alignment.center,
                                           child: Text("Logout",
                                               style: textWhiteBold16())),
@@ -217,7 +221,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
     _countryController.text = UserData.instance.userInfo.countryName;
     // savedcountryName = UserData.instance.userInfo.countryName;
     _companyNameController.text = UserData.instance.userInfo.companyName;
-    _titleController.text = UserData.instance.designation;
+    _titleController.text = UserData.instance.userInfo.designation;
   }
 
   openLogoutDialog(BuildContext context, String message) {
@@ -260,48 +264,44 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
     );
   }
 
-  setUserProfileView() {
+  setUserProfileView(BuildContext context) {
     return Column(children: [
       Container(
-        margin: const EdgeInsets.only(
-            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+        margin: const EdgeInsets.only(top: 5.0, bottom: 10),
         decoration: customDecoration(),
         child: TextField(
-          style: textBlackNormal18(),
+          style: textBlackNormal16(),
           controller: _firstNameController,
           onChanged: (value) => {firstname = value},
           decoration: _setTextFieldDecoration("Firstname"),
         ),
       ),
       Container(
-        margin: const EdgeInsets.only(
-            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+        margin: const EdgeInsets.only(top: 5.0, bottom: 10),
         decoration: customDecoration(),
         child: TextField(
           controller: _lastnameController,
-          style: textBlackNormal18(),
+          style: textBlackNormal16(),
           onChanged: (value) => lastname = value,
           decoration: _setTextFieldDecoration("Lastname"),
         ),
       ),
       Container(
-        margin: const EdgeInsets.only(
-            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+        margin: const EdgeInsets.only(top: 5.0, bottom: 10),
         decoration: customDecoration(),
         child: TextField(
           controller: _titleController,
-          style: textBlackNormal18(),
+          style: textBlackNormal16(),
           onChanged: (value) => title = value,
           decoration: _setTextFieldDecoration("Title"),
         ),
       ),
 
       Container(
-        margin: const EdgeInsets.only(
-            top: 5.0, left: 25.0, right: 25.0, bottom: 20),
+        margin: const EdgeInsets.only(top: 5.0, bottom: 10),
         decoration: customDecoration(),
         child: TextField(
-          style: textBlackNormal18(),
+          style: textBlackNormal16(),
           onChanged: (value) => country = value,
           controller: _countryController,
           decoration: _setTextFieldDecoration("Country"),
@@ -342,11 +342,10 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
       //       }),
       // ),
       Container(
-        margin: const EdgeInsets.only(
-            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+        margin: const EdgeInsets.only(top: 5.0, bottom: 10),
         decoration: customDecoration(),
         child: TextField(
-          style: textBlackNormal18(),
+          style: textBlackNormal16(),
           controller: _companyNameController,
           onChanged: (value) => companyName = value,
           decoration: _setTextFieldDecoration("Company Name"),
@@ -354,26 +353,22 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
       ),
 
       Container(
-        margin: const EdgeInsets.only(
-            top: 5.0, left: 25.0, right: 25.0, bottom: 20),
+        margin: const EdgeInsets.only(top: 5.0, bottom: 10),
         decoration: customDecoration(),
         child: createEditableEmailId(),
       ),
 
       Container(
-        margin: const EdgeInsets.only(
-            top: 5.0, left: 25.0, right: 25.0, bottom: 20),
+        margin: const EdgeInsets.only(top: 5.0, bottom: 10),
         child: createEditableMobileNo(),
       ),
       // UPDATE
       Container(
           margin: const EdgeInsets.only(
-              top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+              top: 5.0, left: 25.0, bottom: 10, right: 25.0),
           child: ElevatedButton(
             onPressed: () {
               // on click
-              // progress = ProgressHUD.of(context);
-              // progress?.showWithText('Updating Profile...');
 
               FocusScope.of(context).requestFocus(FocusNode());
               String _phoneNumber = "+${selectedCountry.dialCode}" +
@@ -382,6 +377,8 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
               if (_phoneNumber != UserData.instance.userInfo.mobileNo ||
                   _companyEmailController.text.toString().trim() !=
                       UserData.instance.userInfo.emailId) {
+                progress = ProgressHUD.of(context);
+                progress?.showWithText('Updating Profile...');
                 submitDetails(_companyEmailController.text.trim(), _phoneNumber,
                     _verificationId, _emailVerificationId);
 
@@ -400,7 +397,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                     borderRadius: BorderRadius.circular(15)),
                 child: Container(
                     width: MediaQuery.of(context).size.width,
-                    height: 60,
+                    height: 45,
                     alignment: Alignment.center,
                     child: Text(
                       "Update",
@@ -474,13 +471,13 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
       children: [
         TextField(
             enabled: false,
-            style: textBlackNormal18(),
+            style: textBlackNormal16(),
             onChanged: (value) => companyEmail = value,
             controller: _companyEmailController,
             decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(10.0),
                 labelText: "Company Email Id",
-                labelStyle: new TextStyle(color: Colors.grey[600]),
+                labelStyle: textNormal14(Colors.grey[600]),
                 border: InputBorder.none,
                 focusedBorder: UnderlineInputBorder(
                   borderSide:
@@ -492,7 +489,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
         Align(
           alignment: Alignment.centerRight,
           child: Container(
-            margin: EdgeInsets.only(left: 25.0, right: 20.0, top: 25.0),
+            margin: EdgeInsets.only(left: 25.0, right: 20.0, top: 15.0),
             child: InkWell(
                 onTap: () {
                   // open Bottom sheet
@@ -500,7 +497,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                 },
                 child: Text(
                   "Update",
-                  style: textNormal16(Colors.blue),
+                  style: textNormal12(Colors.blue),
                 )),
           ),
         ),
@@ -534,7 +531,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                             Text(
                               "Update Your Email ID",
                               textAlign: TextAlign.start,
-                              style: textBold18(headingBlack),
+                              style: textBold16(headingBlack),
                             ),
                             Spacer(),
                             InkWell(
@@ -763,13 +760,13 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                 children: [
                   TextField(
                     enabled: false,
-                    style: textBlackNormal18(),
+                    style: textBlackNormal16(),
                     onChanged: (value) => mobileNumber = value,
                     controller: _mobileController,
                     decoration: new InputDecoration(
                       contentPadding: EdgeInsets.all(15.0),
                       labelText: "Mobile No.",
-                      labelStyle: new TextStyle(color: Colors.grey[600]),
+                      labelStyle: textNormal14(Colors.grey[600]),
                       border: InputBorder.none,
                       focusedBorder: UnderlineInputBorder(
                         borderSide: const BorderSide(
@@ -796,7 +793,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                           },
                           child: Text(
                             "Update",
-                            style: textNormal16(Colors.blue),
+                            style: textNormal12(Colors.blue),
                           )),
                     ),
                   ),
@@ -813,7 +810,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
         child: DropdownButtonFormField<Countries>(
           decoration: InputDecoration(
               labelText: 'Country Code',
-              labelStyle: new TextStyle(color: Colors.grey[600]),
+              labelStyle: textNormal14(Colors.grey[600]),
               enabledBorder: UnderlineInputBorder(
                   borderRadius: BorderRadius.all(const Radius.circular(10.0)),
                   borderSide: BorderSide(color: Colors.transparent))),
@@ -828,10 +825,8 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
               value: countries,
               child: Row(
                 children: <Widget>[
-                  Text(
-                    "+${countries.dialCode}",
-                    style: TextStyle(color: Colors.black),
-                  ),
+                  Text("+${countries.dialCode}",
+                      style: textNormal14(Colors.black)),
                 ],
               ),
             );
@@ -868,7 +863,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                             Text(
                               "Update Your Mobile Number",
                               textAlign: TextAlign.start,
-                              style: textBold18(headingBlack),
+                              style: textBold16(headingBlack),
                             ),
                             Spacer(),
                             InkWell(
@@ -1259,17 +1254,19 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
       requestMap["mobile_verificationId"] = _verificationId;
     }
 
-    Default updateResponse =
-        await UpdateProfileService.updateUserInfo(requestMap);
-    if (updateResponse.status == 200) {
-      // progress.dismiss();
-      _openDialog(context, updateResponse.message);
-    } else {
-      // if (progress != null) {
-      //   progress.dismiss();
-      // }
-      showSnackBar(context, updateResponse.message);
-    }
+    Future.delayed(Duration(seconds: 2), () async {
+      Default updateResponse =
+          await UpdateProfileService.updateUserInfo(requestMap);
+      if (updateResponse.status == 200) {
+        progress.dismiss();
+        _openDialog(context, updateResponse.message);
+      } else {
+        if (progress != null) {
+          progress.dismiss();
+        }
+        showSnackBar(context, updateResponse.message);
+      }
+    });
   }
 
   _openDialog(BuildContext context, String message) {

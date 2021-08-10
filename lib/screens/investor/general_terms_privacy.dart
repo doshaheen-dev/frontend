@@ -193,8 +193,8 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                                   "",
                                   "",
                                   "",
-                                  "",
-                                  "");
+                                  signedUpUser.data.address,
+                                  signedUpUser.data.countryCode);
                               final prefs =
                                   await SharedPreferences.getInstance();
                               final userJson = jsonEncode(userData);

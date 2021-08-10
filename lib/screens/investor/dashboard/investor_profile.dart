@@ -131,13 +131,14 @@ class _InvestorProfileState extends State<InvestorProfile> {
             child: Builder(
                 builder: (context) => SafeArea(
                         child: SingleChildScrollView(
-                            child: Container(
-                                child: Column(
+                            child: Column(
                       children: [
-                        Container(child: setUserProfileView()),
+                        Container(
+                            child: setUserProfileView(context),
+                            margin: EdgeInsets.only(right: 25.0, left: 25.0)),
                         Container(
                           margin: const EdgeInsets.only(
-                              top: 5.0, left: 25.0, bottom: 10, right: 25.0),
+                              top: 5.0, left: 50.0, bottom: 10, right: 50.0),
                           child: ElevatedButton(
                               onPressed: () {
                                 openLogoutDialog(context,
@@ -146,14 +147,14 @@ class _InvestorProfileState extends State<InvestorProfile> {
                               style: ElevatedButton.styleFrom(
                                   padding: EdgeInsets.all(0.0),
                                   shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18))),
+                                      borderRadius: BorderRadius.circular(14))),
                               child: Ink(
                                   decoration: BoxDecoration(
                                       color: Colors.red,
-                                      borderRadius: BorderRadius.circular(15)),
+                                      borderRadius: BorderRadius.circular(10)),
                                   child: Container(
                                       width: MediaQuery.of(context).size.width,
-                                      height: 60,
+                                      height: 50,
                                       alignment: Alignment.center,
                                       child: Text(
                                         "Logout",
@@ -161,7 +162,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
                                       )))),
                         ),
                       ],
-                    )))))));
+                    ))))));
   }
 
   void setUserInformation() {
@@ -258,41 +259,36 @@ class _InvestorProfileState extends State<InvestorProfile> {
     );
   }
 
-  Widget setUserProfileView() {
+  Widget setUserProfileView(BuildContext context) {
     return Column(children: [
       Container(
-        margin: const EdgeInsets.only(
-            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+        margin: const EdgeInsets.only(top: 5.0, bottom: 10),
         decoration: customDecoration(),
         child: TextField(
-          style: textBlackNormal18(),
+          style: textBlackNormal16(),
           controller: _firstNameController,
           onChanged: (value) => {firstname = value},
           decoration: _setTextFieldDecoration("Firstname"),
         ),
       ),
       Container(
-        margin: const EdgeInsets.only(
-            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+        margin: const EdgeInsets.only(top: 5.0, bottom: 10),
         decoration: customDecoration(),
         child: TextField(
           controller: _lastnameController,
-          style: textBlackNormal18(),
+          style: textBlackNormal16(),
           onChanged: (value) => lastname = value,
           decoration: _setTextFieldDecoration("Lastname"),
         ),
       ),
       Container(
-        margin: const EdgeInsets.only(
-            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
+        margin: const EdgeInsets.only(top: 5.0, bottom: 10),
         //decoration: customDecoration(),
         child: _createMobileFields(),
       ),
       Container(
         margin: const EdgeInsets.only(
           top: 5.0,
-          left: 25.0,
-          right: 25.0,
           bottom: 20,
         ),
         decoration: customDecoration(),
@@ -300,11 +296,10 @@ class _InvestorProfileState extends State<InvestorProfile> {
       ),
 
       Container(
-        margin: const EdgeInsets.only(
-            top: 5.0, left: 25.0, right: 25.0, bottom: 20),
+        margin: const EdgeInsets.only(top: 5.0, bottom: 10),
         decoration: customDecoration(),
         child: TextField(
-          style: textBlackNormal18(),
+          style: textBlackNormal14(),
           onChanged: (value) => country = value,
           controller: _countryController,
           decoration: _setTextFieldDecoration("Country"),
@@ -345,10 +340,10 @@ class _InvestorProfileState extends State<InvestorProfile> {
       //       }),
       // ),
       Container(
-        margin: const EdgeInsets.only(top: 5.0, left: 25.0, right: 25.0),
+        margin: const EdgeInsets.only(top: 5.0),
         decoration: customDecoration(),
         child: TextField(
-          style: textBlackNormal18(),
+          style: textBlackNormal14(),
           controller: _addressController,
           onChanged: (value) => address = value,
           decoration: _setTextFieldDecoration("Address 1"),
@@ -359,19 +354,18 @@ class _InvestorProfileState extends State<InvestorProfile> {
       ),
       //NEXT BUTTON
       Container(
-        margin: const EdgeInsets.only(left: 25.0, bottom: 10, right: 25.0),
+        margin: const EdgeInsets.only(bottom: 10, right: 25.0, left: 25.0),
         child: ElevatedButton(
           onPressed: () {
             FocusScope.of(context).requestFocus(FocusNode());
             // on click
-            // progress = ProgressHUD.of(context);
-            // progress?.showWithText('Updating Profile...');
 
             String _phoneNumber = "+${selectedCountry.dialCode}" +
                 _mobileController.text.toString().trim();
-
-            if (_phoneNumber == UserData.instance.userInfo.mobileNo ||
-                _emailController.text == UserData.instance.userInfo.emailId) {
+            bool isDataChanged = (_phoneNumber ==
+                    UserData.instance.userInfo.mobileNo ||
+                _emailController.text == UserData.instance.userInfo.emailId);
+            if (!isDataChanged) {
               showSnackBar(context, "Please enter any new data for updation.");
               return;
             }
@@ -384,19 +378,20 @@ class _InvestorProfileState extends State<InvestorProfile> {
                 country,
                 _addressController.text,
                 _verificationId,
-                _emailVerificationId);
+                _emailVerificationId,
+                context);
           },
           style: ElevatedButton.styleFrom(
               padding: EdgeInsets.all(0.0),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18))),
+                  borderRadius: BorderRadius.circular(14))),
           child: Ink(
             decoration: BoxDecoration(
                 gradient: LinearGradient(colors: [kDarkOrange, kLightOrange]),
-                borderRadius: BorderRadius.circular(15)),
+                borderRadius: BorderRadius.circular(10)),
             child: Container(
               width: MediaQuery.of(context).size.width,
-              height: 60,
+              height: 50,
               alignment: Alignment.center,
               child: Text("Update", style: textWhiteBold16()),
             ),
@@ -487,7 +482,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
                 children: [
                   TextField(
                     enabled: false,
-                    style: textBlackNormal18(),
+                    style: textBlackNormal16(),
                     onChanged: (value) => mobileNumber = value,
                     controller: _mobileController,
                     decoration: new InputDecoration(
@@ -511,8 +506,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: Container(
-                      margin:
-                          EdgeInsets.only(left: 25.0, right: 20.0, top: 25.0),
+                      margin: EdgeInsets.only(right: 10.0, top: 25.0),
                       child: InkWell(
                           onTap: () {
                             // open Bottom sheet
@@ -520,7 +514,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
                           },
                           child: Text(
                             "Update",
-                            style: textNormal16(Colors.blue),
+                            style: textNormal12(Colors.blue),
                           )),
                     ),
                   ),
@@ -537,7 +531,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
         child: DropdownButtonFormField<Countries>(
           decoration: InputDecoration(
               labelText: 'Country Code',
-              labelStyle: new TextStyle(color: Colors.grey[600]),
+              labelStyle: textNormal14(Colors.grey[600]),
               enabledBorder: UnderlineInputBorder(
                   borderRadius: BorderRadius.all(const Radius.circular(10.0)),
                   borderSide: BorderSide(color: Colors.transparent))),
@@ -547,10 +541,8 @@ class _InvestorProfileState extends State<InvestorProfile> {
               value: countries,
               child: Row(
                 children: <Widget>[
-                  Text(
-                    "+${countries.dialCode}",
-                    style: TextStyle(color: Colors.black),
-                  ),
+                  Text("+${countries.dialCode}",
+                      style: textNormal14(Colors.black)),
                 ],
               ),
             );
@@ -563,28 +555,29 @@ class _InvestorProfileState extends State<InvestorProfile> {
     return Stack(
       // clipBehavior: Clip.none,
       children: [
-        TextField(
-            enabled: false,
-            style: textBlackNormal18(),
-            onChanged: (value) => email = value,
-            controller: _emailController,
-            decoration: InputDecoration(
-                contentPadding: EdgeInsets.all(10.0),
-                labelText: "E-mail Id",
-                labelStyle: new TextStyle(color: Colors.grey[600]),
-                border: InputBorder.none,
-                focusedBorder: UnderlineInputBorder(
-                  borderSide:
-                      const BorderSide(color: Colors.transparent, width: 2.0),
-                  borderRadius: BorderRadius.all(
-                    const Radius.circular(10.0),
-                  ),
-                ))),
+        Container(
+            child: TextField(
+                enabled: false,
+                style: textBlackNormal14(),
+                onChanged: (value) => email = value,
+                controller: _emailController,
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(15.0),
+                    labelText: "E-mail Id",
+                    labelStyle: textNormal14(Colors.grey[600]),
+                    border: InputBorder.none,
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: const BorderSide(
+                          color: Colors.transparent, width: 2.0),
+                      borderRadius: BorderRadius.all(
+                        const Radius.circular(10.0),
+                      ),
+                    )))),
         Spacer(),
         Align(
           alignment: Alignment.centerRight,
           child: Container(
-            margin: EdgeInsets.only(right: 10.0, top: 25.0),
+            margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 15.0),
             child: InkWell(
                 onTap: () {
                   // open Bottom sheet
@@ -592,7 +585,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
                 },
                 child: Text(
                   "Update",
-                  style: textNormal16(Colors.blue),
+                  style: textNormal12(Colors.blue),
                 )),
           ),
         ),
@@ -626,7 +619,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
                             Text(
                               "Update Your E-mail ID",
                               textAlign: TextAlign.start,
-                              style: textBold18(headingBlack),
+                              style: textBold16(headingBlack),
                             ),
                             Spacer(),
                             InkWell(
@@ -651,7 +644,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
                               left: 15.0, right: 15.0, top: 10.0),
                           width: MediaQuery.of(context).size.width,
                           child: TextField(
-                              style: textBlackNormal18(),
+                              style: textBlackNormal16(),
                               onChanged: (value) => newEmail = value,
                               controller: _newEmailController,
                               decoration: InputDecoration(
@@ -689,7 +682,9 @@ class _InvestorProfileState extends State<InvestorProfile> {
                                     }
 
                                     if (!CodeUtils.emailValid(
-                                        _newEmailController.text)) {
+                                        _newEmailController.text
+                                            .trim()
+                                            .toString())) {
                                       _emailScaffoldKey.currentState
                                           .showSnackBar(SnackBar(
                                               duration: Duration(seconds: 1),
@@ -722,7 +717,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
                                               BorderRadius.circular(15)),
                                       child: Container(
                                           width: 240,
-                                          height: 50,
+                                          height: 45,
                                           alignment: Alignment.center,
                                           child: Text(
                                             sendOtpSecret,
@@ -872,7 +867,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
                             Text(
                               "Update Your Mobile Number",
                               textAlign: TextAlign.start,
-                              style: textBold18(headingBlack),
+                              style: textBold16(headingBlack),
                             ),
                             Spacer(),
                             InkWell(
@@ -959,7 +954,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
                                               BorderRadius.circular(15)),
                                       child: Container(
                                           width: 240,
-                                          height: 50,
+                                          height: 45,
                                           alignment: Alignment.center,
                                           child: Text(
                                             sendOtpSecret,
@@ -1095,7 +1090,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
             child: Container(
               decoration: customDecoration(),
               child: TextField(
-                style: textBlackNormal18(),
+                style: textBlackNormal16(),
                 onChanged: (value) => newMobileNo = value,
                 controller: _newMobileController,
                 decoration: new InputDecoration(
@@ -1259,10 +1254,13 @@ class _InvestorProfileState extends State<InvestorProfile> {
       String _countryCode,
       String _address,
       String _verificationId,
-      String _emailVerificationId) async {
+      String _emailVerificationId,
+      BuildContext context) async {
     String _phoneNumber =
         "+${selectedCountry.dialCode}" + _mobileNo.toString().trim();
 
+    progress = ProgressHUD.of(context);
+    progress?.showWithText('Updating Profile...');
     Map<String, dynamic> requestMap = Map();
     bool isSignInRequired = false;
 
@@ -1295,41 +1293,55 @@ class _InvestorProfileState extends State<InvestorProfile> {
       requestMap["mobile_verificationId"] = _verificationId;
     }
 
-    Default updateResponse =
-        await UpdateProfileService.updateUserInfo(requestMap);
-    if (updateResponse.status == 200) {
-      // progress.dismiss();
+    Future.delayed(Duration(seconds: 2), () async {
+      Default updateResponse =
+          await UpdateProfileService.updateUserInfo(requestMap);
+      if (updateResponse.status == 200) {
+        progress.dismiss();
 
-      _openDialog(context, updateResponse.message);
-      // if (isSignInRequired) {
-      //   _openDialog(context, updateResponse.message);
-      // } else {
-      //   UserData userData = UserData(
-      //       UserData.instance.userInfo.token,
-      //       _firstName,
-      //       "",
-      //       _lastName,
-      //       UserData.instance.userInfo.mobileNo,
-      //       UserData.instance.userInfo.emailId,
-      //       UserData.instance.userInfo.userType,
-      //       "",
-      //       "",
-      //       "",
-      //       _address,
-      //       _countryCode);
-      //   final prefs = await SharedPreferences.getInstance();
-      //   final userJson = jsonEncode(userData);
-      //   prefs.setString('UserInfo', userJson);
-      //   UserData.instance.userInfo = userData;
+        _openDialog(context, updateResponse.message);
+      } else {
+        if (progress != null) {
+          progress.dismiss();
+        }
+        showSnackBar(context, updateResponse.message);
+      }
+    });
+    // Default updateResponse =
+    //     await UpdateProfileService.updateUserInfo(requestMap);
+    // if (updateResponse.status == 200) {
+    //   progress.dismiss();
 
-      //   showSnackBar(context, updateResponse.message);
-      // }
-    } else {
-      // if (progress != null) {
-      //   progress.dismiss();
-      // }
-      showSnackBar(context, updateResponse.message);
-    }
+    //   _openDialog(context, updateResponse.message);
+    // if (isSignInRequired) {
+    //   _openDialog(context, updateResponse.message);
+    // } else {
+    //   UserData userData = UserData(
+    //       UserData.instance.userInfo.token,
+    //       _firstName,
+    //       "",
+    //       _lastName,
+    //       UserData.instance.userInfo.mobileNo,
+    //       UserData.instance.userInfo.emailId,
+    //       UserData.instance.userInfo.userType,
+    //       "",
+    //       "",
+    //       "",
+    //       _address,
+    //       _countryCode);
+    //   final prefs = await SharedPreferences.getInstance();
+    //   final userJson = jsonEncode(userData);
+    //   prefs.setString('UserInfo', userJson);
+    //   UserData.instance.userInfo = userData;
+
+    //   showSnackBar(context, updateResponse.message);
+    // }
+    // } else {
+    //   // if (progress != null) {
+    //   //   progress.dismiss();
+    //   // }
+    //   showSnackBar(context, updateResponse.message);
+    // }
   }
 
   _openDialog(BuildContext context, String message) {
