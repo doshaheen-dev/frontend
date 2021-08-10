@@ -302,7 +302,7 @@ class _FundraiserHomeState extends State<FundraiserHome> {
         ));
   }
 
-  Column _createHeader() {
+  Widget _createHeader() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -311,7 +311,7 @@ class _FundraiserHomeState extends State<FundraiserHome> {
         SizedBox(
           height: 30,
         ),
-        Row(children: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Row(
 
               // Replace with a Row for horizontal icon + text
@@ -320,11 +320,11 @@ class _FundraiserHomeState extends State<FundraiserHome> {
                 SizedBox(
                   width: 5,
                 ),
-                Text("Listed", style: textNormal16(HexColor("#2B2B2B")))
+                Text("Listed", style: textNormal14(HexColor("#2B2B2B")))
               ]),
-          SizedBox(
-            width: 10,
-          ),
+          // SizedBox(
+          //   width: 10,
+          // ),
           Row(
               // Replace with a Row for horizontal icon + text
               children: <Widget>[
@@ -332,11 +332,11 @@ class _FundraiserHomeState extends State<FundraiserHome> {
                 SizedBox(
                   width: 5,
                 ),
-                Text("Under Scrutiny", style: textNormal16(HexColor("#2B2B2B")))
+                Text("Under Scrutiny", style: textNormal14(HexColor("#2B2B2B")))
               ]),
-          SizedBox(
-            width: 10,
-          ),
+          // SizedBox(
+          //   width: 10,
+          // ),
           Row(
             // Replace with a Row for horizontal icon + text
             children: <Widget>[
@@ -348,7 +348,7 @@ class _FundraiserHomeState extends State<FundraiserHome> {
               SizedBox(
                 width: 5,
               ),
-              Text("Not Listed", style: textNormal16(HexColor("#2B2B2B")))
+              Text("Not Listed", style: textNormal14(HexColor("#2B2B2B")))
             ],
           ),
         ]),
