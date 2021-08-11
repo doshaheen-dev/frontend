@@ -552,31 +552,28 @@ class _InvestorProfileState extends State<InvestorProfile> {
   //------------------ EMAIL ID --------------------------- //
   Widget createEditableEmailId() {
     return Stack(
-      // clipBehavior: Clip.none,
       children: [
-        Container(
-            child: TextField(
-                enabled: false,
-                style: textBlackNormal14(),
-                onChanged: (value) => email = value,
-                controller: _emailController,
-                decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(15.0),
-                    labelText: "E-mail Id",
-                    labelStyle: textNormal14(Colors.grey[600]),
-                    border: InputBorder.none,
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: const BorderSide(
-                          color: Colors.transparent, width: 2.0),
-                      borderRadius: BorderRadius.all(
-                        const Radius.circular(10.0),
-                      ),
-                    )))),
-        Spacer(),
+        TextField(
+            enabled: false,
+            style: textBlackNormal16(),
+            onChanged: (value) => email = value,
+            controller: _emailController,
+            decoration: InputDecoration(
+                contentPadding: EdgeInsets.all(10.0),
+                labelText: "Email Id",
+                labelStyle: textNormal14(Colors.grey[600]),
+                border: InputBorder.none,
+                focusedBorder: UnderlineInputBorder(
+                  borderSide:
+                      const BorderSide(color: Colors.transparent, width: 2.0),
+                  borderRadius: BorderRadius.all(
+                    const Radius.circular(10.0),
+                  ),
+                ))),
         Align(
           alignment: Alignment.centerRight,
           child: Container(
-            margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 15.0),
+            margin: EdgeInsets.only(left: 25.0, right: 20.0, top: 15.0),
             child: InkWell(
                 onTap: () {
                   // open Bottom sheet
@@ -1284,6 +1281,9 @@ class _InvestorProfileState extends State<InvestorProfile> {
       isSignInRequired = true;
       requestMap["email_id"] = CryptUtils.encryption(_emailId);
       requestMap["email_verificationId"] = _emailVerificationId;
+
+      print("Email:- ${CryptUtils.encryption(_emailId)}");
+      print("email_verificationId:- $_emailVerificationId");
     }
 
     if (_phoneNumber != UserData.instance.userInfo.mobileNo) {
