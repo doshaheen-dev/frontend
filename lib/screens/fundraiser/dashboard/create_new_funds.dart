@@ -124,7 +124,7 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                       ),
                       Container(
                         margin: const EdgeInsets.only(
-                            left: 25.0, bottom: 20, right: 25.0),
+                            left: 20.0, bottom: 20, right: 20.0),
                         child: Column(
                           children: [
                             // Countries dropdown
@@ -137,8 +137,7 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
 
                             //Fund Name
                             Container(
-                              margin:
-                                  const EdgeInsets.only(top: 5.0, bottom: 20),
+                              margin: const EdgeInsets.only(bottom: 20),
                               decoration: customDecoration(),
                               child: inputTextField(
                                   "Fund Name",
@@ -188,40 +187,42 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                             // ),
 
                             // Fund regulated
-                            Row(
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "Fund Regulated",
-                                    style: textNormal(HexColor("#8E8E93"), 14),
-                                  ),
-                                ),
-                                Expanded(
-                                    flex: 1,
-                                    child: ToggleSwitch(
-                                      minWidth: 90.0,
-                                      cornerRadius: 20.0,
-                                      activeFgColor: Colors.white,
-                                      inactiveBgColor: unselectedGray,
-                                      inactiveFgColor: Colors.black,
-                                      totalSwitches: 2,
-                                      labels: ['YES', 'No'],
-                                      onToggle: (index) {
-                                        print('switched to: $index');
-                                        if (index == 0) {
-                                          _isFundRegulated = true;
-                                        } else {
-                                          _isFundRegulated = false;
-                                        }
-                                      },
-                                    )),
-                              ],
-                            ),
+                            Container(
+                                margin: EdgeInsets.only(bottom: 10.0),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "Fund Regulated",
+                                      style:
+                                          textNormal(HexColor("#8E8E93"), 14),
+                                    ),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Flexible(
+                                        flex: 1,
+                                        child: ToggleSwitch(
+                                          minWidth: 90.0,
+                                          cornerRadius: 20.0,
+                                          activeFgColor: Colors.white,
+                                          inactiveBgColor: unselectedGray,
+                                          inactiveFgColor: Colors.black,
+                                          totalSwitches: 2,
+                                          labels: ['YES', 'No'],
+                                          onToggle: (index) {
+                                            print('switched to: $index');
+                                            if (index == 0) {
+                                              _isFundRegulated = true;
+                                            } else {
+                                              _isFundRegulated = false;
+                                            }
+                                          },
+                                        )),
+                                  ],
+                                )),
                             //Fund Regulator (if regulated)
                             Container(
-                              margin:
-                                  const EdgeInsets.only(top: 5.0, bottom: 20),
+                              margin: const EdgeInsets.only(bottom: 20),
                               decoration: customDecoration(),
                               child: inputTextField(
                                   "Fund Regulator (if regulated)",
@@ -232,8 +233,7 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                             //Investment Objective
                             Container(
                               height: 150,
-                              margin:
-                                  const EdgeInsets.only(top: 5.0, bottom: 20),
+                              margin: const EdgeInsets.only(bottom: 20),
                               decoration: customDecoration(),
                               child: multiLineInputTextField(
                                   "Investment Objective",
@@ -243,10 +243,9 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
 
                             //Funds currently managed by the sponsors
                             Container(
-                              margin:
-                                  const EdgeInsets.only(top: 5.0, bottom: 20),
+                              margin: const EdgeInsets.only(bottom: 20),
                               decoration: customDecoration(),
-                              child: inputTextField(
+                              child: inputNumberTextField(
                                   "Funds currently managed by the sponsors",
                                   "Please enter fund value here in \$",
                                   _existingFundsController),
@@ -254,18 +253,15 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
 
                             //New Fund for which funds are being raised
                             Container(
-                              margin:
-                                  const EdgeInsets.only(top: 5.0, bottom: 20),
+                              margin: const EdgeInsets.only(bottom: 20),
                               decoration: customDecoration(),
-                              child: inputTextField(
+                              child: inputNumberTextField(
                                   "New Fund for which funds are being raised ",
                                   "Please enter fund value here in \$",
                                   _newFundsController),
                             ),
                             //Funds currently managed by the sponsors
                             Container(
-                              margin:
-                                  const EdgeInsets.only(top: 5.0, bottom: 20),
                               decoration: customDecoration(),
                               child: inputTextField(
                                   "Website Link",
@@ -382,6 +378,30 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
         onChanged: (text) {},
         style: textBlackNormal16(),
         controller: _controller,
+        decoration: new InputDecoration(
+            contentPadding: EdgeInsets.all(10.0),
+            labelText: text,
+            hintText: hint,
+            hintMaxLines: 2,
+            labelStyle: new TextStyle(color: Colors.grey),
+            border: InputBorder.none,
+            focusedBorder: UnderlineInputBorder(
+                borderSide:
+                    const BorderSide(color: Colors.transparent, width: 2.0),
+                borderRadius: BorderRadius.all(
+                  const Radius.circular(10.0),
+                ))));
+  }
+
+  TextField inputNumberTextField(text, hint, _controller) {
+    return TextField(
+        onChanged: (text) {},
+        style: textBlackNormal16(),
+        controller: _controller,
+        keyboardType: TextInputType.number,
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.digitsOnly,
+        ],
         decoration: new InputDecoration(
             contentPadding: EdgeInsets.all(10.0),
             labelText: text,
