@@ -210,11 +210,7 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                                               _isTermsCheck = value;
                                             });
                                           }),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Align(
-                                        alignment: Alignment.center,
+                                      Flexible(
                                         child: RichText(
                                           textAlign: TextAlign.center,
                                           text: TextSpan(
@@ -229,11 +225,9 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                                                         Colors.black, 14),
                                                     recognizer:
                                                         TapGestureRecognizer()
-                                                          ..onTap = () {
-                                                            //openSignIn(context);
-                                                          }),
+                                                          ..onTap = () {}),
                                                 TextSpan(
-                                                  text: "\n and ",
+                                                  text: "and ",
                                                   style: textNormal(
                                                       textLightGrey, 14),
                                                 ),
@@ -243,9 +237,7 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                                                         Colors.black, 14),
                                                     recognizer:
                                                         TapGestureRecognizer()
-                                                          ..onTap = () {
-                                                            //openSignIn(context);
-                                                          })
+                                                          ..onTap = () {})
                                               ]),
                                         ),
                                       ),
@@ -524,8 +516,11 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                                     0)
                                 ? Text('Uploaded',
                                     style: textNormal(Colors.green, 14))
-                                : Text(labelText,
-                                    style: textNormal(Colors.black, 14))),
+                                : Text(
+                                    labelText,
+                                    style: textNormal(Colors.black, 14),
+                                    textAlign: TextAlign.center,
+                                  )),
                       ),
                     ),
                   ),
@@ -534,6 +529,7 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                     flex: 1,
                     child: Text(
                       description,
+                      textAlign: TextAlign.center,
                       style: textNormal(textGrey, 14),
                     )),
               ],
