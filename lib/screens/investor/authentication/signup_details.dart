@@ -383,7 +383,7 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                           style: _setTextFieldStyle(),
                           controller: _addressController,
                           onChanged: (value) => address = value,
-                          decoration: _setTextFieldDecoration("Address 1"),
+                          decoration: _setTextFieldDecoration("Address"),
                         ),
                       ),
                       SizedBox(

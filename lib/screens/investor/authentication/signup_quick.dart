@@ -279,7 +279,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
       openSignUpDetails(user);
     } else {
       final snackBar = SnackBar(
-        content: Text('Something went wrong. Try again!!'),
+        content: Text('No user found. Try again!!'),
         action: SnackBarAction(
           label: 'Ok',
           onPressed: () {},

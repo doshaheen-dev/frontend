@@ -301,7 +301,7 @@ class _InvestorHomeState extends State<InvestorHome> {
               ),
             ),
             firstPageErrorIndicatorBuilder: (ctx) => Center(
-              child: Text("An error occurred"),
+              child: Text("An error occurred!"),
             ),
             itemBuilder: (context, item, index) => Container(
               margin:
@@ -418,7 +418,7 @@ class _InvestorHomeState extends State<InvestorHome> {
             ),
           ),
           firstPageErrorIndicatorBuilder: (ctx) => Center(
-            child: Text("An error occurred"),
+            child: Text("An error occurred!"),
           ),
           itemBuilder: (context, item, index) => Container(
             width: (MediaQuery.of(context).size.width - 40),

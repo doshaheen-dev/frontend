@@ -345,7 +345,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
           style: textBlackNormal14(),
           controller: _addressController,
           onChanged: (value) => address = value,
-          decoration: _setTextFieldDecoration("Address 1"),
+          decoration: _setTextFieldDecoration("Address"),
         ),
       ),
       SizedBox(
