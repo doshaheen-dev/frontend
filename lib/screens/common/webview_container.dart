@@ -39,10 +39,14 @@ class _WebViewContainerState extends State<WebViewContainer> {
               ),
             ),
             Expanded(
-                child: WebView(
-                    key: _key,
-                    javascriptMode: JavascriptMode.unrestricted,
-                    initialUrl: _url))
+                child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 1,
+                    child: WebView(
+                        key: _key,
+                        userAgent: "random",
+                        javascriptMode: JavascriptMode.unrestricted,
+                        initialUrl: _url)))
           ],
         ));
   }

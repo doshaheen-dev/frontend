@@ -198,9 +198,9 @@ class _FundDetailState extends State<FundDetail> {
         Container(
           child: _createFundOverview(),
         ),
-        Container(
-          child: _createFundDeck(),
-        )
+        // Container(
+        //   child: _createFundDeck(),
+        // )
       ],
     );
   }

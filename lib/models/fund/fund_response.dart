@@ -105,6 +105,7 @@ class OptionsData {
   final String minPerInvestor;
   final String countryName;
   final String cityName;
+  final String fundsRemarks;
 
   OptionsData(
     this.fundTxnId,
@@ -129,6 +130,7 @@ class OptionsData {
     this.minPerInvestor,
     this.countryName,
     this.cityName,
+    this.fundsRemarks,
   );
 
   factory OptionsData.fromMap(Map<String, dynamic> json) {
@@ -155,6 +157,7 @@ class OptionsData {
       json["min_per_investor"],
       json["country_name"],
       json["city_name"],
+      json['fund_internal_approved_remarks'],
     );
   }
   factory OptionsData.fromJson(Map<String, dynamic> json) {
@@ -181,6 +184,7 @@ class OptionsData {
       json["min_per_investor"],
       json["country_name"],
       json["city_name"],
+      json['fund_internal_approved_remarks'],
     );
   }
 }

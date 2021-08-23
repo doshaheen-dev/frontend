@@ -157,6 +157,5 @@ class _CreateFundOverviewState extends State<CreateFundOverview> {
                     ]))),
           )))
     ]);
-    ;
   }
 }

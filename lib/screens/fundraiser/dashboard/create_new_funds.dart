@@ -241,22 +241,22 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                                   _objectiveController),
                             ),
 
-                            //Funds currently managed by the sponsors
+                            //Total Assets Under Management (Sponsor)
                             Container(
                               margin: const EdgeInsets.only(bottom: 20),
                               decoration: customDecoration(),
                               child: inputNumberTextField(
-                                  "Funds currently managed by the sponsors",
+                                  "“Total Assets Under Management(Sponsor)",
                                   "Please enter fund value here in \$",
                                   _existingFundsController),
                             ),
 
-                            //New Fund for which funds are being raised
+                            //Target Amount to be Raised
                             Container(
                               margin: const EdgeInsets.only(bottom: 20),
                               decoration: customDecoration(),
                               child: inputNumberTextField(
-                                  "New Fund for which funds are being raised ",
+                                  "Target Amount to be Raised",
                                   "Please enter fund value here in \$",
                                   _newFundsController),
                             ),

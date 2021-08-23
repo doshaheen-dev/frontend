@@ -11,7 +11,9 @@ import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
+import 'package:acc/widgets/fundraiser/fundDetails/funds_detail_documents.dart';
 import 'package:acc/widgets/fundraiser/fundDetails/funds_detail_overview.dart';
+import 'package:acc/widgets/fundraiser/fundDetails/funds_detail_remarks.dart';
 import 'package:acc/widgets/fundraiser/fundDetails/funds_details_header.dart';
 import 'package:acc/widgets/fundraiser/fundDetails/funds_resubmit_header.dart';
 import 'package:file_picker/file_picker.dart';
@@ -42,10 +44,6 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
   SubmittedFunds _likedFunds;
   bool isResubmit = false;
   bool _isButtonDisabled = false;
-  var _changeFundDeckBgColor = unselectedGray;
-  var _selectedFundDeckTextColor = Colors.black;
-  var _pefFilePath;
-
   bool isDocumentUploaded = false;
 
   @override
@@ -118,18 +116,18 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
                                         style: textNormal16(kDarkOrange))
                                   ],
                                 )),
-                            Expanded(
-                                flex: 1,
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      _likedFunds.minimumInvestment,
-                                      style: textBlackNormal16(),
-                                    ),
-                                    Text("Min Per Investor",
-                                        style: textNormal16(kDarkOrange))
-                                  ],
-                                ))
+                            // Expanded(
+                            //     flex: 1,
+                            //     child: Column(
+                            //       children: [
+                            //         Text(
+                            //           _likedFunds.minimumInvestment,
+                            //           style: textBlackNormal16(),
+                            //         ),
+                            //         Text("Min Per Investor",
+                            //             style: textNormal16(kDarkOrange))
+                            //       ],
+                            //     ))
                           ],
                         ),
                       ),
@@ -187,8 +185,13 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
       child: Column(
         children: [
           CreateFundOverview(_likedFunds),
-          Visibility(visible: !isResubmit, child: _createDocumentUpload()),
-          Visibility(visible: !isResubmit, child: _createRemarks()),
+          Visibility(
+            visible: !isResubmit,
+            child: FundsUploadedDocument(_likedFunds),
+          ),
+          Visibility(
+              visible: !isResubmit,
+              child: FundsRemark(_likedFunds.fundsRemarks)),
           Visibility(visible: isResubmit, child: _addNewFundValue()),
           Visibility(visible: isResubmit, child: _uploadFundDeck())
         ],
@@ -196,81 +199,10 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
     );
   }
 
-  Widget _createDocumentUpload() {
-    return Column(children: [
-      Card(
-        color: _changeFundDeckBgColor,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        child: Container(
-          alignment: Alignment.center,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Text("Documents Uploaded",
-                      textAlign: TextAlign.start,
-                      style: textBold16(_selectedFundDeckTextColor))),
-              Spacer(),
-              IconButton(
-                  onPressed: () {},
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  icon: Image.asset(
-                    "assets/images/icon_down.png",
-                    color: _selectedFundDeckTextColor,
-                  ))
-            ],
-          ),
-        ),
-      ),
-    ]);
-  }
-
-  Widget _createRemarks() {
-    return Column(children: [
-      Card(
-        color: _changeFundDeckBgColor,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        child: Container(
-          alignment: Alignment.center,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Text("Remarks (By Amicorp)",
-                      textAlign: TextAlign.start,
-                      style: textBold16(_selectedFundDeckTextColor))),
-              Spacer(),
-              IconButton(
-                  onPressed: () {},
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  icon: Image.asset(
-                    "assets/images/icon_down.png",
-                    color: _selectedFundDeckTextColor,
-                  ))
-            ],
-          ),
-        ),
-      ),
-    ]);
-  }
-
   TextField inputTextField(text, hint, _controller) {
     return TextField(
       onChanged: (text) {
         // if value is not empty enable the button
-        // if (text.length != 0) {
-        //   print("true");
-        //   _changeButtonStatus();
-        // } else {
-        //   print("false");
-        //   _changeButtonStatus();
-        // }
         _changeButtonStatus();
       },
       style: textBlackNormal16(),

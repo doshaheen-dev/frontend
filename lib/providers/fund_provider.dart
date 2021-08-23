@@ -46,6 +46,7 @@ class FundProvider with ChangeNotifier {
         option.fundInternalApproved,
         option.termsAgreedTimestamp,
         option.minPerInvestor,
+        option.fundsRemarks,
       ));
     });
 

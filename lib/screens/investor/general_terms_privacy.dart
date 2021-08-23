@@ -33,8 +33,7 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
   var progress;
 
   String tempUrl =
-      "http://ec2-65-2-69-222.ap-south-1.compute.amazonaws.com:3000/terms_and_conditions"
-      "";
+      "http://ec2-65-2-69-222.ap-south-1.compute.amazonaws.com:3000/terms_and_conditions";
 
   @override
   Widget build(BuildContext context) {
