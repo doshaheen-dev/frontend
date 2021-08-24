@@ -1,8 +1,12 @@
+import 'package:acc/models/fund/fund_documents.dart';
+import 'package:acc/providers/fund_provider.dart';
 import 'package:acc/screens/common/webview_container.dart';
 import 'package:acc/screens/fundraiser/dashboard/fundraiser_home.dart';
+import 'package:acc/services/http_service.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FundsUploadedDocument extends StatefulWidget {
   final SubmittedFunds likedFunds;
@@ -19,6 +23,23 @@ class _FundsUploadedDocumentState extends State<FundsUploadedDocument> {
   bool _isFundDcoumentVisible = false;
   var _selectedTextColor = Colors.black;
   var _changeBgColor = unselectedGray;
+  var _isInit = true;
+  Future _fundDocumentList;
+
+  Future<void> getAllDocuments(BuildContext context) async {
+    Provider.of<FundProvider>(context, listen: false)
+        .getFundsDocument(widget.likedFunds.fundTxnId);
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      _fundDocumentList = getAllDocuments(context);
+      _isInit = false;
+      super.didChangeDependencies();
+    }
+  }
+
   List<String> litems = ["1", "2", "Third", "4"];
 
   _displayFundsDocument() {
@@ -70,45 +91,73 @@ class _FundsUploadedDocumentState extends State<FundsUploadedDocument> {
         ),
       ),
       Visibility(
-          visible: _isFundDcoumentVisible,
-          child: Container(
-              child: Card(
-                  color: unselectedGray,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0)),
-                  child: Padding(
-                      padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                      child: ListView.builder(
-                        itemBuilder: (ctx, index) {
-                          return _createDocumentCell();
-                        },
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: litems.length,
-                        shrinkWrap: true,
-                      )))))
+        visible: _isFundDcoumentVisible,
+        child: Card(
+          color: unselectedGray,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          child: FutureBuilder(
+            future: _fundDocumentList,
+            builder: (ctx, dataSnapshot) {
+              if (dataSnapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: Text("An error occurred!"));
+              } else {
+                return Consumer<FundProvider>(
+                    builder: (ctx, data, child) => MediaQuery.removePadding(
+                          context: context,
+                          removeTop: true,
+                          child: ListView.builder(
+                            itemBuilder: (ctx, index) {
+                              return Container(
+                                margin: EdgeInsets.only(
+                                    bottom: 20.0,
+                                    left: 10.0,
+                                    right: 10.0,
+                                    top: 20.0),
+                                child: _createDocumentCell(
+                                    data.documentsData[index]),
+                              );
+                            },
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: data.documentsData.length,
+                            shrinkWrap: true,
+                          ),
+                        ));
+              }
+            },
+          ),
+        ),
+      )
     ]);
   }
 
-  Widget _createDocumentCell() {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Row(
-        children: [
-          Expanded(
-              flex: 2,
-              child: Text(
-                "Document Name",
-                style: textNormal(textGrey, 14),
-              )),
-          InkWell(
-            onTap: () {
-              openUrl(
-                  "http://ec2-65-2-69-222.ap-south-1.compute.amazonaws.com:3000/api/download/fund/document/2d0eb779-e1da-4255-b531-ef5be446df08-Screenshot_20210810-183114.jpg#toolbar=0&navpanes=0&scrollbar=0");
-            },
-            child: Text("View File", style: textNormal14(selectedOrange)),
-          )
-        ],
-      ),
+  Widget _createDocumentCell(DocumentsData documentsData) {
+    return Row(
+      children: [
+        Expanded(
+            flex: 2,
+            child: Text(
+              documentsData.kycDocName,
+              style: textNormal(headingBlack, 14),
+            )),
+        InkWell(
+          onTap: () {
+            String url = documentsData.fundKycDocPath;
+            if (documentsData.fundKycDocPath.contains("ppt") ||
+                documentsData.fundKycDocPath.contains("pdf")) {
+              String googleLink = "https://docs.google.com/viewer?url=";
+              String docUrl = documentsData.fundKycDocPath;
+              url = googleLink + docUrl;
+            } else {
+              url = documentsData.fundKycDocPath.replaceAll(
+                  "https://funddocuments.s3.ap-south-1.amazonaws.com/",
+                  "${ApiServices.baseUrl}/download/fund/document/");
+            }
+            openUrl(url);
+          },
+          child: Text("View File", style: textNormal14(selectedOrange)),
+        )
+      ],
     );
   }
 

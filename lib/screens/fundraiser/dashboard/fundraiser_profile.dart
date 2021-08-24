@@ -76,6 +76,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
 
   //Future _countries;
   var _isInit = true;
+  bool isDataChanged = false;
 
   // Future<void> _fetchCountries(BuildContext context) async {
   //   await Provider.of<countryProvider.Countries>(context, listen: false)
@@ -87,12 +88,16 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
       selectedCountry = newSelectedCountry;
       _mobileController.text = phoneNumber;
       isOtpReceived = false;
+      // enable the button
+      isDataChanged = true;
     });
   }
 
   void updateEmail(String emailId) {
     _companyEmailController.text = emailId;
     isEmailOtpReceived = false;
+    // enable the button
+    isDataChanged = true;
   }
 
   @override
@@ -367,34 +372,42 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
           margin: const EdgeInsets.only(
               top: 5.0, left: 25.0, bottom: 10, right: 25.0),
           child: ElevatedButton(
-            onPressed: () {
-              // on click
+            onPressed: !isDataChanged
+                ? null
+                : () {
+                    // on click
 
-              FocusScope.of(context).requestFocus(FocusNode());
-              String _phoneNumber = "+${selectedCountry.dialCode}" +
-                  _mobileController.text.toString().trim();
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    String _phoneNumber = "+${selectedCountry.dialCode}" +
+                        _mobileController.text.toString().trim();
 
-              if (_phoneNumber != UserData.instance.userInfo.mobileNo ||
-                  _companyEmailController.text.toString().trim() !=
-                      UserData.instance.userInfo.emailId) {
-                progress = ProgressHUD.of(context);
-                progress?.showWithText('Updating Profile...');
-                submitDetails(_companyEmailController.text.trim(), _phoneNumber,
-                    _verificationId, _emailVerificationId);
+                    if (_phoneNumber != UserData.instance.userInfo.mobileNo ||
+                        _companyEmailController.text.toString().trim() !=
+                            UserData.instance.userInfo.emailId) {
+                      progress = ProgressHUD.of(context);
+                      progress?.showWithText('Updating Profile...');
+                      submitDetails(_companyEmailController.text.trim(),
+                          _phoneNumber, _verificationId, _emailVerificationId);
 
-                return;
-              }
-              showSnackBar(context, "Please enter any new data for updation.");
-            },
+                      return;
+                    }
+                    showSnackBar(
+                        context, "Please enter any new data for updation.");
+                  },
             style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.all(0.0),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18))),
             child: Ink(
-                decoration: BoxDecoration(
-                    gradient:
-                        LinearGradient(colors: [kDarkOrange, kLightOrange]),
-                    borderRadius: BorderRadius.circular(15)),
+                decoration: isDataChanged
+                    ? BoxDecoration(
+                        gradient:
+                            LinearGradient(colors: [kDarkOrange, kLightOrange]),
+                        borderRadius: BorderRadius.circular(10))
+                    : BoxDecoration(
+                        gradient:
+                            LinearGradient(colors: [kwhiteGrey, kwhiteGrey]),
+                        borderRadius: BorderRadius.circular(10)),
                 child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: 45,

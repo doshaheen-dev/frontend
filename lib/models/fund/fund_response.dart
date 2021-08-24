@@ -101,11 +101,11 @@ class OptionsData {
   final String fundStatus;
   final String fundInternalApproved;
   final String termsAgreedTimestamp;
+  final String fundsRemarks;
   final String fundRange;
   final String minPerInvestor;
   final String countryName;
   final String cityName;
-  final String fundsRemarks;
 
   OptionsData(
     this.fundTxnId,
@@ -126,11 +126,11 @@ class OptionsData {
     this.fundStatus,
     this.fundInternalApproved,
     this.termsAgreedTimestamp,
+    this.fundsRemarks,
     this.fundRange,
     this.minPerInvestor,
     this.countryName,
     this.cityName,
-    this.fundsRemarks,
   );
 
   factory OptionsData.fromMap(Map<String, dynamic> json) {
@@ -153,11 +153,11 @@ class OptionsData {
       json["fund_status"],
       json["fund_internal_approved"],
       json["fund_terms_agreed_date_time"],
+      json['fund_internal_approved_remarks'],
       json["fund_range"],
       json["min_per_investor"],
       json["country_name"],
       json["city_name"],
-      json['fund_internal_approved_remarks'],
     );
   }
   factory OptionsData.fromJson(Map<String, dynamic> json) {
@@ -180,11 +180,11 @@ class OptionsData {
       json["fund_status"],
       json["fund_internal_approved"],
       json["fund_terms_agreed_date_time"],
+      json['fund_internal_approved_remarks'],
       json["fund_range"],
       json["min_per_investor"],
       json["country_name"],
       json["city_name"],
-      json['fund_internal_approved_remarks'],
     );
   }
 }

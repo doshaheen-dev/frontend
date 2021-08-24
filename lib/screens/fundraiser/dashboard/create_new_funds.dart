@@ -246,7 +246,7 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                               margin: const EdgeInsets.only(bottom: 20),
                               decoration: customDecoration(),
                               child: inputNumberTextField(
-                                  "“Total Assets Under Management(Sponsor)",
+                                  "Total Assets Under Management(Sponsor)",
                                   "Please enter fund value here in \$",
                                   _existingFundsController),
                             ),

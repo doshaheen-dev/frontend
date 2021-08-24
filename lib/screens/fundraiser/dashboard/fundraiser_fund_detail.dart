@@ -67,6 +67,9 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
+
     return Scaffold(
         bottomNavigationBar: _createButtonLayout(context),
         backgroundColor: Colors.white,
@@ -191,7 +194,9 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
           ),
           Visibility(
               visible: !isResubmit,
-              child: FundsRemark(_likedFunds.fundsRemarks)),
+              child: FundsRemark(_likedFunds.fundsRemarks != null
+                  ? _likedFunds.fundsRemarks
+                  : "")),
           Visibility(visible: isResubmit, child: _addNewFundValue()),
           Visibility(visible: isResubmit, child: _uploadFundDeck())
         ],

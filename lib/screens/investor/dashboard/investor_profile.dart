@@ -67,6 +67,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
   var progress;
   // Future _countries;
   var _isInit = true;
+  bool isDataChanged = false;
 
   // Future<void> _fetchCountries(BuildContext context) async {
   //   await Provider.of<countryProvider.Countries>(context, listen: false)
@@ -99,12 +100,16 @@ class _InvestorProfileState extends State<InvestorProfile> {
     setState(() {
       selectedCountry = newSelectedCountry;
       _mobileController.text = phoneNumber;
+      // enable the button
+      isDataChanged = true;
     });
   }
 
   void updateEmail(String emailId) {
     setState(() {
       _emailController.text = emailId;
+      // enable the button
+      isDataChanged = true;
     });
   }
 
@@ -355,39 +360,44 @@ class _InvestorProfileState extends State<InvestorProfile> {
       Container(
         margin: const EdgeInsets.only(bottom: 10, right: 25.0, left: 25.0),
         child: ElevatedButton(
-          onPressed: () {
-            FocusScope.of(context).requestFocus(FocusNode());
-            // on click
-
-            String _phoneNumber = "+${selectedCountry.dialCode}" +
-                _mobileController.text.toString().trim();
-            bool isDataChanged = (_phoneNumber ==
-                    UserData.instance.userInfo.mobileNo ||
-                _emailController.text == UserData.instance.userInfo.emailId);
-            if (!isDataChanged) {
-              showSnackBar(context, "Please enter any new data for updation.");
-              return;
-            }
-
-            submitDetails(
-                _firstNameController.text.trim(),
-                _lastnameController.text.trim(),
-                _emailController.text.trim(),
-                _mobileController.text.trim(),
-                country,
-                _addressController.text,
-                _verificationId,
-                _emailVerificationId,
-                context);
-          },
+          onPressed: !isDataChanged
+              ? null
+              : () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  // on click
+                  String _phoneNumber = "+${selectedCountry.dialCode}" +
+                      _mobileController.text.toString().trim();
+                  if (_phoneNumber != UserData.instance.userInfo.mobileNo ||
+                      _emailController.text.toString().trim() !=
+                          UserData.instance.userInfo.emailId) {
+                    submitDetails(
+                        _firstNameController.text.trim(),
+                        _lastnameController.text.trim(),
+                        _emailController.text.trim(),
+                        _mobileController.text.trim(),
+                        country,
+                        _addressController.text,
+                        _verificationId,
+                        _emailVerificationId,
+                        context);
+                    return;
+                  }
+                  showSnackBar(
+                      context, "Please enter any new data for updation.");
+                },
           style: ElevatedButton.styleFrom(
               padding: EdgeInsets.all(0.0),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14))),
           child: Ink(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [kDarkOrange, kLightOrange]),
-                borderRadius: BorderRadius.circular(10)),
+            decoration: isDataChanged
+                ? BoxDecoration(
+                    gradient:
+                        LinearGradient(colors: [kDarkOrange, kLightOrange]),
+                    borderRadius: BorderRadius.circular(10))
+                : BoxDecoration(
+                    gradient: LinearGradient(colors: [kwhiteGrey, kwhiteGrey]),
+                    borderRadius: BorderRadius.circular(10)),
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: 50,

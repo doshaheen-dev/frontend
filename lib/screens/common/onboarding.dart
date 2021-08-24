@@ -1,6 +1,4 @@
 import 'package:acc/constants/font_family.dart';
-import 'package:acc/screens/investor/found_us.dart';
-import 'package:acc/screens/investor/welcome.dart';
 import 'package:acc/utilites/app_strings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';

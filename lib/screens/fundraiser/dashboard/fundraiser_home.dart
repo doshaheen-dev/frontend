@@ -371,19 +371,6 @@ class _FundraiserHomeState extends State<FundraiserHome> {
   }
 }
 
-//class SubmittedFunds {
-//   const SubmittedFunds(this.name, this.type, this.date, this.image,
-//       this.location, this.minimumInvestment, this.description);
-//   final String name;
-//   final String type;
-//   final String date;
-//   final String image;
-//   final String location;
-//   final String minimumInvestment;
-//   final String description;
-// }
-//}
-
 class SubmittedFunds {
   final int fundTxnId;
   final int userId;

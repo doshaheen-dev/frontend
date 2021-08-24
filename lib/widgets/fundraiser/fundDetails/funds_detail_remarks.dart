@@ -1,6 +1,8 @@
-import 'package:acc/screens/fundraiser/dashboard/fundraiser_home.dart';
+import 'dart:math';
+
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/text_style.dart';
+import 'package:acc/utilites/ui_widgets.dart';
 import 'package:flutter/material.dart';
 
 class FundsRemark extends StatefulWidget {
@@ -28,9 +30,13 @@ class _FundsRemarkState extends State<FundsRemark> {
       });
     } else {
       setState(() {
-        _isFundDcoumentVisible = true;
-        _changeBgColor = kDarkOrange;
-        _selectedTextColor = Colors.white;
+        if (widget.likedFunds != "") {
+          _isFundDcoumentVisible = true;
+          _changeBgColor = kDarkOrange;
+          _selectedTextColor = Colors.white;
+        } else {
+          showSnackBar(context, "Remarks are not available");
+        }
       });
     }
   }
@@ -78,8 +84,7 @@ class _FundsRemarkState extends State<FundsRemark> {
                       width: MediaQuery.of(context).size.width,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"),
+                        child: Text(widget.likedFunds),
                       )))))
     ]);
   }

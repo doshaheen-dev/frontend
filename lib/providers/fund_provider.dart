@@ -1,3 +1,4 @@
+import 'package:acc/models/fund/fund_documents.dart';
 import 'package:acc/models/fund/fund_response.dart';
 import 'package:acc/screens/fundraiser/dashboard/fundraiser_home.dart';
 import 'package:acc/services/fund_service.dart';
@@ -6,9 +7,14 @@ import 'package:flutter/foundation.dart';
 
 class FundProvider with ChangeNotifier {
   List<SubmittedFunds> _funds = [];
+  List<DocumentsData> _documentsData = [];
 
   List<SubmittedFunds> get funds {
     return [..._funds];
+  }
+
+  List<DocumentsData> get documentsData {
+    return [..._documentsData];
   }
 
   Future<void> fetchAndSetFunds(
@@ -20,11 +26,6 @@ class FundProvider with ChangeNotifier {
     if (extractedData == null) {
       return;
     }
-    // extractedData.data.forEach((option) {
-    //   loadedFunds.add(SubmittedFunds(option.fundName, option.fundStatus,
-    //   option.termsAgreedTimestamp, option.fundLogo, '${option.fundCityId}, ${option.fundCountryCode}',
-    //   '${option.slotId}', option.fundInvstmtObj));
-    // });
 
     extractedData.data.options.forEach((option) {
       loadedFunds.add(SubmittedFunds(
@@ -51,6 +52,22 @@ class FundProvider with ChangeNotifier {
     });
 
     _funds = loadedFunds.toList();
+    notifyListeners();
+  }
+
+  Future<void> getFundsDocument(int fundId) async {
+    final List<DocumentsData> documentsList = [];
+    final FundDocuments extractedData =
+        await FundService.getFundsDocument(fundId);
+    if (extractedData == null) {
+      return;
+    }
+    extractedData.data.records.forEach((record) {
+      documentsList.add(DocumentsData(record.kycDocName, record.fundTxnId,
+          record.fundKycId, record.fundKycDocPath));
+    });
+
+    _documentsData = documentsList.toList();
     notifyListeners();
   }
 }
