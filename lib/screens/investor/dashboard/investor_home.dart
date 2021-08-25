@@ -5,15 +5,18 @@ import 'package:acc/screens/investor/dashboard/fund_detail.dart';
 import 'package:acc/screens/investor/dashboard/product_detail.dart';
 import 'package:acc/services/investor_home_service.dart';
 import 'package:acc/utilites/text_style.dart';
-import 'package:acc/utilites/ui_widgets.dart';
+import 'package:acc/widgets/exception_indicators/empty_list_indicator.dart';
+import 'package:acc/widgets/exception_indicators/error_indicator.dart';
+// import 'package:acc/utilites/ui_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/investor_home_provider.dart' as investorProvider;
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+// import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_tindercard/flutter_tindercard.dart';
 
 class InvestorHome extends StatefulWidget {
   @override
@@ -23,21 +26,24 @@ class InvestorHome extends StatefulWidget {
 class _InvestorHomeState extends State<InvestorHome> {
   var currentIndex = 0;
   var _fundscurrentIndex = 0;
-  Future _recommendations;
-  Future _interestedFunds;
+  // Future _recommendations;
+  // Future _interestedFunds;
 
   var fundPageNo = 0;
   var _isInit = true;
   int recommendationListSize;
   int interestedFundsSize;
 
-  final ItemScrollController itemScrollController = ItemScrollController();
-  final ItemPositionsListener itemPositionsListener =
-      ItemPositionsListener.create();
+  // List<investorProvider.FundsInfo> recommendList = [];
+  // List<investorProvider.FundsInfo> fundsList = [];
 
-  final ItemScrollController fundItemScrollController = ItemScrollController();
-  final ItemPositionsListener fundIitemPositionsListener =
-      ItemPositionsListener.create();
+  // final ItemScrollController itemScrollController = ItemScrollController();
+  // final ItemPositionsListener itemPositionsListener =
+  //     ItemPositionsListener.create();
+
+  // final ItemScrollController fundItemScrollController = ItemScrollController();
+  // final ItemPositionsListener fundIitemPositionsListener =
+  //     ItemPositionsListener.create();
 
   bool isFundsPresent = false;
   bool isRecommendationPresent = false;
@@ -48,7 +54,6 @@ class _InvestorHomeState extends State<InvestorHome> {
   num _recommendationPageSize = 10;
   num totalItems = 0;
   var recommendationPageNo = 0;
-  List<investorProvider.FundsInfo> recommendList = [];
   final PagingController<int, investorProvider.FundsInfo> _recPagingController =
       PagingController(firstPageKey: 0);
 
@@ -56,7 +61,6 @@ class _InvestorHomeState extends State<InvestorHome> {
   num _fundsPageSize = 10;
   num fundsTotalItems = 0;
   var fundsPageNo = 0;
-  List<investorProvider.FundsInfo> fundsList = [];
   final PagingController<int, investorProvider.FundsInfo>
       _intFundsPagingController = PagingController(firstPageKey: 0);
 
@@ -92,24 +96,22 @@ class _InvestorHomeState extends State<InvestorHome> {
   }
 
   Future<void> _fetchRecPage(int pageKey) async {
+    // print("Page: ${pageKey ~/ _recommendationPageSize}");
     try {
       final invHomePvdr =
           Provider.of<investorProvider.InvestorHome>(context, listen: false);
       invHomePvdr
           .fetchAndSetRecommendations(UserData.instance.userInfo.token,
-              recommendationPageNo, _recommendationPageSize)
+              (pageKey ~/ _recommendationPageSize), _recommendationPageSize)
           .then((_) {
         final list = invHomePvdr.recommended;
         print('List: ${list.length}');
-        recommendList.addAll(list);
-        print('RecList: ${recommendList.length}');
         setState(() {
           final isLastPage = list.length < _recommendationPageSize;
           if (isLastPage) {
             _recPagingController.appendLastPage(list);
           } else {
             final nextPageKey = pageKey + list.length;
-            recommendationPageNo++;
             _recPagingController.appendPage(list, nextPageKey);
           }
         });
@@ -125,20 +127,17 @@ class _InvestorHomeState extends State<InvestorHome> {
       final invHomePvdr =
           Provider.of<investorProvider.InvestorHome>(context, listen: false);
       invHomePvdr
-          .fetchAndSetInterestedFunds(
-              UserData.instance.userInfo.token, fundPageNo, _fundsPageSize)
+          .fetchAndSetInterestedFunds(UserData.instance.userInfo.token,
+              (pageKey ~/ _fundsPageSize), _fundsPageSize)
           .then((_) {
         final list = invHomePvdr.interestedFundsData;
         print('FList: ${list.length}');
-        fundsList.addAll(list);
-        print('IFList: ${fundsList.length}');
         setState(() {
           final isLastPage = list.length < _fundsPageSize;
           if (isLastPage) {
             _intFundsPagingController.appendLastPage(list);
           } else {
             final nextPageKey = pageKey + list.length;
-            fundPageNo++;
             _intFundsPagingController.appendPage(list, nextPageKey);
           }
         });
@@ -389,6 +388,7 @@ class _InvestorHomeState extends State<InvestorHome> {
           child: new Stack(
             children: <Widget>[
               Container(
+                color: Colors.orange,
                 height: 300.0,
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: setRecommendations(),
@@ -408,7 +408,7 @@ class _InvestorHomeState extends State<InvestorHome> {
       color: Colors.orange,
       child: PagedListView<int, investorProvider.FundsInfo>.separated(
         pagingController: _recPagingController,
-        scrollDirection: Axis.horizontal,
+        // scrollDirection: Axis.vertical,
         builderDelegate: PagedChildBuilderDelegate<investorProvider.FundsInfo>(
           animateTransitions: true,
           firstPageProgressIndicatorBuilder: (ctx) => Center(
@@ -417,12 +417,15 @@ class _InvestorHomeState extends State<InvestorHome> {
               valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
             ),
           ),
-          firstPageErrorIndicatorBuilder: (ctx) => Center(
-            child: Text("An error occurred!"),
+          firstPageErrorIndicatorBuilder: (ctx) => ErrorIndicator(
+            error: _recPagingController.error,
+            onTryAgain: () => _recPagingController.refresh(),
           ),
+          noItemsFoundIndicatorBuilder: (context) => EmptyListIndicator(),
           itemBuilder: (context, item, index) => Container(
+            height: 300,
             width: (MediaQuery.of(context).size.width - 40),
-            child: _buildRecommendationList(context, index, item),
+            child: _tinderCard(context, index, item),
           ),
         ),
         separatorBuilder: (context, index) => const Divider(
@@ -430,6 +433,46 @@ class _InvestorHomeState extends State<InvestorHome> {
         ),
         shrinkWrap: true,
       ),
+    );
+  }
+
+  Widget _tinderCard(BuildContext context, int arrIndex,
+      investorProvider.FundsInfo recommended) {
+    CardController controller;
+    return new TinderSwapCard(
+      swipeUp: false,
+      swipeDown: false,
+      orientation: AmassOrientation.RIGHT,
+      totalNum: 1,
+      stackNum: 3,
+      swipeEdge: 4.0,
+      maxWidth: MediaQuery.of(context).size.width - 40,
+      maxHeight: 280,
+      minWidth: MediaQuery.of(context).size.width - 60,
+      minHeight: 200,
+      cardBuilder: (ctx, idx) =>
+          _buildRecommendationList(context, arrIndex, recommended),
+      cardController: controller = CardController(),
+      swipeUpdateCallback: (DragUpdateDetails details, Alignment align) {
+        /// Get swiping card's alignment
+        if (align.x < 0) {
+          // print("Card is LEFT swiping");
+        } else if (align.x > 0) {
+          // print("Card is RIGHT swiping");
+        }
+      },
+      swipeCompleteCallback: (CardSwipeOrientation orientation, int index) {
+        /// Get orientation & index of swiped card!
+        if (orientation == CardSwipeOrientation.LEFT ||
+            orientation == CardSwipeOrientation.RIGHT) {
+          setState(() {
+            print("Swipe Completion: $orientation, $index");
+            // print("Items1: ${_recPagingController.itemList.length}");
+            _recPagingController.itemList.removeAt(arrIndex);
+            _recPagingController.refresh();
+          });
+        }
+      },
     );
   }
 
@@ -469,13 +512,6 @@ class _InvestorHomeState extends State<InvestorHome> {
                         //     CircularProgressIndicator(),
                         errorWidget: (context, url, error) => Icon(Icons.error),
                       ),
-                      // Image(
-                      //   image: recommended.fundLogo != ""
-                      //       ? NetworkImage(recommended.fundLogo)
-                      //       : AssetImage("assets/images/dummy/investment1.png"),
-                      //   height: 200,
-                      //   fit: BoxFit.fill,
-                      // ),
                     ),
                   ),
                   Container(

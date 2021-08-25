@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -23,7 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -39,7 +39,7 @@ dependencies:
   dialogflow_flutter: ^0.0.3
   bubble: ^1.1.9+1
   # For OTP text field
-  pin_code_fields: ^7.2.0 
+  pin_code_fields: ^7.2.0
   # Captcha
   ps_code_checking: ^0.0.3
   # Progress Indicator
@@ -57,12 +57,12 @@ dependencies:
   infinite_scroll_pagination: ^3.1.0
   local_auth: ^1.1.6
   cached_network_image: ^3.1.0
-
+  flutter_tindercard: ^0.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.9.0 
+  flutter_launcher_icons: ^0.9.0
 
 flutter_icons:
   android: "launcher_icon"
@@ -78,7 +78,6 @@ flutter_icons:
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -86,20 +85,20 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-   - assets/
-   - assets/images/
-   - assets/images/onboarding/
-   - assets/images/dashboard/
-   - assets/images/investor/
-   - assets/images/navigation/
-   - assets/images/social_media/
-   - assets/images/company_logo/
-   - assets/images/raise_capital/
-   - assets/images/investment_solutions/
-   - assets/images/dummy/
-   - assets/images/chat/
-   - assets/images/UserProfile.png
-   - assets/amicorp.json
+    - assets/
+    - assets/images/
+    - assets/images/onboarding/
+    - assets/images/dashboard/
+    - assets/images/investor/
+    - assets/images/navigation/
+    - assets/images/social_media/
+    - assets/images/company_logo/
+    - assets/images/raise_capital/
+    - assets/images/investment_solutions/
+    - assets/images/dummy/
+    - assets/images/chat/
+    - assets/images/UserProfile.png
+    - assets/amicorp.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -121,16 +120,13 @@ flutter:
           weight: 700
         - asset: assets/fonts/Montserrat/Montserrat-Medium.otf
           weight: 500
-         
 
   #- family: Poppins
-      # fonts:
-      #   - asset: assets/fonts/Poppins-ExtraLight.ttf
-      #   - asset: assets/fonts/Poppins-Light.ttf
-      #   - asset: assets/fonts/Poppins-Medium.ttf
-      #   - asset: assets/fonts/Poppins-Regular.ttf
-
-
+  # fonts:
+  #   - asset: assets/fonts/Poppins-ExtraLight.ttf
+  #   - asset: assets/fonts/Poppins-Light.ttf
+  #   - asset: assets/fonts/Poppins-Medium.ttf
+  #   - asset: assets/fonts/Poppins-Regular.ttf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
