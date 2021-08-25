@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -17,6 +19,13 @@ class _WebViewContainerState extends State<WebViewContainer> {
   bool isPageLoaded = true;
 
   _WebViewContainerState(this._url);
+
+  @override
+  void initState() {
+    super.initState();
+    // Enable hybrid composition.
+    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+  }
 
   @override
   Widget build(BuildContext context) {

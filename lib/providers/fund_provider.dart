@@ -9,6 +9,8 @@ class FundProvider with ChangeNotifier {
   List<SubmittedFunds> _funds = [];
   List<DocumentsData> _documentsData = [];
 
+  int totalDocuments = 0;
+
   List<SubmittedFunds> get funds {
     return [..._funds];
   }
@@ -62,6 +64,8 @@ class FundProvider with ChangeNotifier {
     if (extractedData == null) {
       return;
     }
+    totalDocuments = extractedData.data.records.length;
+
     extractedData.data.records.forEach((record) {
       documentsList.add(DocumentsData(record.kycDocName, record.fundTxnId,
           record.fundKycId, record.fundKycDocPath));

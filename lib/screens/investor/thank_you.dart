@@ -34,8 +34,6 @@ class _ThankYouInvestorState extends State<ThankYouInvestor> {
                       const EdgeInsets.only(top: 25.0, left: 15.0, right: 25.0),
                   child: Row(
                     children: [
-                      Image.asset('assets/images/investor/icon_menu.png'),
-                      SizedBox(width: 10.0),
                       Expanded(
                           child: Text(
                         'Hello Investor',

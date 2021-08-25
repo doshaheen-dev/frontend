@@ -17,11 +17,12 @@ BoxDecoration appColorButton() {
 
 void showSnackBar(BuildContext _context, String message) {
   final snackBar = SnackBar(
+    duration: Duration(seconds: 2),
     content: Text(message),
-    action: SnackBarAction(
-      label: 'Ok',
-      onPressed: () {},
-    ),
+    // action: SnackBarAction(
+    //   label: 'Ok',
+    //   onPressed: () {},
+    // ),
   );
 
   ScaffoldMessenger.of(_context).showSnackBar(snackBar);
