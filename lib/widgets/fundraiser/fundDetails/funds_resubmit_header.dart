@@ -25,8 +25,6 @@ class _FundsResubmitHeaderState extends State<FundsResubmitHeader> {
             margin: const EdgeInsets.only(top: 10.0, left: 15.0, right: 25.0),
             child: Row(
               children: [
-                Image.asset('assets/images/investor/icon_menu.png'),
-                SizedBox(width: 10.0),
                 Expanded(
                     child: Text(
                   'Hello  Fundraiser',

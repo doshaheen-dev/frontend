@@ -41,8 +41,13 @@ class _SignInOTPState extends State<SignInOTP> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     selectedCountry = countryList[0];
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
     return Scaffold(
@@ -334,6 +339,7 @@ class _SignInOTPState extends State<SignInOTP> {
           onChanged: (Countries countries) {
             setState(() {
               print("selectedItemValue3 => ${countries.maxLength}");
+
               selectedCountry = countries;
             });
           },

@@ -5,7 +5,8 @@
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
 
-    <application>
+    <application
+     android:usesCleartextTraffic="true">
     
    <!-- Set up the Sign in with Apple activity, such that it's callable from the browser-redirect -->
 <activity
