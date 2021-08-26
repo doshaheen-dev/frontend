@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:acc/constants/font_family.dart';
+import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/models/investor/respond_recommendation.dart';
 import 'package:acc/providers/investor_home_provider.dart';
 import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
@@ -330,7 +331,7 @@ class _ProductDetailState extends State<ProductDetail> {
                   onPressed: () {
                     progress = ProgressHUD.of(context);
                     progress?.showWithText("Please wait");
-                    respondRecommendation(_recommendation.fundTxnId, 0, _token);
+                    respondRecommendation(_recommendation.fundTxnId, 0);
                   },
                   style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.all(0.0),
@@ -358,8 +359,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     onPressed: () {
                       progress = ProgressHUD.of(context);
                       progress?.showWithText("Please wait");
-                      respondRecommendation(
-                          _recommendation.fundTxnId, 1, _token);
+                      respondRecommendation(_recommendation.fundTxnId, 1);
                     },
                     style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.all(0.0),
@@ -383,11 +383,10 @@ class _ProductDetailState extends State<ProductDetail> {
     );
   }
 
-  Future<void> respondRecommendation(
-      int fundTxnId, int selection, String token) async {
+  Future<void> respondRecommendation(int fundTxnId, int selection) async {
     RespondRecommendation respondRecommendation =
         await InvestorHomeService.acceptRejectRecommendation(
-            _recommendation.fundTxnId, selection, token);
+            fundTxnId, selection, UserData.instance.userInfo.token);
     progress.dismiss();
     if (respondRecommendation.status == 200) {
       _openDialog(context, respondRecommendation.message, "Success");

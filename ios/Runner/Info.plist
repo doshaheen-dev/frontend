@@ -23,6 +23,11 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>LSApplicationQueriesSchemes</key>
+			<array>
+				<string>http</string>
+				<string>https</string>
+			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>

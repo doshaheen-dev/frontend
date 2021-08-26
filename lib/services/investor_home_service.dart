@@ -21,7 +21,7 @@ class InvestorHomeService {
 
     final response = await http.get(url, headers: headers);
     Map valueMap = jsonDecode(response.body);
-    print("R Page: $pageNo, \nRes: ${response.body}");
+    //print("R Page: $pageNo, \nRes: ${response.body}");
     Recommendations recommendations = Recommendations.from(valueMap);
     return recommendations;
   }

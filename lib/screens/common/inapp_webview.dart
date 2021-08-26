@@ -1,16 +1,11 @@
-import 'dart:io';
-
 import 'package:acc/models/fund/fund_documents.dart';
 import 'package:acc/screens/common/webview_container.dart';
 import 'package:acc/services/http_service.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InAppWebViewContainer extends StatefulWidget {
@@ -110,13 +105,7 @@ class _InAppWebViewContainerState extends State<InAppWebViewContainer> {
                             InkWell(
                               onTap: () {
                                 String url = widget.url.fundKycDocPath;
-                                // if (widget.url.fundKycDocPath.contains("pdf")) {
-                                //   String googleLink =
-                                //       "https://docs.google.com/gview?embedded=true&url=";
-                                //   String docUrl = widget.url.fundKycDocPath;
-                                //   url = googleLink + docUrl;
-                                //   openUrl(url);
-                                // } else {
+
                                 if (widget.url.fundKycDocPath.contains("ppt") ||
                                     widget.url.fundKycDocPath.contains("pdf")) {
                                   String googleLink =
@@ -129,7 +118,6 @@ class _InAppWebViewContainerState extends State<InAppWebViewContainer> {
                                       "${ApiServices.baseUrl}/download/fund/document/");
                                 }
                                 _launched = _launchInBrowser(url);
-                                //  }
                               },
                               child: Text("Open File",
                                   style: textNormal16(Colors.blue)),

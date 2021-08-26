@@ -31,18 +31,11 @@ class _FundDetailState extends State<FundDetail> {
   var _changeFundDeckBgColor = unselectedGray;
   var _selectedFundDeckTextColor = Colors.black;
   var _selectedTextColor = Colors.black;
-  String _pefFilePath = "";
 
   @override
   void initState() {
     _likedFunds = widget._recommendation;
     super.initState();
-    createFileOfPdfUrl().then((file) {
-      setState(() {
-        _pefFilePath = file.path;
-        print(_pefFilePath);
-      });
-    });
   }
 
   _displayFundOverview() {
@@ -135,18 +128,18 @@ class _FundDetailState extends State<FundDetail> {
                                 Text("Target", style: textNormal16(kDarkOrange))
                               ],
                             )),
-                        Expanded(
-                            flex: 1,
-                            child: Column(
-                              children: [
-                                Text(
-                                  _likedFunds.minimumInvestment,
-                                  style: textBlackNormal16(),
-                                ),
-                                Text("Min Per Investor",
-                                    style: textNormal16(kDarkOrange))
-                              ],
-                            ))
+                        // Expanded(
+                        //     flex: 1,
+                        //     child: Column(
+                        //       children: [
+                        //         Text(
+                        //           _likedFunds.minimumInvestment,
+                        //           style: textBlackNormal16(),
+                        //         ),
+                        //         Text("Min Per Investor",
+                        //             style: textNormal16(kDarkOrange))
+                        //       ],
+                        //   ))
                       ],
                     ),
                   ),
@@ -198,9 +191,6 @@ class _FundDetailState extends State<FundDetail> {
         Container(
           child: _createFundOverview(),
         ),
-        // Container(
-        //   child: _createFundDeck(),
-        // )
       ],
     );
   }
@@ -327,114 +317,5 @@ class _FundDetailState extends State<FundDetail> {
                     ]))),
           )))
     ]);
-  }
-
-  Widget _createFundDeck() {
-    return Column(children: [
-      Card(
-        color: _changeFundDeckBgColor,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        child: Container(
-          alignment: Alignment.center,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Text("Fund Deck",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: _selectedFundDeckTextColor,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 16.0,
-                          fontFamily: FontFamilyMontserrat.name))),
-              Spacer(),
-              IconButton(
-                  onPressed: () {
-                    _displayFundDeck();
-                  },
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  icon: Image.asset(
-                    "assets/images/icon_down.png",
-                    color: _selectedFundDeckTextColor,
-                  ))
-            ],
-          ),
-        ),
-      ),
-      Visibility(
-          visible: _isFundDeck,
-          child: Container(
-              child: Card(
-            color: unselectedGray,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            child: Container(
-                alignment: Alignment.center,
-                child: Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Column(children: [
-                      Row(
-                        children: [
-                          Expanded(
-                              flex: 1,
-                              child: Image.asset(
-                                "assets/images/UserProfile.png",
-                                height: 150,
-                                width: 50,
-                                fit: BoxFit.fill,
-                              )),
-                          Expanded(flex: 1, child: Text("Image/PDF Name"))
-                        ],
-                      ),
-                      Container(
-                        alignment: Alignment.centerRight,
-                        margin: const EdgeInsets.only(
-                            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // if image
-                            //else if pdf open pdf view
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        PDFViewer(pdf: _pefFilePath)));
-                          },
-                          style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(0.0),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18))),
-                          child: Ink(
-                            decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                    colors: [kDarkOrange, kLightOrange]),
-                                borderRadius: BorderRadius.circular(15)),
-                            child: Container(
-                                width: 100,
-                                height: 50,
-                                alignment: Alignment.center,
-                                child:
-                                    Text("View", style: textWhiteNormal(16.0))),
-                          ),
-                        ),
-                      ),
-                    ]))),
-          )))
-    ]);
-  }
-
-  Future<File> createFileOfPdfUrl() async {
-    final url = "http://www.africau.edu/images/default/sample.pdf";
-    final filename = url.substring(url.lastIndexOf("/") + 1);
-    var request = await HttpClient().getUrl(Uri.parse(url));
-    var response = await request.close();
-    var bytes = await consolidateHttpClientResponseBytes(response);
-    String dir = (await getApplicationDocumentsDirectory()).path;
-    File file = new File('$dir/$filename');
-    await file.writeAsBytes(bytes);
-    return file;
   }
 }

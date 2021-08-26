@@ -1,16 +1,11 @@
-import 'dart:io';
-
 import 'package:acc/models/fund/fund_documents.dart';
 import 'package:acc/providers/fund_provider.dart';
 import 'package:acc/screens/common/inapp_webview.dart';
 import 'package:acc/screens/fundraiser/dashboard/fundraiser_home.dart';
-import 'package:acc/screens/investor/dashboard/pdf_viewer.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class FundsUploadedDocument extends StatefulWidget {
@@ -31,7 +26,6 @@ class _FundsUploadedDocumentState extends State<FundsUploadedDocument> {
   var _isInit = true;
   Future _fundDocumentList;
   List<DocumentsData> documentList;
-  String _pefFilePath = "";
 
   Future<void> getAllDocuments(BuildContext context) async {
     final provider = Provider.of<FundProvider>(context, listen: false);
@@ -67,20 +61,6 @@ class _FundsUploadedDocumentState extends State<FundsUploadedDocument> {
         _selectedTextColor = Colors.white;
       });
     }
-  }
-
-//   _createPath(String url) {
-//  createFileOfPdfUrl(url).then((file) {
-//       setState(() {
-//         _pefFilePath = file.path;
-//         print(_pefFilePath);
-//       });
-//     });
-//   }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override
@@ -191,16 +171,4 @@ class _FundsUploadedDocumentState extends State<FundsUploadedDocument> {
           );
         }));
   }
-
-  // Future<File> createFileOfPdfUrl(String _url) async {
-  //   final url = _url;
-  //   final filename = url.substring(url.lastIndexOf("/") + 1);
-  //   var request = await HttpClient().getUrl(Uri.parse(url));
-  //   var response = await request.close();
-  //   var bytes = await consolidateHttpClientResponseBytes(response);
-  //   String dir = (await getApplicationDocumentsDirectory()).path;
-  //   File file = new File('$dir/$filename');
-  //   await file.writeAsBytes(bytes);
-  //   return file;
-  // }
 }

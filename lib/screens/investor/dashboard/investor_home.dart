@@ -1,10 +1,12 @@
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/models/investor/funds.dart';
+import 'package:acc/models/investor/respond_recommendation.dart';
 import 'package:acc/screens/investor/dashboard/fund_detail.dart';
 import 'package:acc/screens/investor/dashboard/product_detail.dart';
 import 'package:acc/services/investor_home_service.dart';
 import 'package:acc/utilites/text_style.dart';
+import 'package:acc/utilites/ui_widgets.dart';
 import 'package:acc/widgets/exception_indicators/empty_list_indicator.dart';
 import 'package:acc/widgets/exception_indicators/error_indicator.dart';
 // import 'package:acc/utilites/ui_widgets.dart';
@@ -63,6 +65,7 @@ class _InvestorHomeState extends State<InvestorHome> {
   var fundsPageNo = 0;
   final PagingController<int, investorProvider.FundsInfo>
       _intFundsPagingController = PagingController(firstPageKey: 0);
+  var isLoading = false;
 
   void displayInterestedFunds(bool value) {
     setState(() {
@@ -75,18 +78,6 @@ class _InvestorHomeState extends State<InvestorHome> {
       isRecommendationPresent = value;
     });
   }
-
-  // Future<void> _fetchRecommendation(BuildContext context) async {
-  //   await Provider.of<investorProvider.InvestorHome>(context, listen: false)
-  //       .fetchAndSetRecommendations(UserData.instance.userInfo.token,
-  //           recommendationPageNo, _recommendationPageSize); //_userData.token
-  // }
-
-  // Future<void> _fetchInterestedFunds(BuildContext context) async {
-  //   await Provider.of<investorProvider.InvestorHome>(context, listen: false)
-  //       .fetchAndSetInterestedFunds(UserData.instance.userInfo.token,
-  //           fundPageNo, _fundsPageSize); //widget.userData.token
-  // }
 
   void clearAll() {
     Provider.of<investorProvider.InvestorHome>(context, listen: false)
@@ -385,14 +376,22 @@ class _InvestorHomeState extends State<InvestorHome> {
           height: 10.0,
         ),
         Container(
-          child: new Stack(
+          child: Column(
             children: <Widget>[
               Container(
-                color: Colors.orange,
+                //color: Colors.orange,
                 height: 300.0,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: setRecommendations(),
               ),
+              SizedBox(
+                height: 10.0,
+              ),
+              Container(
+                child: Text(
+                  "Swipe Left to Reject and Right to Accept",
+                  style: textBold14(selectedOrange),
+                ),
+              )
             ],
           ),
         ),
@@ -401,39 +400,53 @@ class _InvestorHomeState extends State<InvestorHome> {
   }
 
   Widget setRecommendations() {
-    return RefreshIndicator(
-      onRefresh: () => Future.sync(
-        () => _recPagingController.refresh(),
-      ),
-      color: Colors.orange,
-      child: PagedListView<int, investorProvider.FundsInfo>.separated(
-        pagingController: _recPagingController,
-        // scrollDirection: Axis.vertical,
-        builderDelegate: PagedChildBuilderDelegate<investorProvider.FundsInfo>(
-          animateTransitions: true,
-          firstPageProgressIndicatorBuilder: (ctx) => Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.orange,
-              valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
+    return Stack(children: [
+      RefreshIndicator(
+          onRefresh: () => Future.sync(
+                () => _recPagingController.refresh(),
+              ),
+          color: Colors.orange,
+          child: MediaQuery.removePadding(
+            context: context,
+            removeTop: true,
+            child: PagedListView<int, investorProvider.FundsInfo>.separated(
+              pagingController: _recPagingController,
+              // scrollDirection: Axis.vertical,
+              builderDelegate:
+                  PagedChildBuilderDelegate<investorProvider.FundsInfo>(
+                animateTransitions: true,
+                firstPageProgressIndicatorBuilder: (ctx) => Center(
+                  child: CircularProgressIndicator(
+                      //backgroundColor: Colors.orange,
+                      //valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
+                      ),
+                ),
+                firstPageErrorIndicatorBuilder: (ctx) => ErrorIndicator(
+                  error: _recPagingController.error,
+                  onTryAgain: () => _recPagingController.refresh(),
+                ),
+                noItemsFoundIndicatorBuilder: (context) => EmptyListIndicator(),
+                itemBuilder: (context, item, index) => Container(
+                  height: 300,
+                  width: (MediaQuery.of(context).size.width - 40),
+                  child: _tinderCard(context, index, item),
+                ),
+              ),
+              separatorBuilder: (context, index) => const Divider(
+                color: Colors.transparent,
+              ),
+              shrinkWrap: true,
             ),
-          ),
-          firstPageErrorIndicatorBuilder: (ctx) => ErrorIndicator(
-            error: _recPagingController.error,
-            onTryAgain: () => _recPagingController.refresh(),
-          ),
-          noItemsFoundIndicatorBuilder: (context) => EmptyListIndicator(),
-          itemBuilder: (context, item, index) => Container(
-            height: 300,
-            width: (MediaQuery.of(context).size.width - 40),
-            child: _tinderCard(context, index, item),
+          )),
+      Visibility(
+        visible: isLoading,
+        child: Center(
+          child: CircularProgressIndicator(
+            color: selectedOrange,
           ),
         ),
-        separatorBuilder: (context, index) => const Divider(
-          color: Colors.transparent,
-        ),
-        shrinkWrap: true,
       ),
-    );
+    ]);
   }
 
   Widget _tinderCard(BuildContext context, int arrIndex,
@@ -456,20 +469,31 @@ class _InvestorHomeState extends State<InvestorHome> {
       swipeUpdateCallback: (DragUpdateDetails details, Alignment align) {
         /// Get swiping card's alignment
         if (align.x < 0) {
-          // print("Card is LEFT swiping");
+          // print(
+          //     "Card is LEFT swiping:- $arrIndex, List index: ${recommended.fundTxnId}");
         } else if (align.x > 0) {
           // print("Card is RIGHT swiping");
         }
       },
       swipeCompleteCallback: (CardSwipeOrientation orientation, int index) {
         /// Get orientation & index of swiped card!
+        setState(() {
+          isLoading = true;
+        });
+        if (orientation == CardSwipeOrientation.LEFT) {
+          respondRecommendation(recommended.fundTxnId, 0); // reject
+        } else if (orientation == CardSwipeOrientation.RIGHT) {
+          respondRecommendation(recommended.fundTxnId, 1); // accept
+        }
         if (orientation == CardSwipeOrientation.LEFT ||
             orientation == CardSwipeOrientation.RIGHT) {
           setState(() {
-            print("Swipe Completion: $orientation, $index");
-            // print("Items1: ${_recPagingController.itemList.length}");
-            _recPagingController.itemList.removeAt(arrIndex);
-            _recPagingController.refresh();
+            _recPagingController.itemList.removeAt(index);
+            // print("Swipe Completion: $orientation, $index");
+            //print("Items1: ${_recPagingController.itemList.length}");
+            // print(
+            //     "Items after delete: ${_recPagingController.itemList.length}");
+            //updateList();
           });
         }
       },
@@ -480,7 +504,7 @@ class _InvestorHomeState extends State<InvestorHome> {
       BuildContext context, int index, investorProvider.FundsInfo recommended) {
     return GestureDetector(
         onTap: () => {
-              print("Name:- ${recommended.fundName}"),
+              //print("Name:- ${recommended.fundName}"),
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -490,8 +514,12 @@ class _InvestorHomeState extends State<InvestorHome> {
         child: Card(
           margin: EdgeInsets.zero,
           elevation: 1.0,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape: RoundedRectangleBorder(
+              side: BorderSide(
+                color: Colors.grey.withOpacity(0.2),
+                width: 1,
+              ),
+              borderRadius: BorderRadius.circular(10.0)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -507,7 +535,7 @@ class _InvestorHomeState extends State<InvestorHome> {
                       child: CachedNetworkImage(
                         height: 200.0,
                         imageUrl: recommended.fundLogo,
-                        // fit: BoxFit.cover,
+                        //fit: BoxFit.cover,
                         // placeholder: (context, url) =>
                         //     CircularProgressIndicator(),
                         errorWidget: (context, url, error) => Icon(Icons.error),
@@ -564,6 +592,30 @@ class _InvestorHomeState extends State<InvestorHome> {
         ],
       ),
     );
+  }
+
+  Future<void> respondRecommendation(int fundTxnId, int selection) async {
+    // print("Loading....");
+    setState(() {
+      isLoading = true;
+    });
+    Future.delayed(Duration(seconds: 1), () async {
+      RespondRecommendation respondRecommendation =
+          await InvestorHomeService.acceptRejectRecommendation(
+              fundTxnId, selection, UserData.instance.userInfo.token);
+      // print("Stop Loading....");
+      showSnackBar(context, respondRecommendation.message);
+      setState(() {
+        isLoading = false;
+      });
+      if (respondRecommendation.status == 200) {
+        _recPagingController.refresh();
+
+        // if empty
+        getFundsListSize();
+        _intFundsPagingController.refresh();
+      }
+    });
   }
   // ------------------------------- end of recommendations -------------------------- //
 }
