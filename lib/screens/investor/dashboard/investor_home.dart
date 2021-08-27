@@ -487,11 +487,7 @@ class _InvestorHomeState extends State<InvestorHome> {
             orientation == CardSwipeOrientation.RIGHT) {
           setState(() {
             isLoading = true;
-            _recPagingController.itemList.removeAt(index);
-            // print("Swipe Completion: $orientation, $index");
-            //print("Items1: ${_recPagingController.itemList.length}");
-            // print(
-            //     "Items after delete: ${_recPagingController.itemList.length}");
+            _recPagingController.itemList.removeAt(index);            
             //updateList();
           });
         }
