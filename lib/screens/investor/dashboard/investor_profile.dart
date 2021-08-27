@@ -1267,7 +1267,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
 
     progress = ProgressHUD.of(context);
     progress?.showWithText('Updating Profile...');
-    progress?.barrierEnabled(false);
+
     Map<String, dynamic> requestMap = Map();
     bool isSignInRequired = false;
 
