@@ -477,9 +477,7 @@ class _InvestorHomeState extends State<InvestorHome> {
       },
       swipeCompleteCallback: (CardSwipeOrientation orientation, int index) {
         /// Get orientation & index of swiped card!
-        setState(() {
-          isLoading = true;
-        });
+
         if (orientation == CardSwipeOrientation.LEFT) {
           respondRecommendation(recommended.fundTxnId, 0); // reject
         } else if (orientation == CardSwipeOrientation.RIGHT) {
@@ -488,6 +486,7 @@ class _InvestorHomeState extends State<InvestorHome> {
         if (orientation == CardSwipeOrientation.LEFT ||
             orientation == CardSwipeOrientation.RIGHT) {
           setState(() {
+            isLoading = true;
             _recPagingController.itemList.removeAt(index);
             // print("Swipe Completion: $orientation, $index");
             //print("Items1: ${_recPagingController.itemList.length}");

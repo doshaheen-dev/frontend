@@ -11,7 +11,6 @@ import 'package:acc/providers/kyc_docs_provider.dart';
 import 'package:acc/providers/product_type_provider.dart';
 import 'package:acc/providers/country_provider.dart';
 import 'package:acc/providers/city_provider.dart';
-import 'package:acc/screens/fundraiser/dashboard/add_new_funds.dart';
 import 'package:acc/screens/fundraiser/dashboard/fundraiser_dashboard.dart';
 import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
 import 'package:acc/services/TokenRefreshService.dart';

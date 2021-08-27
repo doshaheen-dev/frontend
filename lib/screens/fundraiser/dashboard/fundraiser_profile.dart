@@ -1230,11 +1230,8 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
     Default updateProfileOtpService =
         await UpdateProfileOtpService.verifyOtp(emailVerificationId, otpCode);
     if (updateProfileOtpService.status == 200) {
-//      progress?.showWithText(successOTP);
-
       Future.delayed(Duration(milliseconds: 2), () async {
         print("id:- $emailVerificationId");
-        // progress.dismiss();
         setState(() {
           isEmailOtpReceived = false;
         });
@@ -1247,7 +1244,6 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
         Navigator.pop(context);
       });
     } else {
-      //progress.dismiss();
       emailVerificationId = "";
       showSnackBar(context, updateProfileOtpService.message);
     }
@@ -1306,6 +1302,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
     // show the dialog
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return alert;
       },

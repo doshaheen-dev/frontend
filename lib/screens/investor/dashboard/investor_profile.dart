@@ -1267,6 +1267,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
 
     progress = ProgressHUD.of(context);
     progress?.showWithText('Updating Profile...');
+    progress?.barrierEnabled(false);
     Map<String, dynamic> requestMap = Map();
     bool isSignInRequired = false;
 
@@ -1316,41 +1317,6 @@ class _InvestorProfileState extends State<InvestorProfile> {
         showSnackBar(context, updateResponse.message);
       }
     });
-    // Default updateResponse =
-    //     await UpdateProfileService.updateUserInfo(requestMap);
-    // if (updateResponse.status == 200) {
-    //   progress.dismiss();
-
-    //   _openDialog(context, updateResponse.message);
-    // if (isSignInRequired) {
-    //   _openDialog(context, updateResponse.message);
-    // } else {
-    //   UserData userData = UserData(
-    //       UserData.instance.userInfo.token,
-    //       _firstName,
-    //       "",
-    //       _lastName,
-    //       UserData.instance.userInfo.mobileNo,
-    //       UserData.instance.userInfo.emailId,
-    //       UserData.instance.userInfo.userType,
-    //       "",
-    //       "",
-    //       "",
-    //       _address,
-    //       _countryCode);
-    //   final prefs = await SharedPreferences.getInstance();
-    //   final userJson = jsonEncode(userData);
-    //   prefs.setString('UserInfo', userJson);
-    //   UserData.instance.userInfo = userData;
-
-    //   showSnackBar(context, updateResponse.message);
-    // }
-    // } else {
-    //   // if (progress != null) {
-    //   //   progress.dismiss();
-    //   // }
-    //   showSnackBar(context, updateResponse.message);
-    // }
   }
 
   _openDialog(BuildContext context, String message) {
@@ -1377,6 +1343,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
     // show the dialog
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return alert;
       },
