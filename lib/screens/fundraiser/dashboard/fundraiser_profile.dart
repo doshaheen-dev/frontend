@@ -129,10 +129,9 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
         backgroundColor: Colors.white,
         body: ProgressHUD(
             child: Builder(
-                builder: (context) => SafeArea(
-                        child: SingleChildScrollView(
+                builder: (context) => SingleChildScrollView(
                       child: Container(
-                          margin: const EdgeInsets.only(bottom: 20),
+                          margin: EdgeInsets.only(top: 10.0, bottom: 20.0),
                           child: Column(
                             children: [
                               Container(
@@ -142,10 +141,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                               ),
                               Container(
                                 margin: const EdgeInsets.only(
-                                    top: 5.0,
-                                    left: 50.0,
-                                    bottom: 10,
-                                    right: 50.0),
+                                    left: 50.0, bottom: 10, right: 50.0),
                                 child: ElevatedButton(
                                     onPressed: () {
                                       openLogoutDialog(context,
@@ -172,7 +168,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                               ),
                             ],
                           )),
-                    )))));
+                    ))));
   }
 
   void setUserInformation() {

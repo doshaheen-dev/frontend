@@ -44,7 +44,7 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
             children: [
               Container(
                   margin:
-                      const EdgeInsets.only(top: 80.0, left: 15.0, right: 25.0),
+                      const EdgeInsets.only(top: 60.0, left: 25.0, right: 25.0),
                   child: Row(
                     children: [
                       Expanded(
@@ -126,17 +126,20 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
             ],
           ),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Color(0xffffffff),
-          elevation: 0.0,
-          currentIndex: bottomSelectedIndex,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          type: BottomNavigationBarType.fixed,
-          onTap: (index) {
-            bottomTapped(index);
-          },
-          items: buildBottomNavBarItems(),
+        bottomNavigationBar: SizedBox(
+          height: 150,
+          child: BottomNavigationBar(
+            backgroundColor: Color(0xffffffff),
+            elevation: 0.0,
+            currentIndex: bottomSelectedIndex,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            type: BottomNavigationBarType.fixed,
+            onTap: (index) {
+              bottomTapped(index);
+            },
+            items: buildBottomNavBarItems(),
+          ),
         ),
       ),
     );
@@ -145,7 +148,10 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
   List<BottomNavigationBarItem> buildBottomNavBarItems() {
     return [
       BottomNavigationBarItem(
-        icon: Image.asset('assets/images/dashboard/nav_home.png'),
+        icon: Image.asset(
+          'assets/images/dashboard/nav_home.png',
+          height: 80.0,
+        ),
         tooltip: "Home",
         title: Text(
           "Home",
