@@ -28,8 +28,6 @@ class InvestorHome extends StatefulWidget {
 
 class _InvestorHomeState extends State<InvestorHome>
     with TickerProviderStateMixin {
-  final GlobalKey<AnimatedListState> _listKey = GlobalKey();
-
   var currentIndex = 0;
   var fundPageNo = 0;
   var _isInit = true;
@@ -402,7 +400,6 @@ class _InvestorHomeState extends State<InvestorHome>
           context: context,
           removeTop: true,
           child: PagedListView<int, investorProvider.FundsInfo>.separated(
-            key: _listKey,
             pagingController: _recPagingController,
             // scrollDirection: Axis.vertical,
             builderDelegate:
