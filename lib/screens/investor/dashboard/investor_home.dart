@@ -26,7 +26,10 @@ class InvestorHome extends StatefulWidget {
   _InvestorHomeState createState() => _InvestorHomeState();
 }
 
-class _InvestorHomeState extends State<InvestorHome> {
+class _InvestorHomeState extends State<InvestorHome>
+    with TickerProviderStateMixin {
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey();
+
   var currentIndex = 0;
   var fundPageNo = 0;
   var _isInit = true;
@@ -50,6 +53,8 @@ class _InvestorHomeState extends State<InvestorHome> {
       _intFundsPagingController = PagingController(firstPageKey: 0);
   var isLoading = false;
   var progress;
+  investorProvider.FundsInfo currentItem;
+  num currentItemIndex = 0;
 
   void displayInterestedFunds(bool value) {
     setState(() {
@@ -191,23 +196,27 @@ class _InvestorHomeState extends State<InvestorHome> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          child: Container(
-              alignment: Alignment.topLeft,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Visibility(
-                      visible: isRecommendationPresent,
-                      child: recommendationsUI(context),
-                    ),
+        body: ProgressHUD(
+          child: Builder(
+            builder: (context) => SingleChildScrollView(
+              child: Container(
+                  alignment: Alignment.topLeft,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Visibility(
+                          visible: isRecommendationPresent,
+                          child: recommendationsUI(context),
+                        ),
 
-                    //FUNDS
-                    Visibility(
-                      visible: isFundsPresent,
-                      child: fundsUI(),
-                    ),
-                  ])),
+                        //FUNDS
+                        Visibility(
+                          visible: isFundsPresent,
+                          child: fundsUI(),
+                        ),
+                      ])),
+            ),
+          ),
         ));
   }
 
@@ -385,42 +394,61 @@ class _InvestorHomeState extends State<InvestorHome> {
   Widget setRecommendations(BuildContext _context) {
     return Stack(children: [
       RefreshIndicator(
-          onRefresh: () => Future.sync(
-                () => _recPagingController.refresh(),
+        onRefresh: () => Future.sync(
+          () => _recPagingController.refresh(),
+        ),
+        color: Colors.orange,
+        child: MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          child: PagedListView<int, investorProvider.FundsInfo>.separated(
+            key: _listKey,
+            pagingController: _recPagingController,
+            // scrollDirection: Axis.vertical,
+            builderDelegate:
+                PagedChildBuilderDelegate<investorProvider.FundsInfo>(
+              animateTransitions: true,
+              transitionDuration: const Duration(milliseconds: 800),
+              firstPageProgressIndicatorBuilder: (ctx) => Center(
+                child: CircularProgressIndicator(
+                    //backgroundColor: Colors.orange,
+                    //valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
+                    ),
               ),
-          color: Colors.orange,
-          child: MediaQuery.removePadding(
-            context: context,
-            removeTop: true,
-            child: PagedListView<int, investorProvider.FundsInfo>.separated(
-              pagingController: _recPagingController,
-              // scrollDirection: Axis.vertical,
-              builderDelegate:
-                  PagedChildBuilderDelegate<investorProvider.FundsInfo>(
-                animateTransitions: true,
-                firstPageProgressIndicatorBuilder: (ctx) => Center(
-                  child: CircularProgressIndicator(
-                      //backgroundColor: Colors.orange,
-                      //valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
+              firstPageErrorIndicatorBuilder: (ctx) => ErrorIndicator(
+                error: _recPagingController.error,
+                onTryAgain: () => _recPagingController.refresh(),
+              ),
+              noItemsFoundIndicatorBuilder: (context) => EmptyListIndicator(),
+              itemBuilder: (context, item, index) => Container(
+                height: 300,
+                width: (MediaQuery.of(context).size.width - 40),
+                child: AnimatedContainer(
+                  curve: Curves.decelerate,
+                  // vsync: this,
+                  duration: const Duration(seconds: 1),
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: Container(
+                          height: 100,
+                          width: 200,
+                          child: Image.asset('assets/images/app_logo.png'),
+                        ),
                       ),
-                ),
-                firstPageErrorIndicatorBuilder: (ctx) => ErrorIndicator(
-                  error: _recPagingController.error,
-                  onTryAgain: () => _recPagingController.refresh(),
-                ),
-                noItemsFoundIndicatorBuilder: (context) => EmptyListIndicator(),
-                itemBuilder: (context, item, index) => Container(
-                  height: 300,
-                  width: (MediaQuery.of(context).size.width - 40),
-                  child: _tinderCard(_context, index, item),
+                      _tinderCard(_context, index, item),
+                    ],
+                  ),
                 ),
               ),
-              separatorBuilder: (context, index) => const Divider(
-                color: Colors.transparent,
-              ),
-              shrinkWrap: true,
             ),
-          )),
+            separatorBuilder: (context, index) => const Divider(
+              color: Colors.transparent,
+            ),
+            shrinkWrap: true,
+          ),
+        ),
+      ),
       // Visibility(
       //   visible: isLoading,
       //   child: Center(
@@ -435,7 +463,7 @@ class _InvestorHomeState extends State<InvestorHome> {
   Widget _tinderCard(BuildContext _context, int arrIndex,
       investorProvider.FundsInfo recommended) {
     CardController controller;
-    return new TinderSwapCard(
+    return TinderSwapCard(
       swipeUp: false,
       swipeDown: false,
       orientation: AmassOrientation.RIGHT,
@@ -446,6 +474,7 @@ class _InvestorHomeState extends State<InvestorHome> {
       maxHeight: 280,
       minWidth: MediaQuery.of(_context).size.width - 60,
       minHeight: 200,
+      allowVerticalMovement: false,
       cardBuilder: (ctx, idx) =>
           _buildRecommendationList(_context, arrIndex, recommended),
       cardController: controller = CardController(),
@@ -459,23 +488,27 @@ class _InvestorHomeState extends State<InvestorHome> {
         }
       },
       swipeCompleteCallback: (CardSwipeOrientation orientation, int index) {
-        /// Get orientation & index of swiped card!
-
-        if (orientation == CardSwipeOrientation.LEFT) {
-          respondRecommendation(recommended.fundTxnId, 0); // reject
-        } else if (orientation == CardSwipeOrientation.RIGHT) {
-          respondRecommendation(recommended.fundTxnId, 1); // accept
-        }
+        currentItemIndex = arrIndex;
+        currentItem = _recPagingController.itemList.elementAt(currentItemIndex);
         if (orientation == CardSwipeOrientation.LEFT ||
             orientation == CardSwipeOrientation.RIGHT) {
           setState(() {
-            _recPagingController.itemList.removeAt(index);
+            _recPagingController.itemList.removeAt(arrIndex);
 
             progress = ProgressHUD.of(_context);
             progress?.showWithText('Updating your preference...');
             //isLoading = true;
             // showProcessingDialog();
           });
+          switch (orientation) {
+            case CardSwipeOrientation.LEFT:
+              respondRecommendation(recommended.fundTxnId, 0); // reject
+              break;
+            case CardSwipeOrientation.RIGHT:
+              respondRecommendation(recommended.fundTxnId, 1); // accept
+              break;
+            default:
+          }
         }
       },
     );
@@ -587,12 +620,15 @@ class _InvestorHomeState extends State<InvestorHome> {
       // });
       progress.dismiss();
       showSnackBar(context, respondRecommendation.message);
-      if (respondRecommendation.status == 200) {
+      if (respondRecommendation.type == 'success') {
         _recPagingController.refresh();
 
         // if empty
         getFundsListSize();
         _intFundsPagingController.refresh();
+      } else {
+        // re-insert if error occurs
+        _recPagingController.itemList.insert(currentItemIndex, currentItem);
       }
     });
   }
