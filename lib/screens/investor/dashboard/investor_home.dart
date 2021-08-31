@@ -13,6 +13,7 @@ import 'package:acc/widgets/exception_indicators/error_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/utilites/app_colors.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/investor_home_provider.dart' as investorProvider;
 // import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -27,38 +28,20 @@ class InvestorHome extends StatefulWidget {
 
 class _InvestorHomeState extends State<InvestorHome> {
   var currentIndex = 0;
-  var _fundscurrentIndex = 0;
-  // Future _recommendations;
-  // Future _interestedFunds;
-
   var fundPageNo = 0;
   var _isInit = true;
   int recommendationListSize;
   int interestedFundsSize;
-
-  // List<investorProvider.FundsInfo> recommendList = [];
-  // List<investorProvider.FundsInfo> fundsList = [];
-
-  // final ItemScrollController itemScrollController = ItemScrollController();
-  // final ItemPositionsListener itemPositionsListener =
-  //     ItemPositionsListener.create();
-
-  // final ItemScrollController fundItemScrollController = ItemScrollController();
-  // final ItemPositionsListener fundIitemPositionsListener =
-  //     ItemPositionsListener.create();
-
   bool isFundsPresent = false;
   bool isRecommendationPresent = false;
   bool isRecommendationNavigation = false;
   bool isFundsNavigation = false;
-
   // Recommendations List
   num _recommendationPageSize = 10;
   num totalItems = 0;
   var recommendationPageNo = 0;
   final PagingController<int, investorProvider.FundsInfo> _recPagingController =
       PagingController(firstPageKey: 0);
-
   // Funds List
   num _fundsPageSize = 10;
   num fundsTotalItems = 0;
@@ -66,6 +49,7 @@ class _InvestorHomeState extends State<InvestorHome> {
   final PagingController<int, investorProvider.FundsInfo>
       _intFundsPagingController = PagingController(firstPageKey: 0);
   var isLoading = false;
+  var progress;
 
   void displayInterestedFunds(bool value) {
     setState(() {
@@ -87,7 +71,6 @@ class _InvestorHomeState extends State<InvestorHome> {
   }
 
   Future<void> _fetchRecPage(int pageKey) async {
-    // print("Page: ${pageKey ~/ _recommendationPageSize}");
     try {
       final invHomePvdr =
           Provider.of<investorProvider.InvestorHome>(context, listen: false);
@@ -108,7 +91,7 @@ class _InvestorHomeState extends State<InvestorHome> {
         });
       });
     } catch (error) {
-      print("RefreshErr: ${error.toString()}");
+      // print("RefreshErr: ${error.toString()}");
       _recPagingController.error = error;
     }
   }
@@ -134,7 +117,7 @@ class _InvestorHomeState extends State<InvestorHome> {
         });
       });
     } catch (error) {
-      print("RefreshErr: ${error.toString()}");
+      //print("RefreshErr: ${error.toString()}");
       _intFundsPagingController.error = error;
     }
   }
@@ -216,7 +199,7 @@ class _InvestorHomeState extends State<InvestorHome> {
                   children: [
                     Visibility(
                       visible: isRecommendationPresent,
-                      child: recommendationsUI(),
+                      child: recommendationsUI(context),
                     ),
 
                     //FUNDS
@@ -367,7 +350,7 @@ class _InvestorHomeState extends State<InvestorHome> {
 
   // ------------------------------- Recommendation funds -------------------------- //
 
-  Container recommendationsUI() {
+  Container recommendationsUI(BuildContext buildContext) {
     return Container(
         child: Column(
       children: [
@@ -381,7 +364,7 @@ class _InvestorHomeState extends State<InvestorHome> {
               Container(
                 //color: Colors.orange,
                 height: 300.0,
-                child: setRecommendations(),
+                child: setRecommendations(buildContext),
               ),
               SizedBox(
                 height: 10.0,
@@ -399,7 +382,7 @@ class _InvestorHomeState extends State<InvestorHome> {
     ));
   }
 
-  Widget setRecommendations() {
+  Widget setRecommendations(BuildContext _context) {
     return Stack(children: [
       RefreshIndicator(
           onRefresh: () => Future.sync(
@@ -429,7 +412,7 @@ class _InvestorHomeState extends State<InvestorHome> {
                 itemBuilder: (context, item, index) => Container(
                   height: 300,
                   width: (MediaQuery.of(context).size.width - 40),
-                  child: _tinderCard(context, index, item),
+                  child: _tinderCard(_context, index, item),
                 ),
               ),
               separatorBuilder: (context, index) => const Divider(
@@ -438,18 +421,18 @@ class _InvestorHomeState extends State<InvestorHome> {
               shrinkWrap: true,
             ),
           )),
-      Visibility(
-        visible: isLoading,
-        child: Center(
-          child: CircularProgressIndicator(
-            color: selectedOrange,
-          ),
-        ),
-      ),
+      // Visibility(
+      //   visible: isLoading,
+      //   child: Center(
+      //     child: CircularProgressIndicator(
+      //       color: selectedOrange,
+      //     ),
+      //   ),
+      // ),
     ]);
   }
 
-  Widget _tinderCard(BuildContext context, int arrIndex,
+  Widget _tinderCard(BuildContext _context, int arrIndex,
       investorProvider.FundsInfo recommended) {
     CardController controller;
     return new TinderSwapCard(
@@ -459,12 +442,12 @@ class _InvestorHomeState extends State<InvestorHome> {
       totalNum: 1,
       stackNum: 3,
       swipeEdge: 4.0,
-      maxWidth: MediaQuery.of(context).size.width - 40,
+      maxWidth: MediaQuery.of(_context).size.width - 40,
       maxHeight: 280,
-      minWidth: MediaQuery.of(context).size.width - 60,
+      minWidth: MediaQuery.of(_context).size.width - 60,
       minHeight: 200,
       cardBuilder: (ctx, idx) =>
-          _buildRecommendationList(context, arrIndex, recommended),
+          _buildRecommendationList(_context, arrIndex, recommended),
       cardController: controller = CardController(),
       swipeUpdateCallback: (DragUpdateDetails details, Alignment align) {
         /// Get swiping card's alignment
@@ -486,9 +469,12 @@ class _InvestorHomeState extends State<InvestorHome> {
         if (orientation == CardSwipeOrientation.LEFT ||
             orientation == CardSwipeOrientation.RIGHT) {
           setState(() {
-            isLoading = true;
-            _recPagingController.itemList.removeAt(index);            
-            //updateList();
+            _recPagingController.itemList.removeAt(index);
+
+            progress = ProgressHUD.of(_context);
+            progress?.showWithText('Updating your preference...');
+            //isLoading = true;
+            // showProcessingDialog();
           });
         }
       },
@@ -590,19 +576,17 @@ class _InvestorHomeState extends State<InvestorHome> {
   }
 
   Future<void> respondRecommendation(int fundTxnId, int selection) async {
-    // print("Loading....");
-    setState(() {
-      isLoading = true;
-    });
     Future.delayed(Duration(seconds: 1), () async {
       RespondRecommendation respondRecommendation =
           await InvestorHomeService.acceptRejectRecommendation(
               fundTxnId, selection, UserData.instance.userInfo.token);
-      // print("Stop Loading....");
+
+      // Navigator.pop(context);
+      // setState(() {
+      //   isLoading = false;
+      // });
+      progress.dismiss();
       showSnackBar(context, respondRecommendation.message);
-      setState(() {
-        isLoading = false;
-      });
       if (respondRecommendation.status == 200) {
         _recPagingController.refresh();
 
@@ -611,6 +595,34 @@ class _InvestorHomeState extends State<InvestorHome> {
         _intFundsPagingController.refresh();
       }
     });
+  }
+
+  void showProcessingDialog() async {
+    return showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              contentPadding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+              content: Container(
+                  width: 250.0,
+                  height: 100.0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          CircularProgressIndicator(
+                            color: kDarkOrange,
+                          ),
+                          SizedBox(width: 10.0),
+                          Text("Updating your prefrences...",
+                              style: textNormal16(headingBlack))
+                        ]),
+                  )));
+        });
   }
   // ------------------------------- end of recommendations -------------------------- //
 }
