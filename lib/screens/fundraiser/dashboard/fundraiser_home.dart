@@ -87,20 +87,21 @@ class _FundraiserHomeState extends State<FundraiserHome> {
         Expanded(
           child: Scrollbar(
             isAlwaysShown: true,
-            child: SingleChildScrollView(
-                child: Container(
-              margin: EdgeInsets.only(top: 10.0, bottom: 20.0),
-              child: Column(
-                children: [
-                  Visibility(
-                      visible: !_fundsAvailable,
-                      child: addNewFundsCell(context)),
-                  Visibility(
-                      visible: _fundsAvailable,
-                      child: addSubmittedList(context)),
-                ],
-              ),
-            )),
+            child: addSubmittedList(context),
+            // SingleChildScrollView(
+            //     child: Container(
+            //   margin: EdgeInsets.only(top: 10.0, bottom: 20.0),
+            //   child: Column(
+            //     children: [
+            //       Visibility(
+            //           visible: !_fundsAvailable,
+            //           child: addNewFundsCell(context)),
+            //       Visibility(
+            //           visible: _fundsAvailable,
+            //           child: addSubmittedList(context)),
+            //     ],
+            //   ),
+            // )),
           ),
         ),
       ]),
@@ -122,7 +123,7 @@ class _FundraiserHomeState extends State<FundraiserHome> {
   }
 
   Widget addSubmittedList(BuildContext context) {
-    return Column(children: [
+    return Stack(children: [
       // Container(
       //   margin: const EdgeInsets.only(left: 25.0, right: 25.0),
       //   child: _createHeader(),
@@ -135,7 +136,7 @@ class _FundraiserHomeState extends State<FundraiserHome> {
             context: context,
             removeTop: true,
             child: PagedListView<int, SubmittedFunds>.separated(
-              physics: NeverScrollableScrollPhysics(),
+              physics: AlwaysScrollableScrollPhysics(),
               pagingController: _pagingController,
               builderDelegate: PagedChildBuilderDelegate<SubmittedFunds>(
                 animateTransitions: true,
