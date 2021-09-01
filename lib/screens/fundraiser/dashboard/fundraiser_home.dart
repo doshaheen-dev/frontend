@@ -30,10 +30,12 @@ class _FundraiserHomeState extends State<FundraiserHome> {
     try {
       // print('Page: $pageKey');
       final fundPvdr = Provider.of<FundProvider>(context, listen: false);
-      fundPvdr.fetchAndSetFunds(pageNo, fundPageSize).then((result) {
+      fundPvdr
+          .fetchAndSetFunds((pageKey ~/ fundPageSize), fundPageSize)
+          .then((result) {
         final funds = fundPvdr.funds;
         // print('Funds: ${funds.length}');
-        fundsList.addAll(funds);
+        // fundsList.addAll(funds);
         // print('FundsList: ${fundsList.length}');
         setState(() {
           if (funds.isEmpty) {
@@ -48,7 +50,6 @@ class _FundraiserHomeState extends State<FundraiserHome> {
             _fundsAvailable = true;
           } else {
             final nextPageKey = pageKey + funds.length;
-            pageNo++;
             _pagingController.appendPage(funds, nextPageKey);
           }
         });
