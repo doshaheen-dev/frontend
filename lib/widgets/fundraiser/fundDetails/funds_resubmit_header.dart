@@ -22,12 +22,12 @@ class _FundsResubmitHeaderState extends State<FundsResubmitHeader> {
           ),
         ),
         Container(
-            margin: const EdgeInsets.only(top: 10.0, left: 15.0, right: 25.0),
+            margin: const EdgeInsets.only(top: 10.0, left: 25.0, right: 25.0),
             child: Row(
               children: [
                 Expanded(
                     child: Text(
-                  'Hello  Fundraiser',
+                  'Hello Fundraiser',
                   style: textBold26(headingBlack),
                 )),
                 Image.asset('assets/images/investor/icon_investor.png'),

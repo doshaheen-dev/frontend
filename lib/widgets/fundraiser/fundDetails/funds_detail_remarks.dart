@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/text_style.dart';
-import 'package:acc/utilites/ui_widgets.dart';
 import 'package:flutter/material.dart';
 
 class FundsRemark extends StatefulWidget {
@@ -30,13 +27,9 @@ class _FundsRemarkState extends State<FundsRemark> {
       });
     } else {
       setState(() {
-        if (widget.likedFunds != "") {
-          _isFundDcoumentVisible = true;
-          _changeBgColor = kDarkOrange;
-          _selectedTextColor = Colors.white;
-        } else {
-          showSnackBar(context, "Remarks are not available");
-        }
+        _isFundDcoumentVisible = true;
+        _changeBgColor = kDarkOrange;
+        _selectedTextColor = Colors.white;
       });
     }
   }
@@ -84,7 +77,8 @@ class _FundsRemarkState extends State<FundsRemark> {
                       width: MediaQuery.of(context).size.width,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(widget.likedFunds),
+                        child: Text(widget.likedFunds,
+                            style: textNormal14(Colors.black)),
                       )))))
     ]);
   }

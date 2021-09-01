@@ -4,7 +4,6 @@ import 'package:acc/screens/common/inapp_webview.dart';
 import 'package:acc/screens/fundraiser/dashboard/fundraiser_home.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/text_style.dart';
-import 'package:acc/utilites/ui_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +20,7 @@ class FundsUploadedDocument extends StatefulWidget {
 
 class _FundsUploadedDocumentState extends State<FundsUploadedDocument> {
   bool _isFundDcoumentVisible = false;
+  bool _isDcoumentEmpty = false;
   var _selectedTextColor = Colors.black;
   var _changeBgColor = unselectedGray;
   var _isInit = true;
@@ -44,8 +44,9 @@ class _FundsUploadedDocumentState extends State<FundsUploadedDocument> {
   }
 
   _displayFundsDocument() {
-    if (_isFundDcoumentVisible == true) {
+    if (_isFundDcoumentVisible == true || _isDcoumentEmpty == true) {
       setState(() {
+        _isDcoumentEmpty = false;
         _isFundDcoumentVisible = false;
         _changeBgColor = unselectedGray;
         _selectedTextColor = Colors.black;
@@ -53,10 +54,13 @@ class _FundsUploadedDocumentState extends State<FundsUploadedDocument> {
     } else {
       setState(() {
         if (documentList.isEmpty) {
-          showSnackBar(context, "No documents uploaded yet.");
-          return;
+          _isDcoumentEmpty = true;
+          //showSnackBar(context, "No documents uploaded yet.");
+        } else {
+          _isDcoumentEmpty = false;
+          _isFundDcoumentVisible = true;
         }
-        _isFundDcoumentVisible = true;
+
         _changeBgColor = kDarkOrange;
         _selectedTextColor = Colors.white;
       });
@@ -131,6 +135,21 @@ class _FundsUploadedDocumentState extends State<FundsUploadedDocument> {
               }
             },
           ),
+        ),
+      ),
+      Visibility(
+        visible: _isDcoumentEmpty,
+        child: Card(
+          color: unselectedGray,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          child: Container(
+              width: MediaQuery.of(context).size.width,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("No documents uploaded yet.",
+                    style: textNormal14(Colors.black)),
+              )),
         ),
       )
     ]);

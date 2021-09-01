@@ -106,46 +106,33 @@ class _FundraiserHomeState extends State<FundraiserHome> {
   }
 
   Widget addSubmittedList(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () => Future.sync(() => _pagingController.refresh()),
-      child: Stack(
-        children: [
-          Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(left: 25.0, right: 25.0),
-                child: _createHeader(),
-              ),
-              Container(
-                  margin: const EdgeInsets.only(
-                      top: 10.0, left: 25.0, right: 25.0, bottom: 20.0),
-                  child: RefreshIndicator(
-                      onRefresh: () => Future.sync(
-                            () => _pagingController.refresh(),
-                          ),
-                      child: MediaQuery.removePadding(
-                        context: context,
-                        removeTop: true,
-                        child: PagedListView<int, SubmittedFunds>.separated(
-                          physics: NeverScrollableScrollPhysics(),
-                          pagingController: _pagingController,
-                          builderDelegate:
-                              PagedChildBuilderDelegate<SubmittedFunds>(
-                            animateTransitions: true,
-                            itemBuilder: (context, item, index) =>
-                                _createCell(item, index),
-                          ),
-                          separatorBuilder: (context, index) => const Divider(
-                            color: Colors.transparent,
-                          ),
-                          shrinkWrap: true,
-                        ),
-                      ))),
-            ],
-          )
-        ],
+    return Column(children: [
+      Container(
+        margin: const EdgeInsets.only(left: 25.0, right: 25.0),
+        child: _createHeader(),
       ),
-    );
+      RefreshIndicator(
+          onRefresh: () => Future.sync(() => print("Refreshing")
+              // _pagingController.refresh()
+              ),
+          child: MediaQuery.removePadding(
+            context: context,
+            removeTop: true,
+            child: PagedListView<int, SubmittedFunds>.separated(
+              physics: NeverScrollableScrollPhysics(),
+              pagingController: _pagingController,
+              builderDelegate: PagedChildBuilderDelegate<SubmittedFunds>(
+                animateTransitions: true,
+                itemBuilder: (context, item, index) => _createCell(item, index),
+              ),
+              separatorBuilder: (context, index) => const Divider(
+                color: Colors.transparent,
+              ),
+              shrinkWrap: true,
+            ),
+          )),
+    ]);
+
     // return Stack(
     //   children: [
     //     Column(
@@ -228,7 +215,11 @@ class _FundraiserHomeState extends State<FundraiserHome> {
         setState(() {});
       },
       child: Container(
-        margin: EdgeInsets.only(top: 8.0),
+        margin: EdgeInsets.only(
+          top: 8.0,
+          left: 25.0,
+          right: 25.0,
+        ),
         height: 80,
         decoration: BoxDecoration(
           color: unselectedGray,

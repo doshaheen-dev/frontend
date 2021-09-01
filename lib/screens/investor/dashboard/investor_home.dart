@@ -9,14 +9,12 @@ import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 import 'package:acc/widgets/exception_indicators/empty_list_indicator.dart';
 import 'package:acc/widgets/exception_indicators/error_indicator.dart';
-// import 'package:acc/utilites/ui_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/investor_home_provider.dart' as investorProvider;
-// import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_tindercard/flutter_tindercard.dart';
@@ -49,7 +47,6 @@ class _InvestorHomeState extends State<InvestorHome>
   var fundsPageNo = 0;
   final PagingController<int, investorProvider.FundsInfo>
       _intFundsPagingController = PagingController(firstPageKey: 0);
-  var isLoading = false;
   var progress;
   investorProvider.FundsInfo currentItem;
   num currentItemIndex = 0;
@@ -329,14 +326,6 @@ class _InvestorHomeState extends State<InvestorHome>
                       imageUrl: interestedFundsData.fundLogo,
                       errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
-                    // Image(
-                    //   image: interestedFundsData.fundLogo != ""
-                    //       ? NetworkImage(interestedFundsData.fundLogo)
-                    //       : AssetImage("assets/images/dummy/investment1.png"),
-                    //   height: 80.0,
-                    //   width: MediaQuery.of(context).size.width * 0.5,
-                    //   fit: BoxFit.fill,
-                    // ),
                   ),
                   SizedBox(
                     height: 5.0,
@@ -352,11 +341,9 @@ class _InvestorHomeState extends State<InvestorHome>
           ),
         ));
   }
-
   // ------------------------------- end of interested funds -------------------------- //
 
   // ------------------------------- Recommendation funds -------------------------- //
-
   Container recommendationsUI(BuildContext buildContext) {
     return Container(
         child: Column(
@@ -427,10 +414,21 @@ class _InvestorHomeState extends State<InvestorHome>
                   child: Stack(
                     children: [
                       Center(
-                        child: Container(
-                          height: 100,
-                          width: 200,
-                          child: Image.asset('assets/images/app_logo.png'),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 80,
+                              width: 200,
+                              child: Image.asset(
+                                'assets/images/app_logo.png',
+                              ),
+                            ),
+                            Text(
+                              "Recommended Funds",
+                              style: textBold16(headingBlack),
+                            )
+                          ],
                         ),
                       ),
                       _tinderCard(_context, index, item),
@@ -494,8 +492,6 @@ class _InvestorHomeState extends State<InvestorHome>
 
             progress = ProgressHUD.of(_context);
             progress?.showWithText('Updating your preference...');
-            //isLoading = true;
-            // showProcessingDialog();
           });
           switch (orientation) {
             case CardSwipeOrientation.LEFT:
@@ -610,11 +606,6 @@ class _InvestorHomeState extends State<InvestorHome>
       RespondRecommendation respondRecommendation =
           await InvestorHomeService.acceptRejectRecommendation(
               fundTxnId, selection, UserData.instance.userInfo.token);
-
-      // Navigator.pop(context);
-      // setState(() {
-      //   isLoading = false;
-      // });
       progress.dismiss();
       showSnackBar(context, respondRecommendation.message);
       if (respondRecommendation.type == 'success') {
@@ -628,34 +619,6 @@ class _InvestorHomeState extends State<InvestorHome>
         _recPagingController.itemList.insert(currentItemIndex, currentItem);
       }
     });
-  }
-
-  void showProcessingDialog() async {
-    return showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
-              contentPadding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-              content: Container(
-                  width: 250.0,
-                  height: 100.0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          CircularProgressIndicator(
-                            color: kDarkOrange,
-                          ),
-                          SizedBox(width: 10.0),
-                          Text("Updating your prefrences...",
-                              style: textNormal16(headingBlack))
-                        ]),
-                  )));
-        });
   }
   // ------------------------------- end of recommendations -------------------------- //
 }

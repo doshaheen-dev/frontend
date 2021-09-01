@@ -31,7 +31,7 @@ class _SuccesssFundSubmittedState extends State<SuccesssFundSubmitted> {
                     children: <Widget>[
               Container(
                   margin:
-                      const EdgeInsets.only(top: 25.0, left: 15.0, right: 25.0),
+                      const EdgeInsets.only(top: 25.0, left: 25.0, right: 25.0),
                   child: Row(
                     children: [
                       Expanded(

@@ -196,7 +196,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
               visible: !isResubmit,
               child: FundsRemark(_likedFunds.fundsRemarks != null
                   ? _likedFunds.fundsRemarks
-                  : "")),
+                  : "Remarks are not available")),
           Visibility(visible: isResubmit, child: _addNewFundValue()),
           Visibility(visible: isResubmit, child: _uploadFundDeck())
         ],

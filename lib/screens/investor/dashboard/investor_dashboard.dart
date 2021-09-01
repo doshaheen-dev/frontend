@@ -126,20 +126,18 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
             ],
           ),
         ),
-        bottomNavigationBar: SizedBox(
-          height: 150,
-          child: BottomNavigationBar(
-            backgroundColor: Color(0xffffffff),
-            elevation: 0.0,
-            currentIndex: bottomSelectedIndex,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            type: BottomNavigationBarType.fixed,
-            onTap: (index) {
-              bottomTapped(index);
-            },
-            items: buildBottomNavBarItems(),
-          ),
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Color(0xffffffff),
+          elevation: 0.0,
+          currentIndex: bottomSelectedIndex,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          selectedFontSize: 0,
+          type: BottomNavigationBarType.fixed,
+          onTap: (index) {
+            bottomTapped(index);
+          },
+          items: buildBottomNavBarItems(),
         ),
       ),
     );
@@ -157,29 +155,35 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
           "Home",
         ),
       ),
+      // BottomNavigationBarItem(
+      //   icon: Image.asset('assets/images/dashboard/nav_suitcase.png'),
+      //   tooltip: "Suitcase",
+      //   title: Text(
+      //     "Suitcase",
+      //   ),
+      // ),
+      // BottomNavigationBarItem(
+      //   icon: Image.asset('assets/images/dashboard/nav_money.png'),
+      //   tooltip: "Money",
+      //   title: Text(
+      //     "Money",
+      //   ),
+      // ),
       BottomNavigationBarItem(
-        icon: Image.asset('assets/images/dashboard/nav_suitcase.png'),
-        tooltip: "Suitcase",
-        title: Text(
-          "Suitcase",
+        icon: Image.asset(
+          'assets/images/dashboard/nav_thumbsup.png',
+          height: 80.0,
         ),
-      ),
-      BottomNavigationBarItem(
-        icon: Image.asset('assets/images/dashboard/nav_money.png'),
-        tooltip: "Money",
-        title: Text(
-          "Money",
-        ),
-      ),
-      BottomNavigationBarItem(
-        icon: Image.asset('assets/images/dashboard/nav_thumbsup.png'),
         tooltip: "Like",
         title: Text(
           "Like",
         ),
       ),
       BottomNavigationBarItem(
-        icon: Image.asset('assets/images/dashboard/nav_profile.png'),
+        icon: Image.asset(
+          'assets/images/dashboard/nav_profile.png',
+          height: 80.0,
+        ),
         tooltip: "Profile",
         title: Text(
           "Profile",
@@ -202,9 +206,9 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
       },
       children: <Widget>[
         InvestorHome(),
-        Blue(),
+        // Blue(),
         Yellow(),
-        Red(),
+        //Red(),
         InvestorProfile(),
       ],
     );
