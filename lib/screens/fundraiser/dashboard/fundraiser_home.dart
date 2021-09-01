@@ -85,24 +85,7 @@ class _FundraiserHomeState extends State<FundraiserHome> {
           height: 10,
         ),
         Expanded(
-          child: Scrollbar(
-            isAlwaysShown: true,
-            child: addSubmittedList(context),
-            // SingleChildScrollView(
-            //     child: Container(
-            //   margin: EdgeInsets.only(top: 10.0, bottom: 20.0),
-            //   child: Column(
-            //     children: [
-            //       Visibility(
-            //           visible: !_fundsAvailable,
-            //           child: addNewFundsCell(context)),
-            //       Visibility(
-            //           visible: _fundsAvailable,
-            //           child: addSubmittedList(context)),
-            //     ],
-            //   ),
-            // )),
-          ),
+          child: Scrollbar(isAlwaysShown: true, child: addFundsView(context)),
         ),
       ]),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -122,95 +105,36 @@ class _FundraiserHomeState extends State<FundraiserHome> {
     );
   }
 
-  Widget addSubmittedList(BuildContext context) {
-    return Stack(children: [
-      // Container(
-      //   margin: const EdgeInsets.only(left: 25.0, right: 25.0),
-      //   child: _createHeader(),
-      // ),
-      RefreshIndicator(
-          onRefresh: () => Future.sync(() => print("Refreshing")
-              // _pagingController.refresh()
-              ),
-          child: MediaQuery.removePadding(
-            context: context,
-            removeTop: true,
-            child: PagedListView<int, SubmittedFunds>.separated(
-              physics: AlwaysScrollableScrollPhysics(),
-              pagingController: _pagingController,
-              builderDelegate: PagedChildBuilderDelegate<SubmittedFunds>(
-                animateTransitions: true,
-                itemBuilder: (context, item, index) => _createCell(item, index),
-              ),
-              separatorBuilder: (context, index) => const Divider(
-                color: Colors.transparent,
-              ),
-              shrinkWrap: true,
-            ),
-          )),
-    ]);
-
-    // return Stack(
-    //   children: [
-    //     Column(
-    //       children: [
-    //         Container(
-    //           margin: const EdgeInsets.only(left: 25.0, right: 25.0),
-    //           child: _createHeader(),
-    //         ),
-    //         Container(
-    //             margin: const EdgeInsets.only(
-    //                 left: 25.0, right: 25.0, bottom: 20.0),
-    //             child: RefreshIndicator(
-    //               onRefresh: () => Future.sync(
-    //                 () => {print("refresh"), _pagingController.refresh()},
-    //               ),
-    //               child: PagedListView<int, SubmittedFunds>.separated(
-    //                 pagingController: _pagingController,
-    //                 builderDelegate: PagedChildBuilderDelegate<SubmittedFunds>(
-    //                   animateTransitions: true,
-    //                   itemBuilder: (context, item, index) =>
-    //                       _createCell(item, index),
-    //                 ),
-    //                 separatorBuilder: (context, index) => const Divider(
-    //                   color: Colors.transparent,
-    //                 ),
-    //                 shrinkWrap: true,
-    //               ),
-    //             )),
-
-    //         // Align(
-    //         //   child: Container(
-    //         //       margin:
-    //         //           const EdgeInsets.only(top: 10.0, left: 25.0, right: 25.0),
-    //         //       child: ElevatedButton(
-    //         //         onPressed: () {
-    //         //           // Open to add new funds
-    //         //           openAddNewFunds();
-    //         //         },
-    //         //         style: ElevatedButton.styleFrom(
-    //         //             padding: EdgeInsets.all(0.0),
-    //         //             shape: RoundedRectangleBorder(
-    //         //                 borderRadius: BorderRadius.circular(18))),
-    //         //         child: Ink(
-    //         //             decoration: BoxDecoration(
-    //         //                 gradient: LinearGradient(
-    //         //                     colors: [kDarkOrange, kLightOrange]),
-    //         //                 borderRadius: BorderRadius.circular(15)),
-    //         //             child: Container(
-    //         //                 width: MediaQuery.of(context).size.width,
-    //         //                 height: 60,
-    //         //                 alignment: Alignment.center,
-    //         //                 child: Text(
-    //         //                   addNewFunds,
-    //         //                   style: textWhiteBold18(),
-    //         //                 ))),
-    //         //       )),
-    //         // )
-    //       ],
-    //     )
-    //   ],
-    // );
+  Widget addFundsView(BuildContext context) {
+    return Stack(
+      children: [
+        Visibility(visible: !_fundsAvailable, child: addNewFundsCell(context)),
+        Visibility(
+            visible: _fundsAvailable,
+            child: RefreshIndicator(
+                onRefresh: () => Future.sync(() => {
+                      // pageNo = 0,
+                      _pagingController.refresh()
+                    }),
+                child: MediaQuery.removePadding(
+                  context: context,
+                  removeTop: true,
+                  child: PagedListView<int, SubmittedFunds>.separated(
+                    //    physics: NeverScrollableScrollPhysics(),
+                    pagingController: _pagingController,
+                    builderDelegate: PagedChildBuilderDelegate<SubmittedFunds>(
+                      animateTransitions: true,
+                      itemBuilder: (context, item, index) =>
+                          _createCell(item, index),
+                    ),
+                    separatorBuilder: (context, index) => const Divider(
+                      color: Colors.transparent,
+                    ),
+                    shrinkWrap: true,
+                  ),
+                )))
+      ],
+    );
   }
 
   Widget _createCell(SubmittedFunds item, int index) {
@@ -260,11 +184,12 @@ class _FundraiserHomeState extends State<FundraiserHome> {
                     children: [
                       InkWell(
                         onTap: () {
+                          print(_pagingController.itemList[index].name);
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => FundraiserFundDetail(
-                                      data: fundsList[index],
+                                      data: _pagingController.itemList[index],
                                       isResubmission: false)));
                         },
                         child: Text(
@@ -282,7 +207,7 @@ class _FundraiserHomeState extends State<FundraiserHome> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => FundraiserFundDetail(
-                                        data: fundsList[index],
+                                        data: _pagingController.itemList[index],
                                         isResubmission: true)));
                           },
                           child: Text(
