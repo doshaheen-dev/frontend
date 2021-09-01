@@ -76,18 +76,34 @@ class _FundraiserHomeState extends State<FundraiserHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-          child: Container(
-        margin: EdgeInsets.only(top: 10.0, bottom: 20.0),
-        child: Column(
-          children: [
-            Visibility(
-                visible: !_fundsAvailable, child: addNewFundsCell(context)),
-            Visibility(
-                visible: _fundsAvailable, child: addSubmittedList(context)),
-          ],
+      body: Column(children: [
+        Container(
+          margin: const EdgeInsets.only(left: 25.0, right: 25.0),
+          child: _createHeader(),
         ),
-      )),
+        SizedBox(
+          height: 10,
+        ),
+        Expanded(
+          child: Scrollbar(
+            isAlwaysShown: true,
+            child: SingleChildScrollView(
+                child: Container(
+              margin: EdgeInsets.only(top: 10.0, bottom: 20.0),
+              child: Column(
+                children: [
+                  Visibility(
+                      visible: !_fundsAvailable,
+                      child: addNewFundsCell(context)),
+                  Visibility(
+                      visible: _fundsAvailable,
+                      child: addSubmittedList(context)),
+                ],
+              ),
+            )),
+          ),
+        ),
+      ]),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Container(
         child: Visibility(
@@ -107,10 +123,10 @@ class _FundraiserHomeState extends State<FundraiserHome> {
 
   Widget addSubmittedList(BuildContext context) {
     return Column(children: [
-      Container(
-        margin: const EdgeInsets.only(left: 25.0, right: 25.0),
-        child: _createHeader(),
-      ),
+      // Container(
+      //   margin: const EdgeInsets.only(left: 25.0, right: 25.0),
+      //   child: _createHeader(),
+      // ),
       RefreshIndicator(
           onRefresh: () => Future.sync(() => print("Refreshing")
               // _pagingController.refresh()
