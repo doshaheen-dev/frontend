@@ -172,6 +172,8 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
   }
 
   void setUserInformation() {
+    print(
+        "User id:- ${CryptUtils.encryption(UserData.instance.userInfo.emailId)}");
     _firstNameController.text = (UserData.instance.userInfo.firstName == null ||
             UserData.instance.userInfo.firstName == 'null')
         ? ''

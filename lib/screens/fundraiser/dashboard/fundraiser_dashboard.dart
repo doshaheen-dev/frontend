@@ -1,5 +1,6 @@
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/screens/common/profile_picture.dart';
+import 'package:acc/screens/fundraiser/dashboard/fundraiser_faq.dart';
 import 'package:acc/screens/fundraiser/dashboard/fundraiser_profile.dart';
 import 'package:acc/widgets/image_circle.dart';
 import 'package:flutter/material.dart';
@@ -138,41 +139,21 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
           height: 80.0,
         ),
         tooltip: "Home",
-        title: Text(
-          "Home",
-        ),
+        label: "Home",
       ),
-      // BottomNavigationBarItem(
-      //   icon: Image.asset('assets/images/dashboard/nav_suitcase.png'),
-      //   tooltip: "Suitcase",
-      //   title: Text(
-      //     "Suitcase",
-      //   ),
-      // ),
-      // BottomNavigationBarItem(
-      //   icon: Image.asset('assets/images/dashboard/nav_money.png'),
-      //   tooltip: "Money",
-      //   title: Text(
-      //     "Money",
-      //   ),
-      // ),
       BottomNavigationBarItem(
         icon: Image.asset(
-          'assets/images/dashboard/nav_thumbsup.png',
+          'assets/images/dashboard/nav_faq.png',
           height: 80.0,
         ),
-        tooltip: "Like",
-        title: Text(
-          "Like",
-        ),
+        tooltip: "FAQ",
+        label: "FAQ",
       ),
       BottomNavigationBarItem(
         icon: Image.asset('assets/images/dashboard/nav_profile.png',
             height: 80.0),
         tooltip: "Profile",
-        title: Text(
-          "Profile",
-        ),
+        label: "Profile",
       ),
     ];
   }
@@ -191,9 +172,7 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
       },
       children: <Widget>[
         FundraiserHome(),
-        // Blue(),
-        Yellow(),
-        //  Red(),
+        FundraiserFaq(),
         FundraiserProfile(),
       ],
     );
@@ -278,48 +257,6 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
       builder: (BuildContext context) {
         return alert;
       },
-    );
-  }
-}
-
-class Red extends StatefulWidget {
-  @override
-  _RedState createState() => _RedState();
-}
-
-class _RedState extends State<Red> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.red,
-    );
-  }
-}
-
-class Blue extends StatefulWidget {
-  @override
-  _BlueState createState() => _BlueState();
-}
-
-class _BlueState extends State<Blue> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.blueAccent,
-    );
-  }
-}
-
-class Yellow extends StatefulWidget {
-  @override
-  _YellowState createState() => _YellowState();
-}
-
-class _YellowState extends State<Yellow> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.yellowAccent,
     );
   }
 }

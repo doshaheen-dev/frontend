@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/investor/dashboard/investor_home.dart';
 
+import 'investor_faq.dart';
+
 class InvestorDashboard extends StatefulWidget {
   final UserData userData;
 
@@ -155,23 +157,9 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
           "Home",
         ),
       ),
-      // BottomNavigationBarItem(
-      //   icon: Image.asset('assets/images/dashboard/nav_suitcase.png'),
-      //   tooltip: "Suitcase",
-      //   title: Text(
-      //     "Suitcase",
-      //   ),
-      // ),
-      // BottomNavigationBarItem(
-      //   icon: Image.asset('assets/images/dashboard/nav_money.png'),
-      //   tooltip: "Money",
-      //   title: Text(
-      //     "Money",
-      //   ),
-      // ),
       BottomNavigationBarItem(
         icon: Image.asset(
-          'assets/images/dashboard/nav_thumbsup.png',
+          'assets/images/dashboard/nav_faq.png',
           height: 80.0,
         ),
         tooltip: "Like",
@@ -206,9 +194,7 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
       },
       children: <Widget>[
         InvestorHome(),
-        // Blue(),
-        Yellow(),
-        //Red(),
+        InvestorFaq(),
         InvestorProfile(),
       ],
     );
@@ -259,47 +245,5 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
           ),
         ) ??
         false;
-  }
-}
-
-class Red extends StatefulWidget {
-  @override
-  _RedState createState() => _RedState();
-}
-
-class _RedState extends State<Red> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.red,
-    );
-  }
-}
-
-class Blue extends StatefulWidget {
-  @override
-  _BlueState createState() => _BlueState();
-}
-
-class _BlueState extends State<Blue> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.blueAccent,
-    );
-  }
-}
-
-class Yellow extends StatefulWidget {
-  @override
-  _YellowState createState() => _YellowState();
-}
-
-class _YellowState extends State<Yellow> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.yellowAccent,
-    );
   }
 }
