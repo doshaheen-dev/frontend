@@ -39,78 +39,70 @@ class _AddNewFundsState extends State<AddNewFunds> {
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+        backgroundColor: Colors.white,
+        body: SafeArea(
+            child: SingleChildScrollView(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
               Container(
                 child: IconButton(
                   icon: Icon(Icons.arrow_back, size: 30),
                   onPressed: () => {Navigator.pop(context)},
                 ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    margin: const EdgeInsets.only(
-                        top: 10.0, left: 25.0, right: 25.0),
-                    child: Text("Choose your Product",
-                        style: textBold(headingBlack, 20.0)),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(
-                        top: 10.0, left: 25.0, right: 25.0),
-                    child: Text(
-                        "Select the products you want to raise funds for.",
-                        style: textNormal(textGrey, 17.0)),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+                  Widget>[
+                Container(
+                  margin:
+                      const EdgeInsets.only(top: 10.0, left: 25.0, right: 25.0),
+                  child: Text("Choose your Product",
+                      style: textBold(headingBlack, 20.0)),
+                ),
+                Container(
+                  margin:
+                      const EdgeInsets.only(top: 10.0, left: 25.0, right: 25.0),
+                  child: Text(
+                      "Select the products you want to raise funds for.",
+                      style: textNormal(textGrey, 17.0)),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
                     margin: const EdgeInsets.only(
                         top: 10.0, left: 25.0, right: 25.0),
                     child: FutureBuilder(
-                      future: _futureFundSlots,
-                      builder: (ctx, dataSnapshot) {
-                        if (dataSnapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Center(
-                              child: CircularProgressIndicator(
-                            backgroundColor: Colors.orange,
-                            valueColor:
-                                new AlwaysStoppedAnimation<Color>(Colors.amber),
-                          ));
-                        } else {
-                          if (dataSnapshot.error != null) {
-                            return Center(child: Text("An error occurred!"));
+                        future: _futureFundSlots,
+                        builder: (ctx, dataSnapshot) {
+                          if (dataSnapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(
+                                child: CircularProgressIndicator(
+                              backgroundColor: Colors.orange,
+                              valueColor: new AlwaysStoppedAnimation<Color>(
+                                  Colors.amber),
+                            ));
                           } else {
-                            return Consumer<productProvider.ProductTypes>(
-                                builder: (ctx, fundData, child) =>
-                                    ListView.builder(
-                                      itemBuilder: (ctx, index) {
-                                        return _createCell(
-                                            fundData.types[index], index);
-                                      },
-                                      physics: NeverScrollableScrollPhysics(),
-                                      itemCount: fundData.types.length,
-                                      shrinkWrap: true,
-                                    ));
+                            if (dataSnapshot.error != null) {
+                              return Center(child: Text("An error occurred!"));
+                            } else {
+                              return Consumer<productProvider.ProductTypes>(
+                                  builder: (ctx, fundData, child) =>
+                                      ListView.builder(
+                                        itemBuilder: (ctx, index) {
+                                          return _createCell(
+                                              fundData.types[index], index);
+                                        },
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemCount: fundData.types.length,
+                                        shrinkWrap: true,
+                                      ));
+                            }
                           }
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+                        }))
+              ])
+            ]))));
   }
 
   InkWell _createCell(productProvider.InvestmentLimitItem item, int index) {

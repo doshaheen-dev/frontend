@@ -177,9 +177,7 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                                         "Upload Fund Brand Image",
                                         "JPEG, PNG, JPG."),
                                   ),
-                                  // SizedBox(
-                                  //   height: 10,
-                                  // ),
+
                                   Row(
                                     children: [
                                       Text(
@@ -423,8 +421,6 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
   Future<void> _selectFile(BuildContext context, int kycDocId) async {
     FilePickerResult result = await FilePicker.platform.pickFiles();
     if (result != null) {
-      // print('Path: ${result.files.single.path}');
-      // print('Name: ${result.files.single.name}');
       String fileName = result.files.single.name;
       File file = File(result.files.single.path);
       _openDialogToUploadFile(context, kycDocId, file, fileName);
@@ -498,9 +494,6 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
-                      // margin: EdgeInsets.only(bottom: 10.0, right: 10),
-                      // width: 20,
-                      // height: 45,
                       decoration: BoxDecoration(
                         color: unselectedGray,
                         borderRadius: BorderRadius.all(

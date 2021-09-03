@@ -42,6 +42,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
   @override
   void initState() {
     _userType = widget._userType;
+    selectedCountry = countryList[0];
     super.initState();
   }
 
@@ -64,7 +65,6 @@ class _SignUpOTPState extends State<SignUpOTP> {
 
   @override
   Widget build(BuildContext context) {
-    selectedCountry = countryList[0];
     String code = "";
     for (var i = 0; i < 6; i++) {
       code = code + Random().nextInt(9).toString();

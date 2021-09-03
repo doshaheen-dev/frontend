@@ -153,39 +153,6 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                               child: _createDropdownCities(),
                             ),
 
-                            // // Cities dropdown
-                            // Container(
-                            //   margin: const EdgeInsets.only(bottom: 20),
-                            //   width: MediaQuery.of(context).size.width,
-                            //   decoration: customDecoration(),
-                            //   child: Row(
-                            //     crossAxisAlignment: CrossAxisAlignment.center,
-                            //     children: [
-                            //       Padding(
-                            //         padding: EdgeInsets.all(10.0),
-                            //         child: Text(
-                            //           "Fund City",
-                            //           style: textNormal16(textGrey),
-                            //         ),
-                            //         // inputTextField("Fund City",
-                            //         //     "Please enter fund city here", null)
-                            //       ),
-                            //       Spacer(),
-                            //       IconButton(
-                            //           onPressed: () {
-                            //             // _openCityDropdown();
-                            //           },
-                            //           splashColor: Colors.transparent,
-                            //           highlightColor: Colors.transparent,
-                            //           icon: Image.asset(
-                            //             "assets/images/icon_down.png",
-                            //             color: Colors.black,
-                            //           ))
-                            //     ],
-                            //   ),
-                            //   //_createDropdownCities(),
-                            // ),
-
                             // Fund regulated
                             Container(
                                 margin: EdgeInsets.only(bottom: 10.0),
@@ -425,8 +392,12 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
         maxLines: null,
         expands: true,
         keyboardType: TextInputType.multiline,
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(500),
+        ],
+        maxLength: 500,
         decoration: new InputDecoration(
-            contentPadding: EdgeInsets.all(10.0),
+            contentPadding: EdgeInsets.all(15.0),
             labelText: text,
             hintText: hint,
             hintMaxLines: 2,

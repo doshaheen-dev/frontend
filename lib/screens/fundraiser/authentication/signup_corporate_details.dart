@@ -1,27 +1,21 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/signup_request.dart';
 import 'package:acc/models/authentication/signup_response.dart' as response;
-import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/services/signup_service.dart';
 import 'package:acc/utils/crypt_utils.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
-// import 'package:acc/models/profile/basic_details.dart';
 import 'package:acc/screens/common/onboarding.dart';
 import 'package:acc/screens/investor/welcome.dart';
-// import 'package:acc/services/ProfileService.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/app_strings.dart';
 import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
 import '../../../utils/code_utils.dart';
@@ -33,12 +27,11 @@ class CorporateDetails extends StatefulWidget {
 }
 
 class _CorporateDetailsState extends State<CorporateDetails> {
-  User _user;
   String firstname = "";
   String lastname = "";
   String title = "";
-  String company_name = "";
-  String company_email = "";
+  String companyName = "";
+  String companyEmail = "";
   String country = "";
   File profilePhoto;
   var progress;
@@ -261,44 +254,6 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                                               })
                                                           .toList()),
                                                 ),
-                                                //         Padding(
-                                                //   padding: const EdgeInsets.all(
-                                                //       10.0),
-                                                //   child:
-                                                //       DropdownButtonFormField(
-                                                //           decoration: InputDecoration(
-                                                //               labelText:
-                                                //                   'Country',
-                                                //               labelStyle:
-                                                //                   new TextStyle(
-                                                //                       color: Colors
-                                                //                               .grey[
-                                                //                           600]),
-                                                //               enabledBorder: UnderlineInputBorder(
-                                                //                   borderRadius:
-                                                //                       BorderRadius
-                                                //                           .all(const Radius.circular(
-                                                //                               10.0)),
-                                                //                   borderSide: BorderSide(
-                                                //                       color: Colors
-                                                //                           .transparent))),
-                                                //           items: countryData
-                                                //               .countries
-                                                //               .map((info) =>
-                                                //                   DropdownMenuItem(
-                                                //                     child: Text(
-                                                //                         info.name),
-                                                //                     value: info
-                                                //                         .abbreviation,
-                                                //                   ))
-                                                //               .toList(),
-                                                //           onChanged: (value) {
-                                                //             print(value);
-                                                //             setState(() {
-                                                //               country = value;
-                                                //             });
-                                                //           }),
-                                                // ),
                                               );
                                             }
                                           }
@@ -314,8 +269,7 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                     child: TextField(
                                       style: textBlackNormal18(),
                                       controller: _companyNameController,
-                                      onChanged: (value) =>
-                                          company_name = value,
+                                      onChanged: (value) => companyName = value,
                                       decoration: _setTextFieldDecoration(
                                           "Company Name"),
                                     ),
@@ -329,7 +283,7 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                       style: textBlackNormal18(),
                                       controller: _companyEmailController,
                                       onChanged: (value) =>
-                                          company_email = value,
+                                          companyEmail = value,
                                       decoration: _setTextFieldDecoration(
                                           "Company Email Id"),
                                     ),
@@ -524,22 +478,6 @@ class _CorporateDetailsState extends State<CorporateDetails> {
     progress.dismiss();
     if (signedUpUser.type == 'success') {
       requestModelInstance.clear();
-      // final prefs = await SharedPreferences.getInstance();
-      // final userJson = jsonEncode(signedUpUser.data);
-      // prefs.setString('UserInfo', userJson);
-
-      // UserData userData = UserData(
-      //     signedUpUser.data.token,
-      //     CryptUtils.encryption(signedUpUser.data.firstName),
-      //     "",
-      //     CryptUtils.encryption(signedUpUser.data.lastName),
-      //     CryptUtils.encryption(signedUpUser.data.mobileNo),
-      //     CryptUtils.encryption(signedUpUser.data.emailId),
-      //     signedUpUser.data.userType,
-      //     "");
-      // UserData.instance.userInfo = userData;
-
-      // print('Saved UserInfo: ${prefs.getString('UserInfo')}');
       showConfirmationText();
       nextButtonText = 'Back to Home';
     } else {

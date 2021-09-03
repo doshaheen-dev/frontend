@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
-import 'package:acc/services/investor_home_service.dart';
-import 'package:acc/utils/crypt_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
@@ -245,9 +243,6 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
   }
 
   Future<void> saveUserInfo(UserData data) async {
-    // final requestModelInstance = UserData.instance;
-    // requestModelInstance.token = data.token;
-
     final prefs = await SharedPreferences.getInstance();
     final userJson = jsonEncode(data);
     prefs.setString('UserInfo', userJson);
