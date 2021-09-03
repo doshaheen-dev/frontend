@@ -135,8 +135,6 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                           },
                           beforeTextPaste: (text) {
                             print("Allowing to paste $text");
-                            //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                            //but you can show anything you want here, like your pop up saying wrong paste format or etc
                             return false;
                           },
                         ),
@@ -237,33 +235,5 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
             );
           }));
     }
-  }
-
-  _openDialog(BuildContext context, String message) {
-    // set up the buttons
-    Widget positiveButton = TextButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        child: Text("Ok",
-            style: textNormal16(
-              Color(0xff00A699),
-            )));
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      content: Text(message),
-      actions: [
-        positiveButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
   }
 }

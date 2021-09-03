@@ -32,6 +32,7 @@ class _InvestorHomeState extends State<InvestorHome>
   int recommendationListSize;
   int interestedFundsSize;
   bool isFundsPresent = false;
+  bool isAnythingPresent = false;
   bool isRecommendationPresent = false;
   bool isRecommendationNavigation = false;
   bool isFundsNavigation = false;
@@ -50,6 +51,12 @@ class _InvestorHomeState extends State<InvestorHome>
   var progress;
   investorProvider.FundsInfo currentItem;
   num currentItemIndex = 0;
+
+  void displayEmptyDashboard(bool value) {
+    setState(() {
+      isAnythingPresent = value;
+    });
+  }
 
   void displayInterestedFunds(bool value) {
     setState(() {
@@ -141,6 +148,7 @@ class _InvestorHomeState extends State<InvestorHome>
   void initState() {
     getRecommendationListSize();
     getFundsListSize();
+
     clearAll();
     super.initState();
   }
@@ -160,8 +168,10 @@ class _InvestorHomeState extends State<InvestorHome>
         fundsTotalItems = result.data.totalCount;
         if (fundsTotalItems == 0) {
           displayInterestedFunds(false);
+          displayEmptyDashboard(true);
         } else {
           displayInterestedFunds(true);
+          displayEmptyDashboard(false);
         }
       });
     });
@@ -177,8 +187,10 @@ class _InvestorHomeState extends State<InvestorHome>
         totalItems = result.data.totalCount;
         if (totalItems == 0) {
           displayRecommendations(false);
+          displayEmptyDashboard(true);
         } else {
           displayRecommendations(true);
+          displayEmptyDashboard(false);
         }
       });
     });
@@ -209,6 +221,10 @@ class _InvestorHomeState extends State<InvestorHome>
                           visible: isFundsPresent,
                           child: fundsUI(),
                         ),
+
+                        Visibility(
+                            visible: isAnythingPresent,
+                            child: EmptyListIndicator())
                       ])),
             ),
           ),

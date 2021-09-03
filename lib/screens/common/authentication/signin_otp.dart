@@ -5,7 +5,6 @@ import 'package:acc/utils/code_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
-import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/screens/common/authentication/signin_verify_otp.dart';
 import 'package:acc/services/OtpService.dart';
 import 'package:acc/utilites/app_colors.dart';

@@ -39,48 +39,43 @@ class _WebViewContainerState extends State<WebViewContainer> {
           elevation: 0.0,
           backgroundColor: (Color(0xffffffff)),
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-                color: Colors.white,
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.arrow_back, size: 30),
-                      onPressed: () => {Navigator.pop(context)},
-                    ),
-                  ],
+        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Container(
+              color: Colors.white,
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.arrow_back, size: 30),
+                    onPressed: () => {Navigator.pop(context)},
+                  ),
+                ],
+              )),
+          Expanded(
+              child: Stack(children: [
+            Visibility(
+                visible: isPageLoaded,
+                child: Container(
+                  child: Center(child: CircularProgressIndicator()),
                 )),
-            Expanded(
-                child: Stack(
-              children: [
-                Visibility(
-                    visible: isPageLoaded,
-                    child: Container(
-                      child: Center(child: CircularProgressIndicator()),
-                    )),
-                Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    child: WebView(
-                      key: _key,
-                      javascriptMode: JavascriptMode.unrestricted,
-                      initialUrl: _url,
-                      onPageStarted: (value) {
-                        setState(() {
-                          isPageLoaded = true;
-                        });
-                      },
-                      onPageFinished: (value) {
-                        setState(() {
-                          isPageLoaded = false;
-                        });
-                      },
-                    ))
-              ],
-            )),
-          ],
-        ));
+            Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: WebView(
+                  key: _key,
+                  javascriptMode: JavascriptMode.unrestricted,
+                  initialUrl: _url,
+                  onPageStarted: (value) {
+                    setState(() {
+                      isPageLoaded = true;
+                    });
+                  },
+                  onPageFinished: (value) {
+                    setState(() {
+                      isPageLoaded = false;
+                    });
+                  },
+                ))
+          ]))
+        ]));
   }
 }
