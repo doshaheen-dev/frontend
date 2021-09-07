@@ -8,6 +8,7 @@ import 'package:acc/services/investor_home_service.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 import 'package:acc/widgets/exception_indicators/empty_list_indicator.dart';
+import 'package:acc/widgets/exception_indicators/empty_list_text.dart';
 import 'package:acc/widgets/exception_indicators/error_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,7 +33,6 @@ class _InvestorHomeState extends State<InvestorHome>
   int recommendationListSize;
   int interestedFundsSize;
   bool isFundsPresent = false;
-  bool isAnythingPresent = false;
   bool isRecommendationPresent = false;
   bool isRecommendationNavigation = false;
   bool isFundsNavigation = false;
@@ -51,12 +51,6 @@ class _InvestorHomeState extends State<InvestorHome>
   var progress;
   investorProvider.FundsInfo currentItem;
   num currentItemIndex = 0;
-
-  void displayEmptyDashboard(bool value) {
-    setState(() {
-      isAnythingPresent = value;
-    });
-  }
 
   void displayInterestedFunds(bool value) {
     setState(() {
@@ -168,10 +162,8 @@ class _InvestorHomeState extends State<InvestorHome>
         fundsTotalItems = result.data.totalCount;
         if (fundsTotalItems == 0) {
           displayInterestedFunds(false);
-          displayEmptyDashboard(true);
         } else {
           displayInterestedFunds(true);
-          displayEmptyDashboard(false);
         }
       });
     });
@@ -185,13 +177,11 @@ class _InvestorHomeState extends State<InvestorHome>
     recommendationInfo.then((result) {
       setState(() {
         totalItems = result.data.totalCount;
-        if (totalItems == 0) {
-          displayRecommendations(false);
-          displayEmptyDashboard(true);
-        } else {
-          displayRecommendations(true);
-          displayEmptyDashboard(false);
-        }
+        // if (totalItems == 0) {
+        //   displayRecommendations(false);
+        // } else {
+        //   displayRecommendations(true);
+        // }
       });
     });
   }
@@ -211,10 +201,7 @@ class _InvestorHomeState extends State<InvestorHome>
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Visibility(
-                          visible: isRecommendationPresent,
-                          child: recommendationsUI(context),
-                        ),
+                        recommendationsUI(context),
 
                         //FUNDS
                         Visibility(
@@ -222,9 +209,10 @@ class _InvestorHomeState extends State<InvestorHome>
                           child: fundsUI(),
                         ),
 
-                        Visibility(
-                            visible: isAnythingPresent,
-                            child: EmptyListIndicator())
+                        // Visibility(
+                        //     visible:
+                        //         !isFundsPresent && !isRecommendationPresent,
+                        //     child: EmptyListIndicator())
                       ])),
             ),
           ),
@@ -292,6 +280,8 @@ class _InvestorHomeState extends State<InvestorHome>
                 color: Theme.of(context).primaryColor,
               ),
             ),
+            noItemsFoundIndicatorBuilder: (context) =>
+                Center(child: Text("No items added to this list yet.")),
             firstPageErrorIndicatorBuilder: (ctx) => Center(
               child: Text("An error occurred!"),
             ),
@@ -458,14 +448,6 @@ class _InvestorHomeState extends State<InvestorHome>
           ),
         ),
       ),
-      // Visibility(
-      //   visible: isLoading,
-      //   child: Center(
-      //     child: CircularProgressIndicator(
-      //       color: selectedOrange,
-      //     ),
-      //   ),
-      // ),
     ]);
   }
 

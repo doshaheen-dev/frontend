@@ -7,7 +7,6 @@ import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 
 import 'package:acc/models/authentication/signup_request.dart';
-import 'package:acc/utils/crypt_utils.dart';
 
 class InvestorSearchInfo extends StatefulWidget {
   final HearAboutUs _hearAboutUs;
@@ -31,7 +30,7 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
   void showNameField() {
     setState(() {
       _isNameVisible = false;
-      print("infoItemList => $infoItemList");
+      //print("infoItemList => $infoItemList");
       if (infoItemList.contains("Referral")) {
         _isNameVisible = true;
       }
@@ -41,7 +40,7 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
   void showNextButton() {
     setState(() {
       _isNextVisible = true;
-      print("infoItemList => $infoItemList");
+      // print("infoItemList => $infoItemList");
       if (infoItemList == null) {
         _isNextVisible = false;
       }
@@ -51,8 +50,8 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
   @override
   void initState() {
     super.initState();
-    print("Data:- ${widget._hearAboutUs}");
-    print("Options:- ${widget._hearAboutUs.data.options.length}");
+    // print("Data:- ${widget._hearAboutUs}");
+    // print("Options:- ${widget._hearAboutUs.data.options.length}");
 
     hearAboutUsList.addAll(widget._hearAboutUs.data.options);
     print("Size: ${this.hearAboutUsList.length}");
@@ -212,14 +211,6 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
     );
   }
 
-  // List<InfoItem> infoItem = [
-  //   InfoItem("Internet Search", "assets/images/investor/internet_search.png"),
-  //   InfoItem(
-  //       "Internet Browsing", "assets/images/investor/internet_browsing.png"),
-  //   InfoItem("Referral", "assets/images/investor/referral.png"),
-  //   InfoItem("Social Media", "assets/images/investor/social_media.png"),
-  // ];
-
   InkWell _createCell(int _index) {
     return InkWell(
       highlightColor: Colors.transparent,
@@ -231,7 +222,6 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
         setState(() {
           showNameField();
           showNextButton();
-          // openInvestmentLimit();
         });
       },
       child: Container(
@@ -312,10 +302,3 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
         }));
   }
 }
-
-// class InfoItem {
-//   final String header;
-//   final String icon;
-
-//   InfoItem(this.header, this.icon);
-// }

@@ -12,6 +12,7 @@ class ProductTypeService {
         Uri.parse('${ApiServices.baseUrl}/sign-up/investment_product_types'));
     Map valueMap = jsonDecode(response.body);
     ProductType slots = ProductType.from(valueMap);
+    print("fetchProductTypes:- ${slots.type}");
     return slots;
   }
 }

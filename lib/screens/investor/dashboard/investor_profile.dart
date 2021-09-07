@@ -114,36 +114,126 @@ class _InvestorProfileState extends State<InvestorProfile> {
                             child: setUserProfileView(context),
                             margin: EdgeInsets.only(
                                 right: 25.0, left: 25.0, bottom: 10.0)),
-                        Container(
-                          margin: const EdgeInsets.only(
-                              top: 5.0, left: 50.0, bottom: 10, right: 50.0),
-                          child: ElevatedButton(
-                              onPressed: () {
-                                openLogoutDialog(context,
-                                    "Are you sure you want to logout?");
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.all(0.0),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(14))),
-                              child: Ink(
-                                  decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Container(
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Row(
+                          children: [
+                            //NEXT BUTTON
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                    left: 25.0, right: 10.0),
+                                child: ElevatedButton(
+                                  onPressed: !isDataChanged
+                                      ? null
+                                      : () {
+                                          FocusScope.of(context)
+                                              .requestFocus(FocusNode());
+                                          // on click
+                                          String _phoneNumber =
+                                              "+${selectedCountry.dialCode}" +
+                                                  _mobileController.text
+                                                      .toString()
+                                                      .trim();
+                                          if (_phoneNumber !=
+                                                  UserData.instance.userInfo
+                                                      .mobileNo ||
+                                              _emailController.text
+                                                      .toString()
+                                                      .trim() !=
+                                                  UserData.instance.userInfo
+                                                      .emailId) {
+                                            submitDetails(
+                                                _firstNameController.text
+                                                    .trim(),
+                                                _lastnameController.text.trim(),
+                                                _emailController.text.trim(),
+                                                _mobileController.text.trim(),
+                                                country,
+                                                _addressController.text,
+                                                _verificationId,
+                                                _emailVerificationId,
+                                                context);
+                                            return;
+                                          }
+                                          showSnackBar(context,
+                                              "Please enter any new data for updation.");
+                                        },
+                                  style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.all(0.0),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(14))),
+                                  child: Ink(
+                                    decoration: isDataChanged
+                                        ? BoxDecoration(
+                                            gradient: LinearGradient(colors: [
+                                              kDarkOrange,
+                                              kLightOrange
+                                            ]),
+                                            borderRadius:
+                                                BorderRadius.circular(10))
+                                        : BoxDecoration(
+                                            gradient: LinearGradient(colors: [
+                                              kwhiteGrey,
+                                              kwhiteGrey
+                                            ]),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                    child: Container(
                                       width: MediaQuery.of(context).size.width,
                                       height: 50,
                                       alignment: Alignment.center,
-                                      child: Text(
-                                        "Logout",
-                                        style: textWhiteBold16(),
-                                      )))),
-                        ),
+                                      child: Text("Update",
+                                          style: textWhiteBold16()),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                    left: 10, right: 25.0),
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      openLogoutDialog(context,
+                                          "Are you sure you want to logout?");
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.all(0.0),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(14))),
+                                    child: Ink(
+                                        decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            height: 50,
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              "Logout",
+                                              style: textWhiteBold16(),
+                                            )))),
+                              ),
+                            )
+                          ],
+                        )
                       ],
                     )))));
   }
 
   void setUserInformation() {
+    print(CryptUtils.encryption(UserData.instance.userInfo.emailId));
     _firstNameController.text = (UserData.instance.userInfo.firstName == null ||
             UserData.instance.userInfo.firstName == 'null')
         ? ''
@@ -271,7 +361,6 @@ class _InvestorProfileState extends State<InvestorProfile> {
         decoration: customDecoration(),
         child: createEditableEmailId(),
       ),
-
       Container(
         margin: const EdgeInsets.only(bottom: 10),
         decoration: customDecoration(),
@@ -282,7 +371,6 @@ class _InvestorProfileState extends State<InvestorProfile> {
           decoration: _setTextFieldDecoration("Country"),
         ),
       ),
-
       Container(
         margin: const EdgeInsets.only(top: 5.0),
         decoration: customDecoration(),
@@ -296,57 +384,38 @@ class _InvestorProfileState extends State<InvestorProfile> {
       SizedBox(
         height: 20,
       ),
-      //NEXT BUTTON
-      Container(
-        margin: const EdgeInsets.only(right: 25.0, left: 25.0),
-        child: ElevatedButton(
-          onPressed: !isDataChanged
-              ? null
-              : () {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                  // on click
-                  String _phoneNumber = "+${selectedCountry.dialCode}" +
-                      _mobileController.text.toString().trim();
-                  if (_phoneNumber != UserData.instance.userInfo.mobileNo ||
-                      _emailController.text.toString().trim() !=
-                          UserData.instance.userInfo.emailId) {
-                    submitDetails(
-                        _firstNameController.text.trim(),
-                        _lastnameController.text.trim(),
-                        _emailController.text.trim(),
-                        _mobileController.text.trim(),
-                        country,
-                        _addressController.text,
-                        _verificationId,
-                        _emailVerificationId,
-                        context);
-                    return;
-                  }
-                  showSnackBar(
-                      context, "Please enter any new data for updation.");
-                },
-          style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.all(0.0),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14))),
-          child: Ink(
-            decoration: isDataChanged
-                ? BoxDecoration(
-                    gradient:
-                        LinearGradient(colors: [kDarkOrange, kLightOrange]),
-                    borderRadius: BorderRadius.circular(10))
-                : BoxDecoration(
-                    gradient: LinearGradient(colors: [kwhiteGrey, kwhiteGrey]),
-                    borderRadius: BorderRadius.circular(10)),
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 50,
-              alignment: Alignment.center,
-              child: Text("Update", style: textWhiteBold16()),
-            ),
-          ),
-        ),
-      )
+      // Card(
+      //   color: selectedOrange,
+      //   shape:
+      //       RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      //   child: Container(
+      //     alignment: Alignment.center,
+      //     child: Row(
+      //       crossAxisAlignment: CrossAxisAlignment.center,
+      //       children: [
+      //         Padding(
+      //             padding: EdgeInsets.all(10.0),
+      //             child: Text("Click Here to Edit preferences",
+      //                 textAlign: TextAlign.start,
+      //                 style: textNormal16(Colors.white))),
+      //         Spacer(),
+      //         IconButton(
+      //             onPressed: () {
+      //               Navigator.push(
+      //                   context,
+      //                   MaterialPageRoute(
+      //                       builder: (context) => InvestorPreferences()));
+      //             },
+      //             splashColor: Colors.transparent,
+      //             highlightColor: Colors.transparent,
+      //             icon: Image.asset(
+      //               "assets/images/navigation/arrow_right.png",
+      //               color: Colors.white,
+      //             ))
+      //       ],
+      //     ),
+      //   ),
+      // ),
     ]);
   }
 
