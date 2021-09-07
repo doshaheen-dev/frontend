@@ -5,10 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
-import 'package:acc/models/profile/basic_details.dart';
 import 'package:acc/screens/investor/welcome.dart';
 import 'package:acc/services/AuthenticationService.dart';
-import 'package:acc/services/ProfileService.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 import 'package:image_picker/image_picker.dart';
@@ -88,8 +86,6 @@ class _SignUpDetailsState extends State<SignUpDetails> {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
-    // print("info, ${_user}");
-
     void _setFirstAndLastName(int idx, String displayName) {
       _firstNameController.text = (displayName == null ||
               displayName.substring(0, idx).trim() == 'null')
@@ -167,34 +163,6 @@ class _SignUpDetailsState extends State<SignUpDetails> {
           });
     }
 
-    Widget _profilePic() {
-      return Container(
-        alignment: Alignment.center,
-        child: CircleAvatar(
-          backgroundColor: Colors.blueGrey,
-          backgroundImage: profilePhoto == null
-              ? (widget._userAvatar == null)
-                  ? AssetImage("assets/images/UserProfile.png")
-                  : widget._userAvatar.length > 0 &&
-                          (widget._userAvatar.startsWith('http://') ||
-                              widget._userAvatar.startsWith('https://'))
-                      ? NetworkImage(widget._userAvatar)
-                      : AssetImage("assets/images/UserProfile.png")
-              : FileImage(profilePhoto),
-          radius: 60.0,
-          child: Align(
-            alignment: Alignment(1.3, 1.3),
-            child: IconButton(
-                icon: Icon(Icons.camera_alt),
-                color: Colors.orange,
-                onPressed: () async {
-                  _showPicker(context);
-                }),
-          ),
-        ),
-      );
-    }
-
     Widget getDropDownSearch(List<Map<String, dynamic>> items) {
       return DropdownSearch<Map<String, dynamic>>(
         mode: Mode.BOTTOM_SHEET,
@@ -267,10 +235,7 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                       SizedBox(
                         height: 30,
                       ),
-                      // _profilePic(),
-                      // SizedBox(
-                      //   height: 30,
-                      // ),
+
                       Container(
                         margin: const EdgeInsets.only(
                             top: 5.0, left: 25.0, bottom: 20, right: 25.0),
@@ -340,36 +305,6 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                                                   })
                                               .toList()),
                                     ),
-
-                                    //     Padding(
-                                    //   padding: const EdgeInsets.all(10.0),
-                                    //   child: DropdownButtonFormField(
-                                    //     decoration: InputDecoration(
-                                    //         labelText: 'Country',
-                                    //         labelStyle: new TextStyle(
-                                    //             color: Colors.grey[600]),
-                                    //         enabledBorder: UnderlineInputBorder(
-                                    //             borderRadius: BorderRadius.all(
-                                    //                 const Radius.circular(
-                                    //                     10.0)),
-                                    //             borderSide: BorderSide(
-                                    //                 color:
-                                    //                     Colors.transparent))),
-                                    //     // value: country,
-                                    //     items: countryData.countries
-                                    //         .map((info) => DropdownMenuItem(
-                                    //               child: Text(info.name),
-                                    //               value: info.abbreviation,
-                                    //             ))
-                                    //         .toList(),
-                                    //     onChanged: (value) {
-                                    //       // print(value);
-                                    //       setState(() {
-                                    //         country = value;
-                                    //       });
-                                    //     },
-                                    //   ),
-                                    // ),
                                   );
                                 }
                               }
@@ -536,18 +471,7 @@ class _SignUpDetailsState extends State<SignUpDetails> {
     requestModelInstance.emailId = CryptUtils.encryption(emailId);
     requestModelInstance.countryCode = countryCode;
     requestModelInstance.address = address;
-
-    // UpdateBasicDetails basicDetails = await ProfileService.updateBasicDetails(
-    //     firstName, lastName, emailId, countryCode, address);
-    // print('BD type: ${basicDetails.type}');
-    // print('BD status: ${basicDetails.status}');
-    // print('BD message: ${basicDetails.message}');
-    // progress.dismiss();
-    // if (basicDetails.type == "success") {
     openWelcomeInvestor();
-    // } else {
-    //   showSnackBar(context, "Something went wrong");
-    // }
   }
 
   void openWelcomeInvestor() {

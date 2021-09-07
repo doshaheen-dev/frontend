@@ -1,14 +1,9 @@
 import 'package:acc/constants/font_family.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:flutter_progress_hud/flutter_progress_hud.dart';
-
 import 'package:acc/screens/investor/investment_choices.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:provider/provider.dart';
-
-// import '../../models/fundslot/fundslot.dart';
-// import '../../services/fund_slot_service.dart';
 import '../../providers/fund_slot_provider.dart' as slotProvider;
 import 'package:acc/models/authentication/signup_request.dart';
 
@@ -39,91 +34,82 @@ class _InvestmentLimitState extends State<InvestmentLimit> {
   Widget fundSlotWidget() {
     return SafeArea(
       child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+            Widget>[
+          Container(
+            child: IconButton(
+              icon: Icon(Icons.arrow_back, size: 30),
+              onPressed: () => {Navigator.pop(context)},
+            ),
+          ),
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+              Widget>[
             Container(
-              child: IconButton(
-                icon: Icon(Icons.arrow_back, size: 30),
-                onPressed: () => {Navigator.pop(context)},
+              margin: const EdgeInsets.only(top: 10.0, left: 25.0, right: 25.0),
+              child: Text(
+                "How much are you looking to invest?",
+                style: TextStyle(
+                    color: headingBlack,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 26.0,
+                    fontFamily: FontFamilyMontserrat.name),
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  margin:
-                      const EdgeInsets.only(top: 10.0, left: 25.0, right: 25.0),
-                  child: Text(
-                    "How much are you looking to invest?",
-                    style: TextStyle(
-                        color: headingBlack,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 26.0,
-                        fontFamily: FontFamilyMontserrat.name),
-                  ),
+            SizedBox(
+              height: 10,
+            ),
+            Center(
+              child: Container(
+                margin:
+                    const EdgeInsets.only(top: 10.0, left: 25.0, right: 25.0),
+                child: Image.asset(
+                  'assets/images/investor/investment_limit.png',
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.fill,
                 ),
-                SizedBox(
-                  height: 10,
-                ),
-                Center(
-                  child: Container(
-                    margin: const EdgeInsets.only(
-                        top: 10.0, left: 25.0, right: 25.0),
-                    child: Image.asset(
-                      'assets/images/investor/investment_limit.png',
-                      width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  margin:
-                      const EdgeInsets.only(top: 30.0, left: 25.0, right: 25.0),
-                  child: FutureBuilder(
-                    future: _fundSlots,
-                    builder: (ctx, dataSnapshot) {
-                      if (dataSnapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return Center(
-                            child: CircularProgressIndicator(
-                          backgroundColor: Colors.orange,
-                          valueColor:
-                              new AlwaysStoppedAnimation<Color>(Colors.amber),
-                        ));
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 30.0, left: 25.0, right: 25.0),
+              child: FutureBuilder(
+                  future: _fundSlots,
+                  builder: (ctx, dataSnapshot) {
+                    if (dataSnapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return Center(
+                          child: CircularProgressIndicator(
+                        backgroundColor: Colors.orange,
+                        valueColor:
+                            new AlwaysStoppedAnimation<Color>(Colors.amber),
+                      ));
+                    } else {
+                      if (dataSnapshot.error != null) {
+                        return Center(child: Text("An error occurred!"));
                       } else {
-                        if (dataSnapshot.error != null) {
-                          return Center(child: Text("An error occurred!"));
-                        } else {
-                          return Consumer<slotProvider.FundSlots>(
+                        return Consumer<slotProvider.FundSlots>(
                             builder: (ctx, slotData, child) => GridView.count(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 20.0,
-                              mainAxisSpacing: 30.0,
-                              shrinkWrap: true,
-                              childAspectRatio:
-                                  (MediaQuery.of(context).size.width / 2 / 65),
-                              children: List.generate(
-                                slotData.slotLineItems.length,
-                                (index) {
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 20.0,
+                                mainAxisSpacing: 30.0,
+                                shrinkWrap: true,
+                                childAspectRatio:
+                                    (MediaQuery.of(context).size.width /
+                                        2 /
+                                        65),
+                                children: List.generate(
+                                    slotData.slotLineItems.length, (index) {
                                   return _createCell(
                                       slotData.slotLineItems[index]);
-                                },
-                              ),
-                            ),
-                          );
-                        }
+                                })));
                       }
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+                    }
+                  }),
+            )
+          ])
+        ]),
       ),
     );
   }

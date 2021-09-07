@@ -132,36 +132,6 @@ class _QuickSignUpState extends State<QuickSignUp> {
                             ),
                           ),
                         ),
-                        // // TERMS AND CONDITIONS
-                        // Align(
-                        //   alignment: Alignment.center,
-                        //   child: RichText(
-                        //     textAlign: TextAlign.center,
-                        //     text: TextSpan(
-                        //         text: "By signing in, I agree with ",
-                        //         style: setTextStyle(textLightGrey),
-                        //         children: [
-                        //           TextSpan(
-                        //               text: "Terms of Use ",
-                        //               style: setTextStyle(Colors.black),
-                        //               recognizer: TapGestureRecognizer()
-                        //                 ..onTap = () {
-                        //                   //openSignIn(context);
-                        //                 }),
-                        //           TextSpan(
-                        //             text: "\n and ",
-                        //             style: setTextStyle(textLightGrey),
-                        //           ),
-                        //           TextSpan(
-                        //               text: "Privacy Poicy",
-                        //               style: setTextStyle(Colors.black),
-                        //               recognizer: TapGestureRecognizer()
-                        //                 ..onTap = () {
-                        //                   //openSignIn(context);
-                        //                 })
-                        //         ]),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ],
@@ -248,7 +218,6 @@ class _QuickSignUpState extends State<QuickSignUp> {
           checkUserAndNavigate(user);
         } else if (type == "Google") {
           await signInGoogle();
-          // context.read<AuthenticationService>().signInWithGoogle();
         }
       },
       child: Container(
@@ -270,7 +239,6 @@ class _QuickSignUpState extends State<QuickSignUp> {
     User user = await Authentication.signInWithGoogle(context: context);
     checkUserAndNavigate(user);
     print("Google => $user");
-    // context.read<AuthenticationService>().signInWithGoogle();
   }
 
   void checkUserAndNavigate(User user) {
@@ -315,7 +283,6 @@ class _QuickSignUpState extends State<QuickSignUp> {
   }
 
   void openSignUpDetails(User user) {
-    // print("User: $user");
     try {
       Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (context, animation, anotherAnimation) {

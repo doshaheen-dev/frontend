@@ -175,6 +175,7 @@ class _FundsUploadedDocumentState extends State<FundsUploadedDocument> {
   }
 
   void openUrl(DocumentsData documentsData) {
+    print(documentsData.fundKycDocPath);
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) {
           return InAppWebViewContainer(documentsData);
