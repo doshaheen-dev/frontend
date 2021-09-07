@@ -55,7 +55,10 @@ class _WebViewContainerState extends State<WebViewContainer> {
             Visibility(
                 visible: isPageLoaded,
                 child: Container(
-                  child: Center(child: CircularProgressIndicator()),
+                  child: Center(
+                      child: CircularProgressIndicator(
+                    color: Theme.of(context).primaryColor,
+                  )),
                 )),
             Container(
                 width: MediaQuery.of(context).size.width,

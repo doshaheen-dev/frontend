@@ -318,9 +318,7 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                                   ConnectionState.waiting) {
                                 return Center(
                                     child: CircularProgressIndicator(
-                                  backgroundColor: Colors.orange,
-                                  valueColor: new AlwaysStoppedAnimation<Color>(
-                                      Colors.amber),
+                                  color: Theme.of(context).primaryColor,
                                 ));
                               } else {
                                 if (dataSnapshot.error != null) {

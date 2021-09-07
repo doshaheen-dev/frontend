@@ -289,8 +289,7 @@ class _InvestorHomeState extends State<InvestorHome>
             animateTransitions: true,
             firstPageProgressIndicatorBuilder: (ctx) => Center(
               child: CircularProgressIndicator(
-                backgroundColor: Colors.orange,
-                valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
+                color: Theme.of(context).primaryColor,
               ),
             ),
             firstPageErrorIndicatorBuilder: (ctx) => Center(
@@ -411,9 +410,8 @@ class _InvestorHomeState extends State<InvestorHome>
               transitionDuration: const Duration(milliseconds: 800),
               firstPageProgressIndicatorBuilder: (ctx) => Center(
                 child: CircularProgressIndicator(
-                    //backgroundColor: Colors.orange,
-                    //valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
-                    ),
+                  color: Theme.of(context).primaryColor,
+                ),
               ),
               firstPageErrorIndicatorBuilder: (ctx) => ErrorIndicator(
                 error: _recPagingController.error,

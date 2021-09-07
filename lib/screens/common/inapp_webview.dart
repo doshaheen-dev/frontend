@@ -82,7 +82,7 @@ class _InAppWebViewContainerState extends State<InAppWebViewContainer> {
                             if (loadingProgress == null) return child;
                             return Center(
                                 child: CircularProgressIndicator(
-                              color: selectedOrange,
+                              color: Theme.of(context).primaryColor,
                             ));
                           },
                           errorBuilder: (context, error, stackTrace) =>

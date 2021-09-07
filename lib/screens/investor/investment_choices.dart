@@ -99,7 +99,10 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                     builder: (ctx, dataSnapshot) {
                       if (dataSnapshot.connectionState ==
                           ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
+                        return Center(
+                            child: CircularProgressIndicator(
+                          color: Theme.of(context).primaryColor,
+                        ));
                       } else {
                         if (dataSnapshot.error != null) {
                           return Center(child: Text("An error occurred!"));

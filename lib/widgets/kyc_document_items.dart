@@ -45,8 +45,7 @@ class _KYCDocumentItemsState extends State<KYCDocumentItems> {
         if (dataSnapshot.connectionState == ConnectionState.waiting) {
           return Center(
               child: CircularProgressIndicator(
-            backgroundColor: Colors.orange,
-            valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
+            color: Theme.of(context).primaryColor,
           ));
         } else {
           if (dataSnapshot.error != null) {

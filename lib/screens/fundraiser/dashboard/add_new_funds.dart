@@ -78,11 +78,10 @@ class _AddNewFundsState extends State<AddNewFunds> {
                           if (dataSnapshot.connectionState ==
                               ConnectionState.waiting) {
                             return Center(
-                                child: CircularProgressIndicator(
-                              backgroundColor: Colors.orange,
-                              valueColor: new AlwaysStoppedAnimation<Color>(
-                                  Colors.amber),
-                            ));
+                              child: CircularProgressIndicator(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            );
                           } else {
                             if (dataSnapshot.error != null) {
                               return Center(child: Text("An error occurred!"));
