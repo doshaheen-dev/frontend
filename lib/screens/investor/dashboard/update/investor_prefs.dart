@@ -142,7 +142,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
                     width: 70,
                     child: CircleAvatar(
                       radius: bRadius,
-                      backgroundColor: Colors.orange,
+                      backgroundColor: Theme.of(context).primaryColor,
                       child: (UserData.instance.userInfo.profileImage == null ||
                               UserData.instance.userInfo.profileImage == '')
                           ? ImageCircle(
@@ -186,7 +186,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
                 if (dataSnapshot.connectionState == ConnectionState.waiting) {
                   return Center(
                       child: CircularProgressIndicator(
-                    backgroundColor: Colors.orange,
+                    backgroundColor: Theme.of(context).primaryColor,
                     valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
                   ));
                 } else {
@@ -223,7 +223,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
                 if (dataSnapshot.connectionState == ConnectionState.waiting) {
                   return Center(
                       child: CircularProgressIndicator(
-                    backgroundColor: Colors.orange,
+                    backgroundColor: Theme.of(context).primaryColor,
                     valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
                   ));
                 } else {
@@ -269,8 +269,10 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
           child: Ink(
             decoration: isDataChanged
                 ? BoxDecoration(
-                    gradient:
-                        LinearGradient(colors: [kDarkOrange, kLightOrange]),
+                    gradient: LinearGradient(colors: [
+                      Theme.of(context).primaryColor,
+                      Theme.of(context).primaryColor
+                    ]),
                     borderRadius: BorderRadius.circular(10))
                 : BoxDecoration(
                     gradient: LinearGradient(colors: [kwhiteGrey, kwhiteGrey]),

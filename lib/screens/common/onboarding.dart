@@ -200,7 +200,7 @@ class _OnBoardingState extends State<OnBoarding> {
                             margin: const EdgeInsets.only(
                                 top: 20.0, left: 25.0, right: 25.0),
                             height: 60,
-                            decoration: appColorButton(),
+                            decoration: appColorButton(context),
                             child: Center(
                                 child: Text(
                               "Join our community",
@@ -217,7 +217,8 @@ class _OnBoardingState extends State<OnBoarding> {
                                 children: [
                                   TextSpan(
                                       text: 'Sign In',
-                                      style: textNormal16(kDarkOrange),
+                                      style: textNormal16(
+                                          Theme.of(context).primaryColor),
                                       recognizer: TapGestureRecognizer()
                                         ..onTap = () {
                                           openSignIn(context);

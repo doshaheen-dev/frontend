@@ -382,8 +382,8 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                             decoration: BoxDecoration(
                                                 gradient: LinearGradient(
                                                     colors: [
-                                                      kDarkOrange,
-                                                      kLightOrange
+                                                      Theme.of(context).primaryColor,
+                                                      Theme.of(context).primaryColor
                                                     ]),
                                                 borderRadius:
                                                     BorderRadius.circular(15)),

@@ -50,7 +50,7 @@ class _ProductDetailState extends State<ProductDetail> {
     } else {
       setState(() {
         _isFundOverview = true;
-        _changeBgColor = kDarkOrange;
+        _changeBgColor = Theme.of(context).primaryColor;
         _selectedTextColor = Colors.white;
       });
     }
@@ -289,7 +289,8 @@ class _ProductDetailState extends State<ProductDetail> {
                                                 ),
                                                 Text("Target",
                                                     style: textNormal16(
-                                                        kDarkOrange))
+                                                        Theme.of(context)
+                                                            .primaryColor))
                                               ],
                                             )),
                                         Expanded(
@@ -303,7 +304,8 @@ class _ProductDetailState extends State<ProductDetail> {
                                                 ),
                                                 Text("Min Per Investor",
                                                     style: textNormal16(
-                                                        kDarkOrange))
+                                                        Theme.of(context)
+                                                            .primaryColor))
                                               ],
                                             ))
                                       ],
@@ -339,8 +341,10 @@ class _ProductDetailState extends State<ProductDetail> {
                           borderRadius: BorderRadius.circular(18))),
                   child: Ink(
                     decoration: BoxDecoration(
-                        gradient:
-                            LinearGradient(colors: [kDarkOrange, kLightOrange]),
+                        gradient: LinearGradient(colors: [
+                          Theme.of(context).primaryColor,
+                          Theme.of(context).primaryColor
+                        ]),
                         borderRadius: BorderRadius.circular(15)),
                     child: Container(
                         width: MediaQuery.of(context).size.width,
@@ -367,8 +371,10 @@ class _ProductDetailState extends State<ProductDetail> {
                             borderRadius: BorderRadius.circular(18))),
                     child: Ink(
                       decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                              colors: [kDarkOrange, kLightOrange]),
+                          gradient: LinearGradient(colors: [
+                            Theme.of(context).primaryColor,
+                            Theme.of(context).primaryColor
+                          ]),
                           borderRadius: BorderRadius.circular(15)),
                       child: Container(
                         width: MediaQuery.of(context).size.width,
@@ -420,7 +426,7 @@ class _ProductDetailState extends State<ProductDetail> {
               (Route<dynamic> route) => false);
         }
       },
-      child: Text("Ok", style: textNormal16(kDarkOrange)),
+      child: Text("Ok", style: textNormal16(Theme.of(context).primaryColor)),
     );
 
     // set up the AlertDialog

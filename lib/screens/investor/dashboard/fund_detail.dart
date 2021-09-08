@@ -48,7 +48,7 @@ class _FundDetailState extends State<FundDetail> {
     } else {
       setState(() {
         _isFundOverview = true;
-        _changeBgColor = kDarkOrange;
+        _changeBgColor = Theme.of(context).primaryColor;
         _selectedTextColor = Colors.white;
       });
     }
@@ -64,7 +64,7 @@ class _FundDetailState extends State<FundDetail> {
     } else {
       setState(() {
         _isFundDeck = true;
-        _changeFundDeckBgColor = kDarkOrange;
+        _changeFundDeckBgColor = Theme.of(context).primaryColor;
         _selectedFundDeckTextColor = Colors.white;
       });
     }
@@ -125,7 +125,9 @@ class _FundDetailState extends State<FundDetail> {
                                   "\$${_likedFunds.fundNewVal}",
                                   style: textBlackNormal16(),
                                 ),
-                                Text("Target", style: textNormal16(kDarkOrange))
+                                Text("Target",
+                                    style: textNormal16(
+                                        Theme.of(context).primaryColor))
                               ],
                             )),
                         // Expanded(

@@ -1,5 +1,8 @@
 import 'hex_color.dart';
 
+final appPrimaryColor = HexColor('097DAC');
+final appAccentColor = HexColor('C45842');
+
 final headingBlack = HexColor('2B2B2B');
 
 final klightGrey = HexColor('313543');

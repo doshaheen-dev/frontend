@@ -268,7 +268,7 @@ class _InvestorHomeState extends State<InvestorHome>
         onRefresh: () => Future.sync(
           () => _intFundsPagingController.refresh(),
         ),
-        color: Colors.orange,
+        color: Theme.of(context).primaryColor,
         child: PagedListView<int, investorProvider.FundsInfo>.separated(
           pagingController: _intFundsPagingController,
           scrollDirection: Axis.horizontal,
@@ -371,7 +371,7 @@ class _InvestorHomeState extends State<InvestorHome>
               Container(
                 child: Text(
                   "Swipe Left to Reject and Right to Accept",
-                  style: textBold14(selectedOrange),
+                  style: textBold14(Theme.of(context).primaryColor),
                 ),
               )
             ],
@@ -387,7 +387,7 @@ class _InvestorHomeState extends State<InvestorHome>
         onRefresh: () => Future.sync(
           () => _recPagingController.refresh(),
         ),
-        color: Colors.orange,
+        color: Theme.of(context).primaryColor,
         child: MediaQuery.removePadding(
           context: context,
           removeTop: true,
@@ -552,7 +552,8 @@ class _InvestorHomeState extends State<InvestorHome>
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text("Click on the image to accept or reject",
-                            style: textNormal(kDarkOrange, 13.0)),
+                            style: textNormal(
+                                Theme.of(context).primaryColor, 13.0)),
                         SizedBox(
                           height: 5.0,
                         ),

@@ -170,8 +170,8 @@ class _InvestorProfileState extends State<InvestorProfile> {
                                     decoration: isDataChanged
                                         ? BoxDecoration(
                                             gradient: LinearGradient(colors: [
-                                              kDarkOrange,
-                                              kLightOrange
+                                              Theme.of(context).primaryColor,
+                                              Theme.of(context).primaryColor
                                             ]),
                                             borderRadius:
                                                 BorderRadius.circular(10))
@@ -296,7 +296,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
         },
         child: Text(
           "Yes",
-          style: textNormal16(selectedOrange),
+          style: textNormal16(Theme.of(context).primaryColor),
         ));
 
     Widget negativeButton = TextButton(
@@ -305,7 +305,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
         },
         child: Text(
           "No",
-          style: textNormal16(selectedOrange),
+          style: textNormal16(Theme.of(context).primaryColor),
         ));
 
     // set up the AlertDialog
@@ -692,8 +692,8 @@ class _InvestorProfileState extends State<InvestorProfile> {
                                   child: Ink(
                                       decoration: BoxDecoration(
                                           gradient: LinearGradient(colors: [
-                                            kDarkOrange,
-                                            kLightOrange
+                                            Theme.of(context).primaryColor,
+                                            Theme.of(context).primaryColor
                                           ]),
                                           borderRadius:
                                               BorderRadius.circular(15)),
@@ -741,8 +741,10 @@ class _InvestorProfileState extends State<InvestorProfile> {
                                       shape: PinCodeFieldShape.underline,
                                       selectedColor: Colors.grey,
                                       inactiveColor: Colors.grey,
-                                      activeColor: Colors.orange,
-                                      activeFillColor: Colors.orange,
+                                      activeColor:
+                                          Theme.of(context).primaryColor,
+                                      activeFillColor:
+                                          Theme.of(context).primaryColor,
                                     ),
                                     cursorColor: Colors.black,
                                     enableActiveFill: false,
@@ -791,11 +793,12 @@ class _InvestorProfileState extends State<InvestorProfile> {
                                                     BorderRadius.circular(18))),
                                         child: Ink(
                                             decoration: BoxDecoration(
-                                                gradient: LinearGradient(
-                                                    colors: [
-                                                      kDarkOrange,
-                                                      kLightOrange
-                                                    ]),
+                                                gradient:
+                                                    LinearGradient(colors: [
+                                                  Theme.of(context)
+                                                      .primaryColor,
+                                                  Theme.of(context).primaryColor
+                                                ]),
                                                 borderRadius:
                                                     BorderRadius.circular(15)),
                                             child: Container(
@@ -929,8 +932,8 @@ class _InvestorProfileState extends State<InvestorProfile> {
                                   child: Ink(
                                       decoration: BoxDecoration(
                                           gradient: LinearGradient(colors: [
-                                            kDarkOrange,
-                                            kLightOrange
+                                            Theme.of(context).primaryColor,
+                                            Theme.of(context).primaryColor
                                           ]),
                                           borderRadius:
                                               BorderRadius.circular(15)),
@@ -978,8 +981,10 @@ class _InvestorProfileState extends State<InvestorProfile> {
                                       shape: PinCodeFieldShape.underline,
                                       selectedColor: Colors.grey,
                                       inactiveColor: Colors.grey,
-                                      activeColor: Colors.orange,
-                                      activeFillColor: Colors.orange,
+                                      activeColor:
+                                          Theme.of(context).primaryColor,
+                                      activeFillColor:
+                                          Theme.of(context).primaryColor,
                                     ),
                                     cursorColor: Colors.black,
                                     enableActiveFill: false,
@@ -1031,11 +1036,12 @@ class _InvestorProfileState extends State<InvestorProfile> {
                                                     BorderRadius.circular(18))),
                                         child: Ink(
                                             decoration: BoxDecoration(
-                                                gradient: LinearGradient(
-                                                    colors: [
-                                                      kDarkOrange,
-                                                      kLightOrange
-                                                    ]),
+                                                gradient:
+                                                    LinearGradient(colors: [
+                                                  Theme.of(context)
+                                                      .primaryColor,
+                                                  Theme.of(context).primaryColor
+                                                ]),
                                                 borderRadius:
                                                     BorderRadius.circular(15)),
                                             child: Container(
@@ -1285,7 +1291,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
         },
         child: Text(
           "Ok",
-          style: textNormal16(selectedOrange),
+          style: textNormal16(Theme.of(context).primaryColor),
         ));
 
     // set up the AlertDialog

@@ -237,7 +237,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
         },
         child: Text(
           "Yes",
-          style: textNormal16(selectedOrange),
+          style: textNormal16(Theme.of(context).primaryColor),
         ));
 
     Widget negativeButton = TextButton(
@@ -246,7 +246,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
         },
         child: Text(
           "No",
-          style: textNormal16(selectedOrange),
+          style: textNormal16(Theme.of(context).primaryColor),
         ));
 
     // set up the AlertDialog
@@ -399,8 +399,10 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
             child: Ink(
                 decoration: isDataChanged
                     ? BoxDecoration(
-                        gradient:
-                            LinearGradient(colors: [kDarkOrange, kLightOrange]),
+                        gradient: LinearGradient(colors: [
+                          Theme.of(context).primaryColor,
+                          Theme.of(context).primaryColor
+                        ]),
                         borderRadius: BorderRadius.circular(10))
                     : BoxDecoration(
                         gradient:
@@ -627,8 +629,8 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                                   child: Ink(
                                       decoration: BoxDecoration(
                                           gradient: LinearGradient(colors: [
-                                            kDarkOrange,
-                                            kLightOrange
+                                            Theme.of(context).primaryColor,
+                                            Theme.of(context).primaryColor
                                           ]),
                                           borderRadius:
                                               BorderRadius.circular(15)),
@@ -676,8 +678,10 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                                       shape: PinCodeFieldShape.underline,
                                       selectedColor: Colors.grey,
                                       inactiveColor: Colors.grey,
-                                      activeColor: Colors.orange,
-                                      activeFillColor: Colors.orange,
+                                      activeColor:
+                                          Theme.of(context).primaryColor,
+                                      activeFillColor:
+                                          Theme.of(context).primaryColor,
                                     ),
                                     cursorColor: Colors.black,
                                     enableActiveFill: false,
@@ -726,11 +730,12 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                                                     BorderRadius.circular(18))),
                                         child: Ink(
                                             decoration: BoxDecoration(
-                                                gradient: LinearGradient(
-                                                    colors: [
-                                                      kDarkOrange,
-                                                      kLightOrange
-                                                    ]),
+                                                gradient:
+                                                    LinearGradient(colors: [
+                                                  Theme.of(context)
+                                                      .primaryColor,
+                                                  Theme.of(context).primaryColor
+                                                ]),
                                                 borderRadius:
                                                     BorderRadius.circular(15)),
                                             child: Container(
@@ -951,8 +956,8 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                                   child: Ink(
                                     decoration: BoxDecoration(
                                         gradient: LinearGradient(colors: [
-                                          kDarkOrange,
-                                          kLightOrange
+                                          Theme.of(context).primaryColor,
+                                          Theme.of(context).primaryColor
                                         ]),
                                         borderRadius:
                                             BorderRadius.circular(15)),
@@ -1001,8 +1006,10 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                                       shape: PinCodeFieldShape.underline,
                                       selectedColor: Colors.grey,
                                       inactiveColor: Colors.grey,
-                                      activeColor: Colors.orange,
-                                      activeFillColor: Colors.orange,
+                                      activeColor:
+                                          Theme.of(context).primaryColor,
+                                      activeFillColor:
+                                          Theme.of(context).primaryColor,
                                     ),
                                     cursorColor: Colors.black,
                                     enableActiveFill: false,
@@ -1054,11 +1061,12 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                                                     BorderRadius.circular(18))),
                                         child: Ink(
                                             decoration: BoxDecoration(
-                                                gradient: LinearGradient(
-                                                    colors: [
-                                                      kDarkOrange,
-                                                      kLightOrange
-                                                    ]),
+                                                gradient:
+                                                    LinearGradient(colors: [
+                                                  Theme.of(context)
+                                                      .primaryColor,
+                                                  Theme.of(context).primaryColor
+                                                ]),
                                                 borderRadius:
                                                     BorderRadius.circular(15)),
                                             child: Container(
@@ -1286,7 +1294,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
         },
         child: Text(
           "Ok",
-          style: textNormal16(selectedOrange),
+          style: textNormal16(Theme.of(context).primaryColor),
         ));
 
     // set up the AlertDialog

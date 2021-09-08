@@ -29,7 +29,7 @@ class _CreateFundOverviewState extends State<CreateFundOverview> {
     } else {
       setState(() {
         _isFundOverview = true;
-        _changeBgColor = kDarkOrange;
+        _changeBgColor = Theme.of(context).primaryColor;
         _selectedTextColor = Colors.white;
       });
     }

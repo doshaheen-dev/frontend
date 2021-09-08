@@ -61,7 +61,7 @@ class _FundsUploadedDocumentState extends State<FundsUploadedDocument> {
           _isFundDcoumentVisible = true;
         }
 
-        _changeBgColor = kDarkOrange;
+        _changeBgColor = Theme.of(context).primaryColor;
         _selectedTextColor = Colors.white;
       });
     }
@@ -168,7 +168,8 @@ class _FundsUploadedDocumentState extends State<FundsUploadedDocument> {
           onTap: () {
             openUrl(documentsData);
           },
-          child: Text("View File", style: textNormal14(selectedOrange)),
+          child: Text("View File",
+              style: textNormal14(Theme.of(context).primaryColor)),
         ),
       ],
     );

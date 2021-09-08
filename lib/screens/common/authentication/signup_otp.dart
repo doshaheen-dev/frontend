@@ -161,8 +161,10 @@ class _SignUpOTPState extends State<SignUpOTP> {
                                     borderRadius: BorderRadius.circular(18))),
                             child: Ink(
                               decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                      colors: [kDarkOrange, kLightOrange]),
+                                  gradient: LinearGradient(colors: [
+                                    Theme.of(context).primaryColor,
+                                    Theme.of(context).primaryColor
+                                  ]),
                                   borderRadius: BorderRadius.circular(15)),
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
@@ -286,7 +288,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
                                     iconSize: 30,
                                     highlightColor: Colors.transparent,
                                     splashColor: Colors.transparent,
-                                    color: kDarkOrange,
+                                    color: Theme.of(context).primaryColor,
                                     onPressed: () {
                                       captchaController.refresh();
                                       textConroller.clear();

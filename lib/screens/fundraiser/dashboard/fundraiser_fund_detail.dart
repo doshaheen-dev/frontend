@@ -114,7 +114,9 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
                                   "\$${_likedFunds.fundNewVal}",
                                   style: textBlackNormal16(),
                                 ),
-                                Text("Target", style: textNormal16(kDarkOrange))
+                                Text("Target",
+                                    style: textNormal16(
+                                        Theme.of(context).primaryColor))
                               ],
                             )),
                         // Expanded(
@@ -166,7 +168,10 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
                 decoration: BoxDecoration(
                     gradient: !_isButtonDisabled
                         ? LinearGradient(colors: [textLightGrey, textLightGrey])
-                        : LinearGradient(colors: [kDarkOrange, kLightOrange]),
+                        : LinearGradient(colors: [
+                            Theme.of(context).primaryColor,
+                            Theme.of(context).primaryColor
+                          ]),
                     borderRadius: BorderRadius.circular(15)),
                 child: Container(
                   width: MediaQuery.of(context).size.width,
@@ -327,7 +332,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
         },
         child: Text(
           "Ok",
-          style: textNormal16(selectedOrange),
+          style: textNormal16(Theme.of(context).primaryColor),
         ));
 
     Widget cancelButton = TextButton(
@@ -336,7 +341,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
         },
         child: Text(
           "Cancel",
-          style: textNormal16(selectedOrange),
+          style: textNormal16(Theme.of(context).primaryColor),
         ));
 
     // set up the AlertDialog

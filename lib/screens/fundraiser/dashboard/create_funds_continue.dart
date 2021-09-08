@@ -187,7 +187,8 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                                       ),
                                       Text(
                                         "5%",
-                                        style: textNormal(selectedOrange, 18),
+                                        style: textNormal(
+                                            Theme.of(context).primaryColor, 18),
                                       )
                                     ],
                                   ),
@@ -199,7 +200,8 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                                       Checkbox(
                                           checkColor: Colors
                                               .white, // color of tick Mark
-                                          activeColor: kDarkOrange,
+                                          activeColor:
+                                              Theme.of(context).primaryColor,
                                           value: _isTermsCheck,
                                           onChanged: (bool value) {
                                             setState(() {
@@ -313,8 +315,8 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                                       child: Ink(
                                         decoration: BoxDecoration(
                                             gradient: LinearGradient(colors: [
-                                              kDarkOrange,
-                                              kLightOrange
+                                              Theme.of(context).primaryColor,
+                                              Theme.of(context).primaryColor
                                             ]),
                                             borderRadius:
                                                 BorderRadius.circular(15)),
@@ -461,7 +463,9 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
         width: 10,
         height: 30,
         decoration: BoxDecoration(
-          color: selectedIndex == index ? selectedOrange : unselectedGray,
+          color: selectedIndex == index
+              ? Theme.of(context).primaryColor
+              : unselectedGray,
           borderRadius: BorderRadius.all(
             const Radius.circular(15.0),
           ),

@@ -118,8 +118,8 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                             shape: PinCodeFieldShape.underline,
                             selectedColor: Colors.grey,
                             inactiveColor: Colors.grey,
-                            activeColor: Colors.orange,
-                            activeFillColor: Colors.orange,
+                            activeColor: Theme.of(context).primaryColor,
+                            activeFillColor: Theme.of(context).primaryColor,
                           ),
                           cursorColor: Colors.black,
                           enableActiveFill: false,
@@ -166,8 +166,10 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                                       borderRadius: BorderRadius.circular(18))),
                               child: Ink(
                                   decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                          colors: [kDarkOrange, kLightOrange]),
+                                      gradient: LinearGradient(colors: [
+                                        Theme.of(context).primaryColor,
+                                        Theme.of(context).primaryColor
+                                      ]),
                                       borderRadius: BorderRadius.circular(15)),
                                   child: Container(
                                       width: MediaQuery.of(context).size.width,

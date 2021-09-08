@@ -99,7 +99,7 @@ class _FundraiserHomeState extends State<FundraiserHome> {
             },
             label: const Text('Add Funds'),
             icon: const Icon(Icons.add),
-            backgroundColor: kDarkOrange,
+            backgroundColor: Theme.of(context).primaryColor,
           ),
         ),
       ),
@@ -264,8 +264,10 @@ class _FundraiserHomeState extends State<FundraiserHome> {
                           borderRadius: BorderRadius.circular(18))),
                   child: Ink(
                       decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                              colors: [kDarkOrange, kLightOrange]),
+                          gradient: LinearGradient(colors: [
+                            Theme.of(context).primaryColor,
+                            Theme.of(context).primaryColor
+                          ]),
                           borderRadius: BorderRadius.circular(15)),
                       child: Container(
                           width: MediaQuery.of(context).size.width,

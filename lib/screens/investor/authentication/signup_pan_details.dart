@@ -104,7 +104,7 @@ class _SignUpPanDetailsState extends State<SignUpPanDetails> {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         height: 60,
-                        decoration: appColorButton(),
+                        decoration: appColorButton(context),
                         child: Center(
                             child: Text(
                           "Complete Process",

@@ -83,7 +83,7 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
                           width: 70,
                           child: CircleAvatar(
                             radius: bRadius,
-                            backgroundColor: Colors.orange,
+                            backgroundColor: Theme.of(context).primaryColor,
                             child: (UserData.instance.userInfo.profileImage ==
                                         null ||
                                     UserData.instance.userInfo.profileImage ==
@@ -212,7 +212,7 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
                   },
                   child: Text(
                     "Yes",
-                    style: textNormal16(selectedOrange),
+                    style: textNormal16(Theme.of(context).primaryColor),
                   )),
               SizedBox(height: 16),
               TextButton(
@@ -221,7 +221,7 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
                   },
                   child: Text(
                     "No",
-                    style: textNormal16(selectedOrange),
+                    style: textNormal16(Theme.of(context).primaryColor),
                   )),
             ],
           ),
@@ -241,7 +241,7 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
       onPressed: () {
         Navigator.of(context).pop(false);
       },
-      child: Text("No", style: textNormal16(selectedOrange)),
+      child: Text("No", style: textNormal16(Theme.of(context).primaryColor)),
     );
     AlertDialog alert = AlertDialog(
       title: new Text('Are you sure?', style: textNormal16(headingBlack)),

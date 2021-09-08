@@ -97,7 +97,7 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                           width: 70,
                           child: CircleAvatar(
                             radius: bRadius,
-                            backgroundColor: Colors.orange,
+                            backgroundColor: Theme.of(context).primaryColor,
                             child: (UserData.instance.userInfo.profileImage ==
                                         null ||
                                     UserData.instance.userInfo.profileImage ==
@@ -230,7 +230,7 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                   },
                   child: Text(
                     "Yes",
-                    style: textNormal14(selectedOrange),
+                    style: textNormal14(Theme.of(context).primaryColor),
                   )),
               SizedBox(height: 16),
               TextButton(
@@ -239,7 +239,7 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                   },
                   child: Text(
                     "No",
-                    style: textNormal14(selectedOrange),
+                    style: textNormal14(Theme.of(context).primaryColor),
                   )),
             ],
           ),

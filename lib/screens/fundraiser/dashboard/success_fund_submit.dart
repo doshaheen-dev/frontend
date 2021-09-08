@@ -97,7 +97,7 @@ class _SuccesssFundSubmittedState extends State<SuccesssFundSubmitted> {
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: 60,
-                    decoration: appColorButton(),
+                    decoration: appColorButton(context),
                     child: Center(
                         child: Text(
                       "Back to Home",

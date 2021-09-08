@@ -322,8 +322,10 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                                   borderRadius: BorderRadius.circular(18))),
                           child: Ink(
                               decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                      colors: [kDarkOrange, kLightOrange]),
+                                  gradient: LinearGradient(colors: [
+                                    Theme.of(context).primaryColor,
+                                    Theme.of(context).primaryColor
+                                  ]),
                                   borderRadius: BorderRadius.circular(15)),
                               child: Container(
                                 width: MediaQuery.of(context).size.width,

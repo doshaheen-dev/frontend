@@ -159,7 +159,7 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
                                 height: 60,
-                                decoration: appColorButton(),
+                                decoration: appColorButton(context),
                                 child: Center(
                                     child: Text(
                                   "Next",
@@ -177,7 +177,7 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
   void toggleSelection() {
     setState(() {
       if (isSelected) {
-        mycolor = selectedOrange;
+        mycolor = Theme.of(context).primaryColor;
         isSelected = false;
       } else {
         mycolor = unselectedGray;
@@ -196,7 +196,7 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
           margin:
               EdgeInsets.only(right: 25.0, top: 10.0, bottom: 10.0, left: 25.0),
           color: infoItemList.contains(item.name)
-              ? selectedOrange
+              ? Theme.of(context).primaryColor
               : unselectedGray,
           child: Container(
             child: ExpansionTile(
@@ -207,7 +207,8 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                 child: Row(
                   children: [
                     Checkbox(
-                        checkColor: Colors.orange, // color of tick Mark
+                        checkColor: Theme.of(context)
+                            .primaryColor, // color of tick Mark
                         activeColor: Colors.white,
                         value: item.isCheck,
                         onChanged: (bool value) {

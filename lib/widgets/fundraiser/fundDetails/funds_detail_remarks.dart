@@ -28,7 +28,7 @@ class _FundsRemarkState extends State<FundsRemark> {
     } else {
       setState(() {
         _isFundDcoumentVisible = true;
-        _changeBgColor = kDarkOrange;
+        _changeBgColor = Theme.of(context).primaryColor;
         _selectedTextColor = Colors.white;
       });
     }

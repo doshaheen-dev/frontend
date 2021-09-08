@@ -79,7 +79,7 @@ class _ThankYouInvestorState extends State<ThankYouInvestor> {
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: 60,
-                    decoration: appColorButton(),
+                    decoration: appColorButton(context),
                     child: Center(
                         child: Text(
                       "Open Dashboard",

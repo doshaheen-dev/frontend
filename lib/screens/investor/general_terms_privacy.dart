@@ -216,7 +216,7 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                                   child: Container(
                                     width: MediaQuery.of(context).size.width,
                                     height: 60,
-                                    decoration: appColorButton(),
+                                    decoration: appColorButton(context),
                                     child: Center(
                                         child: Text(
                                       "Submit",

@@ -83,7 +83,7 @@ class _WelcomeInvestorState extends State<WelcomeInvestor> {
                             child: Container(
                               width: MediaQuery.of(context).size.width,
                               height: 60,
-                              decoration: appColorButton(),
+                              decoration: appColorButton(context),
                               child: Center(
                                   child: Text("Let’s Do it",
                                       style: textWhiteBold18())),

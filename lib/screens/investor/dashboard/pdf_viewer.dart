@@ -25,7 +25,7 @@ class _PDFViewerState extends State<PDFViewer> {
   Widget build(BuildContext context) {
     return PDFViewerScaffold(
         appBar: AppBar(
-          backgroundColor: kDarkOrange,
+          backgroundColor: Theme.of(context).primaryColor,
           title: Text("PDF Document Name"),
         ),
         path: _pefFilePath);

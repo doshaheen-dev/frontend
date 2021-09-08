@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
 
-BoxDecoration appColorButton() {
+BoxDecoration appColorButton(BuildContext context) {
   return BoxDecoration(
     borderRadius: BorderRadius.all(
       const Radius.circular(15.0),
     ),
     gradient: LinearGradient(
-      colors: [kDarkOrange, kLightOrange],
+      colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColor],
       begin: FractionalOffset.centerLeft,
       end: FractionalOffset.centerRight,
     ),

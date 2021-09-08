@@ -166,7 +166,7 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                                 child: Container(
                                   width: MediaQuery.of(context).size.width,
                                   height: 60,
-                                  decoration: appColorButton(),
+                                  decoration: appColorButton(context),
                                   child: Center(
                                       child: Text(
                                     "Next",
@@ -229,7 +229,7 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
         height: 200,
         decoration: BoxDecoration(
           color: infoItemList.contains(this.hearAboutUsList[_index].name)
-              ? selectedOrange
+              ? Theme.of(context).primaryColor
               : unselectedGray,
           borderRadius: BorderRadius.all(
             const Radius.circular(15.0),

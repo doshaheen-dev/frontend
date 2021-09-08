@@ -83,7 +83,7 @@ class _UserTypeState extends State<UserType> {
           height: 160,
           decoration: BoxDecoration(
             color: selectedCategory.contains(investor)
-                ? Colors.orange[600]
+                ? Theme.of(context).primaryColor
                 : Colors.grey[300],
             borderRadius: BorderRadius.all(
               const Radius.circular(15.0),
@@ -132,7 +132,7 @@ class _UserTypeState extends State<UserType> {
           height: 160,
           decoration: BoxDecoration(
             color: selectedCategory.contains(fundraiser)
-                ? selectedOrange
+                ? Theme.of(context).primaryColor
                 : unselectedGray,
             borderRadius: BorderRadius.all(
               const Radius.circular(15.0),

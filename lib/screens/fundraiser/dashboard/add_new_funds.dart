@@ -121,7 +121,7 @@ class _AddNewFundsState extends State<AddNewFunds> {
         margin: EdgeInsets.only(top: 10.0),
         height: 50,
         decoration: BoxDecoration(
-          color: selectedIndex == index ? selectedOrange : unselectedGray,
+          color: selectedIndex == index ? Theme.of(context).primaryColor : unselectedGray,
           borderRadius: BorderRadius.all(
             const Radius.circular(15.0),
           ),

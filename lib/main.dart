@@ -77,8 +77,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           brightness: Brightness.light,
-          primaryColor: kLightOrange,
-          accentColor: kDarkOrange,
+          primaryColor: appPrimaryColor,
+          accentColor: appAccentColor,
           fontFamily: FontFamilyMontserrat.name,
         ),
         home: MyHomePage(),
@@ -212,7 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         child: Text(
           "Login",
-          style: textNormal16(selectedOrange),
+          style: textNormal16(Theme.of(context).primaryColor),
         ));
 
     // set up the AlertDialog

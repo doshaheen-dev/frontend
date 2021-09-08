@@ -120,7 +120,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
                             child: Container(
                               width: MediaQuery.of(context).size.width,
                               height: 60,
-                              decoration: appColorButton(),
+                              decoration: appColorButton(context),
                               child: Center(
                                   child: Text(
                                 "Register",
@@ -158,7 +158,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
                   },
                   child: Text(
                     "Yes",
-                    style: textNormal14(selectedOrange),
+                    style: textNormal14(Theme.of(context).primaryColor),
                   )),
               SizedBox(height: 16),
               TextButton(
@@ -167,7 +167,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
                   },
                   child: Text(
                     "No",
-                    style: textNormal14(selectedOrange),
+                    style: textNormal14(Theme.of(context).primaryColor),
                   )),
             ],
           ),

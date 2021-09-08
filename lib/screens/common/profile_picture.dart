@@ -175,7 +175,7 @@ class _ProfilePicScreenState extends State<ProfilePicScreen> {
                 width: 200,
                 child: CircleAvatar(
                   radius: circleRadius,
-                  backgroundColor: Colors.orange,
+                  backgroundColor: Theme.of(context).primaryColor,
                   child: profilePhoto == null
                       ? (_imageUrl != null && _imageUrl != '')
                           ? ImageCircle(

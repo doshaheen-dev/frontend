@@ -150,7 +150,7 @@ class _InvestmentLimitState extends State<InvestmentLimit> {
         height: 70,
         decoration: BoxDecoration(
           color: infoItemList.contains(item.header)
-              ? selectedOrange
+              ? Theme.of(context).primaryColor
               : unselectedGray,
           borderRadius: BorderRadius.all(
             const Radius.circular(15.0),
