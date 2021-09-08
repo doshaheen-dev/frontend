@@ -1,15 +1,10 @@
-import 'dart:async';
-import 'dart:io';
-
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/providers/investor_home_provider.dart';
-import 'package:acc/screens/investor/dashboard/pdf_viewer.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 
 class FundDetail extends StatefulWidget {
   final FundsInfo _recommendation;
@@ -25,11 +20,7 @@ class _FundDetailState extends State<FundDetail> {
   // String description =
   //     "Elite Specia; Exporter & supplier engaged in offering a varied range of quality products; Already exported 26+ containers valued at \$170k+; Imported Kiwis & Apples valued at \$200k+; Strong sales team in the Middle East; Already raised Rs. 5mn";
   FundsInfo _likedFunds;
-  bool _isFundOverview = false;
-  bool _isFundDeck = false;
-  var _changeBgColor = unselectedGray;
-  var _changeFundDeckBgColor = unselectedGray;
-  var _selectedFundDeckTextColor = Colors.black;
+  bool _isFundOverview = true;
   var _selectedTextColor = Colors.black;
 
   @override
@@ -42,30 +33,12 @@ class _FundDetailState extends State<FundDetail> {
     if (_isFundOverview == true) {
       setState(() {
         _isFundOverview = false;
-        _changeBgColor = unselectedGray;
         _selectedTextColor = Colors.black;
       });
     } else {
       setState(() {
         _isFundOverview = true;
-        _changeBgColor = kDarkOrange;
         _selectedTextColor = Colors.white;
-      });
-    }
-  }
-
-  _displayFundDeck() {
-    if (_isFundDeck == true) {
-      setState(() {
-        _isFundDeck = false;
-        _changeFundDeckBgColor = unselectedGray;
-        _selectedFundDeckTextColor = Colors.black;
-      });
-    } else {
-      setState(() {
-        _isFundDeck = true;
-        _changeFundDeckBgColor = kDarkOrange;
-        _selectedFundDeckTextColor = Colors.white;
       });
     }
   }
@@ -198,7 +171,7 @@ class _FundDetailState extends State<FundDetail> {
   Widget _createFundOverview() {
     return Column(children: [
       Card(
-        color: _changeBgColor,
+        color: _isFundOverview ? kDarkOrange : unselectedGray,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         child: Container(
@@ -211,7 +184,9 @@ class _FundDetailState extends State<FundDetail> {
                   child: Text("Fund Overview",
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                          color: _selectedTextColor,
+                          color: _isFundOverview
+                              ? Colors.white
+                              : _selectedTextColor,
                           fontWeight: FontWeight.normal,
                           fontSize: 16.0,
                           fontFamily: FontFamilyMontserrat.name))),
@@ -224,7 +199,7 @@ class _FundDetailState extends State<FundDetail> {
                   highlightColor: Colors.transparent,
                   icon: Image.asset(
                     "assets/images/icon_down.png",
-                    color: _selectedTextColor,
+                    color: _isFundOverview ? Colors.white : _selectedTextColor,
                   ))
             ],
           ),
@@ -308,12 +283,14 @@ class _FundDetailState extends State<FundDetail> {
                       SizedBox(
                         height: 10.0,
                       ),
-                      Row(
-                        children: [
-                          Expanded(flex: 1, child: Text("Product Type")),
-                          Expanded(flex: 1, child: Text("Angel Investment"))
-                        ],
-                      )
+                      // Row(
+                      //   children: [
+                      //     Expanded(flex: 1, child: Text("Product Type")),
+                      //     Expanded(
+                      //         flex: 1,
+                      //         child: Text("${_likedFunds.product_name}"))
+                      //   ],
+                      // )
                     ]))),
           )))
     ]);

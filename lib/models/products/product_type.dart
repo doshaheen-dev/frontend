@@ -71,13 +71,16 @@ class OptionsData {
   final int id;
   final String name;
   final String desc;
+  final int placementFee;
 
-  OptionsData(this.id, this.name, this.desc);
+  OptionsData(this.id, this.name, this.desc, this.placementFee);
 
   factory OptionsData.fromMap(Map<String, dynamic> json) {
-    return OptionsData(json['id'], json['name'], json['desc']);
+    return OptionsData(
+        json['id'], json['name'], json['desc'], json['placement_fee']);
   }
   factory OptionsData.fromJson(Map<String, dynamic> json) {
-    return OptionsData(json['id'], json['name'], json['desc']);
+    return OptionsData(
+        json['id'], json['name'], json['desc'], json['placement_fee']);
   }
 }

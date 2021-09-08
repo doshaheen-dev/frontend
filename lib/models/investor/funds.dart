@@ -76,6 +76,7 @@ class Option {
   String city_name;
   String country_name;
   String minimumInvestment;
+  String product_name;
 
   Option(
       {this.fundTxnId,
@@ -98,7 +99,8 @@ class Option {
       this.fundInternalApproved,
       this.city_name,
       this.country_name,
-      this.minimumInvestment});
+      this.minimumInvestment,
+      this.product_name});
 
   Option.fromJson(Map<String, dynamic> json) {
     fundTxnId = json['fund_txn_id'];
@@ -122,6 +124,7 @@ class Option {
     city_name = json['city_name'];
     country_name = json['country_name'];
     minimumInvestment = json['min_per_investor'];
+    product_name = json['product_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -147,6 +150,7 @@ class Option {
     data['city_name'] = this.city_name;
     data['country_name'] = this.country_name;
     data['min_per_investor'] = this.minimumInvestment;
+    data['product_name'] = this.product_name;
     return data;
   }
 }

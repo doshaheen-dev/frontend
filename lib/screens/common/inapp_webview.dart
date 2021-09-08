@@ -1,5 +1,6 @@
 import 'package:acc/models/fund/fund_documents.dart';
 import 'package:acc/screens/common/webview_container.dart';
+import 'package:acc/screens/fundraiser/dashboard/pdf_viewer.dart';
 import 'package:acc/services/http_service.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/text_style.dart';
@@ -105,19 +106,28 @@ class _InAppWebViewContainerState extends State<InAppWebViewContainer> {
                             InkWell(
                               onTap: () {
                                 String url = widget.url.fundKycDocPath;
-
-                                if (widget.url.fundKycDocPath.contains("ppt") ||
-                                    widget.url.fundKycDocPath.contains("pdf")) {
-                                  String googleLink =
-                                      "https://docs.google.com/gview?embedded=true&url=";
-                                  String docUrl = widget.url.fundKycDocPath;
-                                  url = googleLink + docUrl;
-                                } else {
+                                print(url);
+                                if (widget.url.fundKycDocPath.contains("pdf")) {
+                                  // open pdf viewer
+                                  openPdfViewer(context, url);
+                                } else if (widget.url.fundKycDocPath
+                                        .contains("png") ||
+                                    widget.url.fundKycDocPath.contains("jpg") ||
+                                    widget.url.fundKycDocPath
+                                        .contains("jpeg")) {
                                   url = widget.url.fundKycDocPath.replaceAll(
                                       "https://funddocuments.s3.ap-south-1.amazonaws.com/",
                                       "${ApiServices.baseUrl}/download/fund/document/");
+                                  _launched = _launchInBrowser(url);
+                                } else {
+                                  // if (widget.url.fundKycDocPath.contains("ppt")) {
+                                  // download file
+                                  String googleLink =
+                                      "https://docs.google.com/gview?embedded=true&url=";
+                                  String docUrl = widget.url.fundKycDocPath;
+                                  url = docUrl;
+                                  _launched = _launchInBrowser(url);
                                 }
-                                _launched = _launchInBrowser(url);
                               },
                               child: Text("Open File",
                                   style: textNormal16(Colors.blue)),
@@ -128,6 +138,23 @@ class _InAppWebViewContainerState extends State<InAppWebViewContainer> {
             FutureBuilder<void>(future: _launched, builder: _launchStatus),
           ],
         ));
+  }
+
+  void openPdfViewer(BuildContext context, String url) {
+    Navigator.of(context).push(PageRouteBuilder(
+        pageBuilder: (context, animation, anotherAnimation) {
+          return AppPDFViewer(pdf: url);
+        },
+        transitionDuration: Duration(milliseconds: 2000),
+        transitionsBuilder: (context, animation, anotherAnimation, child) {
+          animation = CurvedAnimation(
+              curve: Curves.fastLinearToSlowEaseIn, parent: animation);
+          return SlideTransition(
+            position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                .animate(animation),
+            child: child,
+          );
+        }));
   }
 
   Widget _launchStatus(BuildContext context, AsyncSnapshot<void> snapshot) {

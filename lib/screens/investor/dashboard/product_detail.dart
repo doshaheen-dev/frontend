@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/models/investor/respond_recommendation.dart';
@@ -27,9 +25,7 @@ class ProductDetail extends StatefulWidget {
 class _ProductDetailState extends State<ProductDetail> {
   FundsInfo _recommendation;
   String _token;
-  bool _isFundOverview = false;
-  var _changeBgColor = unselectedGray;
-  var _selectedTextColor = Colors.black;
+  bool _isFundOverview = true;
 
   var progress;
 
@@ -44,14 +40,10 @@ class _ProductDetailState extends State<ProductDetail> {
     if (_isFundOverview == true) {
       setState(() {
         _isFundOverview = false;
-        _changeBgColor = unselectedGray;
-        _selectedTextColor = Colors.black;
       });
     } else {
       setState(() {
         _isFundOverview = true;
-        _changeBgColor = kDarkOrange;
-        _selectedTextColor = Colors.white;
       });
     }
   }
@@ -109,7 +101,9 @@ class _ProductDetailState extends State<ProductDetail> {
                                   // Fund overview
                                   Container(
                                     child: Card(
-                                      color: _changeBgColor,
+                                      color: _isFundOverview
+                                          ? kDarkOrange
+                                          : unselectedGray,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10.0)),
@@ -124,8 +118,9 @@ class _ProductDetailState extends State<ProductDetail> {
                                                 child: Text("Fund Overview",
                                                     textAlign: TextAlign.start,
                                                     style: TextStyle(
-                                                        color:
-                                                            _selectedTextColor,
+                                                        color: _isFundOverview
+                                                            ? Colors.white
+                                                            : Colors.black,
                                                         fontWeight:
                                                             FontWeight.normal,
                                                         fontSize: 16.0,
@@ -142,7 +137,9 @@ class _ProductDetailState extends State<ProductDetail> {
                                                     Colors.transparent,
                                                 icon: Image.asset(
                                                   "assets/images/icon_down.png",
-                                                  color: _selectedTextColor,
+                                                  color: _isFundOverview
+                                                      ? Colors.white
+                                                      : Colors.black,
                                                 ))
                                           ],
                                         ),
@@ -268,7 +265,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                                       Expanded(
                                                           flex: 1,
                                                           child: Text(
-                                                              "Angel Investment"))
+                                                              "${_recommendation.product_name}"))
                                                     ],
                                                   )
                                                 ]))),

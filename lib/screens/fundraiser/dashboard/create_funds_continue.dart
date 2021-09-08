@@ -20,6 +20,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:provider/provider.dart';
 
+import 'add_new_funds.dart';
+
 class CreateFundsContinue extends StatefulWidget {
   @override
   _CreateFundsContinueState createState() => _CreateFundsContinueState();
@@ -186,7 +188,7 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                                         width: 10,
                                       ),
                                       Text(
-                                        "5%",
+                                        "${AddNewFunds.placementFee}%",
                                         style: textNormal(selectedOrange, 18),
                                       )
                                     ],

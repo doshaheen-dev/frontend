@@ -28,6 +28,7 @@ class ProductTypes with ChangeNotifier {
         option.id,
         option.name,
         option.desc,
+        option.placementFee,
         false,
         false,
       ));
@@ -57,6 +58,7 @@ class InvestmentLimitItem {
   final int id;
   final String name;
   final String description;
+  final int placementFee;
   bool isExpanded = false;
   bool isCheck = false;
 
@@ -64,6 +66,7 @@ class InvestmentLimitItem {
     this.id,
     this.name,
     this.description,
+    this.placementFee,
     this.isExpanded,
     this.isCheck,
   );

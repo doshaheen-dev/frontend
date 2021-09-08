@@ -369,6 +369,16 @@ class _InvestorHomeState extends State<InvestorHome>
                 height: 10.0,
               ),
               Container(
+                  margin: EdgeInsets.only(left: 20.0, right: 20.0),
+                  child: Text(
+                    "Scroll up and down to browse through the matched opportunities",
+                    textAlign: TextAlign.center,
+                    style: textBold14(selectedOrange),
+                  )),
+              SizedBox(
+                height: 10.0,
+              ),
+              Container(
                 child: Text(
                   "Swipe Left to Reject and Right to Accept",
                   style: textBold14(selectedOrange),
