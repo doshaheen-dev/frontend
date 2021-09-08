@@ -1,4 +1,5 @@
 import 'package:acc/constants/font_family.dart';
+import 'package:acc/models/authentication/otp_response.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/screens/fundraiser/authentication/signup_corporate_details.dart';
 import 'package:acc/utilites/app_strings.dart';
@@ -139,6 +140,24 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                           },
                         ),
                       ),
+                      Container(
+                        margin: EdgeInsets.only(right: 20.0),
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: InkWell(
+                              child: Text(
+                                "Didn't receive the code? Resend OTP",
+                                textAlign: TextAlign.end,
+                                style: textNormal14(Colors.black),
+                              ),
+                              onTap: () {
+                                progress = ProgressHUD.of(context);
+                                progress?.showWithText(sendingOtp);
+                                otpController.clear();
+                                _getOtp();
+                              }),
+                        ),
+                      ),
                       SizedBox(
                         height: 40,
                       ),
@@ -186,8 +205,22 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
         )));
   }
 
+  Future<void> _getOtp() async {
+    print(_phoneNumber);
+    VerificationIdSignIn verificationIdSignIn =
+        await OtpService.getSignUpOtp(_phoneNumber);
+    if (verificationIdSignIn.status == 200) {
+      Future.delayed(Duration(milliseconds: 2), () {
+        _verificationId = verificationIdSignIn.data.verificationId;
+      });
+    }
+    progress.dismiss();
+    showSnackBar(context, verificationIdSignIn.message);
+  }
+
   Future<void> _verifySignUpOTP(
       String otpCode, String verificationId, String phoneNumber) async {
+    print(verificationId);
     SignUpInvestor verificationIdSignIn = await OtpService.getVerifySignUpOtp(
         phoneNumber, verificationId, otpCode);
     if (verificationIdSignIn.status == 200) {

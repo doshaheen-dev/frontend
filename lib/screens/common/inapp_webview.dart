@@ -1,7 +1,6 @@
 import 'package:acc/models/fund/fund_documents.dart';
 import 'package:acc/screens/common/webview_container.dart';
 import 'package:acc/screens/fundraiser/dashboard/pdf_viewer.dart';
-import 'package:acc/services/http_service.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
@@ -25,11 +24,12 @@ class _InAppWebViewContainerState extends State<InAppWebViewContainer> {
 
   Future<void> _launchInBrowser(String url) async {
     if (await canLaunch(url)) {
-      await launch(url,
-          forceSafariVC: true,
-          forceWebView: true,
-          enableJavaScript: true,
-          enableDomStorage: true);
+      await launch(
+        url,
+        forceSafariVC: true,
+        forceWebView: true,
+        enableJavaScript: true,
+      );
     } else {
       showSnackBar(context, 'Could not launch $url');
     }
@@ -38,11 +38,12 @@ class _InAppWebViewContainerState extends State<InAppWebViewContainer> {
   @override
   void initState() {
     super.initState();
-    if (widget.url.fundKycDocPath.contains("pdf") ||
-        widget.url.fundKycDocPath.contains("ppt")) {
-      launchUrl = true;
-    } else {
+    if (widget.url.fundKycDocPath.contains("png") ||
+        widget.url.fundKycDocPath.contains("jpg") ||
+        widget.url.fundKycDocPath.contains("jpeg")) {
       launchUrl = false;
+    } else {
+      launchUrl = true;
     }
   }
 
@@ -110,21 +111,24 @@ class _InAppWebViewContainerState extends State<InAppWebViewContainer> {
                                 if (widget.url.fundKycDocPath.contains("pdf")) {
                                   // open pdf viewer
                                   openPdfViewer(context, url);
-                                } else if (widget.url.fundKycDocPath
-                                        .contains("png") ||
-                                    widget.url.fundKycDocPath.contains("jpg") ||
-                                    widget.url.fundKycDocPath
-                                        .contains("jpeg")) {
-                                  url = widget.url.fundKycDocPath.replaceAll(
-                                      "https://funddocuments.s3.ap-south-1.amazonaws.com/",
-                                      "${ApiServices.baseUrl}/download/fund/document/");
-                                  _launched = _launchInBrowser(url);
-                                } else {
+                                }
+                                // else if (widget.url.fundKycDocPath
+                                //         .contains("png") ||
+                                //     widget.url.fundKycDocPath.contains("jpg") ||
+                                //     widget.url.fundKycDocPath
+                                //         .contains("jpeg")) {
+                                //   url = widget.url.fundKycDocPath.replaceAll(
+                                //       "https://funddocuments.s3.ap-south-1.amazonaws.com/",
+                                //       "${ApiServices.baseUrl}/download/fund/document/");
+                                //   _launched = _launchInBrowser(url);
+                                // }
+                                else {
                                   // if (widget.url.fundKycDocPath.contains("ppt")) {
-                                  // download file
-                                  String googleLink =
-                                      "https://docs.google.com/gview?embedded=true&url=";
+                                  //   download file
+                                  // String googleLink =
+                                  //     "http://docs.google.com/viewer?url=";
                                   String docUrl = widget.url.fundKycDocPath;
+                                  print("docUrl:- $docUrl");
                                   url = docUrl;
                                   _launched = _launchInBrowser(url);
                                 }
