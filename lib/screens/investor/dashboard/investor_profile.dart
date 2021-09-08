@@ -2,6 +2,7 @@ import 'package:acc/models/authentication/otp_response.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/models/default.dart';
 import 'package:acc/models/local_countries.dart';
+import 'package:acc/screens/investor/dashboard/update/investor_prefs.dart';
 import 'package:acc/services/UpdateProfileService.dart';
 import 'package:acc/services/update_otp_service.dart';
 import 'package:acc/utilites/app_colors.dart';
@@ -372,7 +373,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
         ),
       ),
       Container(
-        margin: const EdgeInsets.only(top: 5.0),
+        margin: const EdgeInsets.only(top: 5.0, bottom: 10.0),
         decoration: customDecoration(),
         child: TextField(
           style: textBlackNormal14(),
@@ -381,41 +382,34 @@ class _InvestorProfileState extends State<InvestorProfile> {
           decoration: _setTextFieldDecoration("Address"),
         ),
       ),
-      SizedBox(
-        height: 20,
-      ),
-      // Card(
-      //   color: selectedOrange,
-      //   shape:
-      //       RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-      //   child: Container(
-      //     alignment: Alignment.center,
-      //     child: Row(
-      //       crossAxisAlignment: CrossAxisAlignment.center,
-      //       children: [
-      //         Padding(
-      //             padding: EdgeInsets.all(10.0),
-      //             child: Text("Click Here to Edit preferences",
-      //                 textAlign: TextAlign.start,
-      //                 style: textNormal16(Colors.white))),
-      //         Spacer(),
-      //         IconButton(
-      //             onPressed: () {
-      //               Navigator.push(
-      //                   context,
-      //                   MaterialPageRoute(
-      //                       builder: (context) => InvestorPreferences()));
-      //             },
-      //             splashColor: Colors.transparent,
-      //             highlightColor: Colors.transparent,
-      //             icon: Image.asset(
-      //               "assets/images/navigation/arrow_right.png",
-      //               color: Colors.white,
-      //             ))
-      //       ],
+      // Container(
+      //     margin: const EdgeInsets.only(top: 5.0, bottom: 10.0),
+      //     decoration: BoxDecoration(
+      //       color: selectedOrange,
+      //       borderRadius: BorderRadius.all(const Radius.circular(10.0)),
       //     ),
-      //   ),
-      // ),
+      //     child: Padding(
+      //         padding: const EdgeInsets.only(left: 8.0),
+      //         child:
+      //             Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      //           Text("Click Here to Edit preferences",
+      //               textAlign: TextAlign.start,
+      //               style: textNormal16(Colors.white)),
+      //           Spacer(),
+      //           IconButton(
+      //               onPressed: () {
+      //                 Navigator.push(
+      //                     context,
+      //                     MaterialPageRoute(
+      //                         builder: (context) => InvestorPreferences()));
+      //               },
+      //               splashColor: Colors.transparent,
+      //               highlightColor: Colors.transparent,
+      //               icon: Image.asset(
+      //                 "assets/images/navigation/arrow_right.png",
+      //                 color: Colors.white,
+      //               ))
+      //         ])))
     ]);
   }
 

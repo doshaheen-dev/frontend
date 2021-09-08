@@ -75,6 +75,7 @@ class Option {
   String cityName;
   String country_name;
   String minimumInvestment;
+  String product_name;
 //  Null fundInternalApproved;
 
   Option({
@@ -98,6 +99,7 @@ class Option {
     this.cityName,
     this.country_name,
     this.minimumInvestment,
+    this.product_name,
     //  this.fundInternalApproved
   });
 
@@ -122,6 +124,7 @@ class Option {
     cityName = json['city_name'];
     country_name = json['country_name'];
     minimumInvestment = json['min_per_investor'];
+    product_name = json['product_name'];
     // fundInternalApproved = json['fund_internal_approved'];
   }
 
@@ -147,6 +150,7 @@ class Option {
     data['city_name'] = this.cityName;
     data['country_name'] = this.country_name;
     data['min_per_investor'] = this.minimumInvestment;
+    data['product_name'] = this.product_name;
     //  data['fund_internal_approved'] = this.fundInternalApproved;
     return data;
   }

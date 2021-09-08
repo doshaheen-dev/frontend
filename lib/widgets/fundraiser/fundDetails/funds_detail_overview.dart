@@ -39,7 +39,7 @@ class _CreateFundOverviewState extends State<CreateFundOverview> {
   Widget build(BuildContext context) {
     return Column(children: [
       Card(
-        color: _changeBgColor,
+        color: _isFundOverview ? kDarkOrange : unselectedGray,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         child: Container(
@@ -51,7 +51,9 @@ class _CreateFundOverviewState extends State<CreateFundOverview> {
                   padding: EdgeInsets.all(10.0),
                   child: Text("Fund Overview",
                       textAlign: TextAlign.start,
-                      style: textBold16(_selectedTextColor))),
+                      style: textBold16(
+                        _isFundOverview ? Colors.white : _selectedTextColor,
+                      ))),
               Spacer(),
               IconButton(
                   onPressed: () {
@@ -61,7 +63,7 @@ class _CreateFundOverviewState extends State<CreateFundOverview> {
                   highlightColor: Colors.transparent,
                   icon: Image.asset(
                     "assets/images/icon_down.png",
-                    color: _selectedTextColor,
+                    color: _isFundOverview ? Colors.white : _selectedTextColor,
                   ))
             ],
           ),

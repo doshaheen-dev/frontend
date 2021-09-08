@@ -36,7 +36,8 @@ class InvestorHome with ChangeNotifier {
             option.fundInvstmtObj,
             option.cityName,
             option.country_name,
-            option.minimumInvestment));
+            option.minimumInvestment,
+            option.product_name));
       });
     } else {
       return;
@@ -76,7 +77,8 @@ class InvestorHome with ChangeNotifier {
             option.fundInvstmtObj,
             option.city_name,
             option.country_name,
-            option.minimumInvestment));
+            option.minimumInvestment,
+            option.product_name));
       });
     } else {
       return;
@@ -106,20 +108,21 @@ class FundsInfo {
   final String city_name;
   final String country_name;
   final String minimumInvestment;
+  final String product_name;
 
   FundsInfo(
-    this.fundName,
-    this.fundLogo,
-    this.fundExistVal,
-    this.fundNewVal,
-    this.fundTxnId,
-    this.fundSponsorName,
-    this.fundRegulated,
-    this.fundRegulatorName,
-    this.fundWebsite,
-    this.fund_invstmt_obj,
-    this.city_name,
-    this.country_name,
-    this.minimumInvestment,
-  );
+      this.fundName,
+      this.fundLogo,
+      this.fundExistVal,
+      this.fundNewVal,
+      this.fundTxnId,
+      this.fundSponsorName,
+      this.fundRegulated,
+      this.fundRegulatorName,
+      this.fundWebsite,
+      this.fund_invstmt_obj,
+      this.city_name,
+      this.country_name,
+      this.minimumInvestment,
+      this.product_name);
 }

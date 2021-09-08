@@ -9,6 +9,8 @@ import 'package:provider/provider.dart';
 import 'package:acc/providers/product_type_provider.dart' as productProvider;
 
 class AddNewFunds extends StatefulWidget {
+  static var placementFee;
+
   @override
   _AddNewFundsState createState() => _AddNewFundsState();
 }
@@ -112,6 +114,7 @@ class _AddNewFundsState extends State<AddNewFunds> {
       onTap: () {
         setState(() {
           selectedIndex = index;
+          AddNewFunds.placementFee = item.placementFee;
           final requestModelInstance = AddFundRequestModel.instance;
           requestModelInstance.productId = item.id;
           openCreateNewFunds();

@@ -1,15 +1,14 @@
 import 'package:acc/models/authentication/verify_phone_signin.dart';
+import 'package:acc/providers/fund_slot_provider.dart';
 import 'package:acc/screens/common/profile_picture.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/text_style.dart';
-import 'package:acc/utils/class_navigation.dart';
 import 'package:acc/widgets/image_circle.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:acc/providers/fund_slot_provider.dart' as slotProvider;
 import 'package:acc/providers/product_type_provider.dart' as productProvider;
 
@@ -30,6 +29,9 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
   bool isDataChanged = false;
   var selectedInvestmentLimit;
   var selectedProductType;
+
+  final _multiSelectKey = GlobalKey<FormFieldState>();
+  List<InvestmentLimitItem> _selectedAnimals3 = [];
 
   Future<void> _fetchFundSlots(BuildContext context) async {
     await Provider.of<slotProvider.FundSlots>(context, listen: false)
@@ -66,18 +68,16 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
         backgroundColor: Colors.white,
         body: ProgressHUD(
             child: Builder(
-                builder: (context) => SingleChildScrollView(
-                        child: Column(
-                      children: [
-                        Container(
-                            child: setUserProfileView(context),
-                            margin: EdgeInsets.only(
-                                top: 50,
-                                right: 25.0,
-                                left: 25.0,
-                                bottom: 10.0)),
-                      ],
-                    )))));
+          builder: (context) => SingleChildScrollView(
+              child: Column(
+            children: [
+              Container(
+                  child: setUserProfileView(context),
+                  margin: EdgeInsets.only(
+                      top: 50, right: 25.0, left: 25.0, bottom: 10.0)),
+            ],
+          )),
+        )));
   }
 
   void setUserInformation() {}
@@ -233,12 +233,16 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
                     return Consumer<productProvider.ProductTypes>(
                       builder: (ctx, data, child) => Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: investmentChoicesDropDown(data.types
-                            .map((info) => {
-                                  'text': info.name,
-                                  'value': info.name,
-                                })
-                            .toList()),
+                        // ignore: deprecated_member_use
+                        child:
+                            //createDropdown(data),
+
+                            investmentChoicesDropDown(data.types
+                                .map((info) => {
+                                      'text': info.name,
+                                      'value': info.name,
+                                    })
+                                .toList()),
                       ),
                     );
                   }
@@ -248,6 +252,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
         SizedBox(
           height: 10,
         ),
+
         //NEXT BUTTON
         Container(
             child: ElevatedButton(
@@ -288,6 +293,47 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
       ],
     );
   }
+
+  // MultiSelectBottomSheetField<InvestmentLimitItem> createDropdown(
+  //     productProvider.ProductTypes data) {
+  //   var items = data.types
+  //       .map((animal) =>
+  //           MultiSelectItem<InvestmentLimitItem>(animal, animal.name))
+  //       .toList();
+  //   return MultiSelectBottomSheetField<InvestmentLimitItem>(
+  //     key: _multiSelectKey,
+  //     initialChildSize: 0.7,
+  //     maxChildSize: 0.95,
+  //     title: Text("MultiSelectBottomSheetField"),
+  //     buttonText: Text("Favorite Animals"),
+  //     items: items,
+  //     searchable: false,
+  //     validator: (values) {
+  //       if (values == null || values.isEmpty) {
+  //         return "Required";
+  //       }
+  //       List<String> names = values.map((e) => e.header).toList();
+  //       // if (names.contains("Frog")) {
+  //       //   return "Frogs are weird!";
+  //       // }
+  //       return null;
+  //     },
+  //     onConfirm: (values) {
+  //       setState(() {
+  //         _selectedAnimals3 = values;
+  //       });
+  //       _multiSelectKey.currentState.validate();
+  //     },
+  //     chipDisplay: MultiSelectChipDisplay(
+  //       onTap: (item) {
+  //         setState(() {
+  //           _selectedAnimals3.remove(item);
+  //         });
+  //         _multiSelectKey.currentState.validate();
+  //       },
+  //     ),
+  //   );
+  // }
 
   BoxDecoration customDecoration() {
     return BoxDecoration(
