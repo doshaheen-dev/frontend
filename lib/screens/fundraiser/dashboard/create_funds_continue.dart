@@ -189,8 +189,6 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                                       ),
                                       Text(
                                         "${AddNewFunds.placementFee}%",
-                                        style: textNormal(selectedOrange, 18),
-                                        "5%",
                                         style: textNormal(
                                             Theme.of(context).primaryColor, 18),
                                       )
