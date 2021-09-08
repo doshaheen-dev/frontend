@@ -84,7 +84,7 @@ class _UserTypeState extends State<UserType> {
           decoration: BoxDecoration(
             color: selectedCategory.contains(investor)
                 ? Theme.of(context).primaryColor
-                : Colors.grey[300],
+                : unselectedGray,
             borderRadius: BorderRadius.all(
               const Radius.circular(15.0),
             ),
