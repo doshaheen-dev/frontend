@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:acc/models/fund/fund_documents.dart';
 import 'package:acc/screens/common/webview_container.dart';
 import 'package:acc/screens/fundraiser/dashboard/pdf_viewer.dart';
@@ -111,26 +114,24 @@ class _InAppWebViewContainerState extends State<InAppWebViewContainer> {
                                 if (widget.url.fundKycDocPath.contains("pdf")) {
                                   // open pdf viewer
                                   openPdfViewer(context, url);
-                                }
-                                // else if (widget.url.fundKycDocPath
-                                //         .contains("png") ||
-                                //     widget.url.fundKycDocPath.contains("jpg") ||
-                                //     widget.url.fundKycDocPath
-                                //         .contains("jpeg")) {
-                                //   url = widget.url.fundKycDocPath.replaceAll(
-                                //       "https://funddocuments.s3.ap-south-1.amazonaws.com/",
-                                //       "${ApiServices.baseUrl}/download/fund/document/");
-                                //   _launched = _launchInBrowser(url);
-                                // }
-                                else {
+                                } else {
                                   // if (widget.url.fundKycDocPath.contains("ppt")) {
                                   //   download file
-                                  // String googleLink =
-                                  //     "http://docs.google.com/viewer?url=";
-                                  String docUrl = widget.url.fundKycDocPath;
-                                  print("docUrl:- $docUrl");
-                                  url = docUrl;
-                                  _launched = _launchInBrowser(url);
+
+                                  if (Platform.isIOS) {
+                                    String docUrl = widget.url.fundKycDocPath;
+                                    print("docUrl:- $docUrl");
+                                    url = docUrl;
+                                    _launched = _launchInBrowser(url);
+                                  } else {
+                                    String googleLink =
+                                        "http://docs.google.com/viewer?url=";
+                                    String docUrl =
+                                        googleLink + widget.url.fundKycDocPath;
+                                    print("docUrl:- $docUrl");
+                                    url = docUrl;
+                                    _launched = _launchInBrowser(url);
+                                  }
                                 }
                               },
                               child: Text("Open File",

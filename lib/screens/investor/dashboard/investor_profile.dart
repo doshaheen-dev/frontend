@@ -23,7 +23,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../providers/country_provider.dart' as countryProvider;
 
 class InvestorProfile extends StatefulWidget {
-  InvestorProfile({Key key}) : super(key: key);
+  const InvestorProfile({Key key}) : super(key: key);
 
   @override
   _InvestorProfileState createState() => _InvestorProfileState();
@@ -47,6 +47,8 @@ class _InvestorProfileState extends State<InvestorProfile> {
   var selectedCountry;
 
 //---------- bottom sheet ---------------------------//
+  TextEditingController _newAddressController = TextEditingController();
+
   TextEditingController _newMobileController = TextEditingController();
   TextEditingController otpController = new TextEditingController();
   var _newEmailController = TextEditingController();
@@ -69,6 +71,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
   var _isInit = true;
   bool isDataChanged = false;
   Future _countries;
+  String savedAddress;
 
   Future<void> _fetchCountries(BuildContext context) async {
     await Provider.of<countryProvider.Countries>(context, listen: false)
@@ -78,45 +81,20 @@ class _InvestorProfileState extends State<InvestorProfile> {
   @override
   void initState() {
     super.initState();
-    _emailController = TextEditingController();
-    _mobileController = TextEditingController();
-    _newMobileController = TextEditingController();
-    otpController = new TextEditingController();
-    _addressController = TextEditingController();
-
-    _addressController.addListener(_addressControllerListener);
-  }
-
-  void _addressControllerListener() {
-    print("object1- ${_addressController.text}");
-    print("object2:- ${UserData.instance.userInfo.address}");
-    setState(() {
-      if (_addressController.text != "" &&
-          _addressController.text.toLowerCase() !=
-              UserData.instance.userInfo.address.toLowerCase()) {
-        print("_addressControllerListener = ${_addressController.text}");
-        enableUpdate(true);
-      } else {
-        if (UserData.instance.userInfo.countryName != null &&
-            countryCode == UserData.instance.userInfo.countryName) {
-          enableUpdate(false);
-        }
-      }
-    });
   }
 
   @override
   void dispose() {
-    _addressController.removeListener(_addressControllerListener);
     _addressController.dispose();
     countryCode = "";
-    _isInit = true;
+    print("dispose");
     super.dispose();
   }
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
+      print("init");
       setUserInformation();
       _countries = _fetchCountries(context);
     }
@@ -145,7 +123,14 @@ class _InvestorProfileState extends State<InvestorProfile> {
       _emailController.text = emailId;
       // enable the button
       enableUpdate(true);
-      print("2= $isDataChanged");
+    });
+  }
+
+  void updateAddress(String address) {
+    setState(() {
+      _addressController.text = address;
+      // enable the button
+      enableUpdate(true);
     });
   }
 
@@ -319,6 +304,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
         : mobileNo ?? '';
 
     _addressController.text = UserData.instance.userInfo.address;
+    savedAddress = UserData.instance.userInfo.address;
     //_countryController.text = UserData.instance.userInfo.countryName;
     savedcountryName = UserData.instance.userInfo.countryName;
     countryCode = UserData.instance.userInfo.countryName;
@@ -444,31 +430,41 @@ class _InvestorProfileState extends State<InvestorProfile> {
             }),
       ),
       Container(
-        margin: const EdgeInsets.only(top: 5.0, bottom: 10.0),
-        decoration: customDecoration(),
-        child: TextField(
-          enabled: false,
-          style: textBlackNormal16(),
-          controller: _addressController,
-          onChanged: (value) => {
-            //address = value,
-          },
-          onSubmitted: null,
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.all(10.0),
-            labelText: "Address",
-            labelStyle: new TextStyle(color: Colors.grey[600]),
-            border: InputBorder.none,
-            focusedBorder: UnderlineInputBorder(
-              borderSide:
-                  const BorderSide(color: Colors.transparent, width: 2.0),
-              borderRadius: BorderRadius.all(
-                const Radius.circular(10.0),
-              ),
-            ),
-          ),
+        margin: const EdgeInsets.only(
+          top: 5.0,
+          bottom: 20,
         ),
+        decoration: customDecoration(),
+        child: createAddressUpdate(),
       ),
+      // Container(
+      //   margin: const EdgeInsets.only(top: 5.0, bottom: 10.0),
+      //   decoration: customDecoration(),
+      //   child: TextField(
+      //     style: textBlackNormal16(),
+      //     controller: _addressController,
+      //     onChanged: (value) => {
+      //       if (value == savedAddress)
+      //         {enableUpdate(false)}
+      //       else
+      //         {enableUpdate(true)}
+      //     },
+      //     onSubmitted: null,
+      //     decoration: InputDecoration(
+      //       contentPadding: EdgeInsets.all(10.0),
+      //       labelText: "Address",
+      //       labelStyle: new TextStyle(color: Colors.grey[600]),
+      //       border: InputBorder.none,
+      //       focusedBorder: UnderlineInputBorder(
+      //         borderSide:
+      //             const BorderSide(color: Colors.transparent, width: 2.0),
+      //         borderRadius: BorderRadius.all(
+      //           const Radius.circular(10.0),
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // ),
       // Container(
       //     margin: const EdgeInsets.only(top: 5.0, bottom: 10.0),
       //     decoration: BoxDecoration(
@@ -519,8 +515,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
             print(map['text']);
             enableUpdate(true);
           } else {
-            if (_addressController.text.toLowerCase() ==
-                UserData.instance.userInfo.address.toLowerCase()) {
+            if (_addressController.text.toLowerCase() == savedAddress) {
               enableUpdate(false);
             }
           }
@@ -887,6 +882,22 @@ class _InvestorProfileState extends State<InvestorProfile> {
                                   ),
                                 ),
                                 Container(
+                                  margin: EdgeInsets.only(right: 20.0),
+                                  child: Align(
+                                    alignment: Alignment.topRight,
+                                    child: InkWell(
+                                        child: Text(
+                                          "Didn't receive the code? Resend OTP",
+                                          textAlign: TextAlign.end,
+                                          style: textNormal14(Colors.black),
+                                        ),
+                                        onTap: () {
+                                          _getOtp(_newEmailController.text, "",
+                                              setState, "email_id");
+                                        }),
+                                  ),
+                                ),
+                                Container(
                                     alignment: Alignment.center,
                                     margin: const EdgeInsets.only(
                                         top: 20.0, bottom: 20),
@@ -1127,6 +1138,25 @@ class _InvestorProfileState extends State<InvestorProfile> {
                                   ),
                                 ),
                                 Container(
+                                  margin: EdgeInsets.only(right: 20.0),
+                                  child: Align(
+                                    alignment: Alignment.topRight,
+                                    child: InkWell(
+                                        child: Text(
+                                          "Didn't receive the code? Resend OTP",
+                                          textAlign: TextAlign.end,
+                                          style: textNormal14(Colors.black),
+                                        ),
+                                        onTap: () {
+                                          _getOtp(
+                                              _newMobileController.text,
+                                              newSelectedCountry,
+                                              setState,
+                                              "mobile_no");
+                                        }),
+                                  ),
+                                ),
+                                Container(
                                     alignment: Alignment.center,
                                     margin: const EdgeInsets.only(
                                         top: 20.0, bottom: 20),
@@ -1257,6 +1287,181 @@ class _InvestorProfileState extends State<InvestorProfile> {
         ));
   }
 
+  // ------------------------------------- Address----------------------------//
+  Widget createAddressUpdate() {
+    return Stack(
+      children: [
+        TextField(
+            enabled: false,
+            keyboardType: TextInputType.multiline,
+            maxLength: null,
+            maxLines: null,
+            style: textBlackNormal16(),
+            onChanged: (value) => email = value,
+            controller: _addressController,
+            decoration: InputDecoration(
+                contentPadding: EdgeInsets.all(10.0),
+                labelText: "Address",
+                labelStyle: textNormal14(Colors.grey[600]),
+                border: InputBorder.none,
+                focusedBorder: UnderlineInputBorder(
+                  borderSide:
+                      const BorderSide(color: Colors.transparent, width: 2.0),
+                  borderRadius: BorderRadius.all(
+                    const Radius.circular(10.0),
+                  ),
+                ))),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Container(
+            margin: EdgeInsets.only(left: 25.0, right: 20.0, top: 15.0),
+            child: InkWell(
+                onTap: () {
+                  // open Bottom sheet
+                  showAddressUpdationView();
+                },
+                child: Text(
+                  "Update",
+                  style: textNormal12(Colors.blue),
+                )),
+          ),
+        ),
+      ],
+    );
+  }
+
+  final GlobalKey<ScaffoldState> _addressScaffoldKey =
+      GlobalKey<ScaffoldState>();
+  void showAddressUpdationView() {
+    showModalBottomSheet(
+        isDismissible: false,
+        enableDrag: false,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return Scaffold(
+                key: _addressScaffoldKey,
+                body: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(children: [
+                            Text(
+                              "Update Your Address",
+                              textAlign: TextAlign.start,
+                              style: textBold16(headingBlack),
+                            ),
+                            Spacer(),
+                            InkWell(
+                                onTap: () {
+                                  _newAddressController.clear();
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  "Close",
+                                  style: textNormal16(headingBlack),
+                                ))
+                          ]),
+                        ),
+                        Container(
+                          decoration: customDecoration(),
+                          margin: EdgeInsets.only(
+                              left: 15.0, right: 15.0, top: 10.0),
+                          width: MediaQuery.of(context).size.width,
+                          child: TextField(
+                              style: textBlackNormal16(),
+                              keyboardType: TextInputType.multiline,
+                              maxLength: null,
+                              maxLines: null,
+                              onChanged: (value) => newEmail = value,
+                              controller: _newAddressController,
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(10.0),
+                                  labelText: "Address",
+                                  labelStyle:
+                                      new TextStyle(color: Colors.grey[600]),
+                                  border: InputBorder.none,
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        color: Colors.transparent, width: 2.0),
+                                    borderRadius: BorderRadius.all(
+                                      const Radius.circular(10.0),
+                                    ),
+                                  ))),
+                        ),
+                        Container(
+                            alignment: Alignment.center,
+                            margin:
+                                const EdgeInsets.only(top: 20.0, bottom: 20),
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
+
+                                  if (_newAddressController.text.isEmpty) {
+                                    _addressScaffoldKey.currentState
+                                        .showSnackBar(SnackBar(
+                                            duration: Duration(seconds: 1),
+                                            content: Text(
+                                                "Please enter your address.")));
+                                    return;
+                                  }
+                                  if (_newAddressController.text
+                                          .toLowerCase() !=
+                                      _addressController.text.toLowerCase()) {
+                                    updateAddress(
+                                        _newAddressController.text.trim());
+                                    Future.delayed(Duration(milliseconds: 2),
+                                        () async {
+                                      _newAddressController.clear();
+                                      Navigator.pop(context);
+                                    });
+                                    return;
+                                  }
+                                  _addressScaffoldKey.currentState.showSnackBar(
+                                      SnackBar(
+                                          duration: Duration(seconds: 1),
+                                          content: Text(
+                                              "Please enter new address.")));
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.all(0.0),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18))),
+                                child: Ink(
+                                    decoration: BoxDecoration(
+                                        gradient: LinearGradient(colors: [
+                                          Theme.of(context).primaryColor,
+                                          Theme.of(context).primaryColor
+                                        ]),
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    child: Container(
+                                        width: 240,
+                                        height: 45,
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "Update New Address",
+                                          style: textWhiteBold16(),
+                                        ))))),
+                      ],
+                    ),
+                  ),
+                ));
+          });
+        });
+  }
+  //---------------------------------------------------------------------------\\
+
   Future<void> _getOtp(String text, newSelectedCountry, StateSetter setState,
       String otpType) async {
     String _phoneNumber = text;
@@ -1291,8 +1496,8 @@ class _InvestorProfileState extends State<InvestorProfile> {
         isOtpReceived = false;
         isEmailOtpReceived = false;
       });
-      showSnackBar(context, verificationIdSignIn.message);
     }
+    showSnackBar(context, verificationIdSignIn.message);
   }
 
   Future<void> verifyMobileOTP(String otpCode, String verificationId,
@@ -1403,7 +1608,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
           await UpdateProfileService.updateUserInfo(requestMap);
       if (updateResponse.status == 200) {
         progress.dismiss();
-
+        savedAddress = _address;
         //_openDialog(context, updateResponse.message);
         if (isSignInRequired) {
           _openDialog(context, updateResponse.message);
