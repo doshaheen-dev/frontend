@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:acc/models/authentication/otp_response.dart';
 import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,6 +50,7 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
     _verificationId = widget._verificationId;
     _phoneNumber = widget._phoneNumber;
     _otpType = widget._otpType;
+    print("_phoneNumber= $_phoneNumber, _otpType-$_otpType");
 
     super.initState();
   }
@@ -130,6 +132,25 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
                                     beforeTextPaste: (text) {
                                       return false;
                                     },
+                                  ),
+                                ),
+
+                                Container(
+                                  margin: EdgeInsets.only(right: 20.0),
+                                  child: Align(
+                                    alignment: Alignment.topRight,
+                                    child: InkWell(
+                                        child: Text(
+                                          "Didn't receive the code? Resend OTP",
+                                          textAlign: TextAlign.end,
+                                          style: textNormal14(Colors.black),
+                                        ),
+                                        onTap: () {
+                                          progress = ProgressHUD.of(context);
+                                          progress?.showWithText(sendingOtp);
+                                          otpController.clear();
+                                          sendOTPServer();
+                                        }),
                                   ),
                                 ),
                                 SizedBox(
@@ -230,6 +251,22 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
               }),
           (Route<dynamic> route) => false);
     }
+  }
+
+  Future<void> sendOTPServer() async {
+    print("osType => $_otpType");
+
+    Future.delayed(Duration(seconds: 2), () async {
+      VerificationIdSignIn verificationIdSignIn =
+          await OtpService.getVerificationFromTwillio(
+              _phoneNumber, _otpType, "twilio");
+
+      progress.dismiss();
+      if (verificationIdSignIn.type == "success") {
+        _verificationId = verificationIdSignIn.data.verificationId;
+      }
+      showSnackBar(context, verificationIdSignIn.message);
+    });
   }
 
   Future<void> verifyPhoneUser(String token, String phoneNumber, String otpType,

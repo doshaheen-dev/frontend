@@ -1,6 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:acc/constants/font_family.dart';
+import 'package:acc/models/authentication/signup_request_basicinfo.dart';
+import 'package:acc/models/authentication/verify_phone_signin.dart';
+import 'package:acc/services/signup_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,10 +16,13 @@ import 'package:acc/utilites/ui_widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../utils/code_utils.dart';
 import '../../../providers/country_provider.dart' as countryProvider;
 import 'package:acc/models/authentication/signup_request.dart';
+import 'package:acc/models/authentication/signup_response.dart' as userInfo;
+
 import 'package:acc/utils/crypt_utils.dart';
 
 class SignUpDetails extends StatefulWidget {
@@ -463,13 +470,47 @@ class _SignUpDetailsState extends State<SignUpDetails> {
     String countryCode,
     String address,
   ) async {
-    final requestModelInstance = InvestorSignupRequestModel.instance;
+    // upload basic info
+
+    final requestModelInstance = InvestorSignupBasicInfo.instance;
     requestModelInstance.firstName = CryptUtils.encryption(firstName);
     requestModelInstance.lastName = CryptUtils.encryption(lastName);
     requestModelInstance.emailId = CryptUtils.encryption(emailId);
     requestModelInstance.countryCode = countryCode;
     requestModelInstance.address = address;
-    openWelcomeInvestor();
+    requestModelInstance.userType = 'investor';
+    requestModelInstance.verificationId =
+        InvestorSignupRequestModel.instance.verificationId;
+    requestModelInstance.mobileNo =
+        InvestorSignupRequestModel.instance.mobileNo;
+
+    userInfo.User signedUpUser =
+        await SignUpService.uploadBasicUserDetails(requestModelInstance);
+    progress.dismiss();
+    showSnackBar(context, signedUpUser.message);
+    if (signedUpUser.type == 'success') {
+      // save info
+      UserData userData = UserData(
+          signedUpUser.data.token,
+          signedUpUser.data.firstName,
+          "",
+          signedUpUser.data.lastName,
+          signedUpUser.data.mobileNo,
+          signedUpUser.data.emailId,
+          signedUpUser.data.userType,
+          "",
+          "",
+          "",
+          signedUpUser.data.address,
+          signedUpUser.data.countryCode);
+      final prefs = await SharedPreferences.getInstance();
+      final userJson = jsonEncode(userData);
+      prefs.setString('UserInfo', userJson);
+      UserData.instance.userInfo = userData;
+      print('${userData.firstName}');
+      print('Ins:${UserData.instance.userInfo.firstName}');
+      openWelcomeInvestor();
+    }
   }
 
   void openWelcomeInvestor() {

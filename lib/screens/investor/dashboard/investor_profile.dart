@@ -1,8 +1,9 @@
+import 'dart:convert';
+
 import 'package:acc/models/authentication/otp_response.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/models/default.dart';
 import 'package:acc/models/local_countries.dart';
-import 'package:acc/screens/investor/dashboard/update/investor_prefs.dart';
 import 'package:acc/services/UpdateProfileService.dart';
 import 'package:acc/services/update_otp_service.dart';
 import 'package:acc/utilites/app_colors.dart';
@@ -12,14 +13,17 @@ import 'package:acc/utilites/ui_widgets.dart';
 import 'package:acc/utils/class_navigation.dart';
 import 'package:acc/utils/code_utils.dart';
 import 'package:acc/utils/crypt_utils.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../providers/country_provider.dart' as countryProvider;
 
 class InvestorProfile extends StatefulWidget {
-  InvestorProfile({Key key}) : super(key: key);
+  const InvestorProfile({Key key}) : super(key: key);
 
   @override
   _InvestorProfileState createState() => _InvestorProfileState();
@@ -31,17 +35,20 @@ class _InvestorProfileState extends State<InvestorProfile> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _mobileController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
-  TextEditingController _countryController = TextEditingController();
+  // TextEditingController _countryController = TextEditingController();
   String firstname = "";
   String lastname = "";
   String email = "";
-  String country = "";
+  String countryCode = "";
+  String countryName = "";
   String address = "";
   String mobileNumber = "";
   String savedcountryName = "";
   var selectedCountry;
 
 //---------- bottom sheet ---------------------------//
+  TextEditingController _newAddressController = TextEditingController();
+
   TextEditingController _newMobileController = TextEditingController();
   TextEditingController otpController = new TextEditingController();
   var _newEmailController = TextEditingController();
@@ -63,23 +70,42 @@ class _InvestorProfileState extends State<InvestorProfile> {
   var progress;
   var _isInit = true;
   bool isDataChanged = false;
+  Future _countries;
+  String savedAddress;
+
+  Future<void> _fetchCountries(BuildContext context) async {
+    await Provider.of<countryProvider.Countries>(context, listen: false)
+        .fetchAndSetCountries();
+  }
 
   @override
   void initState() {
     super.initState();
-    _emailController = TextEditingController();
-    _mobileController = TextEditingController();
-    _newMobileController = TextEditingController();
-    otpController = new TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _addressController.dispose();
+    countryCode = "";
+    print("dispose");
+    super.dispose();
   }
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
+      print("init");
       setUserInformation();
+      _countries = _fetchCountries(context);
     }
     _isInit = false;
     super.didChangeDependencies();
+  }
+
+  void enableUpdate(bool isActivated) {
+    setState(() {
+      isDataChanged = isActivated;
+    });
   }
 
   void updateInfo(newSelectedCountry, String phoneNumber) {
@@ -87,7 +113,8 @@ class _InvestorProfileState extends State<InvestorProfile> {
       selectedCountry = newSelectedCountry;
       _mobileController.text = phoneNumber;
       // enable the button
-      isDataChanged = true;
+      enableUpdate(true);
+      print("1= $isDataChanged");
     });
   }
 
@@ -95,7 +122,15 @@ class _InvestorProfileState extends State<InvestorProfile> {
     setState(() {
       _emailController.text = emailId;
       // enable the button
-      isDataChanged = true;
+      enableUpdate(true);
+    });
+  }
+
+  void updateAddress(String address) {
+    setState(() {
+      _addressController.text = address;
+      // enable the button
+      enableUpdate(true);
     });
   }
 
@@ -105,132 +140,119 @@ class _InvestorProfileState extends State<InvestorProfile> {
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: ProgressHUD(
-            child: Builder(
-                builder: (context) => SingleChildScrollView(
-                        child: Column(
-                      children: [
-                        Container(
-                            child: setUserProfileView(context),
-                            margin: EdgeInsets.only(
-                                right: 25.0, left: 25.0, bottom: 10.0)),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        Row(
-                          children: [
-                            //NEXT BUTTON
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                margin: const EdgeInsets.only(
-                                    left: 25.0, right: 10.0),
-                                child: ElevatedButton(
-                                  onPressed: !isDataChanged
-                                      ? null
-                                      : () {
-                                          FocusScope.of(context)
-                                              .requestFocus(FocusNode());
-                                          // on click
-                                          String _phoneNumber =
-                                              "+${selectedCountry.dialCode}" +
-                                                  _mobileController.text
-                                                      .toString()
-                                                      .trim();
-                                          if (_phoneNumber !=
-                                                  UserData.instance.userInfo
-                                                      .mobileNo ||
-                                              _emailController.text
-                                                      .toString()
-                                                      .trim() !=
-                                                  UserData.instance.userInfo
-                                                      .emailId) {
-                                            submitDetails(
-                                                _firstNameController.text
-                                                    .trim(),
-                                                _lastnameController.text.trim(),
-                                                _emailController.text.trim(),
-                                                _mobileController.text.trim(),
-                                                country,
-                                                _addressController.text,
-                                                _verificationId,
-                                                _emailVerificationId,
-                                                context);
-                                            return;
-                                          }
-                                          showSnackBar(context,
-                                              "Please enter any new data for updation.");
-                                        },
-                                  style: ElevatedButton.styleFrom(
-                                      padding: EdgeInsets.all(0.0),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(14))),
-                                  child: Ink(
-                                    decoration: isDataChanged
-                                        ? BoxDecoration(
-                                            gradient: LinearGradient(colors: [
-                                              Theme.of(context).primaryColor,
-                                              Theme.of(context).primaryColor
-                                            ]),
-                                            borderRadius:
-                                                BorderRadius.circular(10))
-                                        : BoxDecoration(
-                                            gradient: LinearGradient(colors: [
-                                              kwhiteGrey,
-                                              kwhiteGrey
-                                            ]),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 50,
-                                      alignment: Alignment.center,
-                                      child: Text("Update",
-                                          style: textWhiteBold16()),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
+      backgroundColor: Colors.white,
+      body: ProgressHUD(
+          child: Builder(
+        builder: (context) => SingleChildScrollView(
+            child: Column(
+          children: [
+            Container(
+                child: setUserProfileView(context),
+                margin: EdgeInsets.only(right: 25.0, left: 25.0, bottom: 10.0)),
+            SizedBox(
+              height: 10.0,
+            ),
+            Row(
+              children: [
+                //NEXT BUTTON
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 25.0, right: 10.0),
+                    child: ElevatedButton(
+                      onPressed: !isDataChanged
+                          ? null
+                          : () {
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              // on click
 
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                margin: const EdgeInsets.only(
-                                    left: 10, right: 25.0),
-                                child: ElevatedButton(
-                                    onPressed: () {
-                                      openLogoutDialog(context,
-                                          "Are you sure you want to logout?");
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                        padding: EdgeInsets.all(0.0),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(14))),
-                                    child: Ink(
-                                        decoration: BoxDecoration(
-                                            color: Colors.red,
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: Container(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            height: 50,
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              "Logout",
-                                              style: textWhiteBold16(),
-                                            )))),
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    )))));
+                              String _phoneNumber =
+                                  "+${selectedCountry.dialCode}" +
+                                      _mobileController.text.toString().trim();
+                              // if (_phoneNumber !=
+                              //         UserData.instance.userInfo.mobileNo ||
+                              //     _emailController.text.toString().trim() !=
+                              //         UserData.instance.userInfo.emailId ||
+                              //     UserData.instance.userInfo.countryName !=
+                              //             null &&
+                              //         country ==
+                              //             UserData
+                              //                 .instance.userInfo.countryName) {
+                              submitDetails(
+                                  _firstNameController.text.trim(),
+                                  _lastnameController.text.trim(),
+                                  _emailController.text.trim(),
+                                  _mobileController.text.trim(),
+                                  countryCode,
+                                  _addressController.text,
+                                  _verificationId,
+                                  _emailVerificationId,
+                                  context);
+                              //return;
+                              //   }
+                              //   showSnackBar(context,
+                              //       "Please enter any new data for updation.");
+                            },
+                      style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.all(0.0),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14))),
+                      child: Ink(
+                        decoration: isDataChanged
+                            ? BoxDecoration(
+                                gradient: LinearGradient(colors: [
+                                  Theme.of(context).primaryColor,
+                                  Theme.of(context).primaryColor
+                                ]),
+                                borderRadius: BorderRadius.circular(10))
+                            : BoxDecoration(
+                                gradient: LinearGradient(
+                                    colors: [kwhiteGrey, kwhiteGrey]),
+                                borderRadius: BorderRadius.circular(10)),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          alignment: Alignment.center,
+                          child: Text("Update", style: textWhiteBold16()),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 10, right: 25.0),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          openLogoutDialog(
+                              context, "Are you sure you want to logout?");
+                        },
+                        style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.all(0.0),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14))),
+                        child: Ink(
+                            decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: 50,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Logout",
+                                  style: textWhiteBold16(),
+                                )))),
+                  ),
+                )
+              ],
+            )
+          ],
+        )),
+      )),
+    );
   }
 
   void setUserInformation() {
@@ -250,14 +272,14 @@ class _InvestorProfileState extends State<InvestorProfile> {
         ? ''
         : UserData.instance.userInfo.emailId ?? '';
 
-    String countryCode;
+    String countryCodeLength;
     if (UserData.instance.userInfo.mobileNo.length == 13 ||
         UserData.instance.userInfo.mobileNo.length == 15) {
       //IN and SG
-      countryCode = UserData.instance.userInfo.mobileNo.substring(1, 3);
+      countryCodeLength = UserData.instance.userInfo.mobileNo.substring(1, 3);
     } else if (UserData.instance.userInfo.mobileNo.length == 12) {
       // US
-      countryCode = UserData.instance.userInfo.mobileNo.substring(1, 2);
+      countryCodeLength = UserData.instance.userInfo.mobileNo.substring(1, 2);
     }
     String mobileNo;
     if (UserData.instance.userInfo.mobileNo.length == 13 ||
@@ -272,7 +294,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
     }
 
     for (var i = 0; i < countryList.length; i++) {
-      if (countryCode == countryList[i].dialCode.toString()) {
+      if (countryCodeLength == countryList[i].dialCode.toString()) {
         selectedCountry = countryList[i];
       }
     }
@@ -282,9 +304,11 @@ class _InvestorProfileState extends State<InvestorProfile> {
         : mobileNo ?? '';
 
     _addressController.text = UserData.instance.userInfo.address;
-    _countryController.text = UserData.instance.userInfo.countryName;
+    savedAddress = UserData.instance.userInfo.address;
+    //_countryController.text = UserData.instance.userInfo.countryName;
     savedcountryName = UserData.instance.userInfo.countryName;
-    country = UserData.instance.userInfo.countryName;
+    countryCode = UserData.instance.userInfo.countryName;
+    countryName = UserData.instance.userInfo.countryName;
   }
 
   openLogoutDialog(BuildContext context, String message) {
@@ -336,7 +360,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
           style: textBlackNormal16(),
           controller: _firstNameController,
           onChanged: (value) => {firstname = value},
-          decoration: _setTextFieldDecoration("Firstname"),
+          decoration: _setTextFieldDecoration("Firstname", false),
         ),
       ),
       Container(
@@ -346,7 +370,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
           controller: _lastnameController,
           style: textBlackNormal16(),
           onChanged: (value) => lastname = value,
-          decoration: _setTextFieldDecoration("Lastname"),
+          decoration: _setTextFieldDecoration("Lastname", false),
         ),
       ),
       Container(
@@ -362,26 +386,85 @@ class _InvestorProfileState extends State<InvestorProfile> {
         decoration: customDecoration(),
         child: createEditableEmailId(),
       ),
+      // Container(
+      //   margin: const EdgeInsets.only(bottom: 10),
+      //   decoration: customDecoration(),
+      //   child: TextField(
+      //     style: textBlackNormal14(),
+      //     onChanged: (value) => country = value,
+      //     controller: _countryController,
+      //     decoration: _setTextFieldDecoration("Country"),
+      //   ),
+      // ),
       Container(
         margin: const EdgeInsets.only(bottom: 10),
+        width: MediaQuery.of(context).size.width,
+        height: 80,
         decoration: customDecoration(),
-        child: TextField(
-          style: textBlackNormal14(),
-          onChanged: (value) => country = value,
-          controller: _countryController,
-          decoration: _setTextFieldDecoration("Country"),
-        ),
+        child: FutureBuilder(
+            future: _countries,
+            builder: (ctx, dataSnapshot) {
+              if (dataSnapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                    child: CircularProgressIndicator(
+                  backgroundColor: Colors.orange,
+                  valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
+                ));
+              } else {
+                if (dataSnapshot.error != null) {
+                  return Center(child: Text("An error occurred!"));
+                } else {
+                  return Consumer<countryProvider.Countries>(
+                    builder: (ctx, countryData, child) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: getDropDownSearch(countryData.countries
+                          .map((info) => {
+                                'text': info.name,
+                                'value': info.abbreviation,
+                              })
+                          .toList()),
+                    ),
+                  );
+                }
+              }
+            }),
       ),
       Container(
-        margin: const EdgeInsets.only(top: 5.0, bottom: 10.0),
-        decoration: customDecoration(),
-        child: TextField(
-          style: textBlackNormal14(),
-          controller: _addressController,
-          onChanged: (value) => address = value,
-          decoration: _setTextFieldDecoration("Address"),
+        margin: const EdgeInsets.only(
+          top: 5.0,
+          bottom: 20,
         ),
+        decoration: customDecoration(),
+        child: createAddressUpdate(),
       ),
+      // Container(
+      //   margin: const EdgeInsets.only(top: 5.0, bottom: 10.0),
+      //   decoration: customDecoration(),
+      //   child: TextField(
+      //     style: textBlackNormal16(),
+      //     controller: _addressController,
+      //     onChanged: (value) => {
+      //       if (value == savedAddress)
+      //         {enableUpdate(false)}
+      //       else
+      //         {enableUpdate(true)}
+      //     },
+      //     onSubmitted: null,
+      //     decoration: InputDecoration(
+      //       contentPadding: EdgeInsets.all(10.0),
+      //       labelText: "Address",
+      //       labelStyle: new TextStyle(color: Colors.grey[600]),
+      //       border: InputBorder.none,
+      //       focusedBorder: UnderlineInputBorder(
+      //         borderSide:
+      //             const BorderSide(color: Colors.transparent, width: 2.0),
+      //         borderRadius: BorderRadius.all(
+      //           const Radius.circular(10.0),
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // ),
       // Container(
       //     margin: const EdgeInsets.only(top: 5.0, bottom: 10.0),
       //     decoration: BoxDecoration(
@@ -413,6 +496,44 @@ class _InvestorProfileState extends State<InvestorProfile> {
     ]);
   }
 
+  Widget getDropDownSearch(List<Map<String, dynamic>> items) {
+    return DropdownSearch<Map<String, dynamic>>(
+      mode: Mode.BOTTOM_SHEET,
+      showSearchBox: true,
+      showSelectedItem: false,
+      items: items,
+      itemAsString: (Map<String, dynamic> i) => i['text'],
+      hint: "",
+      label: savedcountryName != "" ? savedcountryName : 'Country',
+      onChanged: (map) {
+        setState(() {
+          savedcountryName = "";
+          countryCode = map['value'];
+          countryName = map['text'];
+          if (UserData.instance.userInfo.countryName != null &&
+              map['text'] != UserData.instance.userInfo.countryName) {
+            print(map['text']);
+            enableUpdate(true);
+          } else {
+            if (_addressController.text.toLowerCase() == savedAddress) {
+              enableUpdate(false);
+            }
+          }
+        });
+      },
+      dropdownSearchDecoration: InputDecoration(
+        labelText: 'Country',
+        labelStyle: textNormal18(Colors.grey[600]),
+        enabledBorder: UnderlineInputBorder(
+          borderRadius: BorderRadius.all(const Radius.circular(10.0)),
+          borderSide: BorderSide(color: Colors.transparent),
+        ),
+      ),
+      selectedItem: null,
+      maxHeight: 700,
+    );
+  }
+
   BoxDecoration customDecoration() {
     return BoxDecoration(
       color: Colors.transparent,
@@ -426,9 +547,9 @@ class _InvestorProfileState extends State<InvestorProfile> {
     );
   }
 
-  InputDecoration _setTextFieldDecoration(_text) {
+  InputDecoration _setTextFieldDecoration(_text, bool enabled) {
     return InputDecoration(
-      enabled: false,
+      enabled: enabled,
       contentPadding: EdgeInsets.all(10.0),
       labelText: _text,
       labelStyle: new TextStyle(color: Colors.grey[600]),
@@ -761,6 +882,22 @@ class _InvestorProfileState extends State<InvestorProfile> {
                                   ),
                                 ),
                                 Container(
+                                  margin: EdgeInsets.only(right: 20.0),
+                                  child: Align(
+                                    alignment: Alignment.topRight,
+                                    child: InkWell(
+                                        child: Text(
+                                          "Didn't receive the code? Resend OTP",
+                                          textAlign: TextAlign.end,
+                                          style: textNormal14(Colors.black),
+                                        ),
+                                        onTap: () {
+                                          _getOtp(_newEmailController.text, "",
+                                              setState, "email_id");
+                                        }),
+                                  ),
+                                ),
+                                Container(
                                     alignment: Alignment.center,
                                     margin: const EdgeInsets.only(
                                         top: 20.0, bottom: 20),
@@ -1001,6 +1138,25 @@ class _InvestorProfileState extends State<InvestorProfile> {
                                   ),
                                 ),
                                 Container(
+                                  margin: EdgeInsets.only(right: 20.0),
+                                  child: Align(
+                                    alignment: Alignment.topRight,
+                                    child: InkWell(
+                                        child: Text(
+                                          "Didn't receive the code? Resend OTP",
+                                          textAlign: TextAlign.end,
+                                          style: textNormal14(Colors.black),
+                                        ),
+                                        onTap: () {
+                                          _getOtp(
+                                              _newMobileController.text,
+                                              newSelectedCountry,
+                                              setState,
+                                              "mobile_no");
+                                        }),
+                                  ),
+                                ),
+                                Container(
                                     alignment: Alignment.center,
                                     margin: const EdgeInsets.only(
                                         top: 20.0, bottom: 20),
@@ -1131,6 +1287,181 @@ class _InvestorProfileState extends State<InvestorProfile> {
         ));
   }
 
+  // ------------------------------------- Address----------------------------//
+  Widget createAddressUpdate() {
+    return Stack(
+      children: [
+        TextField(
+            enabled: false,
+            keyboardType: TextInputType.multiline,
+            maxLength: null,
+            maxLines: null,
+            style: textBlackNormal16(),
+            onChanged: (value) => email = value,
+            controller: _addressController,
+            decoration: InputDecoration(
+                contentPadding: EdgeInsets.all(10.0),
+                labelText: "Address",
+                labelStyle: textNormal14(Colors.grey[600]),
+                border: InputBorder.none,
+                focusedBorder: UnderlineInputBorder(
+                  borderSide:
+                      const BorderSide(color: Colors.transparent, width: 2.0),
+                  borderRadius: BorderRadius.all(
+                    const Radius.circular(10.0),
+                  ),
+                ))),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Container(
+            margin: EdgeInsets.only(left: 25.0, right: 20.0, top: 15.0),
+            child: InkWell(
+                onTap: () {
+                  // open Bottom sheet
+                  showAddressUpdationView();
+                },
+                child: Text(
+                  "Update",
+                  style: textNormal12(Colors.blue),
+                )),
+          ),
+        ),
+      ],
+    );
+  }
+
+  final GlobalKey<ScaffoldState> _addressScaffoldKey =
+      GlobalKey<ScaffoldState>();
+  void showAddressUpdationView() {
+    showModalBottomSheet(
+        isDismissible: false,
+        enableDrag: false,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return Scaffold(
+                key: _addressScaffoldKey,
+                body: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(children: [
+                            Text(
+                              "Update Your Address",
+                              textAlign: TextAlign.start,
+                              style: textBold16(headingBlack),
+                            ),
+                            Spacer(),
+                            InkWell(
+                                onTap: () {
+                                  _newAddressController.clear();
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  "Close",
+                                  style: textNormal16(headingBlack),
+                                ))
+                          ]),
+                        ),
+                        Container(
+                          decoration: customDecoration(),
+                          margin: EdgeInsets.only(
+                              left: 15.0, right: 15.0, top: 10.0),
+                          width: MediaQuery.of(context).size.width,
+                          child: TextField(
+                              style: textBlackNormal16(),
+                              keyboardType: TextInputType.multiline,
+                              maxLength: null,
+                              maxLines: null,
+                              onChanged: (value) => newEmail = value,
+                              controller: _newAddressController,
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(10.0),
+                                  labelText: "Address",
+                                  labelStyle:
+                                      new TextStyle(color: Colors.grey[600]),
+                                  border: InputBorder.none,
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        color: Colors.transparent, width: 2.0),
+                                    borderRadius: BorderRadius.all(
+                                      const Radius.circular(10.0),
+                                    ),
+                                  ))),
+                        ),
+                        Container(
+                            alignment: Alignment.center,
+                            margin:
+                                const EdgeInsets.only(top: 20.0, bottom: 20),
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
+
+                                  if (_newAddressController.text.isEmpty) {
+                                    _addressScaffoldKey.currentState
+                                        .showSnackBar(SnackBar(
+                                            duration: Duration(seconds: 1),
+                                            content: Text(
+                                                "Please enter your address.")));
+                                    return;
+                                  }
+                                  if (_newAddressController.text
+                                          .toLowerCase() !=
+                                      _addressController.text.toLowerCase()) {
+                                    updateAddress(
+                                        _newAddressController.text.trim());
+                                    Future.delayed(Duration(milliseconds: 2),
+                                        () async {
+                                      _newAddressController.clear();
+                                      Navigator.pop(context);
+                                    });
+                                    return;
+                                  }
+                                  _addressScaffoldKey.currentState.showSnackBar(
+                                      SnackBar(
+                                          duration: Duration(seconds: 1),
+                                          content: Text(
+                                              "Please enter new address.")));
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.all(0.0),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18))),
+                                child: Ink(
+                                    decoration: BoxDecoration(
+                                        gradient: LinearGradient(colors: [
+                                          Theme.of(context).primaryColor,
+                                          Theme.of(context).primaryColor
+                                        ]),
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    child: Container(
+                                        width: 240,
+                                        height: 45,
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "Update New Address",
+                                          style: textWhiteBold16(),
+                                        ))))),
+                      ],
+                    ),
+                  ),
+                ));
+          });
+        });
+  }
+  //---------------------------------------------------------------------------\\
+
   Future<void> _getOtp(String text, newSelectedCountry, StateSetter setState,
       String otpType) async {
     String _phoneNumber = text;
@@ -1165,8 +1496,8 @@ class _InvestorProfileState extends State<InvestorProfile> {
         isOtpReceived = false;
         isEmailOtpReceived = false;
       });
-      showSnackBar(context, verificationIdSignIn.message);
     }
+    showSnackBar(context, verificationIdSignIn.message);
   }
 
   Future<void> verifyMobileOTP(String otpCode, String verificationId,
@@ -1245,8 +1576,20 @@ class _InvestorProfileState extends State<InvestorProfile> {
     progress?.showWithText('Updating Profile...');
 
     Map<String, dynamic> requestMap = Map();
+    var isSignInRequired = false;
+
+    if (UserData.instance.userInfo.countryName != null &&
+        countryCode != UserData.instance.userInfo.countryName) {
+      requestMap["country_code"] = _countryCode;
+    }
+
+    if (_address != UserData.instance.userInfo.address) {
+      requestMap["address"] = _address;
+      UserData.instance.userInfo.address = _address;
+    }
 
     if (_emailId != UserData.instance.userInfo.emailId) {
+      isSignInRequired = true;
       requestMap["email_id"] = CryptUtils.encryption(_emailId);
       requestMap["email_verificationId"] = _emailVerificationId;
 
@@ -1255,6 +1598,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
     }
 
     if (_phoneNumber != UserData.instance.userInfo.mobileNo) {
+      isSignInRequired = true;
       requestMap["mobile_no"] = CryptUtils.encryption(_phoneNumber);
       requestMap["mobile_verificationId"] = _verificationId;
     }
@@ -1264,8 +1608,31 @@ class _InvestorProfileState extends State<InvestorProfile> {
           await UpdateProfileService.updateUserInfo(requestMap);
       if (updateResponse.status == 200) {
         progress.dismiss();
-
-        _openDialog(context, updateResponse.message);
+        savedAddress = _address;
+        //_openDialog(context, updateResponse.message);
+        if (isSignInRequired) {
+          _openDialog(context, updateResponse.message);
+        } else {
+          showSnackBar(context, updateResponse.message);
+          enableUpdate(false);
+          UserData userData = UserData(
+              UserData.instance.userInfo.token,
+              UserData.instance.userInfo.firstName,
+              "",
+              UserData.instance.userInfo.lastName,
+              UserData.instance.userInfo.mobileNo,
+              UserData.instance.userInfo.emailId,
+              UserData.instance.userInfo.userType,
+              "",
+              "",
+              "",
+              _address,
+              countryName);
+          final prefs = await SharedPreferences.getInstance();
+          final userJson = jsonEncode(userData);
+          prefs.setString('UserInfo', userJson);
+          UserData.instance.userInfo = userData;
+        }
       } else {
         if (progress != null) {
           progress.dismiss();

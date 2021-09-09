@@ -1,4 +1,5 @@
 import 'package:acc/constants/font_family.dart';
+import 'package:acc/models/authentication/signup_request_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/investor/general_terms_privacy.dart';
@@ -150,7 +151,7 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                                 print(listIds);
                                 if (listIds.isNotEmpty) {
                                   final requestModelInstance =
-                                      InvestorSignupRequestModel.instance;
+                                      InvestorSignupPreferences.instance;
                                   requestModelInstance.productIds =
                                       listIds.join(',');
                                 }

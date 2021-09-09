@@ -1,4 +1,5 @@
 import 'package:acc/constants/font_family.dart';
+import 'package:acc/models/authentication/signup_request_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/investor/investment_choices.dart';
@@ -139,7 +140,7 @@ class _InvestmentLimitState extends State<InvestmentLimit> {
         print(item.header);
         infoItemList = [];
         infoItemList.add(item.header);
-        final requestModelInstance = InvestorSignupRequestModel.instance;
+        final requestModelInstance = InvestorSignupPreferences.instance;
         requestModelInstance.slotId = '${item.id}';
         setState(() {
           openInvestmentChoices();
