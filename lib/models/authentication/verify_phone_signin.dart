@@ -174,6 +174,10 @@ class UserData {
   String companyName;
   String address;
   String countryName;
+  String hearAboutUs;
+  String referralName;
+  int slotId;
+  String productIds;
 
   UserData._privateConstructor();
 
@@ -182,32 +186,42 @@ class UserData {
   static UserData get instance => _instance;
 
   UserData get userInfo => UserData(
-      this.token,
-      this.firstName,
-      this.middleName,
-      this.lastName,
-      this.mobileNo,
-      this.emailId,
-      this.userType,
-      this.profileImage,
-      this.designation,
-      this.companyName,
-      this.address,
-      this.countryName);
+        this.token,
+        this.firstName,
+        this.middleName,
+        this.lastName,
+        this.mobileNo,
+        this.emailId,
+        this.userType,
+        this.profileImage,
+        this.designation,
+        this.companyName,
+        this.address,
+        this.countryName,
+        this.hearAboutUs,
+        this.referralName,
+        this.slotId,
+        this.productIds,
+      );
 
   UserData(
-      this.token,
-      this.firstName,
-      this.middleName,
-      this.lastName,
-      this.mobileNo,
-      this.emailId,
-      this.userType,
-      this.profileImage,
-      this.designation,
-      this.companyName,
-      this.address,
-      this.countryName);
+    this.token,
+    this.firstName,
+    this.middleName,
+    this.lastName,
+    this.mobileNo,
+    this.emailId,
+    this.userType,
+    this.profileImage,
+    this.designation,
+    this.companyName,
+    this.address,
+    this.countryName,
+    this.hearAboutUs,
+    this.referralName,
+    this.slotId,
+    this.productIds,
+  );
 
   set userInfo(UserData info) {
     this.token = info.token;
@@ -222,6 +236,10 @@ class UserData {
     this.companyName = info.companyName;
     this.address = info.address;
     this.countryName = info.countryName;
+    this.hearAboutUs = info.hearAboutUs;
+    this.referralName = info.referralName;
+    this.slotId = info.slotId;
+    this.productIds = info.productIds;
   }
 
   Map<String, dynamic> toJson() => {
@@ -237,6 +255,10 @@ class UserData {
         "company_name": this.companyName,
         "address": this.address,
         "country_name": this.countryName,
+        "hear_about_us": this.hearAboutUs,
+        "referral_name": this.referralName,
+        "slot_id": this.slotId,
+        "product_ids": this.productIds,
       };
 
   factory UserData.fromMap(Map<String, dynamic> json) {
@@ -253,6 +275,10 @@ class UserData {
       json['company_name'],
       json['address'],
       json['country_name'],
+      json['hear_about_us'],
+      json['referral_name'],
+      json['slot_id'],
+      json['product_ids'],
     );
   }
 
@@ -270,6 +296,10 @@ class UserData {
       json['company_name'],
       json['address'],
       json['country_name'],
+      json['hear_about_us'],
+      json['referral_name'],
+      json['slot_id'],
+      json['product_ids'],
     );
   }
   factory UserData.fromJson(Map<String, dynamic> json) {
@@ -286,6 +316,10 @@ class UserData {
       json['company_name'],
       json['address'],
       json['country_name'],
+      json['hear_about_us'],
+      json['referral_name'],
+      json['slot_id'],
+      json['product_ids'],
     );
   }
 }

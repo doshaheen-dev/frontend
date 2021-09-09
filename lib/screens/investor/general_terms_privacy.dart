@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/signup_request_preferences.dart';
+import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/screens/common/webview_container.dart';
 import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
 import 'package:acc/services/signup_service.dart';
@@ -14,6 +17,7 @@ import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 import 'package:acc/models/authentication/signup_response.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GeneralTermsPrivacy extends StatefulWidget {
   @override
@@ -169,11 +173,10 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                                   onTap: () async {
                                     // on click
                                     progress = ProgressHUD.of(context);
-                                    progress
-                                        ?.showWithText('Uploading Details...');
+                                    progress?.showWithText(
+                                        'Uploading Preferences...');
                                     final requestModelInstance =
                                         InvestorSignupPreferences.instance;
-                                    // requestModelInstance.userType = 'investor';
                                     User signedUpUser = await SignUpService
                                         .updateUserPreferences(
                                             requestModelInstance);
@@ -181,24 +184,29 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                                     if (signedUpUser.type == 'success') {
                                       requestModelInstance.clear();
                                       // print("Firstn: ${signedUpUser.data.firstName}");
-                                      // UserData userData = UserData(
-                                      //     signedUpUser.data.token,
-                                      //     signedUpUser.data.firstName,
-                                      //     "",
-                                      //     signedUpUser.data.lastName,
-                                      //     signedUpUser.data.mobileNo,
-                                      //     signedUpUser.data.emailId,
-                                      //     signedUpUser.data.userType,
-                                      //     "",
-                                      //     "",
-                                      //     "",
-                                      //     signedUpUser.data.address,
-                                      //     signedUpUser.data.countryCode);
-                                      // final prefs =
-                                      //     await SharedPreferences.getInstance();
-                                      // final userJson = jsonEncode(userData);
-                                      // prefs.setString('UserInfo', userJson);
-                                      // UserData.instance.userInfo = userData;
+                                      UserData userData = UserData(
+                                        signedUpUser.data.token,
+                                        signedUpUser.data.firstName,
+                                        "",
+                                        signedUpUser.data.lastName,
+                                        signedUpUser.data.mobileNo,
+                                        signedUpUser.data.emailId,
+                                        signedUpUser.data.userType,
+                                        "",
+                                        "",
+                                        "",
+                                        signedUpUser.data.address,
+                                        signedUpUser.data.countryCode,
+                                        signedUpUser.data.hearAboutUs,
+                                        signedUpUser.data.referralName,
+                                        signedUpUser.data.slotId,
+                                        signedUpUser.data.productIds,
+                                      );
+                                      final prefs =
+                                          await SharedPreferences.getInstance();
+                                      final userJson = jsonEncode(userData);
+                                      prefs.setString('UserInfo', userJson);
+                                      UserData.instance.userInfo = userData;
                                       // print('${userData.firstName}');
                                       // print(
                                       //     'Ins:${UserData.instance.userInfo.firstName}');

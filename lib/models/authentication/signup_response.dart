@@ -54,11 +54,15 @@ class ResponseData {
   final String address;
   final String hearAboutUs;
   final String referralName;
-  final String slotId;
+  final int slotId;
   final String productIds;
   final String userType;
   final String mobileNoVerifiedTimestamp;
   final int mobileNoVerified;
+  final String profileImagePath;
+  final String designation;
+  final String companyName;
+  final int emailVerified;
 
   ResponseData(
     this.token,
@@ -76,6 +80,10 @@ class ResponseData {
     this.userType,
     this.mobileNoVerifiedTimestamp,
     this.mobileNoVerified,
+    this.profileImagePath,
+    this.designation,
+    this.companyName,
+    this.emailVerified,
   );
 
   Map<String, dynamic> toJson() => {
@@ -113,6 +121,10 @@ class ResponseData {
       json['user_type'],
       json['mobile_no_verified_timestamp'],
       json['mobile_no_verified'],
+      json['user_profile_image_path'],
+      json['designation'],
+      json['company_name'],
+      json['email_verified'],
     );
   }
   factory ResponseData.fromJson(Map<String, dynamic> json) {
@@ -132,6 +144,10 @@ class ResponseData {
       json['user_type'],
       json['mobile_no_verified_timestamp'],
       json['mobile_no_verified'],
+      json['user_profile_image_path'],
+      json['designation'],
+      json['company_name'],
+      json['email_verified'],
     );
   }
 }

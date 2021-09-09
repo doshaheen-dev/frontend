@@ -280,8 +280,13 @@ class _InvestorHomeState extends State<InvestorHome>
                 color: Theme.of(context).primaryColor,
               ),
             ),
-            noItemsFoundIndicatorBuilder: (context) =>
-                Center(child: Text("No items added to this list yet.")),
+            noItemsFoundIndicatorBuilder: (ctx) => Padding(
+              padding: const EdgeInsets.only(left: 20.0, top: 20.0),
+              child: Text(
+                "No items added to this list yet.",
+                textAlign: TextAlign.center,
+              ),
+            ),
             firstPageErrorIndicatorBuilder: (ctx) => Center(
               child: Text("An error occurred!"),
             ),
@@ -373,7 +378,7 @@ class _InvestorHomeState extends State<InvestorHome>
                   child: Text(
                     "Scroll up and down to browse through the matched opportunities",
                     textAlign: TextAlign.center,
-                    style: textBold14(selectedOrange),
+                    style: textBold14(Theme.of(context).primaryColor),
                   )),
               SizedBox(
                 height: 10.0,

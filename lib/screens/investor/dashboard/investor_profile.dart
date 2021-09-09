@@ -1616,18 +1616,23 @@ class _InvestorProfileState extends State<InvestorProfile> {
           showSnackBar(context, updateResponse.message);
           enableUpdate(false);
           UserData userData = UserData(
-              UserData.instance.userInfo.token,
-              UserData.instance.userInfo.firstName,
-              "",
-              UserData.instance.userInfo.lastName,
-              UserData.instance.userInfo.mobileNo,
-              UserData.instance.userInfo.emailId,
-              UserData.instance.userInfo.userType,
-              "",
-              "",
-              "",
-              _address,
-              countryName);
+            UserData.instance.userInfo.token,
+            UserData.instance.userInfo.firstName,
+            "",
+            UserData.instance.userInfo.lastName,
+            UserData.instance.userInfo.mobileNo,
+            UserData.instance.userInfo.emailId,
+            UserData.instance.userInfo.userType,
+            "",
+            "",
+            "",
+            _address,
+            countryName,
+            UserData.instance.userInfo.hearAboutUs,
+            UserData.instance.userInfo.referralName,
+            UserData.instance.userInfo.slotId,
+            UserData.instance.userInfo.productIds,
+          );
           final prefs = await SharedPreferences.getInstance();
           final userJson = jsonEncode(userData);
           prefs.setString('UserInfo', userJson);

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:acc/models/authentication/signup_request_basicinfo.dart';
 import 'package:acc/models/authentication/signup_request_preferences.dart';
 import 'package:acc/models/authentication/signup_response.dart';
+import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:http/http.dart' as http;
 import 'package:acc/services/http_service.dart';
 import 'package:acc/models/authentication/signup_request.dart';
@@ -53,8 +54,11 @@ class SignUpService {
   static Future<User> updateUserPreferences(
       InvestorSignupPreferences request) async {
     // set up POST request arguments
-    final url = Uri.parse("${ApiServices.baseUrl}/user/update ");
-    final headers = {"Content-type": "application/json"};
+    final url = Uri.parse("${ApiServices.baseUrl}/user/update");
+    final headers = {
+      "Content-type": "application/json",
+      "authorization": "Bearer ${UserData.instance.userInfo.token}"
+    };
     final jsonBody = jsonEncode(request);
 
     print('URL: $url');

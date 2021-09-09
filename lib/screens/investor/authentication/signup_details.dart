@@ -367,6 +367,8 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                               return;
                             }
                             FocusScope.of(context).requestFocus(FocusNode());
+                            progress = ProgressHUD.of(context);
+                            progress?.showWithText('Uploading Details...');
                             submitDetails(
                               _firstNameController.text.trim(),
                               _lastnameController.text.trim(),
@@ -489,20 +491,26 @@ class _SignUpDetailsState extends State<SignUpDetails> {
     progress.dismiss();
     showSnackBar(context, signedUpUser.message);
     if (signedUpUser.type == 'success') {
+      requestModelInstance.clear();
       // save info
       UserData userData = UserData(
-          signedUpUser.data.token,
-          signedUpUser.data.firstName,
-          "",
-          signedUpUser.data.lastName,
-          signedUpUser.data.mobileNo,
-          signedUpUser.data.emailId,
-          signedUpUser.data.userType,
-          "",
-          "",
-          "",
-          signedUpUser.data.address,
-          signedUpUser.data.countryCode);
+        signedUpUser.data.token,
+        signedUpUser.data.firstName,
+        "",
+        signedUpUser.data.lastName,
+        signedUpUser.data.mobileNo,
+        signedUpUser.data.emailId,
+        signedUpUser.data.userType,
+        "",
+        "",
+        "",
+        signedUpUser.data.address,
+        signedUpUser.data.countryCode,
+        signedUpUser.data.hearAboutUs,
+        signedUpUser.data.referralName,
+        signedUpUser.data.slotId,
+        signedUpUser.data.productIds,
+      );
       final prefs = await SharedPreferences.getInstance();
       final userJson = jsonEncode(userData);
       prefs.setString('UserInfo', userJson);
