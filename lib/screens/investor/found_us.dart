@@ -1,4 +1,5 @@
 import 'package:acc/constants/font_family.dart';
+import 'package:acc/models/authentication/signup_request_preferences.dart';
 import 'package:acc/models/investor/hearaboutus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -152,7 +153,7 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                                 onTap: () {
                                   // on click
                                   final requestModelInstance =
-                                      InvestorSignupRequestModel.instance;
+                                      InvestorSignupPreferences.instance;
                                   if (infoItemList.isNotEmpty) {
                                     requestModelInstance.hearAboutUs =
                                         infoItemList.first;
