@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:acc/models/authentication/otp_response.dart';
 import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
+import 'package:acc/screens/investor/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
@@ -209,14 +210,19 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
         otpController.text.trim().toString(), _verificationId);
   }
 
-  void openHome(UserData data) {
+  Future<void> openHome(UserData data) {
     if (data.userType == "Investor" ||
         data.userType == "investor" ||
         data.userType == "") {
       Navigator.of(context).pushAndRemoveUntil(
           PageRouteBuilder(
               pageBuilder: (context, animation, anotherAnimation) {
-                return InvestorDashboard(userData: data);
+                if (data.slotId == null &&
+                    (data.productIds == null || data.productIds == '')) {
+                  return WelcomeInvestor();
+                } else {
+                  return InvestorDashboard(userData: data);
+                }
               },
               transitionDuration: Duration(milliseconds: 2000),
               transitionsBuilder:

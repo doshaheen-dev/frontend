@@ -13,6 +13,7 @@ import 'package:acc/providers/country_provider.dart';
 import 'package:acc/providers/city_provider.dart';
 import 'package:acc/screens/fundraiser/dashboard/fundraiser_dashboard.dart';
 import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
+import 'package:acc/screens/investor/welcome.dart';
 import 'package:acc/services/TokenRefreshService.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/hex_color.dart';
@@ -119,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       if (userData != null) {
         AppToken token = await TokenRefreshService.refreshToken();
-        if (token.status != 200) {
+        if (token.type != 'success') {
           _openDialog(
               context, "Your session has expired. Please Sign In again.");
           return;
@@ -160,9 +161,12 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.of(context).pushAndRemoveUntil(
           PageRouteBuilder(
               pageBuilder: (context, animation, anotherAnimation) {
-                return InvestorDashboard(
-                  userData: data,
-                );
+                if (data.slotId == null &&
+                    (data.productIds == null || data.productIds == '')) {
+                  return WelcomeInvestor();
+                } else {
+                  return InvestorDashboard(userData: data);
+                }
               },
               transitionDuration: Duration(milliseconds: 2000),
               transitionsBuilder:

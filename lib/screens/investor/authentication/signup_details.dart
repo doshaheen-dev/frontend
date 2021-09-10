@@ -493,30 +493,30 @@ class _SignUpDetailsState extends State<SignUpDetails> {
     if (signedUpUser.type == 'success') {
       requestModelInstance.clear();
       // save info
-      UserData userData = UserData(
-        signedUpUser.data.token,
-        signedUpUser.data.firstName,
-        "",
-        signedUpUser.data.lastName,
-        signedUpUser.data.mobileNo,
-        signedUpUser.data.emailId,
-        signedUpUser.data.userType,
-        "",
-        "",
-        "",
-        signedUpUser.data.address,
-        signedUpUser.data.countryCode,
-        signedUpUser.data.hearAboutUs,
-        signedUpUser.data.referralName,
-        signedUpUser.data.slotId,
-        signedUpUser.data.productIds,
-      );
-      final prefs = await SharedPreferences.getInstance();
-      final userJson = jsonEncode(userData);
-      prefs.setString('UserInfo', userJson);
-      UserData.instance.userInfo = userData;
-      print('${userData.firstName}');
-      print('Ins:${UserData.instance.userInfo.firstName}');
+      // UserData userData = UserData(
+      //   signedUpUser.data.token,
+      //   signedUpUser.data.firstName,
+      //   "",
+      //   signedUpUser.data.lastName,
+      //   signedUpUser.data.mobileNo,
+      //   signedUpUser.data.emailId,
+      //   signedUpUser.data.userType,
+      //   "",
+      //   "",
+      //   "",
+      //   signedUpUser.data.address,
+      //   signedUpUser.data.countryCode,
+      //   signedUpUser.data.hearAboutUs,
+      //   signedUpUser.data.referralName,
+      //   signedUpUser.data.slotId,
+      //   signedUpUser.data.productIds,
+      // );
+      // final prefs = await SharedPreferences.getInstance();
+      // final userJson = jsonEncode(userData);
+      // prefs.setString('UserInfo', userJson);
+      // UserData.instance.userInfo = userData;
+      // print('${userData.firstName}');
+      // print('Ins:${UserData.instance.userInfo.firstName}');
       openWelcomeInvestor();
     }
   }
