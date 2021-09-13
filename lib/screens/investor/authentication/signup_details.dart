@@ -547,6 +547,7 @@ class _SignUpDetailsState extends State<SignUpDetails> {
         signedUpUser.data.referralName,
         signedUpUser.data.slotId,
         signedUpUser.data.productIds,
+        signedUpUser.data.emailVerified,
       );
       UserData.instance.userInfo = userData;
       final prefs = await SharedPreferences.getInstance();
