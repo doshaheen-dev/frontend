@@ -21,79 +21,84 @@ class _WelcomeInvestorState extends State<WelcomeInvestor> {
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
     return WillPopScope(
-      onWillPop: _onBackPressed,
-      child: Scaffold(
-          appBar: AppBar(
-            toolbarHeight: 0,
-            elevation: 0.0,
-            backgroundColor: Color(0xffffffff),
-          ),
-          bottomNavigationBar: BottomAppBar(),
-          backgroundColor: Colors.white,
-          body: SafeArea(
-              child: SingleChildScrollView(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                Container(
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back, size: 30),
-                    onPressed: () => {_onBackPressed()},
-                  ),
-                ),
-                Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        alignment: Alignment.center,
-                        margin: const EdgeInsets.only(
-                            top: 10.0, left: 25.0, right: 25.0),
-                        child: Text(welcomeInvestor,
-                            textAlign: TextAlign.center,
-                            style: textBold26(headingBlack)),
+        onWillPop: _onBackPressed,
+        child: MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+          child: Scaffold(
+              appBar: AppBar(
+                toolbarHeight: 0,
+                elevation: 0.0,
+                backgroundColor: Color(0xffffffff),
+              ),
+              bottomNavigationBar: BottomAppBar(),
+              backgroundColor: Colors.white,
+              body: SafeArea(
+                  child: SingleChildScrollView(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                    Container(
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_back, size: 30),
+                        onPressed: () => {_onBackPressed()},
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(
-                            top: 10.0, left: 25.0, right: 25.0),
-                        child: Text(welcomeInvestorBody,
-                            textAlign: TextAlign.center,
-                            style: textNormal16(textGrey)),
-                      ),
+                    ),
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            alignment: Alignment.center,
+                            margin: const EdgeInsets.only(
+                                top: 10.0, left: 25.0, right: 25.0),
+                            child: Text(welcomeInvestor,
+                                textAlign: TextAlign.center,
+                                style: textBold26(headingBlack)),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(
+                                top: 10.0, left: 25.0, right: 25.0),
+                            child: Text(welcomeInvestorBody,
+                                textAlign: TextAlign.center,
+                                style: textNormal16(textGrey)),
+                          ),
 
-                      SizedBox(
-                        height: 40,
-                      ),
-                      Center(
-                        child: Image.asset(
-                            'assets/images/investor/welcome_experience.png'),
-                      ),
-                      SizedBox(
-                        height: 50,
-                      ),
-                      //NEXT BUTTON
-                      Container(
-                          margin: const EdgeInsets.only(
-                              top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                          child: InkWell(
-                              borderRadius: BorderRadius.circular(40),
-                              onTap: () {
-                                // on click
-                                openInvestorSearchInfo();
-                              },
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: 60,
-                                decoration: appColorButton(context),
-                                child: Center(
-                                    child: Text("Let’s Do it",
-                                        style: textWhiteBold18())),
-                              )))
-                    ])
-              ])))),
-    );
+                          SizedBox(
+                            height: 40,
+                          ),
+                          Center(
+                            child: Image.asset(
+                                'assets/images/investor/welcome_experience.png'),
+                          ),
+                          SizedBox(
+                            height: 50,
+                          ),
+                          //NEXT BUTTON
+                          Container(
+                              margin: const EdgeInsets.only(
+                                  top: 5.0,
+                                  left: 25.0,
+                                  bottom: 20,
+                                  right: 25.0),
+                              child: InkWell(
+                                  borderRadius: BorderRadius.circular(40),
+                                  onTap: () {
+                                    // on click
+                                    openInvestorSearchInfo();
+                                  },
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 60,
+                                    decoration: appColorButton(context),
+                                    child: Center(
+                                        child: Text("Let’s Do it",
+                                            style: textWhiteBold18())),
+                                  )))
+                        ])
+                  ])))),
+        ));
   }
 
   BoxDecoration customDecoration() {

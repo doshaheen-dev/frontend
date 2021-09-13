@@ -412,45 +412,46 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
 
   Widget getDropDownSearch(List<Map<String, dynamic>> items) {
     return MediaQuery(
-        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-        child: DropdownSearch<Map<String, dynamic>>(
-          mode: Mode.BOTTOM_SHEET,
-          showSearchBox: false,
-          showSelectedItem: false,
-          showClearButton: false,
-          items: items,
-          itemAsString: (Map<String, dynamic> i) => i['text'],
-          hint: "",
-          onChanged: (map) {
-            setState(() {
-              selectedItem = map;
-              selectedInvestmentLimit = map['value'];
+      data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+      child: DropdownSearch<Map<String, dynamic>>(
+        mode: Mode.BOTTOM_SHEET,
+        showSearchBox: false,
+        showSelectedItem: false,
+        showClearButton: false,
+        items: items,
+        itemAsString: (Map<String, dynamic> i) => i['text'],
+        hint: "",
+        onChanged: (map) {
+          setState(() {
+            selectedItem = map;
+            selectedInvestmentLimit = map['value'];
 
-              for (var i = 0; i < localInvestmentRange.length; i++) {
-                if (localInvestmentRange[i].range == selectedInvestmentLimit) {
-                  slotId = localInvestmentRange[i].id.toString();
-                }
+            for (var i = 0; i < localInvestmentRange.length; i++) {
+              if (localInvestmentRange[i].range == selectedInvestmentLimit) {
+                slotId = localInvestmentRange[i].id.toString();
               }
-              if (selectedItem.isNotEmpty) {
-                activateUpdate(true);
-              } else {
-                activateUpdate(false);
-              }
-              final requestModel = InvestorSignupPreferences.instance;
-              requestModel.slotId = '$slotId';
-            });
-          },
-          dropdownSearchDecoration: InputDecoration(
-            labelText: 'Investment Range',
-            labelStyle: textNormal18(Colors.grey[600]),
-            enabledBorder: UnderlineInputBorder(
-              borderRadius: BorderRadius.all(const Radius.circular(10.0)),
-              borderSide: BorderSide(color: Colors.transparent),
-            ),
+            }
+            if (selectedItem.isNotEmpty) {
+              activateUpdate(true);
+            } else {
+              activateUpdate(false);
+            }
+            final requestModel = InvestorSignupPreferences.instance;
+            requestModel.slotId = '$slotId';
+          });
+        },
+        dropdownSearchDecoration: InputDecoration(
+          labelText: 'Investment Range',
+          labelStyle: textNormal18(Colors.grey[600]),
+          enabledBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(const Radius.circular(10.0)),
+            borderSide: BorderSide(color: Colors.transparent),
           ),
-          selectedItem: selectedItem,
-          maxHeight: 700,
-        ));
+        ),
+        selectedItem: selectedItem,
+        maxHeight: 700,
+      ),
+    );
   }
 
   // ------------------------------------------------------------------//
@@ -716,7 +717,6 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
           await SignUpService.updateUserPreferences(requestModel);
       progress.dismiss();
       activateUpdate(false);
-      showSnackBar(context, "UPDATE 1:- ${UserData.instance.userInfo.token}");
 
       if (signedUpUser.type == 'success') {
         requestModel.clear();
@@ -742,7 +742,6 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
         final userJson = jsonEncode(userData);
         prefs.setString('UserInfo', userJson);
         UserData.instance.userInfo = userData;
-        showSnackBar(context, "UPDATE 2:- ${UserData.instance.userInfo.token}");
 
         getSelectedRange(
             signedUpUser.data.slotId.toString(), signedUpUser.data.productIds);
@@ -764,12 +763,13 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
         },
         child: Text(
           "Login",
+          textScaleFactor: 1.0,
           style: textNormal16(Color(0xff00A699)),
         ));
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      content: Text(message),
+      content: Text(message, textScaleFactor: 1.0),
       actions: [
         positiveButton,
       ],

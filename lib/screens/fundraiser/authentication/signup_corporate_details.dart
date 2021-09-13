@@ -113,15 +113,17 @@ class _CorporateDetailsState extends State<CorporateDetails> {
       );
     }
 
-    return Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 0,
-          elevation: 0.0,
-          backgroundColor: Color(0xffffffff),
-        ),
-        bottomNavigationBar: BottomAppBar(),
-        backgroundColor: Colors.white,
-        body: ProgressHUD(
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+      child: Scaffold(
+          appBar: AppBar(
+            toolbarHeight: 0,
+            elevation: 0.0,
+            backgroundColor: Color(0xffffffff),
+          ),
+          bottomNavigationBar: BottomAppBar(),
+          backgroundColor: Colors.white,
+          body: ProgressHUD(
             child: Builder(
                 builder: (context) => SafeArea(
                       child: SingleChildScrollView(
@@ -225,7 +227,8 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                             return Center(
                                                 child:
                                                     CircularProgressIndicator(
-                                              color: Theme.of(context).primaryColor,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
                                             ));
                                           } else {
                                             if (dataSnapshot.error != null) {
@@ -380,11 +383,12 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                                     BorderRadius.circular(18))),
                                         child: Ink(
                                             decoration: BoxDecoration(
-                                                gradient: LinearGradient(
-                                                    colors: [
-                                                      Theme.of(context).primaryColor,
-                                                      Theme.of(context).primaryColor
-                                                    ]),
+                                                gradient:
+                                                    LinearGradient(colors: [
+                                                  Theme.of(context)
+                                                      .primaryColor,
+                                                  Theme.of(context).primaryColor
+                                                ]),
                                                 borderRadius:
                                                     BorderRadius.circular(15)),
                                             child: Container(
@@ -400,7 +404,9 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                       )),
                                 ])
                           ])),
-                    ))));
+                    )),
+          )),
+    );
   }
 
   BoxDecoration customDecoration() {

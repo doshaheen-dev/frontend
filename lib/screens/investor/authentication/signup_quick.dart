@@ -27,121 +27,127 @@ class _QuickSignUpState extends State<QuickSignUp> {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
     return WillPopScope(
-      onWillPop: _onBackPressed,
-      child: Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 0,
-          elevation: 0.0,
-          backgroundColor: Color(0xffffffff),
-        ),
-        bottomNavigationBar: BottomAppBar(),
-        backgroundColor: Color(0xffffffff),
-        body: ProgressHUD(
-          child: Builder(
-            builder: (context) => SafeArea(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      child: IconButton(
-                        icon: Icon(Icons.arrow_back, size: 30),
-                        onPressed: () => {_onBackPressed()},
-                      ),
-                    ),
-                    Column(
+        onWillPop: _onBackPressed,
+        child: MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+          child: Scaffold(
+            appBar: AppBar(
+              toolbarHeight: 0,
+              elevation: 0.0,
+              backgroundColor: Color(0xffffffff),
+            ),
+            bottomNavigationBar: BottomAppBar(),
+            backgroundColor: Color(0xffffffff),
+            body: ProgressHUD(
+              child: Builder(
+                builder: (context) => SafeArea(
+                  child: SingleChildScrollView(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Container(
-                          margin: const EdgeInsets.only(top: 10.0, left: 25.0),
-                          child: Text(
-                            "Register Your Email",
-                            style: TextStyle(
-                                color: headingBlack,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 26.0,
-                                fontFamily: FontFamilyMontserrat.name),
+                          child: IconButton(
+                            icon: Icon(Icons.arrow_back, size: 30),
+                            onPressed: () => {_onBackPressed()},
                           ),
                         ),
-
-                        SizedBox(
-                          height: 30,
-                        ),
-                        // Apple Login
-                        Container(
-                            margin: const EdgeInsets.only(
-                              top: 15.0,
-                              bottom: 5,
-                            ),
-                            child: createButton(context, "Apple")),
-                        //Google Button
-                        Container(
-                          margin: const EdgeInsets.only(
-                            top: 5.0,
-                          ),
-                          child: createButton(context, "Google"),
-                        ),
-                        Center(
-                          child: Text(
-                            "or",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16.0,
-                                fontFamily: FontFamilyMontserrat.name),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                        Center(
-                          child: Text(
-                            "Use your email address to register",
-                            style: TextStyle(
-                                color: textGrey,
-                                fontSize: 16.0,
-                                fontFamily: FontFamilyMontserrat.name),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-
-                        //SIGN UP BUTTON
-                        Container(
-                          margin: const EdgeInsets.only(
-                              top: 5.0, left: 40.0, bottom: 20, right: 40.0),
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(40),
-                            onTap: () {
-                              // on sign up click
-                              openSignUpDetails(null);
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 60,
-                              decoration: appColorButton(context),
-                              child: Center(
-                                  child: Text(
-                                "Register",
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              margin:
+                                  const EdgeInsets.only(top: 10.0, left: 25.0),
+                              child: Text(
+                                "Register Your Email",
                                 style: TextStyle(
-                                    fontSize: 18.0,
+                                    color: headingBlack,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              )),
+                                    fontSize: 26.0,
+                                    fontFamily: FontFamilyMontserrat.name),
+                              ),
                             ),
-                          ),
+
+                            SizedBox(
+                              height: 30,
+                            ),
+                            // Apple Login
+                            Container(
+                                margin: const EdgeInsets.only(
+                                  top: 15.0,
+                                  bottom: 5,
+                                ),
+                                child: createButton(context, "Apple")),
+                            //Google Button
+                            Container(
+                              margin: const EdgeInsets.only(
+                                top: 5.0,
+                              ),
+                              child: createButton(context, "Google"),
+                            ),
+                            Center(
+                              child: Text(
+                                "or",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16.0,
+                                    fontFamily: FontFamilyMontserrat.name),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20.0,
+                            ),
+                            Center(
+                              child: Text(
+                                "Use your email address to register",
+                                style: TextStyle(
+                                    color: textGrey,
+                                    fontSize: 16.0,
+                                    fontFamily: FontFamilyMontserrat.name),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+
+                            //SIGN UP BUTTON
+                            Container(
+                              margin: const EdgeInsets.only(
+                                  top: 5.0,
+                                  left: 40.0,
+                                  bottom: 20,
+                                  right: 40.0),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(40),
+                                onTap: () {
+                                  // on sign up click
+                                  openSignUpDetails(null);
+                                },
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 60,
+                                  decoration: appColorButton(context),
+                                  child: Center(
+                                      child: Text(
+                                    "Register",
+                                    style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                  )),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   Future<bool> _onBackPressed() {

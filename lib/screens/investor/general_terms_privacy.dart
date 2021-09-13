@@ -35,206 +35,215 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
-    return Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 0,
-          elevation: 0.0,
-          backgroundColor: Colors.white,
-        ),
-        bottomNavigationBar: BottomAppBar(),
-        backgroundColor: Colors.white,
-        body: ProgressHUD(
-          child: Builder(
-              builder: (context) => SafeArea(
-                      child: SingleChildScrollView(
-                          child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        child: IconButton(
-                          icon: Icon(Icons.arrow_back, size: 30),
-                          onPressed: () => {Navigator.pop(context)},
-                        ),
-                      ),
-                      Column(
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: Scaffold(
+            appBar: AppBar(
+              toolbarHeight: 0,
+              elevation: 0.0,
+              backgroundColor: Colors.white,
+            ),
+            bottomNavigationBar: BottomAppBar(),
+            backgroundColor: Colors.white,
+            body: ProgressHUD(
+              child: Builder(
+                  builder: (context) => SafeArea(
+                          child: SingleChildScrollView(
+                              child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Container(
-                            margin: const EdgeInsets.only(
-                                top: 10.0, left: 25.0, right: 25.0),
-                            child: Text(
-                              "Please accept our T&C, Privacy policy below",
-                              style: TextStyle(
-                                  color: headingBlack,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 26.0,
-                                  fontFamily: FontFamilyMontserrat.name),
+                            child: IconButton(
+                              icon: Icon(Icons.arrow_back, size: 30),
+                              onPressed: () => {Navigator.pop(context)},
                             ),
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Card(
-                            color: unselectedGray,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0)),
-                            margin: EdgeInsets.only(
-                                right: 25.0,
-                                top: 10.0,
-                                bottom: 10.0,
-                                left: 25.0),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 20.0,
-                                          left: 10.0,
-                                          bottom: 20.0,
-                                          right: 10.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "General Terms and Conditions",
-                                            style: setTextStyle(
-                                                headingBlack, 20.0),
-                                          ),
-                                          SizedBox(
-                                            height: 10.0,
-                                          ),
-                                          // // TERMS AND CONDITIONS
-                                          RichText(
-                                            text: TextSpan(
-                                                text: termsConditions,
-                                                style: setTextStyle(
-                                                    textDarkGrey, 16.0),
-                                                children: [
-                                                  TextSpan(
-                                                      text: "... Read More",
-                                                      style: setTextStyle(
-                                                          Colors.blue, 16.0),
-                                                      recognizer:
-                                                          TapGestureRecognizer()
-                                                            ..onTap = () {
-                                                              openUrl(tempUrl);
-                                                            }),
-                                                ]),
-                                          ),
-                                          SizedBox(
-                                            height: 20.0,
-                                          ),
-                                          Text(
-                                            "Privacy Policy",
-                                            style: setTextStyle(
-                                                headingBlack, 20.0),
-                                          ),
-                                          SizedBox(
-                                            height: 10.0,
-                                          ),
-                                          RichText(
-                                            text: TextSpan(
-                                                text: privacyPolicy,
-                                                style: setTextStyle(
-                                                    textDarkGrey, 16.0),
-                                                children: [
-                                                  TextSpan(
-                                                      text: "... Read More",
-                                                      style: setTextStyle(
-                                                          Colors.blue, 16.0),
-                                                      recognizer:
-                                                          TapGestureRecognizer()
-                                                            ..onTap = () {
-                                                              openUrl(tempUrl);
-                                                            }),
-                                                ]),
-                                          ),
-                                        ],
-                                      )),
-                                ],
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                margin: const EdgeInsets.only(
+                                    top: 10.0, left: 25.0, right: 25.0),
+                                child: Text(
+                                  "Please accept our T&C, Privacy policy below",
+                                  style: TextStyle(
+                                      color: headingBlack,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 26.0,
+                                      fontFamily: FontFamilyMontserrat.name),
+                                ),
                               ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Card(
+                                color: unselectedGray,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0)),
+                                margin: EdgeInsets.only(
+                                    right: 25.0,
+                                    top: 10.0,
+                                    bottom: 10.0,
+                                    left: 25.0),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 20.0,
+                                              left: 10.0,
+                                              bottom: 20.0,
+                                              right: 10.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "General Terms and Conditions",
+                                                style: setTextStyle(
+                                                    headingBlack, 20.0),
+                                              ),
+                                              SizedBox(
+                                                height: 10.0,
+                                              ),
+                                              // // TERMS AND CONDITIONS
+                                              RichText(
+                                                text: TextSpan(
+                                                    text: termsConditions,
+                                                    style: setTextStyle(
+                                                        textDarkGrey, 16.0),
+                                                    children: [
+                                                      TextSpan(
+                                                          text: "... Read More",
+                                                          style: setTextStyle(
+                                                              Colors.blue,
+                                                              16.0),
+                                                          recognizer:
+                                                              TapGestureRecognizer()
+                                                                ..onTap = () {
+                                                                  openUrl(
+                                                                      tempUrl);
+                                                                }),
+                                                    ]),
+                                              ),
+                                              SizedBox(
+                                                height: 20.0,
+                                              ),
+                                              Text(
+                                                "Privacy Policy",
+                                                style: setTextStyle(
+                                                    headingBlack, 20.0),
+                                              ),
+                                              SizedBox(
+                                                height: 10.0,
+                                              ),
+                                              RichText(
+                                                text: TextSpan(
+                                                    text: privacyPolicy,
+                                                    style: setTextStyle(
+                                                        textDarkGrey, 16.0),
+                                                    children: [
+                                                      TextSpan(
+                                                          text: "... Read More",
+                                                          style: setTextStyle(
+                                                              Colors.blue,
+                                                              16.0),
+                                                          recognizer:
+                                                              TapGestureRecognizer()
+                                                                ..onTap = () {
+                                                                  openUrl(
+                                                                      tempUrl);
+                                                                }),
+                                                    ]),
+                                              ),
+                                            ],
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
 
-                          //NEXT BUTTON
-                          Container(
-                              margin: const EdgeInsets.only(
-                                  top: 5.0,
-                                  left: 25.0,
-                                  bottom: 20,
-                                  right: 25.0),
-                              child: InkWell(
-                                  borderRadius: BorderRadius.circular(40),
-                                  onTap: () async {
-                                    // on click
-                                    progress = ProgressHUD.of(context);
-                                    progress?.showWithText(
-                                        'Uploading Preferences...');
-                                    final requestModelInstance =
-                                        InvestorSignupPreferences.instance;
-                                    User signedUpUser = await SignUpService
-                                        .updateUserPreferences(
-                                            requestModelInstance);
-                                    progress.dismiss();
-                                    if (signedUpUser.type == 'success') {
-                                      requestModelInstance.clear();
-                                      // print("Firstn: ${signedUpUser.data.firstName}");
-                                      UserData userData = UserData(
-                                        signedUpUser.data.token,
-                                        signedUpUser.data.firstName,
-                                        "",
-                                        signedUpUser.data.lastName,
-                                        signedUpUser.data.mobileNo,
-                                        signedUpUser.data.emailId,
-                                        signedUpUser.data.userType,
-                                        "",
-                                        "",
-                                        "",
-                                        signedUpUser.data.address,
-                                        signedUpUser.data.countryCode,
-                                        signedUpUser.data.hearAboutUs,
-                                        signedUpUser.data.referralName,
-                                        signedUpUser.data.slotId,
-                                        signedUpUser.data.productIds,
-                                      );
-                                      final prefs =
-                                          await SharedPreferences.getInstance();
-                                      final userJson = jsonEncode(userData);
-                                      prefs.setString('UserInfo', userJson);
-                                      UserData.instance.userInfo = userData;
-                                      // print('${userData.firstName}');
-                                      // print(
-                                      //     'Ins:${UserData.instance.userInfo.firstName}');
+                              //NEXT BUTTON
+                              Container(
+                                  margin: const EdgeInsets.only(
+                                      top: 5.0,
+                                      left: 25.0,
+                                      bottom: 20,
+                                      right: 25.0),
+                                  child: InkWell(
+                                      borderRadius: BorderRadius.circular(40),
+                                      onTap: () async {
+                                        // on click
+                                        progress = ProgressHUD.of(context);
+                                        progress?.showWithText(
+                                            'Uploading Preferences...');
+                                        final requestModelInstance =
+                                            InvestorSignupPreferences.instance;
 
-                                      openDashboard();
-                                    } else {
-                                      showSnackBar(
-                                          context, signedUpUser.message);
-                                    }
-                                  },
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 60,
-                                    decoration: appColorButton(context),
-                                    child: Center(
-                                        child: Text(
-                                      "Submit",
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
-                                    )),
-                                  )))
+                                        User signedUpUser = await SignUpService
+                                            .updateUserPreferences(
+                                                requestModelInstance);
+                                        progress.dismiss();
+                                        if (signedUpUser.type == 'success') {
+                                          requestModelInstance.clear();
+                                          // print("Firstn: ${signedUpUser.data.firstName}");
+                                          UserData userData = UserData(
+                                            UserData.instance.userInfo.token,
+                                            signedUpUser.data.firstName,
+                                            "",
+                                            signedUpUser.data.lastName,
+                                            signedUpUser.data.mobileNo,
+                                            signedUpUser.data.emailId,
+                                            signedUpUser.data.userType,
+                                            "",
+                                            "",
+                                            "",
+                                            signedUpUser.data.address,
+                                            signedUpUser.data.countryCode,
+                                            signedUpUser.data.hearAboutUs,
+                                            signedUpUser.data.referralName,
+                                            signedUpUser.data.slotId,
+                                            signedUpUser.data.productIds,
+                                          );
+                                          final prefs = await SharedPreferences
+                                              .getInstance();
+                                          final userJson = jsonEncode(userData);
+                                          prefs.setString('UserInfo', userJson);
+                                          UserData.instance.userInfo = userData;
+                                          // print('${userData.firstName}');
+                                          // print(
+                                          //     'Ins:${UserData.instance.userInfo.firstName}');
+
+                                          openDashboard();
+                                        } else {
+                                          showSnackBar(
+                                              context, signedUpUser.message);
+                                        }
+                                      },
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        height: 60,
+                                        decoration: appColorButton(context),
+                                        child: Center(
+                                            child: Text(
+                                          "Submit",
+                                          style: TextStyle(
+                                              fontSize: 18.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white),
+                                        )),
+                                      )))
+                            ],
+                          )
                         ],
-                      )
-                    ],
-                  )))),
-        ));
+                      )))),
+            )));
   }
 
   TextStyle setTextStyle(colors, _fontSize) {

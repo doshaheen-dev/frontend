@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'app_colors.dart';
-
 BoxDecoration appColorButton(BuildContext context) {
   return BoxDecoration(
     borderRadius: BorderRadius.all(
@@ -18,7 +16,10 @@ BoxDecoration appColorButton(BuildContext context) {
 void showSnackBar(BuildContext _context, String message) {
   final snackBar = SnackBar(
     duration: Duration(seconds: 2),
-    content: Text(message),
+    content: Text(
+      message,
+      textScaleFactor: 1.0,
+    ),
     // action: SnackBarAction(
     //   label: 'Ok',
     //   onPressed: () {},
@@ -30,7 +31,10 @@ void showSnackBar(BuildContext _context, String message) {
 
 void showSnackBarWithoutButton(BuildContext _context, String message) {
   final snackBar = SnackBar(
-    content: Text(message),
+    content: Text(
+      message,
+      textScaleFactor: 1.0,
+    ),
   );
 
   ScaffoldMessenger.of(_context).showSnackBar(snackBar);

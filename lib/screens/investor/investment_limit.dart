@@ -6,7 +6,6 @@ import 'package:acc/screens/investor/investment_choices.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:provider/provider.dart';
 import '../../providers/fund_slot_provider.dart' as slotProvider;
-import 'package:acc/models/authentication/signup_request.dart';
 
 class InvestmentLimit extends StatefulWidget {
   @override
@@ -34,6 +33,8 @@ class _InvestmentLimitState extends State<InvestmentLimit> {
 
   Widget fundSlotWidget() {
     return SafeArea(
+        child: MediaQuery(
+      data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
       child: SingleChildScrollView(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
             Widget>[
@@ -110,7 +111,7 @@ class _InvestmentLimitState extends State<InvestmentLimit> {
           ])
         ]),
       ),
-    );
+    ));
   }
 
   @override

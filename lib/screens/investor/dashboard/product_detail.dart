@@ -425,12 +425,17 @@ class _ProductDetailState extends State<ProductDetail> {
               (Route<dynamic> route) => false);
         }
       },
-      child: Text("Ok", style: textNormal16(Theme.of(context).primaryColor)),
+      child: Text("Ok",
+          textScaleFactor: 1.0,
+          style: textNormal16(Theme.of(context).primaryColor)),
     );
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      content: Text(message),
+      content: Text(
+        message,
+        textScaleFactor: 1.0,
+      ),
       actions: [
         positiveButton,
       ],

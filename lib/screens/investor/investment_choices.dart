@@ -8,7 +8,6 @@ import 'package:acc/utilites/ui_widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/product_type_provider.dart' as productProvider;
-import 'package:acc/models/authentication/signup_request.dart';
 
 class InvestmentChoices extends StatefulWidget {
   @override
@@ -64,115 +63,120 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-            child: SingleChildScrollView(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-              Container(
-                child: IconButton(
-                  icon: Icon(Icons.arrow_back, size: 30),
-                  onPressed: () => {Navigator.pop(context)},
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: Scaffold(
+            backgroundColor: Colors.white,
+            body: SafeArea(
+                child: SingleChildScrollView(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
                   Container(
-                    margin: const EdgeInsets.only(
-                        top: 10.0, left: 25.0, right: 25.0),
-                    child: Text(
-                      "Please click on your Investment Choice(s)",
-                      style: TextStyle(
-                          color: headingBlack,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 26.0,
-                          fontFamily: FontFamilyMontserrat.name),
+                    child: IconButton(
+                      icon: Icon(Icons.arrow_back, size: 30),
+                      onPressed: () => {Navigator.pop(context)},
                     ),
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        margin: const EdgeInsets.only(
+                            top: 10.0, left: 25.0, right: 25.0),
+                        child: Text(
+                          "Please click on your Investment Choice(s)",
+                          style: TextStyle(
+                              color: headingBlack,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 26.0,
+                              fontFamily: FontFamilyMontserrat.name),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
 
-                  FutureBuilder(
-                    future: _productTypes,
-                    builder: (ctx, dataSnapshot) {
-                      if (dataSnapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return Center(
-                            child: CircularProgressIndicator(
-                          color: Theme.of(context).primaryColor,
-                        ));
-                      } else {
-                        if (dataSnapshot.error != null) {
-                          return Center(child: Text("An error occurred!"));
-                        } else {
-                          return Consumer<productProvider.ProductTypes>(
-                            builder: (ctx, prodTypeData, child) =>
-                                ListView.builder(
-                              itemBuilder: (ctx, index) {
-                                return _buildPlayerModelList(
-                                    prodTypeData.types[index]);
-                              },
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: prodTypeData.types.length,
-                              shrinkWrap: true,
-                            ),
-                          );
-                        }
-                      }
-                    },
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  //NEXT BUTTON
-                  Visibility(
-                      visible: _isButtonVisible,
-                      child: Container(
-                          margin: const EdgeInsets.only(
-                              top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                          child: InkWell(
-                              borderRadius: BorderRadius.circular(40),
-                              onTap: () {
-                                // on click
-                                var types =
-                                    Provider.of<productProvider.ProductTypes>(
+                      FutureBuilder(
+                        future: _productTypes,
+                        builder: (ctx, dataSnapshot) {
+                          if (dataSnapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(
+                                child: CircularProgressIndicator(
+                              color: Theme.of(context).primaryColor,
+                            ));
+                          } else {
+                            if (dataSnapshot.error != null) {
+                              return Center(child: Text("An error occurred!"));
+                            } else {
+                              return Consumer<productProvider.ProductTypes>(
+                                builder: (ctx, prodTypeData, child) =>
+                                    ListView.builder(
+                                  itemBuilder: (ctx, index) {
+                                    return _buildPlayerModelList(
+                                        prodTypeData.types[index]);
+                                  },
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: prodTypeData.types.length,
+                                  shrinkWrap: true,
+                                ),
+                              );
+                            }
+                          }
+                        },
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      //NEXT BUTTON
+                      Visibility(
+                          visible: _isButtonVisible,
+                          child: Container(
+                              margin: const EdgeInsets.only(
+                                  top: 5.0,
+                                  left: 25.0,
+                                  bottom: 20,
+                                  right: 25.0),
+                              child: InkWell(
+                                  borderRadius: BorderRadius.circular(40),
+                                  onTap: () {
+                                    // on click
+                                    var types = Provider.of<
+                                                productProvider.ProductTypes>(
                                             context,
                                             listen: false)
                                         .selectedTypes;
-                                var listIds = [];
-                                types.forEach((item) {
-                                  listIds.add(item.id);
-                                });
-                                // print('Checked Count: ${types.length}');
-                                print(listIds);
-                                if (listIds.isNotEmpty) {
-                                  final requestModelInstance =
-                                      InvestorSignupPreferences.instance;
-                                  requestModelInstance.productIds =
-                                      listIds.join(',');
-                                }
-                                openGeneralTermsPrivacy();
-                              },
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: 60,
-                                decoration: appColorButton(context),
-                                child: Center(
-                                    child: Text(
-                                  "Next",
-                                  style: TextStyle(
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                )),
-                              ))))
-                ],
-              )
-            ]))));
+                                    var listIds = [];
+                                    types.forEach((item) {
+                                      listIds.add(item.id);
+                                    });
+                                    // print('Checked Count: ${types.length}');
+                                    print(listIds);
+                                    if (listIds.isNotEmpty) {
+                                      final requestModelInstance =
+                                          InvestorSignupPreferences.instance;
+                                      requestModelInstance.productIds =
+                                          listIds.join(',');
+                                    }
+                                    openGeneralTermsPrivacy();
+                                  },
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 60,
+                                    decoration: appColorButton(context),
+                                    child: Center(
+                                        child: Text(
+                                      "Next",
+                                      style: TextStyle(
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    )),
+                                  ))))
+                    ],
+                  )
+                ])))));
   }
 
   void toggleSelection() {

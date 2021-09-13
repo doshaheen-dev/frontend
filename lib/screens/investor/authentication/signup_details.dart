@@ -201,206 +201,242 @@ class _SignUpDetailsState extends State<SignUpDetails> {
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 0,
-        elevation: 0.0,
-        backgroundColor: Color(0xffffffff),
-      ),
-      bottomNavigationBar: BottomAppBar(),
-      backgroundColor: Colors.white,
-      body: ProgressHUD(
-        child: Builder(
-          builder: (context) => SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    child: IconButton(
-                      icon: Icon(Icons.arrow_back, size: 30),
-                      onPressed: () {
-                        Authentication.signOut();
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.only(top: 10.0, left: 25.0),
-                        child: Text(
-                          "Personal details here",
-                          style: TextStyle(
-                              color: headingBlack,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 26.0,
-                              fontFamily: FontFamilyMontserrat.name),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-
-                      Container(
-                        margin: const EdgeInsets.only(
-                            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                        decoration: customDecoration(),
-                        child: TextField(
-                          style: _setTextFieldStyle(),
-                          controller: _firstNameController,
-                          onChanged: (value) => {firstname = value},
-                          decoration: _setTextFieldDecoration("Firstname"),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(
-                            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                        decoration: customDecoration(),
-                        child: TextField(
-                          controller: _lastnameController,
-                          style: _setTextFieldStyle(),
-                          onChanged: (value) => lastname = value,
-                          decoration: _setTextFieldDecoration("Lastname"),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(
-                            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                        decoration: customDecoration(),
-                        child: TextField(
-                          controller: _emailController,
-                          style: _setTextFieldStyle(),
-                          onChanged: (value) => email = value,
-                          decoration: _setTextFieldDecoration("E-mail"),
-                        ),
-                      ),
-
-                      Container(
-                        margin: const EdgeInsets.only(
-                            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                        width: MediaQuery.of(context).size.width,
-                        height: 80,
-                        decoration: customDecoration(),
-                        child: FutureBuilder(
-                            future: _countries,
-                            builder: (ctx, dataSnapshot) {
-                              if (dataSnapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Center(
-                                    child: CircularProgressIndicator(
-                                  color: Theme.of(context).primaryColor,
-                                ));
-                              } else {
-                                if (dataSnapshot.error != null) {
-                                  return Center(
-                                      child: Text("An error occurred!"));
-                                } else {
-                                  return Consumer<countryProvider.Countries>(
-                                    builder: (ctx, countryData, child) =>
-                                        Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10.0),
-                                      child: getDropDownSearch(
-                                          countryData.countries
-                                              .map((info) => {
-                                                    'text': info.name,
-                                                    'value': info.abbreviation,
-                                                  })
-                                              .toList()),
-                                    ),
-                                  );
-                                }
-                              }
-                            }),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(
-                            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                        decoration: customDecoration(),
-                        child: TextField(
-                          style: _setTextFieldStyle(),
-                          controller: _addressController,
-                          onChanged: (value) => address = value,
-                          decoration: _setTextFieldDecoration("Address"),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 50,
-                      ),
-                      //NEXT BUTTON
-                      Container(
-                        margin: const EdgeInsets.only(
-                            top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(40),
-                          onTap: () {
-                            // on click
-                            if (_firstNameController.text.isEmpty) {
-                              showSnackBar(
-                                  context, "Please enter the Firstname.");
-                              return;
-                            }
-                            if (_lastnameController.text.isEmpty) {
-                              showSnackBar(
-                                  context, "Please enter the Lastname.");
-                              return;
-                            }
-                            if (_emailController.text.isEmpty) {
-                              showSnackBar(
-                                  context, "Please enter the email id.");
-                              return;
-                            }
-                            if (!CodeUtils.emailValid(_emailController.text)) {
-                              showSnackBar(
-                                  context, "Please enter a valid email id.");
-                              return;
-                            }
-                            if (country.isEmpty) {
-                              showSnackBar(context, "Please select a country.");
-                              return;
-                            }
-                            if (_addressController.text.isEmpty) {
-                              showSnackBar(
-                                  context, "Please enter the address.");
-                              return;
-                            }
-                            FocusScope.of(context).requestFocus(FocusNode());
-                            progress = ProgressHUD.of(context);
-                            progress?.showWithText('Uploading Details...');
-                            submitDetails(
-                              _firstNameController.text.trim(),
-                              _lastnameController.text.trim(),
-                              _emailController.text.trim(),
-                              country,
-                              _addressController.text,
-                            );
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 60,
-                            decoration: appColorButton(context),
-                            child: Center(
-                                child: Text(
-                              "Next",
-                              style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            )),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: Scaffold(
+          appBar: AppBar(
+            toolbarHeight: 0,
+            elevation: 0.0,
+            backgroundColor: Color(0xffffffff),
           ),
-        ),
-      ),
-    );
+          bottomNavigationBar: BottomAppBar(),
+          backgroundColor: Colors.white,
+          body: ProgressHUD(
+            child: Builder(
+                builder: (context) => SafeArea(
+                        child: SingleChildScrollView(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              child: IconButton(
+                                icon: Icon(Icons.arrow_back, size: 30),
+                                onPressed: () {
+                                  Authentication.signOut();
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ),
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 10.0, left: 25.0),
+                                    child: Text(
+                                      "Personal details here",
+                                      style: TextStyle(
+                                          color: headingBlack,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 26.0,
+                                          fontFamily:
+                                              FontFamilyMontserrat.name),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 5.0,
+                                        left: 25.0,
+                                        bottom: 20,
+                                        right: 25.0),
+                                    decoration: customDecoration(),
+                                    child: TextField(
+                                      style: _setTextFieldStyle(),
+                                      controller: _firstNameController,
+                                      onChanged: (value) => {firstname = value},
+                                      decoration:
+                                          _setTextFieldDecoration("Firstname"),
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 5.0,
+                                        left: 25.0,
+                                        bottom: 20,
+                                        right: 25.0),
+                                    decoration: customDecoration(),
+                                    child: TextField(
+                                      controller: _lastnameController,
+                                      style: _setTextFieldStyle(),
+                                      onChanged: (value) => lastname = value,
+                                      decoration:
+                                          _setTextFieldDecoration("Lastname"),
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 5.0,
+                                        left: 25.0,
+                                        bottom: 20,
+                                        right: 25.0),
+                                    decoration: customDecoration(),
+                                    child: TextField(
+                                      controller: _emailController,
+                                      style: _setTextFieldStyle(),
+                                      onChanged: (value) => email = value,
+                                      decoration:
+                                          _setTextFieldDecoration("E-mail"),
+                                    ),
+                                  ),
+
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 5.0,
+                                        left: 25.0,
+                                        bottom: 20,
+                                        right: 25.0),
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 80,
+                                    decoration: customDecoration(),
+                                    child: FutureBuilder(
+                                        future: _countries,
+                                        builder: (ctx, dataSnapshot) {
+                                          if (dataSnapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                            ));
+                                          } else {
+                                            if (dataSnapshot.error != null) {
+                                              return Center(
+                                                  child: Text(
+                                                      "An error occurred!"));
+                                            } else {
+                                              return Consumer<
+                                                  countryProvider.Countries>(
+                                                builder:
+                                                    (ctx, countryData, child) =>
+                                                        Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 10.0),
+                                                  child: getDropDownSearch(
+                                                      countryData.countries
+                                                          .map((info) => {
+                                                                'text':
+                                                                    info.name,
+                                                                'value': info
+                                                                    .abbreviation,
+                                                              })
+                                                          .toList()),
+                                                ),
+                                              );
+                                            }
+                                          }
+                                        }),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 5.0,
+                                        left: 25.0,
+                                        bottom: 20,
+                                        right: 25.0),
+                                    decoration: customDecoration(),
+                                    child: TextField(
+                                      style: _setTextFieldStyle(),
+                                      controller: _addressController,
+                                      onChanged: (value) => address = value,
+                                      decoration:
+                                          _setTextFieldDecoration("Address"),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 50,
+                                  ),
+                                  //NEXT BUTTON
+                                  Container(
+                                      margin: const EdgeInsets.only(
+                                          top: 5.0,
+                                          left: 25.0,
+                                          bottom: 20,
+                                          right: 25.0),
+                                      child: InkWell(
+                                        borderRadius: BorderRadius.circular(40),
+                                        onTap: () {
+                                          // on click
+                                          if (_firstNameController
+                                              .text.isEmpty) {
+                                            showSnackBar(context,
+                                                "Please enter the Firstname.");
+                                            return;
+                                          }
+                                          if (_lastnameController
+                                              .text.isEmpty) {
+                                            showSnackBar(context,
+                                                "Please enter the Lastname.");
+                                            return;
+                                          }
+                                          if (_emailController.text.isEmpty) {
+                                            showSnackBar(context,
+                                                "Please enter the email id.");
+                                            return;
+                                          }
+                                          if (!CodeUtils.emailValid(
+                                              _emailController.text)) {
+                                            showSnackBar(context,
+                                                "Please enter a valid email id.");
+                                            return;
+                                          }
+                                          if (country.isEmpty) {
+                                            showSnackBar(context,
+                                                "Please select a country.");
+                                            return;
+                                          }
+                                          if (_addressController.text.isEmpty) {
+                                            showSnackBar(context,
+                                                "Please enter the address.");
+                                            return;
+                                          }
+                                          FocusScope.of(context)
+                                              .requestFocus(FocusNode());
+                                          progress = ProgressHUD.of(context);
+                                          progress?.showWithText(
+                                              'Uploading Details...');
+                                          submitDetails(
+                                            _firstNameController.text.trim(),
+                                            _lastnameController.text.trim(),
+                                            _emailController.text.trim(),
+                                            country,
+                                            _addressController.text,
+                                          );
+                                        },
+                                        child: Container(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          height: 60,
+                                          decoration: appColorButton(context),
+                                          child: Center(
+                                              child: Text(
+                                            "Next",
+                                            style: TextStyle(
+                                                fontSize: 18.0,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white),
+                                          )),
+                                        ),
+                                      )),
+                                ]),
+                          ]),
+                    ))),
+          ),
+        ));
   }
 
   TextStyle setTextStyle(colors) {
@@ -492,29 +528,31 @@ class _SignUpDetailsState extends State<SignUpDetails> {
     showSnackBar(context, signedUpUser.message);
     if (signedUpUser.type == 'success') {
       requestModelInstance.clear();
+
       // save info
-      // UserData userData = UserData(
-      //   signedUpUser.data.token,
-      //   signedUpUser.data.firstName,
-      //   "",
-      //   signedUpUser.data.lastName,
-      //   signedUpUser.data.mobileNo,
-      //   signedUpUser.data.emailId,
-      //   signedUpUser.data.userType,
-      //   "",
-      //   "",
-      //   "",
-      //   signedUpUser.data.address,
-      //   signedUpUser.data.countryCode,
-      //   signedUpUser.data.hearAboutUs,
-      //   signedUpUser.data.referralName,
-      //   signedUpUser.data.slotId,
-      //   signedUpUser.data.productIds,
-      // );
-      // final prefs = await SharedPreferences.getInstance();
-      // final userJson = jsonEncode(userData);
-      // prefs.setString('UserInfo', userJson);
-      // UserData.instance.userInfo = userData;
+      UserData userData = UserData(
+        signedUpUser.data.token,
+        signedUpUser.data.firstName,
+        "",
+        signedUpUser.data.lastName,
+        signedUpUser.data.mobileNo,
+        signedUpUser.data.emailId,
+        signedUpUser.data.userType,
+        "",
+        "",
+        "",
+        signedUpUser.data.address,
+        signedUpUser.data.countryCode,
+        signedUpUser.data.hearAboutUs,
+        signedUpUser.data.referralName,
+        signedUpUser.data.slotId,
+        signedUpUser.data.productIds,
+      );
+      UserData.instance.userInfo = userData;
+      final prefs = await SharedPreferences.getInstance();
+      final userJson = jsonEncode(userData);
+      prefs.setString('UserInfo', userJson);
+      UserData.instance.userInfo = userData;
       // print('${userData.firstName}');
       // print('Ins:${UserData.instance.userInfo.firstName}');
       openWelcomeInvestor();

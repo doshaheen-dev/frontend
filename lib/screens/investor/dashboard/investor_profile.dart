@@ -311,6 +311,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
         },
         child: Text(
           "Yes",
+          textScaleFactor: 1.0,
           style: textNormal16(Theme.of(context).primaryColor),
         ));
 
@@ -320,14 +321,19 @@ class _InvestorProfileState extends State<InvestorProfile> {
         },
         child: Text(
           "No",
+          textScaleFactor: 1.0,
           style: textNormal16(Theme.of(context).primaryColor),
         ));
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      content: Text(
-        message,
-        style: textNormal18(headingBlack),
+      content: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          message,
+          textScaleFactor: 1.0,
+          style: textNormal18(headingBlack),
+        ),
       ),
       actions: [positiveButton, negativeButton],
     );
@@ -610,12 +616,14 @@ class _InvestorProfileState extends State<InvestorProfile> {
         },
         child: Text(
           "Ok",
+          textScaleFactor: 1.0,
           style: textNormal16(Theme.of(context).primaryColor),
         ));
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      content: Text(message, style: textNormal18(headingBlack)),
+      content: Text(message,
+          textScaleFactor: 1.0, style: textNormal16(headingBlack)),
       actions: [
         positiveButton,
       ],

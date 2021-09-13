@@ -28,21 +28,23 @@ class _AppPDFViewerState extends State<AppPDFViewer> {
           primaryColor: Colors.white,
         ),
         debugShowCheckedModeBanner: false,
-        home: Scaffold(
-            appBar: AppBar(
-              elevation: 0.0,
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ),
-            body: Center(
-              child: _isLoading
-                  ? Center(child: CircularProgressIndicator())
-                  : PDFViewer(document: document),
-            )));
+        home: MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: Scaffold(
+                appBar: AppBar(
+                  elevation: 0.0,
+                  leading: IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
+                body: Center(
+                  child: _isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : PDFViewer(document: document),
+                ))));
   }
 
   Future<void> loadPdfDocument(String pdf) async {

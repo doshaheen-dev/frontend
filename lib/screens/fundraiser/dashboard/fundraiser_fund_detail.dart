@@ -70,141 +70,149 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
-    return ProgressHUD(
-        child: Builder(
-      builder: (context) => Scaffold(
-        bottomNavigationBar: _createButtonLayout(context),
-        backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          child: Container(
-            margin: const EdgeInsets.only(top: 40.0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: Scaffold(
+            bottomNavigationBar: _createButtonLayout(context),
+            backgroundColor: Colors.white,
+            body: ProgressHUD(
+              child: Builder(
+                builder: (context) => SingleChildScrollView(
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 40.0),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Visibility(
-                            visible: !isResubmit,
-                            child: FundsDetailHeader(_likedFunds)),
-                        Visibility(
-                            visible: isResubmit, child: FundsResubmitHeader())
-                      ],
-                    ),
-                  ),
-
-                  Divider(color: HexColor("#E8E8E8")),
-                  // Fund overview
-                  Container(
-                    child: _createFundBody(),
-                  ),
-
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    child: Row(
-                      children: [
-                        Expanded(
-                            flex: 1,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  "\$${_likedFunds.fundNewVal}",
-                                  style: textBlackNormal16(),
-                                ),
-                                Text("Target",
-                                    style: textNormal16(
-                                        Theme.of(context).primaryColor))
+                                Visibility(
+                                    visible: !isResubmit,
+                                    child: FundsDetailHeader(_likedFunds)),
+                                Visibility(
+                                    visible: isResubmit,
+                                    child: FundsResubmitHeader())
                               ],
-                            )),
-                        // Expanded(
-                        //     flex: 1,
-                        //     child: Column(
-                        //       children: [
-                        //         Text(
-                        //           _likedFunds.minimumInvestment,
-                        //           style: textBlackNormal16(),
-                        //         ),
-                        //         Text("Min Per Investor",
-                        //             style: textNormal16(kDarkOrange))
-                        //       ],
-                        //     ))
-                      ],
-                    ),
+                            ),
+                          ),
+
+                          Divider(color: HexColor("#E8E8E8")),
+                          // Fund overview
+                          Container(
+                            child: _createFundBody(),
+                          ),
+
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    flex: 1,
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          "\$${_likedFunds.fundNewVal}",
+                                          style: textBlackNormal16(),
+                                        ),
+                                        Text("Target",
+                                            style: textNormal16(
+                                                Theme.of(context).primaryColor))
+                                      ],
+                                    )),
+                                // Expanded(
+                                //     flex: 1,
+                                //     child: Column(
+                                //       children: [
+                                //         Text(
+                                //           _likedFunds.minimumInvestment,
+                                //           style: textBlackNormal16(),
+                                //         ),
+                                //         Text("Min Per Investor",
+                                //             style: textNormal16(kDarkOrange))
+                                //       ],
+                                //     ))
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 40,
+                          ),
+                        ]),
                   ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                ]),
-          ),
-        ),
-      ),
-    ));
+                ),
+              ),
+            )));
   }
 
   _createButtonLayout(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Visibility(
-        visible: isResubmit,
-        child: Container(
-            margin: const EdgeInsets.only(
-                top: 5.0, left: 20.0, bottom: 20, right: 20.0),
-            child: ElevatedButton(
-              onPressed: () {
-                if (_isButtonDisabled) {
-                  progress = ProgressHUD.of(context);
-                  progress?.showWithText('Submitting Updates...');
-                  _performSubmission(context);
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.all(0.0),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18))),
-              child: Ink(
-                decoration: BoxDecoration(
-                    gradient: !_isButtonDisabled
-                        ? LinearGradient(colors: [textLightGrey, textLightGrey])
-                        : LinearGradient(colors: [
-                            Theme.of(context).primaryColor,
-                            Theme.of(context).primaryColor
-                          ]),
-                    borderRadius: BorderRadius.circular(15)),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  alignment: Alignment.center,
-                  child: Text("Submit", style: textWhiteBold16()),
-                ),
-              ),
-            )),
-      ),
-    );
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Visibility(
+            visible: isResubmit,
+            child: Container(
+                margin: const EdgeInsets.only(
+                    top: 5.0, left: 20.0, bottom: 20, right: 20.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_isButtonDisabled) {
+                      progress = ProgressHUD.of(context);
+                      progress?.showWithText('Submitting Updates...');
+                      _performSubmission(context);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.all(0.0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18))),
+                  child: Ink(
+                    decoration: BoxDecoration(
+                        gradient: !_isButtonDisabled
+                            ? LinearGradient(
+                                colors: [textLightGrey, textLightGrey])
+                            : LinearGradient(colors: [
+                                Theme.of(context).primaryColor,
+                                Theme.of(context).primaryColor
+                              ]),
+                        borderRadius: BorderRadius.circular(15)),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 50,
+                      alignment: Alignment.center,
+                      child: Text("Submit", style: textWhiteBold16()),
+                    ),
+                  ),
+                )),
+          ),
+        ));
   }
 
   Widget _createFundBody() {
-    return Container(
-      margin: EdgeInsets.only(left: 20.0, right: 20.0),
-      child: Column(
-        children: [
-          CreateFundOverview(_likedFunds),
-          Visibility(
-            visible: !isResubmit,
-            child: FundsUploadedDocument(_likedFunds),
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: Container(
+          margin: EdgeInsets.only(left: 20.0, right: 20.0),
+          child: Column(
+            children: [
+              CreateFundOverview(_likedFunds),
+              Visibility(
+                visible: !isResubmit,
+                child: FundsUploadedDocument(_likedFunds),
+              ),
+              Visibility(
+                  visible: !isResubmit,
+                  child: FundsRemark(_likedFunds.fundsRemarks != null
+                      ? _likedFunds.fundsRemarks
+                      : "Remarks are not available")),
+              Visibility(visible: isResubmit, child: _addNewFundValue()),
+              Visibility(visible: isResubmit, child: _uploadFundDeck())
+            ],
           ),
-          Visibility(
-              visible: !isResubmit,
-              child: FundsRemark(_likedFunds.fundsRemarks != null
-                  ? _likedFunds.fundsRemarks
-                  : "Remarks are not available")),
-          Visibility(visible: isResubmit, child: _addNewFundValue()),
-          Visibility(visible: isResubmit, child: _uploadFundDeck())
-        ],
-      ),
-    );
+        ));
   }
 
   TextField inputTextField(text, hint, _controller) {
@@ -237,23 +245,27 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
 
   Widget _addNewFundValue() {
     //Fund Name
-    return Container(
-      margin: const EdgeInsets.only(top: 5.0, bottom: 10),
-      decoration: BoxDecoration(
-          color: unselectedGray,
-          borderRadius: BorderRadius.circular(10.0),
-          border: Border.all(color: textGrey, width: 1)),
-      child: inputTextField("New Fund Value",
-          "Please enter new fund value here", _newFundValueController),
-    );
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: Container(
+          margin: const EdgeInsets.only(top: 5.0, bottom: 10),
+          decoration: BoxDecoration(
+              color: unselectedGray,
+              borderRadius: BorderRadius.circular(10.0),
+              border: Border.all(color: textGrey, width: 1)),
+          child: inputTextField("New Fund Value",
+              "Please enter new fund value here", _newFundValueController),
+        ));
   }
 
   Widget _uploadFundDeck() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 10.0, right: 15),
-      child: _createDocumentUI(context, "Upload Fund Deck document",
-          "PDF, JPEG, PNG, JPG, PPT etc."),
-    );
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: Container(
+          margin: EdgeInsets.only(bottom: 10.0, right: 15),
+          child: _createDocumentUI(context, "Upload Fund Deck document",
+              "PDF, JPEG, PNG, JPG, PPT etc."),
+        ));
   }
 
   Widget _createDocumentUI(
