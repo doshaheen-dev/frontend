@@ -185,7 +185,7 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                                       requestModelInstance.clear();
                                       // print("Firstn: ${signedUpUser.data.firstName}");
                                       UserData userData = UserData(
-                                        signedUpUser.data.token,
+                                        UserData.instance.userInfo.token,
                                         signedUpUser.data.firstName,
                                         "",
                                         signedUpUser.data.lastName,
@@ -201,6 +201,7 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                                         signedUpUser.data.referralName,
                                         signedUpUser.data.slotId,
                                         signedUpUser.data.productIds,
+                                        signedUpUser.data.emailVerified,
                                       );
                                       final prefs =
                                           await SharedPreferences.getInstance();

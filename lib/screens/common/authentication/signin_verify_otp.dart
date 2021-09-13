@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:acc/models/authentication/otp_response.dart';
+import 'package:acc/screens/fundraiser/authentication/email_verification.dart';
 import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
 import 'package:acc/screens/investor/welcome.dart';
 import 'package:flutter/material.dart';
@@ -243,7 +244,11 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
       Navigator.of(context).pushAndRemoveUntil(
           PageRouteBuilder(
               pageBuilder: (context, animation, anotherAnimation) {
-                return FundraiserDashboard();
+                if (data.emailVerified == 1) {
+                  return FundraiserDashboard();
+                } else {
+                  return EmailVerification();
+                }
               },
               transitionDuration: Duration(milliseconds: 2000),
               transitionsBuilder:

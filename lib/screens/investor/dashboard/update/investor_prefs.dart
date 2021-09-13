@@ -737,6 +737,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
           signedUpUser.data.referralName,
           signedUpUser.data.slotId,
           signedUpUser.data.productIds,
+          signedUpUser.data.emailVerified,
         );
         final prefs = await SharedPreferences.getInstance();
         final userJson = jsonEncode(userData);

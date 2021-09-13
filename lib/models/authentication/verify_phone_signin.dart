@@ -178,6 +178,7 @@ class UserData {
   String referralName;
   int slotId;
   String productIds;
+  int emailVerified;
 
   UserData._privateConstructor();
 
@@ -202,6 +203,7 @@ class UserData {
         this.referralName,
         this.slotId,
         this.productIds,
+        this.emailVerified,
       );
 
   UserData(
@@ -221,6 +223,7 @@ class UserData {
     this.referralName,
     this.slotId,
     this.productIds,
+    this.emailVerified,
   );
 
   set userInfo(UserData info) {
@@ -240,6 +243,7 @@ class UserData {
     this.referralName = info.referralName;
     this.slotId = info.slotId;
     this.productIds = info.productIds;
+    this.emailVerified = info.emailVerified;
   }
 
   Map<String, dynamic> toJson() => {
@@ -259,6 +263,7 @@ class UserData {
         "referral_name": this.referralName,
         "slot_id": this.slotId,
         "product_ids": this.productIds,
+        "email_verified": this.emailVerified,
       };
 
   factory UserData.fromMap(Map<String, dynamic> json) {
@@ -279,6 +284,7 @@ class UserData {
       json['referral_name'],
       json['slot_id'],
       json['product_ids'],
+      json['email_verified'],
     );
   }
 
@@ -300,6 +306,7 @@ class UserData {
       json['referral_name'],
       json['slot_id'],
       json['product_ids'],
+      json['email_verified'],
     );
   }
   factory UserData.fromJson(Map<String, dynamic> json) {
@@ -320,6 +327,7 @@ class UserData {
       json['referral_name'],
       json['slot_id'],
       json['product_ids'],
+      json['email_verified'],
     );
   }
 }
