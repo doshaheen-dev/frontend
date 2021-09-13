@@ -8,7 +8,6 @@ import 'package:acc/services/investor_home_service.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 import 'package:acc/widgets/exception_indicators/empty_list_indicator.dart';
-import 'package:acc/widgets/exception_indicators/empty_list_text.dart';
 import 'package:acc/widgets/exception_indicators/error_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -191,32 +190,34 @@ class _InvestorHomeState extends State<InvestorHome>
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: ProgressHUD(
-          child: Builder(
-            builder: (context) => SingleChildScrollView(
-              child: Container(
-                  alignment: Alignment.topLeft,
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        recommendationsUI(context),
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: Scaffold(
+            backgroundColor: Colors.white,
+            body: ProgressHUD(
+              child: Builder(
+                builder: (context) => SingleChildScrollView(
+                  child: Container(
+                      alignment: Alignment.topLeft,
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            recommendationsUI(context),
 
-                        //FUNDS
-                        Visibility(
-                          visible: isFundsPresent,
-                          child: fundsUI(),
-                        ),
+                            //FUNDS
+                            Visibility(
+                              visible: isFundsPresent,
+                              child: fundsUI(),
+                            ),
 
-                        // Visibility(
-                        //     visible:
-                        //         !isFundsPresent && !isRecommendationPresent,
-                        //     child: EmptyListIndicator())
-                      ])),
-            ),
-          ),
-        ));
+                            // Visibility(
+                            //     visible:
+                            //         !isFundsPresent && !isRecommendationPresent,
+                            //     child: EmptyListIndicator())
+                          ])),
+                ),
+              ),
+            )));
   }
 
   // ------------------------------- Interested funds -------------------------- //
@@ -529,59 +530,62 @@ class _InvestorHomeState extends State<InvestorHome>
                       builder: (context) => ProductDetail(
                           data: recommended, token: UserData.instance.token)))
             },
-        child: Card(
-          margin: EdgeInsets.zero,
-          elevation: 1.0,
-          shape: RoundedRectangleBorder(
-              side: BorderSide(
-                color: Colors.grey.withOpacity(0.2),
-                width: 1,
-              ),
-              borderRadius: BorderRadius.circular(10.0)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8.0),
-                      topRight: Radius.circular(8.0),
-                    ),
-                    child: Center(
-                      child: CachedNetworkImage(
-                        height: 200.0,
-                        imageUrl: recommended.fundLogo,
-                        //fit: BoxFit.cover,
-                        // placeholder: (context, url) =>
-                        //     CircularProgressIndicator(),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
-                      ),
-                    ),
+        child: MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: Card(
+              margin: EdgeInsets.zero,
+              elevation: 1.0,
+              shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                    color: Colors.grey.withOpacity(0.2),
+                    width: 1,
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(top: 10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text("Click on the image to accept or reject",
-                            style: textNormal(
-                                Theme.of(context).primaryColor, 13.0)),
-                        SizedBox(
-                          height: 5.0,
+                  borderRadius: BorderRadius.circular(10.0)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8.0),
+                          topRight: Radius.circular(8.0),
                         ),
-                        Text(recommended.fundName,
-                            style: textBold16(headingBlack)),
-                      ],
-                    ),
+                        child: Center(
+                          child: CachedNetworkImage(
+                            height: 200.0,
+                            imageUrl: recommended.fundLogo,
+                            //fit: BoxFit.cover,
+                            // placeholder: (context, url) =>
+                            //     CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.only(top: 10.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text("Click on the image to accept or reject",
+                                style: textNormal(
+                                    Theme.of(context).primaryColor, 13.0)),
+                            SizedBox(
+                              height: 5.0,
+                            ),
+                            Text(recommended.fundName,
+                                style: textBold16(headingBlack)),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
-        ));
+            )));
   }
 
   Widget _createRecommendationHeader() {

@@ -1,4 +1,3 @@
-import 'package:acc/constants/font_family.dart';
 import 'package:acc/utilites/app_strings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -23,6 +22,8 @@ class _OnBoardingState extends State<OnBoarding> {
 
   Color statusBarColor;
 
+  double scale;
+
   @override
   void initState() {
     super.initState();
@@ -35,6 +36,8 @@ class _OnBoardingState extends State<OnBoarding> {
 
   @override
   Widget build(BuildContext context) {
+    scale = MediaQuery.of(context).textScaleFactor;
+
     if (currentPageValue == 0) {
       statusBarColor = statusGrey;
       SystemChrome.setSystemUIOverlayStyle(
@@ -70,6 +73,7 @@ class _OnBoardingState extends State<OnBoarding> {
             padding: EdgeInsets.all(25.0),
             child: Text(
               onBoardingScreen1,
+              //  textScaleFactor: 1.0,
               textAlign: TextAlign.center,
               style: textWhiteBold20(),
             ))
@@ -90,6 +94,7 @@ class _OnBoardingState extends State<OnBoarding> {
             padding: EdgeInsets.all(25.0),
             child: Text(
               onBoardingScreen2,
+              //  textScaleFactor: 1.0,
               textAlign: TextAlign.center,
               style: textWhiteBold20(),
             ))
@@ -110,6 +115,7 @@ class _OnBoardingState extends State<OnBoarding> {
             padding: EdgeInsets.all(25.0),
             child: Text(
               onBoardingScreen3,
+              //   textScaleFactor: 1.0,
               textAlign: TextAlign.center,
               style: textWhiteBold20(),
             ))
@@ -119,113 +125,118 @@ class _OnBoardingState extends State<OnBoarding> {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(backgroundColor: Colors.white),
-        home: Scaffold(
-            appBar: AppBar(
-              toolbarHeight: 0,
-              elevation: 0.0,
-              backgroundColor: (statusBarColor),
-            ),
-            bottomNavigationBar: BottomAppBar(),
-            body: SafeArea(
-                child: Column(children: [
-              // Slider View
-              Expanded(
-                  child: Container(
-                      child: Stack(
-                          alignment: AlignmentDirectional.bottomCenter,
-                          children: <Widget>[
-                    PageView.builder(
-                        physics: BouncingScrollPhysics(),
-                        itemCount: introWidgetsList.length,
-                        onPageChanged: (int page) {
-                          getChangedPageAndMoveBar(page);
-                        },
-                        controller: controller,
-                        itemBuilder: (context, index) {
-                          return introWidgetsList[index];
-                        }),
-                    Stack(
-                        alignment: AlignmentDirectional.topCenter,
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(top: 5),
-                            child: Divider(color: Colors.white70),
-                          ),
-                          Container(
-                              margin: EdgeInsets.only(bottom: 100),
-                              child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    for (int i = 0;
-                                        i < introWidgetsList.length;
-                                        i++)
-                                      if (i == currentPageValue) ...[
-                                        circleBar(true, i)
-                                      ] else
-                                        circleBar(false, i),
-                                  ]))
-                        ])
-                  ]))),
-              // Bottom view
-              Container(
-                  color: kDarkGrey,
-                  height: 150,
-                  child: Column(children: [
-                    InkWell(
-                        borderRadius: BorderRadius.circular(40),
-                        onTap: () {
-                          // Open  view
-                          Navigator.of(context).push(PageRouteBuilder(
-                              pageBuilder:
-                                  (context, animation, anotherAnimation) {
-                                return UserType();
-                              },
-                              transitionDuration: Duration(milliseconds: 2000),
-                              transitionsBuilder: (context, animation,
-                                  anotherAnimation, child) {
-                                animation = CurvedAnimation(
-                                    curve: Curves.fastLinearToSlowEaseIn,
-                                    parent: animation);
-                                return SlideTransition(
-                                  position: Tween(
-                                          begin: Offset(1.0, 0.0),
-                                          end: Offset(0.0, 0.0))
-                                      .animate(animation),
-                                  child: child,
-                                );
-                              }));
-                        },
-                        child: Container(
-                            margin: const EdgeInsets.only(
-                                top: 20.0, left: 25.0, right: 25.0),
-                            height: 60,
-                            decoration: appColorButton(context),
-                            child: Center(
-                                child: Text(
-                              "Join our community",
-                              style: textWhiteBold18(),
-                            )))),
-                    Container(
-                        margin: const EdgeInsets.only(top: 20.0),
-                        alignment: Alignment.center,
-                        child: RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                                text: "Already a member? ",
-                                style: textNormal16(textDarkOrange),
-                                children: [
-                                  TextSpan(
-                                      text: 'Sign In',
-                                      style: textNormal16(
-                                          Theme.of(context).primaryColor),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          openSignIn(context);
-                                        })
-                                ])))
-                  ]))
-            ]))));
+        home: MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: Scaffold(
+                appBar: AppBar(
+                  toolbarHeight: 0,
+                  elevation: 0.0,
+                  backgroundColor: (statusBarColor),
+                ),
+                bottomNavigationBar: BottomAppBar(),
+                body: SafeArea(
+                    child: Column(children: [
+                  // Slider View
+                  Expanded(
+                      child: Container(
+                          child: Stack(
+                              alignment: AlignmentDirectional.bottomCenter,
+                              children: <Widget>[
+                        PageView.builder(
+                            physics: BouncingScrollPhysics(),
+                            itemCount: introWidgetsList.length,
+                            onPageChanged: (int page) {
+                              getChangedPageAndMoveBar(page);
+                            },
+                            controller: controller,
+                            itemBuilder: (context, index) {
+                              return introWidgetsList[index];
+                            }),
+                        Stack(
+                            alignment: AlignmentDirectional.topCenter,
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.only(top: 5),
+                                child: Divider(color: Colors.white70),
+                              ),
+                              Container(
+                                  margin: EdgeInsets.only(bottom: 100),
+                                  child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        for (int i = 0;
+                                            i < introWidgetsList.length;
+                                            i++)
+                                          if (i == currentPageValue) ...[
+                                            circleBar(true, i)
+                                          ] else
+                                            circleBar(false, i),
+                                      ]))
+                            ])
+                      ]))),
+                  // Bottom view
+                  Container(
+                      color: kDarkGrey,
+                      height: 150,
+                      child: Column(children: [
+                        InkWell(
+                            borderRadius: BorderRadius.circular(40),
+                            onTap: () {
+                              // Open  view
+                              Navigator.of(context).push(PageRouteBuilder(
+                                  pageBuilder:
+                                      (context, animation, anotherAnimation) {
+                                    return UserType();
+                                  },
+                                  transitionDuration:
+                                      Duration(milliseconds: 2000),
+                                  transitionsBuilder: (context, animation,
+                                      anotherAnimation, child) {
+                                    animation = CurvedAnimation(
+                                        curve: Curves.fastLinearToSlowEaseIn,
+                                        parent: animation);
+                                    return SlideTransition(
+                                      position: Tween(
+                                              begin: Offset(1.0, 0.0),
+                                              end: Offset(0.0, 0.0))
+                                          .animate(animation),
+                                      child: child,
+                                    );
+                                  }));
+                            },
+                            child: Container(
+                                margin: const EdgeInsets.only(
+                                    top: 20.0, left: 25.0, right: 25.0),
+                                height: 60,
+                                decoration: appColorButton(context),
+                                child: Center(
+                                    child: Text(
+                                  "Join our community",
+                                  //  textScaleFactor: 1.0,
+                                  style: textWhiteBold18(),
+                                )))),
+                        Container(
+                            margin: const EdgeInsets.only(top: 20.0),
+                            alignment: Alignment.center,
+                            child: RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                    text: "Already a member? ",
+                                    style: textNormal16(textDarkOrange),
+                                    children: [
+                                      TextSpan(
+                                          text: 'Sign In',
+                                          style: textNormal16(
+                                              Theme.of(context).primaryColor),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              openSignIn(context);
+                                            })
+                                    ])))
+                      ]))
+                ])))));
   }
 
   void openSignIn(BuildContext context) {
@@ -258,11 +269,8 @@ class _OnBoardingState extends State<OnBoarding> {
             child: Text(
               (currentPageValue + 1).toString(),
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                  fontFamily: FontFamilyMontserrat.name),
+              //  textScaleFactor: 1.0,
+              style: textBold14(Colors.black),
             ),
           ),
           decoration: BoxDecoration(

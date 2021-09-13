@@ -55,94 +55,99 @@ class _InAppWebViewContainerState extends State<InAppWebViewContainer> {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
-    return Scaffold(
-        backgroundColor: Color(0xffffffff),
-        appBar: AppBar(
-          toolbarHeight: 0,
-          elevation: 0.0,
-          backgroundColor: (Color(0xffffffff)),
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-                color: Colors.white,
-                child: Row(
-                  children: [
-                    IconButton(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      icon: Icon(Icons.arrow_back, size: 30),
-                      onPressed: () => {Navigator.pop(context)},
-                    ),
-                  ],
-                )),
-            Container(
-                child: !launchUrl
-                    ? Center(
-                        child: Image.network(
-                          widget.url.fundKycDocPath,
-                          fit: BoxFit.fitHeight,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Center(
-                                child: CircularProgressIndicator(
-                              color: Theme.of(context).primaryColor,
-                            ));
-                          },
-                          errorBuilder: (context, error, stackTrace) =>
-                              Text('Some errors occurred!'),
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 0.85),
+        child: Scaffold(
+            backgroundColor: Color(0xffffffff),
+            appBar: AppBar(
+              toolbarHeight: 0,
+              elevation: 0.0,
+              backgroundColor: (Color(0xffffffff)),
+            ),
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                    color: Colors.white,
+                    child: Row(
+                      children: [
+                        IconButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          icon: Icon(Icons.arrow_back, size: 30),
+                          onPressed: () => {Navigator.pop(context)},
                         ),
-                      )
-                    : Expanded(
-                        child: Align(
-                        alignment: Alignment.center,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              widget.url.kycDocName,
-                              style: textNormal18(headingBlack),
-                            ),
-                            SizedBox(
-                              height: 20.0,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                String url = widget.url.fundKycDocPath;
-                                print(url);
-                                if (widget.url.fundKycDocPath.contains("pdf")) {
-                                  // open pdf viewer
-                                  openPdfViewer(context, url);
-                                } else {
-                                  // if (widget.url.fundKycDocPath.contains("ppt")) {
-                                  //   download file
-
-                                  if (Platform.isIOS) {
-                                    String docUrl = widget.url.fundKycDocPath;
-                                    print("docUrl:- $docUrl");
-                                    url = docUrl;
-                                    _launched = _launchInBrowser(url);
-                                  } else {
-                                    String googleLink =
-                                        "http://docs.google.com/viewer?url=";
-                                    String docUrl =
-                                        googleLink + widget.url.fundKycDocPath;
-                                    print("docUrl:- $docUrl");
-                                    url = docUrl;
-                                    _launched = _launchInBrowser(url);
-                                  }
-                                }
+                      ],
+                    )),
+                Container(
+                    child: !launchUrl
+                        ? Center(
+                            child: Image.network(
+                              widget.url.fundKycDocPath,
+                              fit: BoxFit.fitHeight,
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Center(
+                                    child: CircularProgressIndicator(
+                                  color: Theme.of(context).primaryColor,
+                                ));
                               },
-                              child: Text("Open File",
-                                  style: textNormal16(Colors.blue)),
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Text('Some errors occurred!'),
                             ),
-                          ],
-                        ),
-                      ))),
-            FutureBuilder<void>(future: _launched, builder: _launchStatus),
-          ],
-        ));
+                          )
+                        : Expanded(
+                            child: Align(
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  widget.url.kycDocName,
+                                  style: textNormal18(headingBlack),
+                                ),
+                                SizedBox(
+                                  height: 20.0,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    String url = widget.url.fundKycDocPath;
+                                    print(url);
+                                    if (widget.url.fundKycDocPath
+                                        .contains("pdf")) {
+                                      // open pdf viewer
+                                      openPdfViewer(context, url);
+                                    } else {
+                                      // if (widget.url.fundKycDocPath.contains("ppt")) {
+                                      //   download file
+
+                                      if (Platform.isIOS) {
+                                        String docUrl =
+                                            widget.url.fundKycDocPath;
+                                        print("docUrl:- $docUrl");
+                                        url = docUrl;
+                                        _launched = _launchInBrowser(url);
+                                      } else {
+                                        String googleLink =
+                                            "http://docs.google.com/viewer?url=";
+                                        String docUrl = googleLink +
+                                            widget.url.fundKycDocPath;
+                                        print("docUrl:- $docUrl");
+                                        url = docUrl;
+                                        _launched = _launchInBrowser(url);
+                                      }
+                                    }
+                                  },
+                                  child: Text("Open File",
+                                      style: textNormal16(Colors.blue)),
+                                ),
+                              ],
+                            ),
+                          ))),
+                FutureBuilder<void>(future: _launched, builder: _launchStatus),
+              ],
+            )));
   }
 
   void openPdfViewer(BuildContext context, String url) {

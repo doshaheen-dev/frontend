@@ -38,111 +38,118 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
     final double iHeight = 65;
 
     return WillPopScope(
-      onWillPop: _onBackPressed,
-      child: Scaffold(
-        backgroundColor: Color(0xffffffff),
-        body: Container(
-          child: Column(
-            children: [
-              Container(
-                  margin:
-                      const EdgeInsets.only(top: 60.0, left: 25.0, right: 25.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: (UserData.instance.userInfo.firstName == null ||
-                                UserData.instance.userInfo.firstName == '')
-                            ? Text(
-                                'Hello Investor',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 26.0,
-                                    fontFamily: FontFamilyMontserrat.name),
-                              )
-                            : Text(
-                                'Hello ${UserData.instance.userInfo.firstName}',
-                                style: textBold26(headingBlack),
-                              ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.of(context)
-                              .push(
-                                PageRouteBuilder(
-                                    pageBuilder:
-                                        (context, animation, anotherAnimation) {
-                                      return ProfilePicScreen(UserData
-                                          .instance.userInfo.profileImage);
-                                    },
-                                    transitionDuration:
-                                        Duration(milliseconds: 2000),
-                                    transitionsBuilder: (context, animation,
-                                        anotherAnimation, child) {
-                                      animation = CurvedAnimation(
-                                          curve: Curves.fastLinearToSlowEaseIn,
-                                          parent: animation);
-                                      return SlideTransition(
-                                        position: Tween(
-                                                begin: Offset(1.0, 0.0),
-                                                end: Offset(0.0, 0.0))
-                                            .animate(animation),
-                                        child: child,
-                                      );
-                                    }),
-                              )
-                              .then((_) => setState(() {}));
-                        },
-                        child: Container(
-                          height: 70,
-                          width: 70,
-                          child: CircleAvatar(
-                            radius: bRadius,
-                            backgroundColor: Theme.of(context).primaryColor,
-                            child: (UserData.instance.userInfo.profileImage ==
+        onWillPop: _onBackPressed,
+        child: MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+          child: Scaffold(
+            backgroundColor: Color(0xffffffff),
+            body: Container(
+              child: Column(
+                children: [
+                  Container(
+                      margin: const EdgeInsets.only(
+                          top: 60.0, left: 25.0, right: 25.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: (UserData.instance.userInfo.firstName ==
                                         null ||
-                                    UserData.instance.userInfo.profileImage ==
-                                        '')
-                                ? ImageCircle(
-                                    borderRadius: bRadius,
-                                    image: Image.asset(
-                                      'assets/images/UserProfile.png',
-                                      width: iHeight,
-                                      height: iHeight,
-                                      fit: BoxFit.fill,
-                                    ),
+                                    UserData.instance.userInfo.firstName == '')
+                                ? Text(
+                                    'Hello Investor',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 26.0,
+                                        fontFamily: FontFamilyMontserrat.name),
                                   )
-                                : ImageCircle(
-                                    borderRadius: bRadius,
-                                    image: Image.network(
-                                      UserData.instance.userInfo.profileImage,
-                                      width: iHeight,
-                                      height: iHeight,
-                                      fit: BoxFit.fill,
-                                    )),
+                                : Text(
+                                    'Hello ${UserData.instance.userInfo.firstName}',
+                                    style: textBold26(headingBlack),
+                                  ),
                           ),
-                        ),
-                      ),
-                    ],
-                  )),
-              Expanded(child: buildPageView())
-            ],
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context)
+                                  .push(
+                                    PageRouteBuilder(
+                                        pageBuilder: (context, animation,
+                                            anotherAnimation) {
+                                          return ProfilePicScreen(UserData
+                                              .instance.userInfo.profileImage);
+                                        },
+                                        transitionDuration:
+                                            Duration(milliseconds: 2000),
+                                        transitionsBuilder: (context, animation,
+                                            anotherAnimation, child) {
+                                          animation = CurvedAnimation(
+                                              curve:
+                                                  Curves.fastLinearToSlowEaseIn,
+                                              parent: animation);
+                                          return SlideTransition(
+                                            position: Tween(
+                                                    begin: Offset(1.0, 0.0),
+                                                    end: Offset(0.0, 0.0))
+                                                .animate(animation),
+                                            child: child,
+                                          );
+                                        }),
+                                  )
+                                  .then((_) => setState(() {}));
+                            },
+                            child: Container(
+                              height: 70,
+                              width: 70,
+                              child: CircleAvatar(
+                                radius: bRadius,
+                                backgroundColor: Theme.of(context).primaryColor,
+                                child:
+                                    (UserData.instance.userInfo.profileImage ==
+                                                null ||
+                                            UserData.instance.userInfo
+                                                    .profileImage ==
+                                                '')
+                                        ? ImageCircle(
+                                            borderRadius: bRadius,
+                                            image: Image.asset(
+                                              'assets/images/UserProfile.png',
+                                              width: iHeight,
+                                              height: iHeight,
+                                              fit: BoxFit.fill,
+                                            ),
+                                          )
+                                        : ImageCircle(
+                                            borderRadius: bRadius,
+                                            image: Image.network(
+                                              UserData.instance.userInfo
+                                                  .profileImage,
+                                              width: iHeight,
+                                              height: iHeight,
+                                              fit: BoxFit.fill,
+                                            )),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
+                  Expanded(child: buildPageView())
+                ],
+              ),
+            ),
+            bottomNavigationBar: BottomNavigationBar(
+              backgroundColor: Color(0xffffffff),
+              elevation: 0.0,
+              currentIndex: bottomSelectedIndex,
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              selectedFontSize: 0,
+              type: BottomNavigationBarType.fixed,
+              onTap: (index) {
+                bottomTapped(index);
+              },
+              items: buildBottomNavBarItems(),
+            ),
           ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Color(0xffffffff),
-          elevation: 0.0,
-          currentIndex: bottomSelectedIndex,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          selectedFontSize: 0,
-          type: BottomNavigationBarType.fixed,
-          onTap: (index) {
-            bottomTapped(index);
-          },
-          items: buildBottomNavBarItems(),
-        ),
-      ),
-    );
+        ));
   }
 
   List<BottomNavigationBarItem> buildBottomNavBarItems() {

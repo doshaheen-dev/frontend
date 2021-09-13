@@ -51,8 +51,10 @@ class _ProductDetailState extends State<ProductDetail> {
   @override
   Widget build(BuildContext context) {
     return ProgressHUD(
-      child: Builder(
-        builder: (context) => Scaffold(
+        child: Builder(
+      builder: (context) => MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: Scaffold(
             appBar: AppBar(
               toolbarHeight: 0,
               elevation: 0.0,
@@ -313,7 +315,7 @@ class _ProductDetailState extends State<ProductDetail> {
                           ),
                         ))))),
       ),
-    );
+    ));
   }
 
   Padding _createButtonLayout(BuildContext context) {

@@ -45,82 +45,85 @@ class _FundDetailState extends State<FundDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          child: Container(
-            margin: const EdgeInsets.only(top: 40.0, left: 15.0, right: 15.0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    child: IconButton(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      icon: Image.asset("assets/images/icon_close.png"),
-                      onPressed: () => {Navigator.pop(context)},
-                    ),
-                  ),
-                  Image(
-                    image: _likedFunds.fundLogo != ""
-                        ? NetworkImage(_likedFunds.fundLogo)
-                        : AssetImage("assets/images/dummy/investment1.png"),
-                    width: MediaQuery.of(context).size.width,
-                    height: 100,
-                    fit: BoxFit.fill,
-                  ),
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: Scaffold(
+            backgroundColor: Colors.white,
+            body: SingleChildScrollView(
+              child: Container(
+                margin:
+                    const EdgeInsets.only(top: 40.0, left: 15.0, right: 15.0),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        child: IconButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          icon: Image.asset("assets/images/icon_close.png"),
+                          onPressed: () => {Navigator.pop(context)},
+                        ),
+                      ),
+                      Image(
+                        image: _likedFunds.fundLogo != ""
+                            ? NetworkImage(_likedFunds.fundLogo)
+                            : AssetImage("assets/images/dummy/investment1.png"),
+                        width: MediaQuery.of(context).size.width,
+                        height: 100,
+                        fit: BoxFit.fill,
+                      ),
 
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                    child: _createFundHeader(),
-                  ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                        child: _createFundHeader(),
+                      ),
 
-                  Divider(color: HexColor("#E8E8E8")),
-                  // Fund overview
-                  Container(
-                    child: _createFundBody(),
-                  ),
+                      Divider(color: HexColor("#E8E8E8")),
+                      // Fund overview
+                      Container(
+                        child: _createFundBody(),
+                      ),
 
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    child: Row(
-                      children: [
-                        Expanded(
-                            flex: 1,
-                            child: Column(
-                              children: [
-                                Text(
-                                  "\$${_likedFunds.fundNewVal}",
-                                  style: textBlackNormal16(),
-                                ),
-                                Text("Target",
-                                    style: textNormal16(
-                                        Theme.of(context).primaryColor))
-                              ],
-                            )),
-                        // Expanded(
-                        //     flex: 1,
-                        //     child: Column(
-                        //       children: [
-                        //         Text(
-                        //           _likedFunds.minimumInvestment,
-                        //           style: textBlackNormal16(),
-                        //         ),
-                        //         Text("Min Per Investor",
-                        //             style: textNormal16(kDarkOrange))
-                        //       ],
-                        //   ))
-                      ],
-                    ),
-                  ),
-                ]),
-          ),
-        ));
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        child: Row(
+                          children: [
+                            Expanded(
+                                flex: 1,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "\$${_likedFunds.fundNewVal}",
+                                      style: textBlackNormal16(),
+                                    ),
+                                    Text("Target",
+                                        style: textNormal16(
+                                            Theme.of(context).primaryColor))
+                                  ],
+                                )),
+                            // Expanded(
+                            //     flex: 1,
+                            //     child: Column(
+                            //       children: [
+                            //         Text(
+                            //           _likedFunds.minimumInvestment,
+                            //           style: textBlackNormal16(),
+                            //         ),
+                            //         Text("Min Per Investor",
+                            //             style: textNormal16(kDarkOrange))
+                            //       ],
+                            //   ))
+                          ],
+                        ),
+                      ),
+                    ]),
+              ),
+            )));
   }
 
   Widget _createFundHeader() {

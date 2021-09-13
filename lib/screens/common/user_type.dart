@@ -18,46 +18,50 @@ class _UserTypeState extends State<UserType> {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
-    return Scaffold(
-        backgroundColor: Color(0xffffffff),
-        body: SafeArea(
-            child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                child: IconButton(
-                  icon: Icon(Icons.arrow_back, size: 30),
-                  onPressed: () => {Navigator.pop(context)},
-                ),
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: Scaffold(
+            backgroundColor: Color(0xffffffff),
+            body: SafeArea(
+                child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    child: IconButton(
+                      icon: Icon(Icons.arrow_back, size: 30),
+                      onPressed: () => {Navigator.pop(context)},
+                    ),
+                  ),
+                  Material(
+                      color: Colors.white,
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              color: Colors.white,
+                              margin:
+                                  const EdgeInsets.only(top: 80.0, left: 25.0),
+                              child: Text(
+                                "I am a",
+                                style: textBold(Colors.black, 26),
+                              ),
+                            ),
+                            Container(
+                              margin:
+                                  const EdgeInsets.only(top: 5.0, left: 25.0),
+                              child: Text(
+                                "Please choose your appropiate type",
+                                style: textNormal(textGrey, 16.0),
+                              ),
+                            ),
+                            Center(
+                              child: header(),
+                            )
+                          ])),
+                ],
               ),
-              Material(
-                  color: Colors.white,
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          color: Colors.white,
-                          margin: const EdgeInsets.only(top: 80.0, left: 25.0),
-                          child: Text(
-                            "I am a",
-                            style: textBold(Colors.black, 26),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(top: 5.0, left: 25.0),
-                          child: Text(
-                            "Please choose your appropiate type",
-                            style: textNormal(textGrey, 16.0),
-                          ),
-                        ),
-                        Center(
-                          child: header(),
-                        )
-                      ])),
-            ],
-          ),
-        )));
+            ))));
   }
 
   List<String> selectedCategory = [];

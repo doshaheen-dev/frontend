@@ -72,125 +72,133 @@ class _SignUpOTPState extends State<SignUpOTP> {
 
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
-    return Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 0,
-          elevation: 0.0,
-          backgroundColor: Color(0xffffffff),
-        ),
-        bottomNavigationBar: BottomAppBar(),
-        backgroundColor: Colors.white,
-        body: ProgressHUD(
-            child: Builder(
-          builder: (context) => SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    width: 60,
-                    height: 60,
-                    child: IconButton(
-                      icon: Icon(Icons.arrow_back, size: 30),
-                      onPressed: () => {Navigator.of(context).maybePop()},
-                    ),
-                  ),
-                  Column(
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: Scaffold(
+            appBar: AppBar(
+              toolbarHeight: 0,
+              elevation: 0.0,
+              backgroundColor: Color(0xffffffff),
+            ),
+            bottomNavigationBar: BottomAppBar(),
+            backgroundColor: Colors.white,
+            body: ProgressHUD(
+                child: Builder(
+              builder: (context) => SafeArea(
+                child: SingleChildScrollView(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                        margin: const EdgeInsets.only(top: 10.0, left: 25.0),
-                        child:
-                            Text(signUpHeader, style: textBold26(headingBlack)),
+                        width: 60,
+                        height: 60,
+                        child: IconButton(
+                          icon: Icon(Icons.arrow_back, size: 30),
+                          onPressed: () => {Navigator.of(context).maybePop()},
+                        ),
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 5.0, left: 25.0),
-                        child: Text(signUpSubHeader,
-                            style: textNormal16(textGrey)),
-                      ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: _createMobileFields(),
-                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            margin:
+                                const EdgeInsets.only(top: 10.0, left: 25.0),
+                            child: Text(signUpHeader,
+                                style: textBold26(headingBlack)),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 5.0, left: 25.0),
+                            child: Text(signUpSubHeader,
+                                style: textNormal16(textGrey)),
+                          ),
+                          SizedBox(
+                            height: 25,
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: _createMobileFields(),
+                          ),
 
-                      //CAPTCHA
-                      _createCaptcha(context),
+                          //CAPTCHA
+                          _createCaptcha(context),
 
-                      //SIGN UP BUTTON
-                      Container(
-                          margin: const EdgeInsets.only(
-                              top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              FocusScope.of(context).requestFocus(FocusNode());
+                          //SIGN UP BUTTON
+                          Container(
+                              margin: const EdgeInsets.only(
+                                  top: 5.0,
+                                  left: 25.0,
+                                  bottom: 20,
+                                  right: 25.0),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
 
-                              if (selectedCountry == null) {
-                                showSnackBar(context, errorCountryCode);
-                                return;
-                              }
+                                  if (selectedCountry == null) {
+                                    showSnackBar(context, errorCountryCode);
+                                    return;
+                                  }
 
-                              if (phoneController.text.isEmpty) {
-                                showSnackBar(context, correctMobile);
-                                return;
-                              }
-                              if (selectedCountry.maxLength !=
-                                  phoneController.text.length) {
-                                showSnackBar(context,
-                                    "Phone number should be of ${selectedCountry.maxLength} digits.");
-                                return;
-                              }
+                                  if (phoneController.text.isEmpty) {
+                                    showSnackBar(context, correctMobile);
+                                    return;
+                                  }
+                                  if (selectedCountry.maxLength !=
+                                      phoneController.text.length) {
+                                    showSnackBar(context,
+                                        "Phone number should be of ${selectedCountry.maxLength} digits.");
+                                    return;
+                                  }
 
-                              if (!captchaController
-                                  .verify(textConroller.value.text)) {
-                                showSnackBar(context, correctCaptcha);
-                                textConroller.clear();
-                                captchaController.refresh();
-                                return;
-                              }
+                                  if (!captchaController
+                                      .verify(textConroller.value.text)) {
+                                    showSnackBar(context, correctCaptcha);
+                                    textConroller.clear();
+                                    captchaController.refresh();
+                                    return;
+                                  }
 
-                              progress = ProgressHUD.of(context);
-                              progress?.showWithText(sendingOtp);
-                              _getOtp(phoneController.text);
-                            },
-                            style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.all(0.0),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18))),
-                            child: Ink(
-                              decoration: BoxDecoration(
-                                  gradient: LinearGradient(colors: [
-                                    Theme.of(context).primaryColor,
-                                    Theme.of(context).primaryColor
-                                  ]),
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: 60,
-                                alignment: Alignment.center,
-                                child: Text(sendOtpSecret,
-                                    style: textWhiteBold18()),
-                              ),
-                            ),
-                          )),
+                                  progress = ProgressHUD.of(context);
+                                  progress?.showWithText(sendingOtp);
+                                  _getOtp(phoneController.text);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.all(0.0),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18))),
+                                child: Ink(
+                                  decoration: BoxDecoration(
+                                      gradient: LinearGradient(colors: [
+                                        Theme.of(context).primaryColor,
+                                        Theme.of(context).primaryColor
+                                      ]),
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 60,
+                                    alignment: Alignment.center,
+                                    child: Text(sendOtpSecret,
+                                        style: textWhiteBold18()),
+                                  ),
+                                ),
+                              )),
 
-                      Container(
-                        margin: const EdgeInsets.only(
-                            left: 25.0, bottom: 20, right: 25.0),
-                        width: MediaQuery.of(context).size.width,
-                        child: Text(
-                            "*You will recieve a one time password(Secret Code) on your mobile.",
-                            style: textNormal16(textGrey)),
+                          Container(
+                            margin: const EdgeInsets.only(
+                                left: 25.0, bottom: 20, right: 25.0),
+                            width: MediaQuery.of(context).size.width,
+                            child: Text(
+                                "*You will recieve a one time password(Secret Code) on your mobile.",
+                                style: textNormal16(textGrey)),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-        )));
+            ))));
   }
 
   Row _createMobileFields() {

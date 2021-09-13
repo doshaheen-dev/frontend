@@ -141,103 +141,107 @@ class _InvestorProfileState extends State<InvestorProfile> {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: ProgressHUD(
-          child: Builder(
-        builder: (context) => SingleChildScrollView(
-            child: Column(
-          children: [
-            Container(
-                child: setUserProfileView(context),
-                margin: EdgeInsets.only(right: 25.0, left: 25.0, bottom: 10.0)),
-            SizedBox(
-              height: 10.0,
-            ),
-            Row(
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+      child: Scaffold(
+          backgroundColor: Colors.white,
+          body: ProgressHUD(
+              child: Builder(
+            builder: (context) => SingleChildScrollView(
+                child: Column(
               children: [
-                //NEXT BUTTON
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 25.0, right: 10.0),
-                    child: ElevatedButton(
-                      onPressed: !isDataChanged
-                          ? null
-                          : () {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              // on click
+                Container(
+                    child: setUserProfileView(context),
+                    margin:
+                        EdgeInsets.only(right: 25.0, left: 25.0, bottom: 10.0)),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Row(
+                  children: [
+                    //NEXT BUTTON
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 25.0, right: 10.0),
+                        child: ElevatedButton(
+                          onPressed: !isDataChanged
+                              ? null
+                              : () {
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
+                                  // on click
 
-                              submitDetails(
-                                  _firstNameController.text.trim(),
-                                  _lastnameController.text.trim(),
-                                  _emailController.text.trim(),
-                                  _mobileController.text.trim(),
-                                  countryCode,
-                                  _addressController.text,
-                                  _verificationId,
-                                  _emailVerificationId,
-                                  context);
-                            },
-                      style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.all(0.0),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14))),
-                      child: Ink(
-                        decoration: isDataChanged
-                            ? BoxDecoration(
-                                gradient: LinearGradient(colors: [
-                                  Theme.of(context).primaryColor,
-                                  Theme.of(context).primaryColor
-                                ]),
-                                borderRadius: BorderRadius.circular(10))
-                            : BoxDecoration(
-                                gradient: LinearGradient(
-                                    colors: [kwhiteGrey, kwhiteGrey]),
-                                borderRadius: BorderRadius.circular(10)),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 50,
-                          alignment: Alignment.center,
-                          child: Text("Update", style: textWhiteBold16()),
+                                  submitDetails(
+                                      _firstNameController.text.trim(),
+                                      _lastnameController.text.trim(),
+                                      _emailController.text.trim(),
+                                      _mobileController.text.trim(),
+                                      countryCode,
+                                      _addressController.text,
+                                      _verificationId,
+                                      _emailVerificationId,
+                                      context);
+                                },
+                          style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.all(0.0),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14))),
+                          child: Ink(
+                            decoration: isDataChanged
+                                ? BoxDecoration(
+                                    gradient: LinearGradient(colors: [
+                                      Theme.of(context).primaryColor,
+                                      Theme.of(context).primaryColor
+                                    ]),
+                                    borderRadius: BorderRadius.circular(10))
+                                : BoxDecoration(
+                                    gradient: LinearGradient(
+                                        colors: [kwhiteGrey, kwhiteGrey]),
+                                    borderRadius: BorderRadius.circular(10)),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 50,
+                              alignment: Alignment.center,
+                              child: Text("Update", style: textWhiteBold16()),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
 
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 10, right: 25.0),
-                    child: ElevatedButton(
-                        onPressed: () {
-                          openLogoutDialog(
-                              context, "Are you sure you want to logout?");
-                        },
-                        style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.all(0.0),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14))),
-                        child: Ink(
-                            decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: 50,
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "Logout",
-                                  style: textWhiteBold16(),
-                                )))),
-                  ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 10, right: 25.0),
+                        child: ElevatedButton(
+                            onPressed: () {
+                              openLogoutDialog(
+                                  context, "Are you sure you want to logout?");
+                            },
+                            style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(0.0),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(14))),
+                            child: Ink(
+                                decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 50,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Logout",
+                                      style: textWhiteBold16(),
+                                    )))),
+                      ),
+                    )
+                  ],
                 )
               ],
-            )
-          ],
-        )),
-      )),
+            )),
+          ))),
     );
   }
 

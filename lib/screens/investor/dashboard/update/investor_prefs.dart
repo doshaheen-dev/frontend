@@ -76,11 +76,6 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void didChangeDependencies() {
     if (_isInit) {
       _investmentRange = _fetchFundSlots(context);
@@ -148,20 +143,22 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: ProgressHUD(
-            child: Builder(
-          builder: (context) => SingleChildScrollView(
-              child: Column(
-            children: [
-              Container(
-                  child: setUserProfileView(context),
-                  margin: EdgeInsets.only(
-                      top: 50, right: 25.0, left: 25.0, bottom: 10.0)),
-            ],
-          )),
-        )));
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: Scaffold(
+            backgroundColor: Colors.white,
+            body: ProgressHUD(
+                child: Builder(
+              builder: (context) => SingleChildScrollView(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                      child: setUserProfileView(context),
+                      margin: EdgeInsets.only(top: 10, bottom: 10.0)),
+                ],
+              )),
+            ))));
   }
 
   Widget setUserProfileView(BuildContext context) {
@@ -169,6 +166,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
+          margin: EdgeInsets.only(top: 10.0),
           child: IconButton(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
@@ -177,147 +175,151 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
           ),
         ),
         Container(
-            margin: const EdgeInsets.only(top: 10.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: (UserData.instance.userInfo.firstName == null ||
-                          UserData.instance.userInfo.firstName == '')
-                      ? Text(
-                          'Hello Investor',
-                          style: textBold26(headingBlack),
-                        )
-                      : Text(
-                          'Hello ${UserData.instance.userInfo.firstName}',
-                          style: textBold26(headingBlack),
-                        ),
-                ),
-                openProfilePicture(context),
-              ],
-            )),
-        SizedBox(
-          height: 40,
-        ),
-        Text(
-          "You can edit your preferences here",
-          style: textNormal18(headingBlack),
-        ),
-
-        Container(
-          margin: const EdgeInsets.only(top: 10.0, bottom: 10),
-          width: MediaQuery.of(context).size.width,
-          height: 80,
-          decoration: customDecoration(),
-          child: setInvestmentLimit(context),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 10.0, bottom: 10),
-          width: MediaQuery.of(context).size.width,
-          // height: 80,
-          decoration: customDecoration(),
+          margin: EdgeInsets.only(
+            right: 25.0,
+            left: 25.0,
+          ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Visibility(
-                  visible: infoItemList.isEmpty ? false : true,
-                  child: Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Text(
-                        "Investment Choices",
-                        style: textNormal12(Colors.grey),
-                      ))),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Visibility(
-                      visible: infoItemList.isEmpty ? true : false,
-                      child: Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Text("Investment Choices",
-                              style: textNormal18(Colors.grey[600])))),
-                  Visibility(
-                      visible: infoItemList.isEmpty ? false : true,
-                      child: Container(
-                        // height: 50,
-                        width: 295,
-                        child: newSetChipList(),
-                      )),
-                  Spacer(),
-                  IconButton(
-                      onPressed: () {
-                        openInvestmentList();
-                      },
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      icon: Icon(Icons.arrow_drop_down))
+                  Expanded(
+                    child: (UserData.instance.userInfo.firstName == null ||
+                            UserData.instance.userInfo.firstName == '')
+                        ? Text(
+                            'Hello Investor',
+                            style: textBold26(headingBlack),
+                          )
+                        : Text(
+                            'Hello ${UserData.instance.userInfo.firstName}',
+                            style: textBold26(headingBlack),
+                          ),
+                  ),
+                  openProfilePicture(context),
                 ],
-              )
+              ),
+              SizedBox(height: 10.0),
+              Text(
+                "You can edit your preferences here",
+                style: textNormal18(headingBlack),
+              ),
+
+              Container(
+                margin: const EdgeInsets.only(top: 10.0, bottom: 10),
+                width: MediaQuery.of(context).size.width,
+                height: 80,
+                decoration: customDecoration(),
+                child: setInvestmentLimit(context),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                decoration: customDecoration(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Visibility(
+                        visible: infoItemList.isEmpty ? false : true,
+                        child: Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Text(
+                              "Investment Choices",
+                              style: textNormal12(Colors.grey),
+                            ))),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Visibility(
+                            visible: infoItemList.isEmpty ? true : false,
+                            child: Padding(
+                                padding: EdgeInsets.all(10.0),
+                                child: Text("Investment Choices",
+                                    style: textNormal18(Colors.grey[600])))),
+                        Visibility(
+                            visible: infoItemList.isEmpty ? false : true,
+                            child: Container(
+                              // height: 50,
+                              width: 295,
+                              child: newSetChipList(),
+                            )),
+                        Spacer(),
+                        IconButton(
+                            onPressed: () {
+                              openInvestmentList();
+                            },
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            icon: Icon(Icons.arrow_drop_down))
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+
+              //NEXT BUTTON
+              Container(
+                  child: ElevatedButton(
+                onPressed: !isUpdateActivated
+                    ? null
+                    : () async {
+                        // on click
+                        var listIds = [];
+                        if (localItemList.isEmpty && productsList.isNotEmpty) {
+                          for (int i = 0; i < productsList.length; i++) {
+                            listIds.add(productsList[i]);
+                          }
+                        } else {
+                          for (int i = 0; i < localItemList.length; i++) {
+                            for (int j = 0; j < infoItemList.length; j++) {
+                              if (localItemList[i].name == infoItemList[j]) {
+                                listIds.add(localItemList[i].id);
+                                break;
+                              }
+                            }
+                          }
+                        }
+
+                        if (listIds.isNotEmpty) {
+                          final requestModel =
+                              InvestorSignupPreferences.instance;
+                          requestModel.productIds = listIds.join(',');
+                        }
+
+                        var progress = ProgressHUD.of(context);
+                        progress?.showWithText('Updating Preferences...');
+                        await submitPreference(progress, context);
+
+                        return;
+                      },
+                style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.all(0.0),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14))),
+                child: Ink(
+                  decoration: isUpdateActivated
+                      ? BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(10))
+                      : BoxDecoration(
+                          color: kwhiteGrey,
+                          borderRadius: BorderRadius.circular(10)),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 50,
+                    alignment: Alignment.center,
+                    child: Text("Update", style: textWhiteBold16()),
+                  ),
+                ),
+              ))
             ],
           ),
         ),
-        SizedBox(
-          height: 10,
-        ),
-
-        //NEXT BUTTON
-        Container(
-            child: ElevatedButton(
-          onPressed: !isUpdateActivated
-              ? null
-              : () async {
-                  // on click
-                  var listIds = [];
-                  if (localItemList.isEmpty && productsList.isNotEmpty) {
-                    for (int i = 0; i < productsList.length; i++) {
-                      listIds.add(productsList[i]);
-                    }
-                  } else {
-                    for (int i = 0; i < localItemList.length; i++) {
-                      for (int j = 0; j < infoItemList.length; j++) {
-                        if (localItemList[i].name == infoItemList[j]) {
-                          listIds.add(localItemList[i].id);
-                          break;
-                        }
-                      }
-                    }
-                  }
-
-                  if (listIds.isNotEmpty) {
-                    final requestModel = InvestorSignupPreferences.instance;
-                    requestModel.productIds = listIds.join(',');
-                  }
-
-                  var progress = ProgressHUD.of(context);
-                  progress?.showWithText('Updating Preferences...');
-                  await submitPreference(progress, context);
-
-                  return;
-                },
-          style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.all(0.0),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14))),
-          child: Ink(
-            decoration: isUpdateActivated
-                ? BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(10))
-                : BoxDecoration(
-                    color: kwhiteGrey, borderRadius: BorderRadius.circular(10)),
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 50,
-              alignment: Alignment.center,
-              child: Text("Update", style: textWhiteBold16()),
-            ),
-          ),
-        ))
       ],
     );
   }
@@ -409,44 +411,46 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
   }
 
   Widget getDropDownSearch(List<Map<String, dynamic>> items) {
-    return DropdownSearch<Map<String, dynamic>>(
-      mode: Mode.MENU,
-      showSearchBox: false,
-      showSelectedItem: false,
-      showClearButton: false,
-      items: items,
-      itemAsString: (Map<String, dynamic> i) => i['text'],
-      hint: "",
-      onChanged: (map) {
-        setState(() {
-          selectedItem = map;
-          selectedInvestmentLimit = map['value'];
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: DropdownSearch<Map<String, dynamic>>(
+          mode: Mode.BOTTOM_SHEET,
+          showSearchBox: false,
+          showSelectedItem: false,
+          showClearButton: false,
+          items: items,
+          itemAsString: (Map<String, dynamic> i) => i['text'],
+          hint: "",
+          onChanged: (map) {
+            setState(() {
+              selectedItem = map;
+              selectedInvestmentLimit = map['value'];
 
-          for (var i = 0; i < localInvestmentRange.length; i++) {
-            if (localInvestmentRange[i].range == selectedInvestmentLimit) {
-              slotId = localInvestmentRange[i].id.toString();
-            }
-          }
-          if (selectedItem.isNotEmpty) {
-            activateUpdate(true);
-          } else {
-            activateUpdate(false);
-          }
-          final requestModel = InvestorSignupPreferences.instance;
-          requestModel.slotId = '$slotId';
-        });
-      },
-      dropdownSearchDecoration: InputDecoration(
-        labelText: 'Investment Range',
-        labelStyle: textNormal18(Colors.grey[600]),
-        enabledBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.all(const Radius.circular(10.0)),
-          borderSide: BorderSide(color: Colors.transparent),
-        ),
-      ),
-      selectedItem: selectedItem,
-      maxHeight: 700,
-    );
+              for (var i = 0; i < localInvestmentRange.length; i++) {
+                if (localInvestmentRange[i].range == selectedInvestmentLimit) {
+                  slotId = localInvestmentRange[i].id.toString();
+                }
+              }
+              if (selectedItem.isNotEmpty) {
+                activateUpdate(true);
+              } else {
+                activateUpdate(false);
+              }
+              final requestModel = InvestorSignupPreferences.instance;
+              requestModel.slotId = '$slotId';
+            });
+          },
+          dropdownSearchDecoration: InputDecoration(
+            labelText: 'Investment Range',
+            labelStyle: textNormal18(Colors.grey[600]),
+            enabledBorder: UnderlineInputBorder(
+              borderRadius: BorderRadius.all(const Radius.circular(10.0)),
+              borderSide: BorderSide(color: Colors.transparent),
+            ),
+          ),
+          selectedItem: selectedItem,
+          maxHeight: 700,
+        ));
   }
 
   // ------------------------------------------------------------------//
@@ -464,35 +468,6 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
     );
   }
 
-  // ------------------------------------------------------------------//
-
-  Widget investmentChoicesDropDown(List<Map<String, dynamic>> items) {
-    return DropdownSearch<Map<String, dynamic>>(
-      mode: Mode.MENU,
-      showSearchBox: false,
-      showSelectedItem: false,
-      showClearButton: true,
-      items: items,
-      itemAsString: (Map<String, dynamic> i) => i['text'],
-      hint: "",
-      onChanged: (map) {
-        setState(() {
-          selectedProductType = map['value'];
-        });
-      },
-      dropdownSearchDecoration: InputDecoration(
-        labelText: 'Investment Choices',
-        labelStyle: textNormal18(Colors.grey[600]),
-        enabledBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.all(const Radius.circular(10.0)),
-          borderSide: BorderSide(color: Colors.transparent),
-        ),
-      ),
-      selectedItem: null,
-      maxHeight: 700,
-    );
-  }
-
   void openInvestmentList() {
     showModalBottomSheet(
         isDismissible: false,
@@ -504,68 +479,73 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
         builder: (context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
-            return Scaffold(
-                body: SingleChildScrollView(
-                    child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FutureBuilder(
-                            future: _productTypes,
-                            builder: (ctx, dataSnapshot) {
-                              if (dataSnapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Center(
-                                    child: CircularProgressIndicator(
-                                  backgroundColor:
-                                      Theme.of(context).primaryColor,
-                                  valueColor: new AlwaysStoppedAnimation<Color>(
-                                      Colors.amber),
-                                ));
-                              } else {
-                                if (dataSnapshot.error != null) {
-                                  return Center(
-                                      child: Text("An error occurred!"));
-                                } else {
-                                  return Consumer<productProvider.ProductTypes>(
-                                    builder: (ctx, data, child) => Column(
-                                      children: [
-                                        Padding(
-                                            padding: EdgeInsets.all(10.0),
-                                            child: Row(children: [
-                                              Text(
-                                                "Choose your invesment choices",
-                                                textAlign: TextAlign.start,
-                                                style: textBold16(headingBlack),
-                                              ),
-                                              Spacer(),
-                                              InkWell(
-                                                  onTap: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: Text(
-                                                    "Done",
-                                                    style: textNormal16(
+            return MediaQuery(
+                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                child: Scaffold(
+                    body: SingleChildScrollView(
+                        child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FutureBuilder(
+                                future: _productTypes,
+                                builder: (ctx, dataSnapshot) {
+                                  if (dataSnapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return Center(
+                                        child: CircularProgressIndicator(
+                                      backgroundColor:
+                                          Theme.of(context).primaryColor,
+                                      valueColor:
+                                          new AlwaysStoppedAnimation<Color>(
+                                              Colors.amber),
+                                    ));
+                                  } else {
+                                    if (dataSnapshot.error != null) {
+                                      return Center(
+                                          child: Text("An error occurred!"));
+                                    } else {
+                                      return Consumer<
+                                          productProvider.ProductTypes>(
+                                        builder: (ctx, data, child) => Column(
+                                          children: [
+                                            Padding(
+                                                padding: EdgeInsets.all(10.0),
+                                                child: Row(children: [
+                                                  Text(
+                                                    "Choose your invesment choices",
+                                                    textAlign: TextAlign.start,
+                                                    style: textBold16(
                                                         headingBlack),
-                                                  ))
-                                            ])),
-                                        ListView.builder(
-                                          itemBuilder: (ctx, index) {
-                                            checkData(data, index);
-                                            return Container(
-                                              child: _createItemCell(
-                                                  data.types[index]),
-                                            );
-                                          },
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          itemCount: data.types.length,
-                                          shrinkWrap: true,
+                                                  ),
+                                                  Spacer(),
+                                                  InkWell(
+                                                      onTap: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Text(
+                                                        "Done",
+                                                        style: textNormal16(
+                                                            headingBlack),
+                                                      ))
+                                                ])),
+                                            ListView.builder(
+                                              itemBuilder: (ctx, index) {
+                                                checkData(data, index);
+                                                return Container(
+                                                  child: _createItemCell(
+                                                      data.types[index]),
+                                                );
+                                              },
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
+                                              itemCount: data.types.length,
+                                              shrinkWrap: true,
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  );
-                                }
-                              }
-                            }))));
+                                      );
+                                    }
+                                  }
+                                })))));
           });
         });
   }
@@ -584,63 +564,66 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
         _checkOption(item);
       }
     }
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        InkWell(
-          highlightColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          onTap: () {
-            setState(() {
-              item.isCheck = !item.isCheck;
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            InkWell(
+              highlightColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              onTap: () {
+                setState(() {
+                  item.isCheck = !item.isCheck;
 
-              if (!item.isCheck) {
-                infoItemList.remove(item.name);
-                _uncheckOption(item);
-              } else {
-                infoItemList.add(item.name);
-                _checkOption(item);
-              }
-              if (infoItemList.isNotEmpty) {
-                activateUpdate(true);
-              } else {
-                activateUpdate(false);
-              }
-            });
-          },
-          child: Container(
-              height: 50.0,
-              color: infoItemList.contains(item.name)
-                  ? Theme.of(context).primaryColor
-                  : Colors.white,
-              // margin: EdgeInsets.only(left: 10, right: 10.0),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(children: [
-                  Text(item.name,
-                      textAlign: TextAlign.center,
-                      style: textNormal18(infoItemList.contains(item.name)
-                          ? Colors.white
-                          : headingBlack)),
-                  Spacer(),
-                  Visibility(
-                      visible: infoItemList.contains(item.name) ? true : false,
-                      child: Center(
-                        child: IconButton(
-                          onPressed: () {},
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          icon: Icon(
-                            Icons.check,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ))
-                ]),
-              )),
-        )
-      ],
-    );
+                  if (!item.isCheck) {
+                    infoItemList.remove(item.name);
+                    _uncheckOption(item);
+                  } else {
+                    infoItemList.add(item.name);
+                    _checkOption(item);
+                  }
+                  if (infoItemList.isNotEmpty) {
+                    activateUpdate(true);
+                  } else {
+                    activateUpdate(false);
+                  }
+                });
+              },
+              child: Container(
+                  height: 50.0,
+                  color: infoItemList.contains(item.name)
+                      ? Theme.of(context).primaryColor
+                      : Colors.white,
+                  // margin: EdgeInsets.only(left: 10, right: 10.0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(children: [
+                      Text(item.name,
+                          textAlign: TextAlign.center,
+                          style: textNormal18(infoItemList.contains(item.name)
+                              ? Colors.white
+                              : headingBlack)),
+                      Spacer(),
+                      Visibility(
+                          visible:
+                              infoItemList.contains(item.name) ? true : false,
+                          child: Center(
+                            child: IconButton(
+                              onPressed: () {},
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              icon: Icon(
+                                Icons.check,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ))
+                    ]),
+                  )),
+            )
+          ],
+        ));
   }
 
   int tag = -1;
@@ -733,10 +716,12 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
           await SignUpService.updateUserPreferences(requestModel);
       progress.dismiss();
       activateUpdate(false);
+      showSnackBar(context, "UPDATE 1:- ${UserData.instance.userInfo.token}");
+
       if (signedUpUser.type == 'success') {
         requestModel.clear();
         UserData userData = UserData(
-          signedUpUser.data.token,
+          UserData.instance.userInfo.token,
           signedUpUser.data.firstName,
           "",
           signedUpUser.data.lastName,
@@ -757,6 +742,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
         final userJson = jsonEncode(userData);
         prefs.setString('UserInfo', userJson);
         UserData.instance.userInfo = userData;
+        showSnackBar(context, "UPDATE 2:- ${UserData.instance.userInfo.token}");
 
         getSelectedRange(
             signedUpUser.data.slotId.toString(), signedUpUser.data.productIds);
