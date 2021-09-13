@@ -216,12 +216,14 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         child: Text(
           "Login",
+          textScaleFactor: 1.0,
           style: textNormal16(Theme.of(context).primaryColor),
         ));
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      content: Text(message, style: textNormal18(headingBlack)),
+      content: Text(message,
+          textScaleFactor: 1.0, style: textNormal18(headingBlack)),
       actions: [
         positiveButton,
       ],

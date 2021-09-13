@@ -109,150 +109,167 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: ProgressHUD(
-            child: Builder(
-                builder: (context) => SingleChildScrollView(
-                      child: Container(
-                          margin: EdgeInsets.only(top: 10.0, bottom: 20.0),
-                          child: Column(
-                            children: [
-                              Container(
-                                child: setUserProfileView(context),
-                                margin:
-                                    EdgeInsets.only(left: 25.0, right: 25.0),
-                              ),
-                              Row(
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: Scaffold(
+            backgroundColor: Colors.white,
+            body: ProgressHUD(
+                child: Builder(
+                    builder: (context) => SingleChildScrollView(
+                          child: Container(
+                              margin: EdgeInsets.only(top: 10.0, bottom: 20.0),
+                              child: Column(
                                 children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: // UPDATE
-                                        Container(
-                                            margin: const EdgeInsets.only(
-                                                top: 5.0,
-                                                left: 25.0,
-                                                bottom: 10,
-                                                right: 10.0),
-                                            child: ElevatedButton(
-                                              onPressed: !isDataChanged
-                                                  ? null
-                                                  : () {
-                                                      // on click
-
-                                                      FocusScope.of(context)
-                                                          .requestFocus(
-                                                              FocusNode());
-                                                      String _phoneNumber =
-                                                          "+${selectedCountry.dialCode}" +
-                                                              _mobileController
-                                                                  .text
-                                                                  .toString()
-                                                                  .trim();
-
-                                                      if (_phoneNumber !=
-                                                              UserData
-                                                                  .instance
-                                                                  .userInfo
-                                                                  .mobileNo ||
-                                                          _companyEmailController
-                                                                  .text
-                                                                  .toString()
-                                                                  .trim() !=
-                                                              UserData
-                                                                  .instance
-                                                                  .userInfo
-                                                                  .emailId) {
-                                                        progress =
-                                                            ProgressHUD.of(
-                                                                context);
-                                                        progress?.showWithText(
-                                                            'Updating Profile...');
-                                                        submitDetails(
-                                                            _companyEmailController
-                                                                .text
-                                                                .trim(),
-                                                            _phoneNumber,
-                                                            _verificationId,
-                                                            _emailVerificationId);
-
-                                                        return;
-                                                      }
-                                                      showSnackBar(context,
-                                                          "Please enter any new data for updation.");
-                                                    },
-                                              style: ElevatedButton.styleFrom(
-                                                padding: EdgeInsets.all(0.0),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(18),
-                                                ),
-                                              ),
-                                              child: Ink(
-                                                decoration: isDataChanged
-                                                    ? BoxDecoration(
-                                                        color: Theme.of(context)
-                                                            .primaryColor,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(15))
-                                                    : BoxDecoration(
-                                                        color: kwhiteGrey,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(15),
-                                                      ),
-                                                child: Container(
-                                                  width: MediaQuery.of(context)
-                                                      .size
-                                                      .width,
-                                                  height: 45,
-                                                  alignment: Alignment.center,
-                                                  child: Text(
-                                                    "Update",
-                                                    style: textWhiteBold16(),
-                                                  ),
-                                                ),
-                                              ),
-                                            )),
+                                  Container(
+                                    child: setUserProfileView(context),
+                                    margin: EdgeInsets.only(
+                                        left: 25.0, right: 25.0),
                                   ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      margin: const EdgeInsets.only(
-                                          left: 10.0, bottom: 10, right: 25.0),
-                                      child: ElevatedButton(
-                                          onPressed: () {
-                                            openLogoutDialog(context,
-                                                "Are you sure you want to logout?");
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                              padding: EdgeInsets.all(0.0),
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          18))),
-                                          child: Ink(
-                                            decoration: BoxDecoration(
-                                                color: Colors.red,
-                                                borderRadius:
-                                                    BorderRadius.circular(15)),
-                                            child: Container(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                height: 45,
-                                                alignment: Alignment.center,
-                                                child: Text("Logout",
-                                                    style: textWhiteBold16())),
-                                          )),
-                                    ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: // UPDATE
+                                            Container(
+                                                margin: const EdgeInsets.only(
+                                                    top: 5.0,
+                                                    left: 25.0,
+                                                    bottom: 10,
+                                                    right: 10.0),
+                                                child: ElevatedButton(
+                                                  onPressed: !isDataChanged
+                                                      ? null
+                                                      : () {
+                                                          // on click
+
+                                                          FocusScope.of(context)
+                                                              .requestFocus(
+                                                                  FocusNode());
+                                                          String _phoneNumber =
+                                                              "+${selectedCountry.dialCode}" +
+                                                                  _mobileController
+                                                                      .text
+                                                                      .toString()
+                                                                      .trim();
+
+                                                          if (_phoneNumber !=
+                                                                  UserData
+                                                                      .instance
+                                                                      .userInfo
+                                                                      .mobileNo ||
+                                                              _companyEmailController
+                                                                      .text
+                                                                      .toString()
+                                                                      .trim() !=
+                                                                  UserData
+                                                                      .instance
+                                                                      .userInfo
+                                                                      .emailId) {
+                                                            progress =
+                                                                ProgressHUD.of(
+                                                                    context);
+                                                            progress?.showWithText(
+                                                                'Updating Profile...');
+                                                            submitDetails(
+                                                                _companyEmailController
+                                                                    .text
+                                                                    .trim(),
+                                                                _phoneNumber,
+                                                                _verificationId,
+                                                                _emailVerificationId);
+
+                                                            return;
+                                                          }
+                                                          showSnackBar(context,
+                                                              "Please enter any new data for updation.");
+                                                        },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    padding:
+                                                        EdgeInsets.all(0.0),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              18),
+                                                    ),
+                                                  ),
+                                                  child: Ink(
+                                                    decoration: isDataChanged
+                                                        ? BoxDecoration(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .primaryColor,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        15))
+                                                        : BoxDecoration(
+                                                            color: kwhiteGrey,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        15),
+                                                          ),
+                                                    child: Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      height: 45,
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                        "Update",
+                                                        style:
+                                                            textWhiteBold16(),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                          margin: const EdgeInsets.only(
+                                              left: 10.0,
+                                              bottom: 10,
+                                              right: 25.0),
+                                          child: ElevatedButton(
+                                              onPressed: () {
+                                                openLogoutDialog(context,
+                                                    "Are you sure you want to logout?");
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                  padding: EdgeInsets.all(0.0),
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              18))),
+                                              child: Ink(
+                                                decoration: BoxDecoration(
+                                                    color: Colors.red,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15)),
+                                                child: Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    height: 45,
+                                                    alignment: Alignment.center,
+                                                    child: Text("Logout",
+                                                        style:
+                                                            textWhiteBold16())),
+                                              )),
+                                        ),
+                                      )
+                                    ],
                                   )
                                 ],
-                              )
-                            ],
-                          )),
-                    ))));
+                              )),
+                        )))));
   }
 
   void setUserInformation() {
@@ -320,6 +337,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
         },
         child: Text(
           "Yes",
+          textScaleFactor: 1.0,
           style: textNormal16(Theme.of(context).primaryColor),
         ));
 
@@ -329,6 +347,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
         },
         child: Text(
           "No",
+          textScaleFactor: 1.0,
           style: textNormal16(Theme.of(context).primaryColor),
         ));
 
@@ -336,6 +355,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
     AlertDialog alert = AlertDialog(
       content: Text(
         message,
+        textScaleFactor: 1.0,
         style: textNormal18(headingBlack),
       ),
       actions: [positiveButton, negativeButton],
@@ -513,12 +533,14 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
         },
         child: Text(
           "Ok",
+          textScaleFactor: 1.0,
           style: textNormal16(Theme.of(context).primaryColor),
         ));
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      content: Text(message, style: textNormal18(headingBlack)),
+      content: Text(message,
+          textScaleFactor: 1.0, style: textNormal18(headingBlack)),
       actions: [
         positiveButton,
       ],

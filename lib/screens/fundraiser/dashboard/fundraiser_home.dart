@@ -75,35 +75,38 @@ class _FundraiserHomeState extends State<FundraiserHome> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(children: [
-        Container(
-          margin: const EdgeInsets.only(left: 25.0, right: 25.0),
-          child: _createHeader(),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Expanded(
-          child: Scrollbar(isAlwaysShown: true, child: addFundsView(context)),
-        ),
-      ]),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: Container(
-        child: Visibility(
-          visible: _fundsAvailable,
-          child: FloatingActionButton.extended(
-            onPressed: () {
-              openAddNewFunds();
-            },
-            label: const Text('Add Funds'),
-            icon: const Icon(Icons.add),
-            backgroundColor: Theme.of(context).primaryColor,
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: Column(children: [
+            Container(
+              margin: const EdgeInsets.only(left: 25.0, right: 25.0),
+              child: _createHeader(),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child:
+                  Scrollbar(isAlwaysShown: true, child: addFundsView(context)),
+            ),
+          ]),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          floatingActionButton: Container(
+            child: Visibility(
+              visible: _fundsAvailable,
+              child: FloatingActionButton.extended(
+                onPressed: () {
+                  openAddNewFunds();
+                },
+                label: const Text('Add Funds'),
+                icon: const Icon(Icons.add),
+                backgroundColor: Theme.of(context).primaryColor,
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   Widget addFundsView(BuildContext context) {
@@ -148,96 +151,102 @@ class _FundraiserHomeState extends State<FundraiserHome> {
       iconColor = Colors.red;
     }
 
-    return InkWell(
-      splashColor: Colors.transparent,
-      focusColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      borderRadius: BorderRadius.circular(40),
-      onTap: () {
-        setState(() {});
-      },
-      child: Container(
-        margin: EdgeInsets.only(
-          top: 8.0,
-          left: 25.0,
-          right: 25.0,
-        ),
-        height: 80,
-        decoration: BoxDecoration(
-          color: unselectedGray,
-          borderRadius: BorderRadius.all(
-            const Radius.circular(15.0),
-          ),
-        ),
-        child: Container(
-          margin: EdgeInsets.all(10.0),
-          padding: const EdgeInsets.all(5.0),
-          child: Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: InkWell(
+          splashColor: Colors.transparent,
+          focusColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          borderRadius: BorderRadius.circular(40),
+          onTap: () {
+            setState(() {});
+          },
+          child: Container(
+            margin: EdgeInsets.only(
+              top: 8.0,
+              left: 25.0,
+              right: 25.0,
+            ),
+            height: 80,
+            decoration: BoxDecoration(
+              color: unselectedGray,
+              borderRadius: BorderRadius.all(
+                const Radius.circular(15.0),
+              ),
+            ),
+            child: Container(
+              margin: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(5.0),
+              child: Row(
                 children: [
-                  Text(item.name, style: textNormal16(Colors.black)),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Row(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      InkWell(
-                        onTap: () {
-                          print(_pagingController.itemList[index].name);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => FundraiserFundDetail(
-                                      data: _pagingController.itemList[index],
-                                      isResubmission: false)));
-                        },
-                        child: Text(
-                          "Show Details",
-                          style: textNormal12(HexColor("#468FFD")),
-                        ),
-                      ),
+                      Text(item.name, style: textNormal16(Colors.black)),
                       SizedBox(
-                        width: 15,
+                        height: 10.0,
                       ),
-                      if (item.type == "Reject")
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => FundraiserFundDetail(
-                                        data: _pagingController.itemList[index],
-                                        isResubmission: true)));
-                          },
-                          child: Text(
-                            "Resubmit",
-                            style: textNormal12(HexColor("#FB724C")),
+                      Row(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              print(_pagingController.itemList[index].name);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          FundraiserFundDetail(
+                                              data: _pagingController
+                                                  .itemList[index],
+                                              isResubmission: false)));
+                            },
+                            child: Text(
+                              "Show Details",
+                              style: textNormal12(HexColor("#468FFD")),
+                            ),
                           ),
-                        ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      InkWell(
-                        child: Text(
-                          DateUtilsExt.dateFromUTCToLocal(item.date),
-                          style: textNormal12(HexColor("#468FFD")),
-                        ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          if (item.type == "Reject")
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            FundraiserFundDetail(
+                                                data: _pagingController
+                                                    .itemList[index],
+                                                isResubmission: true)));
+                              },
+                              child: Text(
+                                "Resubmit",
+                                style: textNormal12(HexColor("#FB724C")),
+                              ),
+                            ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          InkWell(
+                            child: Text(
+                              DateUtilsExt.dateFromUTCToLocal(item.date),
+                              style: textNormal12(HexColor("#468FFD")),
+                            ),
+                          )
+                        ],
                       )
                     ],
+                  ),
+                  Spacer(),
+                  Align(
+                    child: Icon(Icons.circle, color: iconColor, size: 15.0),
                   )
                 ],
               ),
-              Spacer(),
-              Align(
-                child: Icon(Icons.circle, color: iconColor, size: 15.0),
-              )
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   Container addNewFundsCell(BuildContext context) {

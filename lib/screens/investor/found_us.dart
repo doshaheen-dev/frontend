@@ -7,8 +7,6 @@ import 'package:acc/screens/investor/investment_limit.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 
-import 'package:acc/models/authentication/signup_request.dart';
-
 class InvestorSearchInfo extends StatefulWidget {
   final HearAboutUs _hearAboutUs;
 
@@ -63,130 +61,135 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 0,
-        elevation: 0.0,
-        backgroundColor: Color(0xffffffff),
-      ),
-      bottomNavigationBar: BottomAppBar(),
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                child: IconButton(
-                  icon: Icon(Icons.arrow_back, size: 30),
-                  onPressed: () => {Navigator.pop(context)},
-                ),
-              ),
-              Column(
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: Scaffold(
+          appBar: AppBar(
+            toolbarHeight: 0,
+            elevation: 0.0,
+            backgroundColor: Color(0xffffffff),
+          ),
+          bottomNavigationBar: BottomAppBar(),
+          backgroundColor: Colors.white,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    margin: const EdgeInsets.only(
-                        top: 10.0, left: 25.0, right: 25.0),
-                    child: Text(
-                      "How did you find us ?",
-                      style: TextStyle(
-                          color: headingBlack,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 26.0,
-                          fontFamily: FontFamilyMontserrat.name),
+                    child: IconButton(
+                      icon: Icon(Icons.arrow_back, size: 30),
+                      onPressed: () => {Navigator.pop(context)},
                     ),
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(
-                        top: 30.0, left: 25.0, right: 25.0),
-                    child: GridView.count(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10.0,
-                        mainAxisSpacing: 10.0,
-                        shrinkWrap: true,
-                        children:
-                            List.generate(hearAboutUsList.length, (index) {
-                          return _createCell(index);
-                        })),
-                  ),
-                  Visibility(
-                    visible: _isNameVisible,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 20,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        margin: const EdgeInsets.only(
+                            top: 10.0, left: 25.0, right: 25.0),
+                        child: Text(
+                          "How did you find us ?",
+                          style: TextStyle(
+                              color: headingBlack,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 26.0,
+                              fontFamily: FontFamilyMontserrat.name),
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(
-                              top: 5.0, left: 25.0, bottom: 20, right: 25.0),
-                          decoration: customDecoration(),
-                          child: TextField(
-                            style: _setTextFieldStyle(),
-                            controller: firstNameController,
-                            onChanged: (value) => {firstname = value},
-                            decoration: _setTextFieldDecoration(
-                                "Name of the person who referred you"),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Visibility(
-                      visible: _isNextVisible,
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(
+                            top: 30.0, left: 25.0, right: 25.0),
+                        child: GridView.count(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10.0,
+                            mainAxisSpacing: 10.0,
+                            shrinkWrap: true,
+                            children:
+                                List.generate(hearAboutUsList.length, (index) {
+                              return _createCell(index);
+                            })),
+                      ),
+                      Visibility(
+                        visible: _isNameVisible,
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Container(
                               margin: const EdgeInsets.only(
                                   top: 5.0,
                                   left: 25.0,
                                   bottom: 20,
                                   right: 25.0),
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(40),
-                                onTap: () {
-                                  // on click
-                                  final requestModelInstance =
-                                      InvestorSignupPreferences.instance;
-                                  if (infoItemList.isNotEmpty) {
-                                    requestModelInstance.hearAboutUs =
-                                        infoItemList.first;
-                                  }
-                                  if (firstNameController.text.isNotEmpty) {
-                                    requestModelInstance.referralName =
-                                        firstNameController.text.trim();
-                                  }
-                                  openInvestmentLimit();
-                                },
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 60,
-                                  decoration: appColorButton(context),
-                                  child: Center(
-                                      child: Text(
-                                    "Next",
-                                    style: TextStyle(
-                                        fontSize: 18.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
+                              decoration: customDecoration(),
+                              child: TextField(
+                                style: _setTextFieldStyle(),
+                                controller: firstNameController,
+                                onChanged: (value) => {firstname = value},
+                                decoration: _setTextFieldDecoration(
+                                    "Name of the person who referred you"),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Visibility(
+                          visible: _isNextVisible,
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                  margin: const EdgeInsets.only(
+                                      top: 5.0,
+                                      left: 25.0,
+                                      bottom: 20,
+                                      right: 25.0),
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(40),
+                                    onTap: () {
+                                      // on click
+                                      final requestModelInstance =
+                                          InvestorSignupPreferences.instance;
+                                      if (infoItemList.isNotEmpty) {
+                                        requestModelInstance.hearAboutUs =
+                                            infoItemList.first;
+                                      }
+                                      if (firstNameController.text.isNotEmpty) {
+                                        requestModelInstance.referralName =
+                                            firstNameController.text.trim();
+                                      }
+                                      openInvestmentLimit();
+                                    },
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 60,
+                                      decoration: appColorButton(context),
+                                      child: Center(
+                                          child: Text(
+                                        "Next",
+                                        style: TextStyle(
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white),
+                                      )),
+                                    ),
                                   )),
-                                ),
-                              )),
-                        ],
-                      ))
+                            ],
+                          ))
+                    ],
+                  ),
                 ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   TextStyle _setTextFieldStyle() {

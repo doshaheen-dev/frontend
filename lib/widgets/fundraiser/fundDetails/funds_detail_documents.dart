@@ -69,90 +69,92 @@ class _FundsUploadedDocumentState extends State<FundsUploadedDocument> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Card(
-        color: _changeBgColor,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        child: Container(
-          alignment: Alignment.center,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Text("Documents Uploaded",
-                      textAlign: TextAlign.start,
-                      style: textBold16(_selectedTextColor))),
-              Spacer(),
-              IconButton(
-                  onPressed: () {
-                    _displayFundsDocument();
-                  },
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  icon: Image.asset(
-                    "assets/images/icon_down.png",
-                    color: _selectedTextColor,
-                  ))
-            ],
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: Column(children: [
+          Card(
+            color: _changeBgColor,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            child: Container(
+              alignment: Alignment.center,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Text("Documents Uploaded",
+                          textAlign: TextAlign.start,
+                          style: textBold16(_selectedTextColor))),
+                  Spacer(),
+                  IconButton(
+                      onPressed: () {
+                        _displayFundsDocument();
+                      },
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      icon: Image.asset(
+                        "assets/images/icon_down.png",
+                        color: _selectedTextColor,
+                      ))
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
-      Visibility(
-        visible: _isFundDcoumentVisible,
-        child: Card(
-          color: unselectedGray,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          child: FutureBuilder(
-            future: _fundDocumentList,
-            builder: (ctx, dataSnapshot) {
-              if (dataSnapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: Text("An error occurred!"));
-              } else {
-                return Consumer<FundProvider>(
-                    builder: (ctx, data, child) => MediaQuery.removePadding(
-                          context: context,
-                          removeTop: true,
-                          child: ListView.builder(
-                            itemBuilder: (ctx, index) {
-                              return Container(
-                                margin: EdgeInsets.only(
-                                    bottom: 20.0,
-                                    left: 10.0,
-                                    right: 10.0,
-                                    top: 20.0),
-                                child: _createDocumentCell(
-                                    data.documentsData[index]),
-                              );
-                            },
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: data.documentsData.length,
-                            shrinkWrap: true,
-                          ),
-                        ));
-              }
-            },
+          Visibility(
+            visible: _isFundDcoumentVisible,
+            child: Card(
+              color: unselectedGray,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
+              child: FutureBuilder(
+                future: _fundDocumentList,
+                builder: (ctx, dataSnapshot) {
+                  if (dataSnapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: Text("An error occurred!"));
+                  } else {
+                    return Consumer<FundProvider>(
+                        builder: (ctx, data, child) => MediaQuery.removePadding(
+                              context: context,
+                              removeTop: true,
+                              child: ListView.builder(
+                                itemBuilder: (ctx, index) {
+                                  return Container(
+                                    margin: EdgeInsets.only(
+                                        bottom: 20.0,
+                                        left: 10.0,
+                                        right: 10.0,
+                                        top: 20.0),
+                                    child: _createDocumentCell(
+                                        data.documentsData[index]),
+                                  );
+                                },
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: data.documentsData.length,
+                                shrinkWrap: true,
+                              ),
+                            ));
+                  }
+                },
+              ),
+            ),
           ),
-        ),
-      ),
-      Visibility(
-        visible: _isDcoumentEmpty,
-        child: Card(
-          color: unselectedGray,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("No documents uploaded yet.",
-                    style: textNormal14(Colors.black)),
-              )),
-        ),
-      )
-    ]);
+          Visibility(
+            visible: _isDcoumentEmpty,
+            child: Card(
+              color: unselectedGray,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
+              child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text("No documents uploaded yet.",
+                        style: textNormal14(Colors.black)),
+                  )),
+            ),
+          )
+        ]));
   }
 
   Widget _createDocumentCell(DocumentsData documentsData) {

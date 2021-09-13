@@ -53,67 +53,69 @@ class _MobileUpdateState extends State<MobileUpdate> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Expanded(
-            flex: 1,
-            child: Container(
-              decoration: customDecoration(),
-              child: _buildCodeDropDown(),
-            )),
-        Expanded(
-            flex: 2,
-            child: Container(
-              margin: EdgeInsets.only(left: 10.0),
-              decoration: customDecoration(),
-              child: Stack(
-                children: [
-                  TextField(
-                    enabled: false,
-                    style: textBlackNormal16(),
-                    onChanged: (value) => {
-                      mobileNumber = value,
-                    },
-                    controller: _mobileController,
-                    decoration: new InputDecoration(
-                      contentPadding: EdgeInsets.all(15.0),
-                      labelText: "Mobile No.",
-                      labelStyle: new TextStyle(color: Colors.grey[600]),
-                      border: InputBorder.none,
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: Colors.transparent, width: 2.0),
-                        borderRadius: BorderRadius.all(
-                          const Radius.circular(10.0),
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+                flex: 1,
+                child: Container(
+                  decoration: customDecoration(),
+                  child: _buildCodeDropDown(),
+                )),
+            Expanded(
+                flex: 2,
+                child: Container(
+                  margin: EdgeInsets.only(left: 10.0),
+                  decoration: customDecoration(),
+                  child: Stack(
+                    children: [
+                      TextField(
+                        enabled: false,
+                        style: textBlackNormal16(),
+                        onChanged: (value) => {
+                          mobileNumber = value,
+                        },
+                        controller: _mobileController,
+                        decoration: new InputDecoration(
+                          contentPadding: EdgeInsets.all(15.0),
+                          labelText: "Mobile No.",
+                          labelStyle: new TextStyle(color: Colors.grey[600]),
+                          border: InputBorder.none,
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Colors.transparent, width: 2.0),
+                            borderRadius: BorderRadius.all(
+                              const Radius.circular(10.0),
+                            ),
+                          ),
+                        ),
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Container(
+                          margin: EdgeInsets.only(right: 10.0, top: 25.0),
+                          child: InkWell(
+                              onTap: () {
+                                // open Bottom sheet
+                                showUpdationView();
+                              },
+                              child: Text(
+                                "Update",
+                                style: textNormal12(Colors.blue),
+                              )),
                         ),
                       ),
-                    ),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly,
                     ],
                   ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Container(
-                      margin: EdgeInsets.only(right: 10.0, top: 25.0),
-                      child: InkWell(
-                          onTap: () {
-                            // open Bottom sheet
-                            showUpdationView();
-                          },
-                          child: Text(
-                            "Update",
-                            style: textNormal12(Colors.blue),
-                          )),
-                    ),
-                  ),
-                ],
-              ),
-            ))
-      ],
-    );
+                ))
+          ],
+        ));
   }
 
   Widget _buildCodeDropDown() {
@@ -158,245 +160,257 @@ class _MobileUpdateState extends State<MobileUpdate> {
         builder: (context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
-            return Scaffold(
-                key: _modelScaffoldKey,
-                body: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(children: [
-                            Text(
-                              "Update Your Mobile Number",
-                              textAlign: TextAlign.start,
-                              style: textBold16(headingBlack),
-                            ),
-                            Spacer(),
-                            InkWell(
-                                onTap: () {
-                                  _newMobileController.clear();
-                                  otpController.clear();
+            return MediaQuery(
+                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                child: Scaffold(
+                    key: _modelScaffoldKey,
+                    body: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(children: [
+                                Text(
+                                  "Update Your Mobile Number",
+                                  textAlign: TextAlign.start,
+                                  style: textBold16(headingBlack),
+                                ),
+                                Spacer(),
+                                InkWell(
+                                    onTap: () {
+                                      _newMobileController.clear();
+                                      otpController.clear();
 
-                                  setState(() {
-                                    isOtpReceived = false;
-                                  });
-                                  Navigator.pop(context);
-                                },
-                                child: Text(
-                                  "Close",
-                                  style: textNormal16(headingBlack),
-                                ))
-                          ]),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(
-                              left: 15.0, right: 15.0, top: 10.0),
-                          width: MediaQuery.of(context).size.width,
-                          child: _createNewMobileFields(setState),
-                        ),
-                        Visibility(
-                          visible: !isOtpReceived,
-                          child: Container(
-                              alignment: Alignment.center,
-                              margin:
-                                  const EdgeInsets.only(top: 20.0, bottom: 20),
-                              child: ElevatedButton(
-                                  onPressed: () {
-                                    FocusScope.of(context)
-                                        .requestFocus(FocusNode());
-                                    if (newSelectedCountry == null) {
-                                      _modelScaffoldKey.currentState
-                                          .showSnackBar(SnackBar(
-                                              duration: Duration(seconds: 1),
-                                              content: Text(errorCountryCode)));
-
-                                      return;
-                                    }
-
-                                    if (_newMobileController.text.isEmpty) {
-                                      _modelScaffoldKey.currentState
-                                          .showSnackBar(SnackBar(
-                                              duration: Duration(seconds: 1),
-                                              content: Text(correctMobile)));
-                                      return;
-                                    }
-
-                                    if (newSelectedCountry.maxLength !=
-                                        _newMobileController.text.length) {
-                                      _modelScaffoldKey.currentState
-                                          .showSnackBar(SnackBar(
-                                              duration: Duration(seconds: 1),
-                                              content: Text(
-                                                  "Phone number should be of ${newSelectedCountry.maxLength} digits.")));
-
-                                      return;
-                                    }
-
-                                    //  progress = ProgressHUD.of(context);
-                                    // progress?.showWithText(sendingOtp);
-                                    otpController = TextEditingController();
-                                    _getOtp(
-                                        _newMobileController.text,
-                                        newSelectedCountry,
-                                        setState,
-                                        "mobile_no");
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      padding: EdgeInsets.all(0.0),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(18))),
-                                  child: Ink(
-                                      decoration: BoxDecoration(
-                                          gradient: LinearGradient(colors: [
-                                            Theme.of(context).primaryColor,
-                                            Theme.of(context).primaryColor
-                                          ]),
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                      child: Container(
-                                          width: 240,
-                                          height: 45,
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            sendOtpSecret,
-                                            style: textWhiteBold16(),
-                                          ))))),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Visibility(
-                            visible: isOtpReceived,
-                            child: Column(
-                              children: [
-                                Container(
-                                    alignment: Alignment.topLeft,
-                                    margin: const EdgeInsets.only(
-                                        top: 5.0, left: 25.0),
-                                    child: Text(
-                                      otpMobileLabel,
-                                      style: textNormal16(Colors.black),
-                                    )),
-                                Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  margin: const EdgeInsets.only(
-                                      top: 5.0,
-                                      left: 40.0,
-                                      bottom: 20,
-                                      right: 40.0),
-                                  child: PinCodeTextField(
-                                    controller: otpController,
-                                    appContext: context,
-                                    pastedTextStyle: TextStyle(
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                    length: 6,
-                                    animationType: AnimationType.none,
-                                    pinTheme: PinTheme(
-                                      shape: PinCodeFieldShape.underline,
-                                      selectedColor: Colors.grey,
-                                      inactiveColor: Colors.grey,
-                                      activeColor:
-                                          Theme.of(context).primaryColor,
-                                      activeFillColor:
-                                          Theme.of(context).primaryColor,
-                                    ),
-                                    cursorColor: Colors.black,
-                                    enableActiveFill: false,
-                                    keyboardType: TextInputType.number,
-                                    onCompleted: (v) {
-                                      print("Completed " + v);
-                                    },
-                                    onChanged: (value) {
-                                      print(value);
                                       setState(() {
-                                        otpText = value;
+                                        isOtpReceived = false;
                                       });
+                                      Navigator.pop(context);
                                     },
-                                    beforeTextPaste: (text) {
-                                      print("Allowing to paste $text");
-                                      //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                                      //but you can show anything you want here, like your pop up saying wrong paste format or etc
-                                      return false;
-                                    },
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(right: 20.0),
-                                  child: Align(
-                                    alignment: Alignment.topRight,
-                                    child: InkWell(
+                                    child: Text(
+                                      "Close",
+                                      style: textNormal16(headingBlack),
+                                    ))
+                              ]),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  left: 15.0, right: 15.0, top: 10.0),
+                              width: MediaQuery.of(context).size.width,
+                              child: _createNewMobileFields(setState),
+                            ),
+                            Visibility(
+                              visible: !isOtpReceived,
+                              child: Container(
+                                  alignment: Alignment.center,
+                                  margin: const EdgeInsets.only(
+                                      top: 20.0, bottom: 20),
+                                  child: ElevatedButton(
+                                      onPressed: () {
+                                        FocusScope.of(context)
+                                            .requestFocus(FocusNode());
+                                        if (newSelectedCountry == null) {
+                                          _modelScaffoldKey.currentState
+                                              .showSnackBar(SnackBar(
+                                                  duration:
+                                                      Duration(seconds: 1),
+                                                  content:
+                                                      Text(errorCountryCode)));
+
+                                          return;
+                                        }
+
+                                        if (_newMobileController.text.isEmpty) {
+                                          _modelScaffoldKey.currentState
+                                              .showSnackBar(SnackBar(
+                                                  duration:
+                                                      Duration(seconds: 1),
+                                                  content:
+                                                      Text(correctMobile)));
+                                          return;
+                                        }
+
+                                        if (newSelectedCountry.maxLength !=
+                                            _newMobileController.text.length) {
+                                          _modelScaffoldKey.currentState
+                                              .showSnackBar(SnackBar(
+                                                  duration:
+                                                      Duration(seconds: 1),
+                                                  content: Text(
+                                                      "Phone number should be of ${newSelectedCountry.maxLength} digits.")));
+
+                                          return;
+                                        }
+
+                                        //  progress = ProgressHUD.of(context);
+                                        // progress?.showWithText(sendingOtp);
+                                        otpController = TextEditingController();
+                                        _getOtp(
+                                            _newMobileController.text,
+                                            newSelectedCountry,
+                                            setState,
+                                            "mobile_no");
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                          padding: EdgeInsets.all(0.0),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(18))),
+                                      child: Ink(
+                                          decoration: BoxDecoration(
+                                              gradient: LinearGradient(colors: [
+                                                Theme.of(context).primaryColor,
+                                                Theme.of(context).primaryColor
+                                              ]),
+                                              borderRadius:
+                                                  BorderRadius.circular(15)),
+                                          child: Container(
+                                              width: 240,
+                                              height: 45,
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                sendOtpSecret,
+                                                style: textWhiteBold16(),
+                                              ))))),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Visibility(
+                                visible: isOtpReceived,
+                                child: Column(
+                                  children: [
+                                    Container(
+                                        alignment: Alignment.topLeft,
+                                        margin: const EdgeInsets.only(
+                                            top: 5.0, left: 25.0),
                                         child: Text(
-                                          "Didn't receive the code? Resend OTP",
-                                          textAlign: TextAlign.end,
-                                          style: textNormal14(Colors.black),
+                                          otpMobileLabel,
+                                          style: textNormal16(Colors.black),
+                                        )),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      margin: const EdgeInsets.only(
+                                          top: 5.0,
+                                          left: 40.0,
+                                          bottom: 20,
+                                          right: 40.0),
+                                      child: PinCodeTextField(
+                                        controller: otpController,
+                                        appContext: context,
+                                        pastedTextStyle: TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.normal,
                                         ),
-                                        onTap: () {
-                                          _getOtp(
-                                              _newMobileController.text,
-                                              newSelectedCountry,
-                                              setState,
-                                              "mobile_no");
-                                        }),
-                                  ),
-                                ),
-                                Container(
-                                    alignment: Alignment.center,
-                                    margin: const EdgeInsets.only(
-                                        top: 20.0, bottom: 20),
-                                    child: ElevatedButton(
-                                        onPressed: () {
-                                          FocusScope.of(context)
-                                              .requestFocus(FocusNode());
-                                          if (otpController.text.isEmpty) {
-                                            _modelScaffoldKey.currentState
-                                                .showSnackBar(SnackBar(
-                                                    duration:
-                                                        Duration(seconds: 1),
-                                                    content: Text(warningOTP)));
-                                            return;
-                                          }
-                                          // verify otp
-                                          verifyMobileOTP(
-                                              otpController.text,
-                                              _verificationId,
-                                              _newMobileController.text.trim(),
-                                              setState);
+                                        length: 6,
+                                        animationType: AnimationType.none,
+                                        pinTheme: PinTheme(
+                                          shape: PinCodeFieldShape.underline,
+                                          selectedColor: Colors.grey,
+                                          inactiveColor: Colors.grey,
+                                          activeColor:
+                                              Theme.of(context).primaryColor,
+                                          activeFillColor:
+                                              Theme.of(context).primaryColor,
+                                        ),
+                                        cursorColor: Colors.black,
+                                        enableActiveFill: false,
+                                        keyboardType: TextInputType.number,
+                                        onCompleted: (v) {
+                                          print("Completed " + v);
                                         },
-                                        style: ElevatedButton.styleFrom(
-                                            padding: EdgeInsets.all(0.0),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(18))),
-                                        child: Ink(
-                                            decoration: BoxDecoration(
-                                                gradient:
-                                                    LinearGradient(colors: [
-                                                  Theme.of(context)
-                                                      .primaryColor,
-                                                  Theme.of(context).primaryColor
-                                                ]),
-                                                borderRadius:
-                                                    BorderRadius.circular(15)),
-                                            child: Container(
-                                                width: 240,
-                                                height: 50,
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  verifyOtp,
-                                                  style: textWhiteBold16(),
-                                                )))))
-                              ],
-                            )),
-                      ],
-                    ),
-                  ),
-                ));
+                                        onChanged: (value) {
+                                          print(value);
+                                          setState(() {
+                                            otpText = value;
+                                          });
+                                        },
+                                        beforeTextPaste: (text) {
+                                          print("Allowing to paste $text");
+                                          //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
+                                          //but you can show anything you want here, like your pop up saying wrong paste format or etc
+                                          return false;
+                                        },
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(right: 20.0),
+                                      child: Align(
+                                        alignment: Alignment.topRight,
+                                        child: InkWell(
+                                            child: Text(
+                                              "Didn't receive the code? Resend OTP",
+                                              textAlign: TextAlign.end,
+                                              style: textNormal14(Colors.black),
+                                            ),
+                                            onTap: () {
+                                              _getOtp(
+                                                  _newMobileController.text,
+                                                  newSelectedCountry,
+                                                  setState,
+                                                  "mobile_no");
+                                            }),
+                                      ),
+                                    ),
+                                    Container(
+                                        alignment: Alignment.center,
+                                        margin: const EdgeInsets.only(
+                                            top: 20.0, bottom: 20),
+                                        child: ElevatedButton(
+                                            onPressed: () {
+                                              FocusScope.of(context)
+                                                  .requestFocus(FocusNode());
+                                              if (otpController.text.isEmpty) {
+                                                _modelScaffoldKey.currentState
+                                                    .showSnackBar(SnackBar(
+                                                        duration: Duration(
+                                                            seconds: 1),
+                                                        content:
+                                                            Text(warningOTP)));
+                                                return;
+                                              }
+                                              // verify otp
+                                              verifyMobileOTP(
+                                                  otpController.text,
+                                                  _verificationId,
+                                                  _newMobileController.text
+                                                      .trim(),
+                                                  setState);
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                                padding: EdgeInsets.all(0.0),
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            18))),
+                                            child: Ink(
+                                                decoration: BoxDecoration(
+                                                    gradient: LinearGradient(
+                                                        colors: [
+                                                          Theme.of(context)
+                                                              .primaryColor,
+                                                          Theme.of(context)
+                                                              .primaryColor
+                                                        ]),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15)),
+                                                child: Container(
+                                                    width: 240,
+                                                    height: 50,
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      verifyOtp,
+                                                      style: textWhiteBold16(),
+                                                    )))))
+                                  ],
+                                )),
+                          ],
+                        ),
+                      ),
+                    )));
           });
         });
   }

@@ -313,12 +313,13 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
         },
         child: Text(
           "Ok",
+          textScaleFactor: 1.0,
           style: textNormal16(Color(0xff00A699)),
         ));
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      content: Text(message),
+      content: Text(message, textScaleFactor: 1.0),
       actions: [
         positiveButton,
       ],
