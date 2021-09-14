@@ -241,8 +241,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
                         Visibility(
                             visible: infoItemList.isEmpty ? false : true,
                             child: Container(
-                              // height: 50,
-                              width: 295,
+                              width: 260,
                               child: newSetChipList(),
                             )),
                         Spacer(),
@@ -596,7 +595,6 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
                   color: infoItemList.contains(item.name)
                       ? Theme.of(context).primaryColor
                       : Colors.white,
-                  // margin: EdgeInsets.only(left: 10, right: 10.0),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(children: [
@@ -611,7 +609,24 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
                               infoItemList.contains(item.name) ? true : false,
                           child: Center(
                             child: IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                setState(() {
+                                  item.isCheck = !item.isCheck;
+
+                                  if (!item.isCheck) {
+                                    infoItemList.remove(item.name);
+                                    _uncheckOption(item);
+                                  } else {
+                                    infoItemList.add(item.name);
+                                    _checkOption(item);
+                                  }
+                                  if (infoItemList.isNotEmpty) {
+                                    activateUpdate(true);
+                                  } else {
+                                    activateUpdate(false);
+                                  }
+                                });
+                              },
                               splashColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               icon: Icon(
@@ -713,6 +728,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
     Future.delayed(Duration(seconds: 2), () async {
       final requestModel = InvestorSignupPreferences.instance;
       requestModel.hearAboutUs = UserData.instance.userInfo.hearAboutUs;
+      requestModel.referralName = UserData.instance.userInfo.referralName;
       User signedUpUser =
           await SignUpService.updateUserPreferences(requestModel);
       progress.dismiss();
