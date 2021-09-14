@@ -27,7 +27,7 @@ class _InvestorFaqState extends State<InvestorFaq> {
               children: <Widget>[
                 new WebView(
                   initialUrl:
-                      'http://ami-corp-admin-portal.s3-website.ap-south-1.amazonaws.com/onboarding/investor-faq',
+                      'http://ami-corp-admin-portal.s3-website.ap-south-1.amazonaws.com/onboarding/faq/investor',
                   javascriptMode: JavascriptMode.unrestricted,
                   onWebViewCreated: (controller) {
                     _webViewController = controller;

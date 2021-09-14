@@ -45,18 +45,18 @@ class AddFundRequestModel {
       };
 
   void clear() {
-    this.productId = -1;
-    this.slotId = -1;
+    this.productId = null;
+    this.slotId = null;
     this.fundSponsorName = '';
     this.fundName = '';
     this.countryCode = '';
-    this.cityId = -1;
+    this.cityId = null;
     this.fundRegulated = false;
     this.regulatorName = '';
     this.fundInvstmtObj = '';
-    this.fundExistVal = -1;
+    this.fundExistVal = null;
     this.fundLogo = '';
-    this.fundNewVal = -1;
+    this.fundNewVal = null;
     this.fundWebsite = '';
     this.termsAgreedTimestamp = '';
     this.fundKycDocuments = [];

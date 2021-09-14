@@ -54,9 +54,10 @@ class FundService {
       "authorization": "Bearer ${UserData.instance.userInfo.token}",
     };
     final jsonBody = jsonEncode(request);
-
+    print('ReqBody: $jsonBody');
     final response = await http.put(url, headers: headers, body: jsonBody);
     final responseBody = response.body;
+    print('ResBody: $responseBody');
     Map valueMap = jsonDecode(responseBody);
     AddFundResponse fundTxnDetails = AddFundResponse.from(valueMap);
     return fundTxnDetails;

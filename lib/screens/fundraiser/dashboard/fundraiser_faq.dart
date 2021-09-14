@@ -29,7 +29,7 @@ class _FundraiserFaqState extends State<FundraiserFaq> {
               children: <Widget>[
                 new WebView(
                   initialUrl:
-                      'http://ami-corp-admin-portal.s3-website.ap-south-1.amazonaws.com/onboarding/fundraiser-faq',
+                      'http://ami-corp-admin-portal.s3-website.ap-south-1.amazonaws.com/onboarding/faq/fundraiser',
                   javascriptMode: JavascriptMode.unrestricted,
                   onWebViewCreated: (controller) {
                     _webViewController = controller;

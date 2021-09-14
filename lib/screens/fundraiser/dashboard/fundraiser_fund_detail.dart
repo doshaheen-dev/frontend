@@ -72,79 +72,80 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
 
     return MediaQuery(
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-        child: Scaffold(
-            bottomNavigationBar: _createButtonLayout(context),
-            backgroundColor: Colors.white,
-            body: ProgressHUD(
-              child: Builder(
-                builder: (context) => SingleChildScrollView(
-                  child: Container(
-                    margin: const EdgeInsets.only(top: 40.0),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Visibility(
-                                    visible: !isResubmit,
-                                    child: FundsDetailHeader(_likedFunds)),
-                                Visibility(
-                                    visible: isResubmit,
-                                    child: FundsResubmitHeader())
-                              ],
-                            ),
+        child: ProgressHUD(
+          child: Builder(
+            builder: (context) => Scaffold(
+              bottomNavigationBar: _createButtonLayout(context),
+              backgroundColor: Colors.white,
+              body: SingleChildScrollView(
+                child: Container(
+                  margin: const EdgeInsets.only(top: 40.0),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Visibility(
+                                  visible: !isResubmit,
+                                  child: FundsDetailHeader(_likedFunds)),
+                              Visibility(
+                                  visible: isResubmit,
+                                  child: FundsResubmitHeader())
+                            ],
                           ),
+                        ),
 
-                          Divider(color: HexColor("#E8E8E8")),
-                          // Fund overview
-                          Container(
-                            child: _createFundBody(),
-                          ),
+                        Divider(color: HexColor("#E8E8E8")),
+                        // Fund overview
+                        Container(
+                          child: _createFundBody(),
+                        ),
 
-                          SizedBox(
-                            height: 10,
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        "\$${_likedFunds.fundNewVal}",
+                                        style: textBlackNormal16(),
+                                      ),
+                                      Text("Target",
+                                          style: textNormal16(
+                                              Theme.of(context).primaryColor))
+                                    ],
+                                  )),
+                              // Expanded(
+                              //     flex: 1,
+                              //     child: Column(
+                              //       children: [
+                              //         Text(
+                              //           _likedFunds.minimumInvestment,
+                              //           style: textBlackNormal16(),
+                              //         ),
+                              //         Text("Min Per Investor",
+                              //             style: textNormal16(kDarkOrange))
+                              //       ],
+                              //     ))
+                            ],
                           ),
-                          Container(
-                            child: Row(
-                              children: [
-                                Expanded(
-                                    flex: 1,
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          "\$${_likedFunds.fundNewVal}",
-                                          style: textBlackNormal16(),
-                                        ),
-                                        Text("Target",
-                                            style: textNormal16(
-                                                Theme.of(context).primaryColor))
-                                      ],
-                                    )),
-                                // Expanded(
-                                //     flex: 1,
-                                //     child: Column(
-                                //       children: [
-                                //         Text(
-                                //           _likedFunds.minimumInvestment,
-                                //           style: textBlackNormal16(),
-                                //         ),
-                                //         Text("Min Per Investor",
-                                //             style: textNormal16(kDarkOrange))
-                                //       ],
-                                //     ))
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 40,
-                          ),
-                        ]),
-                  ),
+                        ),
+                        SizedBox(
+                          height: 40,
+                        ),
+                      ]),
                 ),
               ),
-            )));
+            ),
+          ),
+        ));
   }
 
   _createButtonLayout(BuildContext context) {
@@ -410,8 +411,10 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
   void _performSubmission(BuildContext context) async {
     try {
       final requestModelInstance = AddFundRequestModel.instance;
-      requestModelInstance.fundNewVal =
-          int.parse(_newFundValueController.text.trim());
+      String newVal = _newFundValueController.text.trim();
+      if (newVal != null && newVal != '') {
+        requestModelInstance.fundNewVal = int.parse(newVal);
+      }
       requestModelInstance.fundKycDocuments = null;
       if (_uploadedDocuments.isNotEmpty) {
         requestModelInstance.fundKycDocuments = [];
