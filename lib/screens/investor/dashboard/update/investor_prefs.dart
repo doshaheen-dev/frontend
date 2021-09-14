@@ -166,7 +166,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          margin: EdgeInsets.only(top: 10.0),
+          margin: EdgeInsets.only(top: 30.0, left: 10.0),
           child: IconButton(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,

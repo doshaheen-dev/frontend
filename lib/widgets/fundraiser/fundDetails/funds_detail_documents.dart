@@ -117,6 +117,7 @@ class _FundsUploadedDocumentState extends State<FundsUploadedDocument> {
                         builder: (ctx, data, child) => MediaQuery.removePadding(
                               context: context,
                               removeTop: true,
+                              removeBottom: true,
                               child: ListView.builder(
                                 itemBuilder: (ctx, index) {
                                   return Container(
