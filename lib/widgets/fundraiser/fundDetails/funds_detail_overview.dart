@@ -38,7 +38,9 @@ class _CreateFundOverviewState extends State<CreateFundOverview> {
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
         child: Column(children: [
           Card(
-            color: _isFundOverview ? kDarkOrange : unselectedGray,
+            color: _isFundOverview
+                ? Theme.of(context).primaryColor
+                : unselectedGray,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0)),
             child: Container(

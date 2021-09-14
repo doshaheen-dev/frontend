@@ -392,8 +392,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
               if (dataSnapshot.connectionState == ConnectionState.waiting) {
                 return Center(
                     child: CircularProgressIndicator(
-                  backgroundColor: Colors.orange,
-                  valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
+                  color: Theme.of(context).primaryColor,
                 ));
               } else {
                 if (dataSnapshot.error != null) {
@@ -414,42 +413,42 @@ class _InvestorProfileState extends State<InvestorProfile> {
               }
             }),
       ),
-      Container(
-        margin: const EdgeInsets.only(
-          top: 5.0,
-          bottom: 20,
-        ),
-        decoration: customDecoration(),
-        child: AddressUpdate(_addressController.text, addressUpdate.callback),
-      ),
-      Container(
-          margin: const EdgeInsets.only(top: 5.0, bottom: 10.0),
-          decoration: BoxDecoration(
-            color: selectedOrange,
-            borderRadius: BorderRadius.all(const Radius.circular(10.0)),
-          ),
-          child: Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child:
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                Text("Click Here to Edit preferences",
-                    textAlign: TextAlign.start,
-                    style: textNormal16(Colors.white)),
-                Spacer(),
-                IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => InvestorPreferences()));
-                    },
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    icon: Image.asset(
-                      "assets/images/navigation/arrow_right.png",
-                      color: Colors.white,
-                    ))
-              ])))
+      InkWell(
+        onTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => InvestorPreferences()));
+        },
+        child: Container(
+            margin: const EdgeInsets.only(top: 5.0, bottom: 10.0),
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              borderRadius: BorderRadius.all(const Radius.circular(10.0)),
+            ),
+            child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text("Click Here to Edit preferences",
+                          textAlign: TextAlign.start,
+                          style: textNormal16(Colors.white)),
+                      Spacer(),
+                      IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        InvestorPreferences()));
+                          },
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          icon: Image.asset(
+                            "assets/images/navigation/arrow_right.png",
+                            color: Colors.white,
+                          ))
+                    ]))),
+      )
     ]);
   }
 

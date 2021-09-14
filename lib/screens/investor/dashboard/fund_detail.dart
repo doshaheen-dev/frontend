@@ -176,7 +176,8 @@ class _FundDetailState extends State<FundDetail> {
   Widget _createFundOverview() {
     return Column(children: [
       Card(
-        color: _isFundOverview ? kDarkOrange : unselectedGray,
+        color:
+            _isFundOverview ? Theme.of(context).primaryColor : unselectedGray,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         child: Container(

@@ -104,7 +104,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                   Container(
                                     child: Card(
                                       color: _isFundOverview
-                                          ? kDarkOrange
+                                          ? Theme.of(context).primaryColor
                                           : unselectedGray,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
