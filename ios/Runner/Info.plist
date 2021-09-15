@@ -23,17 +23,17 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
-			<key>LSApplicationQueriesSchemes</key>
-			<array>
-				<string>http</string>
-				<string>https</string>
-			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.googleusercontent.apps.257378514008-eclfdj3o2g86t0tfbk6q0363h31vmdc3</string>
 				<string>app-1-99767968971-ios-a0f41860fc2a8cc1f8674e</string>
+			</array>
+			<key>LSApplicationQueriesSchemes</key>
+			<array>
+				<string>http</string>
+				<string>https</string>
 			</array>
 		</dict>
 	</array>

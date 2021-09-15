@@ -11,6 +11,7 @@ import 'package:acc/providers/kyc_docs_provider.dart';
 import 'package:acc/providers/product_type_provider.dart';
 import 'package:acc/providers/country_provider.dart';
 import 'package:acc/providers/city_provider.dart';
+import 'package:acc/screens/fundraiser/authentication/email_verification.dart';
 import 'package:acc/screens/fundraiser/dashboard/fundraiser_dashboard.dart';
 import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
 import 'package:acc/screens/investor/welcome.dart';
@@ -185,7 +186,11 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.of(context).pushAndRemoveUntil(
           PageRouteBuilder(
               pageBuilder: (context, animation, anotherAnimation) {
-                return FundraiserDashboard();
+                if (data.emailVerified == 1) {
+                  return FundraiserDashboard();
+                } else {
+                  return EmailVerification();
+                }
               },
               transitionDuration: Duration(milliseconds: 2000),
               transitionsBuilder:
