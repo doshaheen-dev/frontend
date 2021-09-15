@@ -248,7 +248,8 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                                                               18))),
                                               child: Ink(
                                                 decoration: BoxDecoration(
-                                                    color: Colors.red,
+                                                    color: Theme.of(context)
+                                                        .primaryColor,
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             15)),

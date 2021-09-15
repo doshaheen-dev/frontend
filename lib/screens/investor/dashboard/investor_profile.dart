@@ -225,7 +225,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
                                     borderRadius: BorderRadius.circular(14))),
                             child: Ink(
                                 decoration: BoxDecoration(
-                                    color: Colors.red,
+                                    color: Theme.of(context).primaryColor,
                                     borderRadius: BorderRadius.circular(10)),
                                 child: Container(
                                     width: MediaQuery.of(context).size.width,
