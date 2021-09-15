@@ -17,12 +17,6 @@ final textDarkGrey = HexColor('505050');
 final kDarkGrey = HexColor('202020');
 
 final unselectedGray = HexColor('F0F0F0');
-final selectedOrange = HexColor('FE904B');
 final textDarkOrange = HexColor('FCFCFC');
-final kDarkOrange = HexColor('f97156');
-final kLightOrange = HexColor('fc8e53');
-
-final kHomeOrange = HexColor('FFAB94');
-final kHomeOrange1 = HexColor('FF7D59');
 
 final kIndicatorInactive = HexColor('404040');

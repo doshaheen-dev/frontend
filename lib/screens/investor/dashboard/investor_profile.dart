@@ -413,6 +413,14 @@ class _InvestorProfileState extends State<InvestorProfile> {
               }
             }),
       ),
+      Container(
+        margin: const EdgeInsets.only(
+          top: 5.0,
+          bottom: 20,
+        ),
+        decoration: customDecoration(),
+        child: AddressUpdate(_addressController.text, addressUpdate.callback),
+      ),
       InkWell(
         onTap: () {
           Navigator.push(context,
