@@ -302,7 +302,7 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                             corporateVerificationText,
                                             textAlign: TextAlign.center,
                                             style: textNormal16(
-                                                HexColor("#FE904B")),
+                                                Theme.of(context).primaryColor),
                                           ))),
                                   //NEXT BUTTON
                                   Container(

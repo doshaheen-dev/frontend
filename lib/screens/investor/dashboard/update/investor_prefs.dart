@@ -484,63 +484,66 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
                     body: SingleChildScrollView(
                         child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: FutureBuilder(
-                                future: _productTypes,
-                                builder: (ctx, dataSnapshot) {
-                                  if (dataSnapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return Center(
-                                        child: CircularProgressIndicator(
-                                      color: Theme.of(context).primaryColor,
-                                    ));
-                                  } else {
-                                    if (dataSnapshot.error != null) {
-                                      return Center(
-                                          child: Text("An error occurred!"));
-                                    } else {
-                                      return Consumer<
-                                          productProvider.ProductTypes>(
-                                        builder: (ctx, data, child) => Column(
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsets.all(10.0),
-                                                child: Row(children: [
-                                                  Text(
-                                                    "Choose your invesment choices",
-                                                    textAlign: TextAlign.start,
-                                                    style: textBold16(
-                                                        headingBlack),
-                                                  ),
-                                                  Spacer(),
-                                                  InkWell(
-                                                      onTap: () {
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: Text(
-                                                        "Done",
-                                                        style: textNormal16(
-                                                            headingBlack),
-                                                      ))
-                                                ])),
-                                            ListView.builder(
+                            child: Column(
+                              children: [
+                                Padding(
+                                    padding: EdgeInsets.all(10.0),
+                                    child: Row(children: [
+                                      Text(
+                                        "Choose your invesment choices",
+                                        textAlign: TextAlign.start,
+                                        style: textBold16(headingBlack),
+                                      ),
+                                      Spacer(),
+                                      InkWell(
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text(
+                                            "Done",
+                                            style: textNormal16(headingBlack),
+                                          ))
+                                    ])),
+                                FutureBuilder(
+                                    future: _productTypes,
+                                    builder: (ctx, dataSnapshot) {
+                                      if (dataSnapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return Center(
+                                            child: CircularProgressIndicator(
+                                          backgroundColor:
+                                              Theme.of(context).primaryColor,
+                                          valueColor:
+                                              new AlwaysStoppedAnimation<Color>(
+                                                  Colors.amber),
+                                        ));
+                                      } else {
+                                        if (dataSnapshot.error != null) {
+                                          return Center(
+                                              child:
+                                                  Text("An error occurred!"));
+                                        } else {
+                                          return Consumer<
+                                              productProvider.ProductTypes>(
+                                            builder: (ctx, data, child) =>
+                                                ListView.builder(
                                               itemBuilder: (ctx, index) {
                                                 checkData(data, index);
                                                 return Container(
-                                                  child: _createItemCell(
-                                                      data.types[index]),
-                                                );
+                                                    child: _createItemCell(
+                                                        data.types[index]));
                                               },
                                               physics:
                                                   NeverScrollableScrollPhysics(),
                                               itemCount: data.types.length,
                                               shrinkWrap: true,
                                             ),
-                                          ],
-                                        ),
-                                      );
-                                    }
-                                  }
-                                })))));
+                                          );
+                                        }
+                                      }
+                                    })
+                              ],
+                            )))));
           });
         });
   }
@@ -553,88 +556,85 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
   }
 
   _createItemCell(productProvider.InvestmentLimitItem item) {
-    for (var i = 0; i < infoItemList.length; i++) {
-      if (item.name == infoItemList[i]) {
-        item.isCheck = true;
-        _checkOption(item);
-      }
-    }
-    return MediaQuery(
-        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            InkWell(
-              highlightColor: Colors.transparent,
-              splashColor: Colors.transparent,
-              onTap: () {
-                setState(() {
-                  item.isCheck = !item.isCheck;
+    // for (var i = 0; i < infoItemList.length; i++) {
+    //   if (item.name == infoItemList[i]) {
+    //     item.isCheck = true;
+    //     _checkOption(item);
+    //   }
+    // }
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        InkWell(
+          highlightColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          onTap: () {
+            setState(() {
+              //   item.isCheck = !item.isCheck;
 
-                  if (!item.isCheck) {
-                    infoItemList.remove(item.name);
-                    _uncheckOption(item);
-                  } else {
-                    infoItemList.add(item.name);
-                    _checkOption(item);
-                  }
-                  if (infoItemList.isNotEmpty) {
-                    activateUpdate(true);
-                  } else {
-                    activateUpdate(false);
-                  }
-                });
-              },
-              child: Container(
-                  height: 50.0,
-                  color: infoItemList.contains(item.name)
-                      ? Theme.of(context).primaryColor
-                      : Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(children: [
-                      Text(item.name,
-                          textAlign: TextAlign.center,
-                          style: textNormal18(infoItemList.contains(item.name)
-                              ? Colors.white
-                              : headingBlack)),
-                      Spacer(),
-                      Visibility(
-                          visible:
-                              infoItemList.contains(item.name) ? true : false,
-                          child: Center(
-                            child: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  item.isCheck = !item.isCheck;
+              if (infoItemList.contains(item.name)) {
+                infoItemList.remove(item.name);
+                _uncheckOption(item);
+              } else {
+                infoItemList.add(item.name);
+                _checkOption(item);
+              }
+              if (infoItemList.isNotEmpty) {
+                activateUpdate(true);
+              } else {
+                activateUpdate(false);
+              }
+            });
+          },
+          child: Container(
+              height: 50.0,
+              color: infoItemList.contains(item.name)
+                  ? Theme.of(context).primaryColor
+                  : Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(children: [
+                  Text(item.name,
+                      textAlign: TextAlign.center,
+                      style: textNormal18(infoItemList.contains(item.name)
+                          ? Colors.white
+                          : headingBlack)),
+                  Spacer(),
+                  Visibility(
+                      visible: infoItemList.contains(item.name) ? true : false,
+                      child: Center(
+                        child: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              //      item.isCheck = !item.isCheck;
 
-                                  if (!item.isCheck) {
-                                    infoItemList.remove(item.name);
-                                    _uncheckOption(item);
-                                  } else {
-                                    infoItemList.add(item.name);
-                                    _checkOption(item);
-                                  }
-                                  if (infoItemList.isNotEmpty) {
-                                    activateUpdate(true);
-                                  } else {
-                                    activateUpdate(false);
-                                  }
-                                });
-                              },
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              icon: Icon(
-                                Icons.check,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ))
-                    ]),
-                  )),
-            )
-          ],
-        ));
+                              if (infoItemList.contains(item.name)) {
+                                infoItemList.remove(item.name);
+                                _uncheckOption(item);
+                              } else {
+                                infoItemList.add(item.name);
+                                _checkOption(item);
+                              }
+                              if (infoItemList.isNotEmpty) {
+                                activateUpdate(true);
+                              } else {
+                                activateUpdate(false);
+                              }
+                            });
+                          },
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          icon: Icon(
+                            Icons.check,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ))
+                ]),
+              )),
+        )
+      ],
+    );
   }
 
   int tag = -1;

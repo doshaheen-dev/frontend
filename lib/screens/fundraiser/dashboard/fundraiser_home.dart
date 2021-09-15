@@ -202,11 +202,12 @@ class _FundraiserHomeState extends State<FundraiserHome> {
                             },
                             child: Text(
                               "Show Details",
-                              style: textNormal12(HexColor("#468FFD")),
+                              style:
+                                  textNormal12(Theme.of(context).primaryColor),
                             ),
                           ),
                           SizedBox(
-                            width: 15,
+                            width: 10,
                           ),
                           if (item.type == "Reject")
                             InkWell(
@@ -222,7 +223,7 @@ class _FundraiserHomeState extends State<FundraiserHome> {
                               },
                               child: Text(
                                 "Resubmit",
-                                style: textNormal12(HexColor("#FB724C")),
+                                style: textNormal12(Colors.red),
                               ),
                             ),
                           SizedBox(
@@ -231,7 +232,8 @@ class _FundraiserHomeState extends State<FundraiserHome> {
                           InkWell(
                             child: Text(
                               DateUtilsExt.dateFromUTCToLocal(item.date),
-                              style: textNormal12(HexColor("#468FFD")),
+                              style:
+                                  textNormal12(Theme.of(context).primaryColor),
                             ),
                           )
                         ],
