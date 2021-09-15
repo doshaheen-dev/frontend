@@ -386,8 +386,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
           if (dataSnapshot.connectionState == ConnectionState.waiting) {
             return Center(
                 child: CircularProgressIndicator(
-              backgroundColor: Theme.of(context).primaryColor,
-              valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
+              color: Theme.of(context).primaryColor,
             ));
           } else {
             if (dataSnapshot.error != null) {
@@ -492,11 +491,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
                                       ConnectionState.waiting) {
                                     return Center(
                                         child: CircularProgressIndicator(
-                                      backgroundColor:
-                                          Theme.of(context).primaryColor,
-                                      valueColor:
-                                          new AlwaysStoppedAnimation<Color>(
-                                              Colors.amber),
+                                      color: Theme.of(context).primaryColor,
                                     ));
                                   } else {
                                     if (dataSnapshot.error != null) {
