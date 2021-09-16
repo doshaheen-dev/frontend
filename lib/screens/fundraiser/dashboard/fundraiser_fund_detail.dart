@@ -166,13 +166,17 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
                 child: ElevatedButton(
                   onPressed: () {
                     if (_isButtonDisabled) {
-                      if (int.parse(_newFundValueController.text.trim()) >
-                              2100000000 ||
-                          int.parse(_newFundValueController.text.trim()) <= 0) {
-                        showSnackBar(context,
-                            "Please enter value between 0 and 2100000000");
-                        return;
+                      if (_newFundValueController.text.isNotEmpty) {
+                        if (int.parse(_newFundValueController.text.trim()) >
+                                2100000000 ||
+                            int.parse(_newFundValueController.text.trim()) <=
+                                0) {
+                          showSnackBar(context,
+                              "Please enter value between 0 and 2100000000");
+                          return;
+                        }
                       }
+
                       progress = ProgressHUD.of(context);
                       progress?.showWithText('Submitting Updates...');
                       _performSubmission(context);
