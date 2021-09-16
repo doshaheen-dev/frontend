@@ -1,7 +1,10 @@
+import 'package:acc/models/authentication/verify_phone_signin.dart';
+import 'package:acc/screens/common/profile_picture.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
+
+import '../../image_circle.dart';
 
 class FundsResubmitHeader extends StatefulWidget {
   @override
@@ -9,6 +12,9 @@ class FundsResubmitHeader extends StatefulWidget {
 }
 
 class _FundsResubmitHeaderState extends State<FundsResubmitHeader> {
+  final double bRadius = 60;
+  final double iHeight = 65;
+
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
@@ -26,20 +32,81 @@ class _FundsResubmitHeaderState extends State<FundsResubmitHeader> {
               ),
             ),
             Container(
-                margin:
-                    const EdgeInsets.only(top: 10.0, left: 25.0, right: 25.0),
+                margin: const EdgeInsets.only(left: 25.0, right: 25.0),
                 child: Row(
                   children: [
                     Expanded(
-                        child: Text(
-                      'Hello Fundraiser',
-                      style: textBold26(headingBlack),
-                    )),
-                    Image.asset('assets/images/investor/icon_investor.png'),
+                      child: UserData.instance.userInfo.firstName != null
+                          ? Text(
+                              'Hello ${UserData.instance.userInfo.firstName}',
+                              style: textBold26(headingBlack),
+                            )
+                          : Text(
+                              'Hello Fundraiser',
+                              style: textBold26(headingBlack),
+                            ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(
+                              PageRouteBuilder(
+                                  pageBuilder:
+                                      (context, animation, anotherAnimation) {
+                                    return ProfilePicScreen(UserData
+                                        .instance.userInfo.profileImage);
+                                  },
+                                  transitionDuration:
+                                      Duration(milliseconds: 2000),
+                                  transitionsBuilder: (context, animation,
+                                      anotherAnimation, child) {
+                                    animation = CurvedAnimation(
+                                        curve: Curves.fastLinearToSlowEaseIn,
+                                        parent: animation);
+                                    return SlideTransition(
+                                      position: Tween(
+                                              begin: Offset(1.0, 0.0),
+                                              end: Offset(0.0, 0.0))
+                                          .animate(animation),
+                                      child: child,
+                                    );
+                                  }),
+                            )
+                            .then((_) => setState(() {}));
+                      },
+                      child: Container(
+                        height: 70,
+                        width: 70,
+                        child: CircleAvatar(
+                          radius: bRadius,
+                          backgroundColor: Theme.of(context).primaryColor,
+                          child: (UserData.instance.userInfo.profileImage ==
+                                      null ||
+                                  UserData.instance.userInfo.profileImage == '')
+                              ? ImageCircle(
+                                  borderRadius: bRadius,
+                                  image: Image.asset(
+                                    'assets/images/UserProfile.png',
+                                    width: iHeight,
+                                    height: iHeight,
+                                    fit: BoxFit.fill,
+                                  ),
+                                )
+                              : ImageCircle(
+                                  borderRadius: bRadius,
+                                  image: Image.network(
+                                    UserData.instance.userInfo.profileImage,
+                                    width: iHeight,
+                                    height: iHeight,
+                                    fit: BoxFit.fill,
+                                  )),
+                        ),
+                      ),
+                    ),
                   ],
                 )),
             SizedBox(
-              height: 50,
+              height: 10,
             ),
             Center(
               child: Text(

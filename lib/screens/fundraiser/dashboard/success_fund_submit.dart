@@ -1,5 +1,8 @@
+import 'package:acc/models/authentication/verify_phone_signin.dart';
+import 'package:acc/screens/common/profile_picture.dart';
 import 'package:acc/screens/fundraiser/dashboard/fundraiser_dashboard.dart';
 import 'package:acc/utilites/text_style.dart';
+import 'package:acc/widgets/image_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/utilites/app_colors.dart';
@@ -11,6 +14,9 @@ class SuccesssFundSubmitted extends StatefulWidget {
 }
 
 class _SuccesssFundSubmittedState extends State<SuccesssFundSubmitted> {
+  final double bRadius = 60;
+  final double iHeight = 65;
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -33,16 +39,88 @@ class _SuccesssFundSubmittedState extends State<SuccesssFundSubmitted> {
                       children: <Widget>[
                     Container(
                         margin: const EdgeInsets.only(
-                            top: 25.0, left: 25.0, right: 25.0),
+                            top: 60.0, left: 25.0, right: 25.0),
                         child: Row(
                           children: [
                             Expanded(
-                                child: Text(
-                              'Hello Fundraiser',
-                              style: textBold26(headingBlack),
-                            )),
-                            Image.asset(
-                                'assets/images/investor/icon_investor.png'),
+                              child:
+                                  UserData.instance.userInfo.firstName != null
+                                      ? Text(
+                                          'Hello ${UserData.instance.userInfo.firstName}',
+                                          style: textBold26(headingBlack),
+                                        )
+                                      : Text(
+                                          'Hello Fundraiser',
+                                          style: textBold26(headingBlack),
+                                        ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context)
+                                    .push(
+                                      PageRouteBuilder(
+                                          pageBuilder: (context, animation,
+                                              anotherAnimation) {
+                                            return ProfilePicScreen(UserData
+                                                .instance
+                                                .userInfo
+                                                .profileImage);
+                                          },
+                                          transitionDuration:
+                                              Duration(milliseconds: 2000),
+                                          transitionsBuilder: (context,
+                                              animation,
+                                              anotherAnimation,
+                                              child) {
+                                            animation = CurvedAnimation(
+                                                curve: Curves
+                                                    .fastLinearToSlowEaseIn,
+                                                parent: animation);
+                                            return SlideTransition(
+                                              position: Tween(
+                                                      begin: Offset(1.0, 0.0),
+                                                      end: Offset(0.0, 0.0))
+                                                  .animate(animation),
+                                              child: child,
+                                            );
+                                          }),
+                                    )
+                                    .then((_) => setState(() {}));
+                              },
+                              child: Container(
+                                height: 70,
+                                width: 70,
+                                child: CircleAvatar(
+                                  radius: bRadius,
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
+                                  child: (UserData.instance.userInfo
+                                                  .profileImage ==
+                                              null ||
+                                          UserData.instance.userInfo
+                                                  .profileImage ==
+                                              '')
+                                      ? ImageCircle(
+                                          borderRadius: bRadius,
+                                          image: Image.asset(
+                                            'assets/images/UserProfile.png',
+                                            width: iHeight,
+                                            height: iHeight,
+                                            fit: BoxFit.fill,
+                                          ),
+                                        )
+                                      : ImageCircle(
+                                          borderRadius: bRadius,
+                                          image: Image.network(
+                                            UserData
+                                                .instance.userInfo.profileImage,
+                                            width: iHeight,
+                                            height: iHeight,
+                                            fit: BoxFit.fill,
+                                          )),
+                                ),
+                              ),
+                            ),
                           ],
                         )),
                     Container(

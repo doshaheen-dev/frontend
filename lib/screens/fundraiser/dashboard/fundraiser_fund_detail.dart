@@ -73,13 +73,18 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
     return MediaQuery(
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
         child: ProgressHUD(
-          child: Builder(
-            builder: (context) => Scaffold(
-              bottomNavigationBar: _createButtonLayout(context),
-              backgroundColor: Colors.white,
-              body: SingleChildScrollView(
+            child: Builder(
+          builder: (context) => Scaffold(
+            bottomNavigationBar: _createButtonLayout(context),
+            backgroundColor: Colors.white,
+            body: new GestureDetector(
+              onTap: () {
+                /*This method here will hide the soft keyboard.*/
+                FocusScope.of(context).requestFocus(new FocusNode());
+              },
+              child: SingleChildScrollView(
                 child: Container(
-                  margin: const EdgeInsets.only(top: 40.0),
+                  margin: const EdgeInsets.only(top: 25.0),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -145,7 +150,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
               ),
             ),
           ),
-        ));
+        )));
   }
 
   _createButtonLayout(BuildContext context) {
@@ -161,6 +166,13 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
                 child: ElevatedButton(
                   onPressed: () {
                     if (_isButtonDisabled) {
+                      if (int.parse(_newFundValueController.text.trim()) >
+                              2100000000 ||
+                          int.parse(_newFundValueController.text.trim()) <= 0) {
+                        showSnackBar(context,
+                            "Please enter value between 0 and 2100000000");
+                        return;
+                      }
                       progress = ProgressHUD.of(context);
                       progress?.showWithText('Submitting Updates...');
                       _performSubmission(context);
@@ -225,7 +237,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
       style: textBlackNormal16(),
       controller: _controller,
       decoration: new InputDecoration(
-          contentPadding: EdgeInsets.all(10.0),
+          contentPadding: EdgeInsets.all(8.0),
           labelText: text,
           hintText: hint,
           hintMaxLines: 2,
@@ -237,9 +249,11 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
               borderRadius: BorderRadius.all(
                 const Radius.circular(10.0),
               ))),
+      textInputAction: TextInputAction.done,
       keyboardType: TextInputType.number,
       inputFormatters: <TextInputFormatter>[
         FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(10),
       ],
     );
   }
@@ -249,7 +263,8 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
     return MediaQuery(
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
         child: Container(
-          margin: const EdgeInsets.only(top: 5.0, bottom: 10),
+          margin: const EdgeInsets.only(
+              top: 5.0, bottom: 10, left: 5.0, right: 5.0),
           decoration: BoxDecoration(
               color: unselectedGray,
               borderRadius: BorderRadius.circular(10.0),
@@ -288,7 +303,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
                 Expanded(
                   flex: 2,
                   child: Container(
-                    margin: EdgeInsets.only(right: 10),
+                    margin: EdgeInsets.only(right: 10, left: 2.0),
                     decoration: BoxDecoration(
                       color: unselectedGray,
                       borderRadius: BorderRadius.all(
@@ -296,7 +311,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
                       ),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Center(
                           child: (_uploadedDocuments
                                       .indexWhere((doc) => doc.id == 0) >=
@@ -412,6 +427,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
     try {
       final requestModelInstance = AddFundRequestModel.instance;
       String newVal = _newFundValueController.text.trim();
+
       if (newVal != null && newVal != '') {
         requestModelInstance.fundNewVal = int.parse(newVal);
       }
