@@ -296,7 +296,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
             highlightColor: Colors.transparent,
             onTap: () => {
                   FocusScope.of(context).requestFocus(FocusNode()),
-                  _selectFile(context, 0),
+                  _selectFile(context, 3), //3 For Fund Deck
                 },
             child: Row(
               children: [
@@ -314,7 +314,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Center(
                           child: (_uploadedDocuments
-                                      .indexWhere((doc) => doc.id == 0) >=
+                                      .indexWhere((doc) => doc.id == 3) >=
                                   0)
                               ? Text('Uploaded',
                                   textAlign: TextAlign.center,
