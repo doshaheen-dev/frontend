@@ -168,11 +168,9 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
                     if (_isButtonDisabled) {
                       if (_newFundValueController.text.isNotEmpty) {
                         if (int.parse(_newFundValueController.text.trim()) >
-                                2100000000 ||
-                            int.parse(_newFundValueController.text.trim()) <=
-                                0) {
+                            2100000000) {
                           showSnackBar(context,
-                              "Please enter value between 0 and 2100000000");
+                              "Please enter value less than or equal to 2100000000");
                           return;
                         }
                       }
