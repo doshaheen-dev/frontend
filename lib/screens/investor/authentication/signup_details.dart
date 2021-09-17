@@ -184,6 +184,14 @@ class _SignUpDetailsState extends State<SignUpDetails> {
             print(country);
           });
         },
+        emptyBuilder: (ctx, search) => Center(
+          child: Text('No Data Found',
+              style: TextStyle(
+                  decoration: TextDecoration.none,
+                  fontFamily: FontFamilyMontserrat.bold,
+                  fontSize: 26,
+                  color: Colors.black)),
+        ),
         dropdownSearchDecoration: InputDecoration(
           labelText: 'Country',
           labelStyle: new TextStyle(

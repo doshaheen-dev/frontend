@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class FundraiserFaq extends StatefulWidget {
@@ -31,6 +32,17 @@ class _FundraiserFaqState extends State<FundraiserFaq> {
                   initialUrl:
                       'http://ami-corp-admin-portal.s3-website.ap-south-1.amazonaws.com/onboarding/faq/fundraiser',
                   javascriptMode: JavascriptMode.unrestricted,
+                  navigationDelegate: (action) {
+                    if (action.url.contains('mailto')) {
+                      launch(action.url);
+                      return NavigationDecision.prevent; // Prevent opening url
+                    } else if (action.url.contains('youtube.com')) {
+                      print('Trying to open Youtube');
+                      return NavigationDecision.navigate; // Allow opening url
+                    } else {
+                      return NavigationDecision.navigate; // Default decision
+                    }
+                  },
                   onWebViewCreated: (controller) {
                     _webViewController = controller;
                   },

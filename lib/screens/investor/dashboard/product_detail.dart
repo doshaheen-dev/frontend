@@ -55,265 +55,254 @@ class _ProductDetailState extends State<ProductDetail> {
       builder: (context) => MediaQuery(
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
         child: Scaffold(
-            appBar: AppBar(
-              toolbarHeight: 0,
-              elevation: 0.0,
-              backgroundColor: Color(0xffffffff),
-            ),
-            bottomNavigationBar: _createButtonLayout(context),
-            backgroundColor: Colors.white,
-            body: ProgressHUD(
-                child: Builder(
-                    builder: (context) => SafeArea(
-                            child: SingleChildScrollView(
-                          child: Container(
-                            margin: const EdgeInsets.only(
-                                top: 40.0, left: 15.0, right: 15.0),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Container(
-                                    child: IconButton(
-                                      splashColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      icon: Image.asset(
-                                          "assets/images/icon_close.png"),
-                                      onPressed: () => {Navigator.pop(context)},
-                                    ),
-                                  ),
-                                  Image(
-                                    image: _recommendation.fundLogo != ""
-                                        ? NetworkImage(_recommendation.fundLogo)
-                                        : AssetImage(
-                                            "assets/images/dummy/investment1.png"),
-                                    height: 250,
-                                    width: MediaQuery.of(context).size.width,
-                                    fit: BoxFit.fill,
-                                  ),
+          appBar: AppBar(
+            toolbarHeight: 0,
+            elevation: 0.0,
+            backgroundColor: Color(0xffffffff),
+          ),
+          bottomNavigationBar: _createButtonLayout(context),
+          backgroundColor: Colors.white,
+          body: ProgressHUD(
+              child: Builder(
+            builder: (context) => SafeArea(
+                child: SingleChildScrollView(
+              child: Container(
+                margin:
+                    const EdgeInsets.only(top: 40.0, left: 15.0, right: 15.0),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        child: IconButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          icon: Image.asset("assets/images/icon_close.png"),
+                          onPressed: () => {Navigator.pop(context)},
+                        ),
+                      ),
+                      Image(
+                        image: _recommendation.fundLogo != ""
+                            ? NetworkImage(_recommendation.fundLogo)
+                            : AssetImage("assets/images/dummy/investment1.png"),
+                        height: 250,
+                        width: MediaQuery.of(context).size.width,
+                        fit: BoxFit.fill,
+                      ),
 
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  Center(
-                                      child: Text(
-                                    _recommendation.fundName,
-                                    style: textBold18(headingBlack),
-                                  )),
-                                  Divider(color: HexColor("#E8E8E8")),
-                                  // Fund overview
-                                  Container(
-                                    child: Card(
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Center(
+                          child: Text(
+                        _recommendation.fundName,
+                        style: textBold18(headingBlack),
+                      )),
+                      Divider(color: HexColor("#E8E8E8")),
+                      // Fund overview
+                      Container(
+                        child: Card(
+                          color: _isFundOverview
+                              ? Theme.of(context).primaryColor
+                              : unselectedGray,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0)),
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Padding(
+                                    padding: EdgeInsets.all(10.0),
+                                    child: Text("Fund Overview",
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: _isFundOverview
+                                                ? Colors.white
+                                                : Colors.black,
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 16.0,
+                                            fontFamily:
+                                                FontFamilyMontserrat.name))),
+                                Spacer(),
+                                IconButton(
+                                    onPressed: () {
+                                      _displayFundOverview();
+                                    },
+                                    splashColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    icon: Image.asset(
+                                      "assets/images/icon_down.png",
                                       color: _isFundOverview
-                                          ? Theme.of(context).primaryColor
-                                          : unselectedGray,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0)),
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsets.all(10.0),
-                                                child: Text("Fund Overview",
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                        color: _isFundOverview
-                                                            ? Colors.white
-                                                            : Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        fontSize: 16.0,
-                                                        fontFamily:
-                                                            FontFamilyMontserrat
-                                                                .name))),
-                                            Spacer(),
-                                            IconButton(
-                                                onPressed: () {
-                                                  _displayFundOverview();
-                                                },
-                                                splashColor: Colors.transparent,
-                                                highlightColor:
-                                                    Colors.transparent,
-                                                icon: Image.asset(
-                                                  "assets/images/icon_down.png",
-                                                  color: _isFundOverview
-                                                      ? Colors.white
-                                                      : Colors.black,
-                                                ))
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Visibility(
-                                      visible: _isFundOverview,
-                                      child: Container(
-                                          child: Card(
-                                        color: unselectedGray,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0)),
-                                        child: Container(
-                                            alignment: Alignment.center,
-                                            child: Padding(
-                                                padding: EdgeInsets.all(10.0),
-                                                child: Column(children: [
-                                                  Row(
-                                                    children: [
-                                                      Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                              "Fund Regulated")),
-                                                      Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                              _recommendation
-                                                                          .fundRegulated ==
-                                                                      1
-                                                                  ? "Yes"
-                                                                  : "No"))
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 10.0,
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                              "Fund Regulator")),
-                                                      Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                              _recommendation
-                                                                  .fundRegulatorName))
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 10.0,
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                              "Website Link")),
-                                                      Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                              _recommendation
-                                                                  .fundWebsite))
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 10.0,
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                              "Fund Sponsor")),
-                                                      Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                              _recommendation
-                                                                  .fundSponsorName))
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 10.0,
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                              "Existing Fund")),
-                                                      Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                              "\$${_recommendation.fundExistVal}"))
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 10.0,
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Expanded(
-                                                          flex: 1,
-                                                          child:
-                                                              Text("New Fund")),
-                                                      Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                              "\$${_recommendation.fundNewVal}"))
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 10.0,
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                              "Product Type")),
-                                                      Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                              "${_recommendation.product_name}"))
-                                                    ],
-                                                  )
-                                                ]))),
-                                      ))),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Container(
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                            flex: 1,
-                                            child: Column(
-                                              children: [
-                                                Text(
-                                                  "\$${_recommendation.fundNewVal}",
-                                                  style: textBlackNormal16(),
-                                                ),
-                                                Text("Target",
-                                                    style: textNormal16(
-                                                        Theme.of(context)
-                                                            .primaryColor))
-                                              ],
-                                            )),
-                                        Expanded(
-                                            flex: 1,
-                                            child: Column(
-                                              children: [
-                                                Text(
-                                                  _recommendation
-                                                      .minimumInvestment,
-                                                  style: textBlackNormal16(),
-                                                ),
-                                                Text("Min Per Investor",
-                                                    style: textNormal16(
-                                                        Theme.of(context)
-                                                            .primaryColor))
-                                              ],
-                                            ))
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(height: 20.0),
-                                ]),
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ))
+                              ],
+                            ),
                           ),
-                        ))))),
+                        ),
+                      ),
+                      Visibility(
+                          visible: _isFundOverview,
+                          child: Container(
+                              child: Card(
+                            color: unselectedGray,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
+                            child: Container(
+                                alignment: Alignment.center,
+                                child: Padding(
+                                    padding: EdgeInsets.all(10.0),
+                                    child: Column(children: [
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                              flex: 1,
+                                              child: Text("Fund Regulated")),
+                                          Expanded(
+                                              flex: 1,
+                                              child: Text(_recommendation
+                                                          .fundRegulated ==
+                                                      1
+                                                  ? "Yes"
+                                                  : "No"))
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 10.0,
+                                      ),
+                                      if (_recommendation.fundRegulated == 1)
+                                        Container(
+                                            child: Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                    flex: 1,
+                                                    child:
+                                                        Text("Fund Regulator")),
+                                                Expanded(
+                                                    flex: 1,
+                                                    child: Text(_recommendation
+                                                        .fundRegulatorName))
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              height: 10.0,
+                                            )
+                                          ],
+                                        )),
+                                      SizedBox(
+                                        height: 10.0,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                              flex: 1,
+                                              child: Text("Website Link")),
+                                          Expanded(
+                                              flex: 1,
+                                              child: Text(
+                                                  _recommendation.fundWebsite))
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 10.0,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                              flex: 1,
+                                              child: Text("Fund Sponsor")),
+                                          Expanded(
+                                              flex: 1,
+                                              child: Text(_recommendation
+                                                  .fundSponsorName))
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 10.0,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                              flex: 1,
+                                              child: Text("Existing Fund")),
+                                          Expanded(
+                                              flex: 1,
+                                              child: Text(
+                                                  "\$${_recommendation.fundExistVal}"))
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 10.0,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                              flex: 1, child: Text("New Fund")),
+                                          Expanded(
+                                              flex: 1,
+                                              child: Text(
+                                                  "\$${_recommendation.fundNewVal}"))
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 10.0,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                              flex: 1,
+                                              child: Text("Product Type")),
+                                          Expanded(
+                                              flex: 1,
+                                              child: Text(
+                                                  "${_recommendation.product_name}"))
+                                        ],
+                                      )
+                                    ]))),
+                          ))),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        child: Row(
+                          children: [
+                            Expanded(
+                                flex: 1,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "\$${_recommendation.fundNewVal}",
+                                      style: textBlackNormal16(),
+                                    ),
+                                    Text("Target",
+                                        style: textNormal16(
+                                            Theme.of(context).primaryColor))
+                                  ],
+                                )),
+                            Expanded(
+                                flex: 1,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      _recommendation.minimumInvestment,
+                                      style: textBlackNormal16(),
+                                    ),
+                                    Text("Min Per Investor",
+                                        style: textNormal16(
+                                            Theme.of(context).primaryColor))
+                                  ],
+                                ))
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20.0),
+                    ]),
+              ),
+            )),
+          )),
+        ),
       ),
     ));
   }

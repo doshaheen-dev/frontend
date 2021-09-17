@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/models/default.dart';
 import 'package:acc/models/local_countries.dart';
@@ -482,6 +483,14 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
           print(country);
         });
       },
+      emptyBuilder: (ctx, search) => Center(
+        child: Text('No Data Found',
+            style: TextStyle(
+                decoration: TextDecoration.none,
+                fontFamily: FontFamilyMontserrat.bold,
+                fontSize: 26,
+                color: Colors.black)),
+      ),
       dropdownSearchDecoration: InputDecoration(
         labelText: 'Country',
         labelStyle: textNormal18(Colors.grey[600]),

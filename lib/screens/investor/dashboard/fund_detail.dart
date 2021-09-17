@@ -236,17 +236,24 @@ class _FundDetailState extends State<FundDetail> {
                       SizedBox(
                         height: 10.0,
                       ),
-                      Row(
-                        children: [
-                          Expanded(flex: 1, child: Text("Fund Regulator")),
-                          Expanded(
-                              flex: 1,
-                              child: Text(_likedFunds.fundRegulatorName))
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
+                      if (_likedFunds.fundRegulated == 1)
+                        Container(
+                            child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                    flex: 1, child: Text("Fund Regulator")),
+                                Expanded(
+                                    flex: 1,
+                                    child: Text(_likedFunds.fundRegulatorName))
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            )
+                          ],
+                        )),
                       Row(
                         children: [
                           Expanded(flex: 1, child: Text("Website Link")),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/models/default.dart';
 import 'package:acc/models/local_countries.dart';
@@ -464,6 +465,14 @@ class _InvestorProfileState extends State<InvestorProfile> {
     return DropdownSearch<Map<String, dynamic>>(
       mode: Mode.BOTTOM_SHEET,
       showSearchBox: true,
+      emptyBuilder: (ctx, search) => Center(
+        child: Text('No Data Found',
+            style: TextStyle(
+                decoration: TextDecoration.none,
+                fontFamily: FontFamilyMontserrat.bold,
+                fontSize: 26,
+                color: Colors.black)),
+      ),
       showSelectedItem: false,
       items: items,
       itemAsString: (Map<String, dynamic> i) => i['text'],

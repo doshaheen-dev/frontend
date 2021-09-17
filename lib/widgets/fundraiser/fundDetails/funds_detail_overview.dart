@@ -97,18 +97,25 @@ class _CreateFundOverviewState extends State<CreateFundOverview> {
                           SizedBox(
                             height: 10.0,
                           ),
-                          Row(
-                            children: [
-                              Expanded(flex: 1, child: Text("Fund Regulator")),
-                              Expanded(
-                                  flex: 1,
-                                  child:
-                                      Text(widget.likedFunds.fundRegulatorName))
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10.0,
-                          ),
+                          if (widget.likedFunds.fundRegulated == 1)
+                            Container(
+                                child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                        flex: 1, child: Text("Fund Regulator")),
+                                    Expanded(
+                                        flex: 1,
+                                        child: Text(widget
+                                            .likedFunds.fundRegulatorName))
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10.0,
+                                )
+                              ],
+                            )),
                           Row(
                             children: [
                               Expanded(flex: 1, child: Text("Website Link")),

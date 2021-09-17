@@ -4,6 +4,7 @@ import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/screens/fundraiser/authentication/signup_corporate_details.dart';
 import 'package:acc/utilites/app_strings.dart';
 import 'package:acc/utilites/text_style.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
@@ -144,23 +145,30 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.only(right: 20.0),
-                            child: Align(
+                              margin: EdgeInsets.only(right: 20.0),
                               alignment: Alignment.topRight,
-                              child: InkWell(
-                                  child: Text(
-                                    "Didn't receive the code? Resend OTP",
-                                    textAlign: TextAlign.end,
+                              child: RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                    text: "Didn't receive the code? ",
                                     style: textNormal14(Colors.black),
-                                  ),
-                                  onTap: () {
-                                    progress = ProgressHUD.of(context);
-                                    progress?.showWithText(sendingOtp);
-                                    otpController.clear();
-                                    _getOtp();
-                                  }),
-                            ),
-                          ),
+                                    children: [
+                                      TextSpan(
+                                          text: 'Resend OTP',
+                                          style: textNormal14(
+                                              Theme.of(context).primaryColor),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              progress =
+                                                  ProgressHUD.of(context);
+                                              progress
+                                                  ?.showWithText(sendingOtp);
+                                              otpController.clear();
+                                              _getOtp();
+                                            })
+                                    ]),
+                              )),
+
                           SizedBox(
                             height: 40,
                           ),

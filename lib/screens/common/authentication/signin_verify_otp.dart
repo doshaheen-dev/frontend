@@ -4,6 +4,7 @@ import 'package:acc/models/authentication/otp_response.dart';
 import 'package:acc/screens/fundraiser/authentication/email_verification.dart';
 import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
 import 'package:acc/screens/investor/welcome.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
@@ -105,10 +106,7 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
                                   Container(
                                     width: MediaQuery.of(context).size.width,
                                     margin: const EdgeInsets.only(
-                                        top: 5.0,
-                                        left: 40.0,
-                                        bottom: 20,
-                                        right: 40.0),
+                                        top: 5.0, left: 40.0, right: 40.0),
                                     child: PinCodeTextField(
                                       controller: otpController,
                                       appContext: context,
@@ -140,25 +138,36 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
                                   ),
 
                                   Container(
-                                    margin: EdgeInsets.only(right: 20.0),
-                                    child: Align(
+                                      margin: EdgeInsets.only(right: 20.0),
                                       alignment: Alignment.topRight,
-                                      child: InkWell(
-                                          child: Text(
-                                            "Didn't receive the code? Resend OTP",
-                                            textAlign: TextAlign.end,
+                                      child: RichText(
+                                        textAlign: TextAlign.center,
+                                        text: TextSpan(
+                                            text: "Didn't receive the code? ",
                                             style: textNormal14(Colors.black),
-                                          ),
-                                          onTap: () {
-                                            progress = ProgressHUD.of(context);
-                                            progress?.showWithText(sendingOtp);
-                                            otpController.clear();
-                                            sendOTPServer();
-                                          }),
-                                    ),
-                                  ),
+                                            children: [
+                                              TextSpan(
+                                                  text: 'Resend OTP',
+                                                  style: textNormal14(
+                                                      Theme.of(context)
+                                                          .primaryColor),
+                                                  recognizer:
+                                                      TapGestureRecognizer()
+                                                        ..onTap = () {
+                                                          progress =
+                                                              ProgressHUD.of(
+                                                                  context);
+                                                          progress
+                                                              ?.showWithText(
+                                                                  sendingOtp);
+                                                          otpController.clear();
+                                                          sendOTPServer();
+                                                        })
+                                            ]),
+                                      )),
+
                                   SizedBox(
-                                    height: 40,
+                                    height: 30,
                                   ),
                                   //Verify BUTTON
                                   Container(

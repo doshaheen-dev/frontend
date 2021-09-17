@@ -516,6 +516,7 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
           'No $label found',
           style: TextStyle(
             color: Colors.red,
+            decoration: TextDecoration.none,
             fontFamily: FontFamilyMontserrat.name,
             fontSize: 26,
             fontWeight: FontWeight.bold,

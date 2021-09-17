@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class InvestorFaq extends StatefulWidget {
@@ -29,6 +30,17 @@ class _InvestorFaqState extends State<InvestorFaq> {
                   initialUrl:
                       'http://ami-corp-admin-portal.s3-website.ap-south-1.amazonaws.com/onboarding/faq/investor',
                   javascriptMode: JavascriptMode.unrestricted,
+                  navigationDelegate: (action) {
+                    if (action.url.contains('mailto')) {
+                      launch(action.url);
+                      return NavigationDecision.prevent; // Prevent opening url
+                    } else if (action.url.contains('youtube.com')) {
+                      print('Trying to open Youtube');
+                      return NavigationDecision.navigate; // Allow opening url
+                    } else {
+                      return NavigationDecision.navigate; // Default decision
+                    }
+                  },
                   onWebViewCreated: (controller) {
                     _webViewController = controller;
                   },
