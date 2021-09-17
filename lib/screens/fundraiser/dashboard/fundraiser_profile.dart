@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:acc/constants/font_family.dart';
@@ -113,165 +114,163 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
     return MediaQuery(
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
         child: Scaffold(
-            backgroundColor: Colors.white,
-            body: ProgressHUD(
-                child: Builder(
-                    builder: (context) => SingleChildScrollView(
-                          child: Container(
-                              margin: EdgeInsets.only(top: 10.0, bottom: 20.0),
-                              child: Column(
+          backgroundColor: Colors.white,
+          body: ProgressHUD(
+            child: Builder(
+                builder: (context) => SingleChildScrollView(
+                      child: Container(
+                          margin: EdgeInsets.only(top: 10.0, bottom: 20.0),
+                          child: Column(
+                            children: [
+                              Container(
+                                child: setUserProfileView(context),
+                                margin:
+                                    EdgeInsets.only(left: 25.0, right: 25.0),
+                              ),
+                              Row(
                                 children: [
-                                  Container(
-                                    child: setUserProfileView(context),
-                                    margin: EdgeInsets.only(
-                                        left: 25.0, right: 25.0),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 1,
-                                        child: // UPDATE
-                                            Container(
-                                                margin: const EdgeInsets.only(
-                                                    top: 5.0,
-                                                    left: 25.0,
-                                                    bottom: 10,
-                                                    right: 10.0),
-                                                child: ElevatedButton(
-                                                  onPressed: !isDataChanged
-                                                      ? null
-                                                      : () {
-                                                          // on click
+                                  Expanded(
+                                    flex: 1,
+                                    child: // UPDATE
+                                        Container(
+                                            margin: const EdgeInsets.only(
+                                                top: 5.0,
+                                                left: 25.0,
+                                                bottom: 10,
+                                                right: 10.0),
+                                            child: ElevatedButton(
+                                              onPressed: !isDataChanged
+                                                  ? null
+                                                  : () {
+                                                      // on click
 
-                                                          FocusScope.of(context)
-                                                              .requestFocus(
-                                                                  FocusNode());
-                                                          String _phoneNumber =
-                                                              "+${selectedCountry.dialCode}" +
-                                                                  _mobileController
-                                                                      .text
-                                                                      .toString()
-                                                                      .trim();
+                                                      FocusScope.of(context)
+                                                          .requestFocus(
+                                                              FocusNode());
+                                                      String _phoneNumber =
+                                                          "+${selectedCountry.dialCode}" +
+                                                              _mobileController
+                                                                  .text
+                                                                  .toString()
+                                                                  .trim();
+                                                      progress = ProgressHUD.of(
+                                                          context);
+                                                      progress?.showWithText(
+                                                          'Updating Profile...');
+                                                      submitDetails(
+                                                          _companyEmailController
+                                                              .text
+                                                              .trim(),
+                                                          _phoneNumber,
+                                                          _verificationId,
+                                                          _emailVerificationId);
 
-                                                          if (_phoneNumber !=
-                                                                  UserData
-                                                                      .instance
-                                                                      .userInfo
-                                                                      .mobileNo ||
-                                                              _companyEmailController
-                                                                      .text
-                                                                      .toString()
-                                                                      .trim() !=
-                                                                  UserData
-                                                                      .instance
-                                                                      .userInfo
-                                                                      .emailId) {
-                                                            progress =
-                                                                ProgressHUD.of(
-                                                                    context);
-                                                            progress?.showWithText(
-                                                                'Updating Profile...');
-                                                            submitDetails(
-                                                                _companyEmailController
-                                                                    .text
-                                                                    .trim(),
-                                                                _phoneNumber,
-                                                                _verificationId,
-                                                                _emailVerificationId);
+                                                      // if (_phoneNumber !=
+                                                      //         UserData
+                                                      //             .instance
+                                                      //             .userInfo
+                                                      //             .mobileNo ||
+                                                      //     _companyEmailController
+                                                      //             .text
+                                                      //             .toString()
+                                                      //             .trim() !=
+                                                      //         UserData
+                                                      //             .instance
+                                                      //             .userInfo
+                                                      //             .emailId) {
+                                                      //   progress =
+                                                      //       ProgressHUD.of(
+                                                      //           context);
+                                                      //   progress?.showWithText(
+                                                      //       'Updating Profile...');
+                                                      //   submitDetails(
+                                                      //       _companyEmailController
+                                                      //           .text
+                                                      //           .trim(),
+                                                      //       _phoneNumber,
+                                                      //       _verificationId,
+                                                      //       _emailVerificationId);
 
-                                                            return;
-                                                          }
-                                                          showSnackBar(context,
-                                                              "Please enter any new data for updation.");
-                                                        },
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    padding:
-                                                        EdgeInsets.all(0.0),
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              18),
-                                                    ),
-                                                  ),
-                                                  child: Ink(
-                                                    decoration: isDataChanged
-                                                        ? BoxDecoration(
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .primaryColor,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        15))
-                                                        : BoxDecoration(
-                                                            color: kwhiteGrey,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        15),
-                                                          ),
-                                                    child: Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      height: 45,
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: Text(
-                                                        "Update",
-                                                        style:
-                                                            textWhiteBold16(),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                )),
-                                      ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: Container(
-                                          margin: const EdgeInsets.only(
-                                              left: 10.0,
-                                              bottom: 10,
-                                              right: 25.0),
-                                          child: ElevatedButton(
-                                              onPressed: () {
-                                                openLogoutDialog(context,
-                                                    "Are you sure you want to logout?");
-                                              },
+                                                      //   return;
+                                                      // }
+                                                      // showSnackBar(context,
+                                                      //     "Please enter any new data for updation.");
+                                                    },
                                               style: ElevatedButton.styleFrom(
-                                                  padding: EdgeInsets.all(0.0),
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              18))),
+                                                padding: EdgeInsets.all(0.0),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(18),
+                                                ),
+                                              ),
                                               child: Ink(
-                                                decoration: BoxDecoration(
-                                                    color: Theme.of(context)
-                                                        .primaryColor,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15)),
+                                                decoration: isDataChanged
+                                                    ? BoxDecoration(
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15))
+                                                    : BoxDecoration(
+                                                        color: kwhiteGrey,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15),
+                                                      ),
                                                 child: Container(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    height: 45,
-                                                    alignment: Alignment.center,
-                                                    child: Text("Logout",
-                                                        style:
-                                                            textWhiteBold16())),
-                                              )),
-                                        ),
-                                      )
-                                    ],
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  height: 45,
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    "Update",
+                                                    style: textWhiteBold16(),
+                                                  ),
+                                                ),
+                                              ),
+                                            )),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      margin: const EdgeInsets.only(
+                                          left: 10.0, bottom: 10, right: 25.0),
+                                      child: ElevatedButton(
+                                          onPressed: () {
+                                            openLogoutDialog(context,
+                                                "Are you sure you want to logout?");
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              padding: EdgeInsets.all(0.0),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          18))),
+                                          child: Ink(
+                                            decoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(15)),
+                                            child: Container(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                height: 45,
+                                                alignment: Alignment.center,
+                                                child: Text("Logout",
+                                                    style: textWhiteBold16())),
+                                          )),
+                                    ),
                                   )
                                 ],
-                              )),
-                        )))));
+                              )
+                            ],
+                          )),
+                    )),
+          ),
+        ));
   }
 
   void setUserInformation() {
@@ -507,13 +506,16 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
   Future<void> submitDetails(String _email, String _phoneNumber,
       String _verificationId, String _emailVerificationId) async {
     Map<String, dynamic> requestMap = Map();
+    var isSignInRequired = false;
 
     if (_email != UserData.instance.userInfo.emailId) {
+      isSignInRequired = true;
       requestMap["email_id"] = CryptUtils.encryption(_email);
       requestMap["email_verificationId"] = _emailVerificationId;
     }
 
     if (_phoneNumber != UserData.instance.userInfo.mobileNo) {
+      isSignInRequired = true;
       requestMap["mobile_no"] = CryptUtils.encryption(_phoneNumber);
       requestMap["mobile_verificationId"] = _verificationId;
     }
@@ -523,7 +525,38 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
           await UpdateProfileService.updateUserInfo(requestMap);
       if (updateResponse.status == 200) {
         progress.dismiss();
-        _openDialog(context, updateResponse.message);
+        if (isSignInRequired) {
+          _openDialog(context, updateResponse.message);
+        } else {
+          showSnackBar(context, updateResponse.message);
+          setState(() {
+            isDataChanged = false;
+          });
+
+          UserData userData = UserData(
+            UserData.instance.userInfo.token,
+            UserData.instance.userInfo.firstName,
+            "",
+            UserData.instance.userInfo.lastName,
+            UserData.instance.userInfo.mobileNo,
+            UserData.instance.userInfo.emailId,
+            UserData.instance.userInfo.userType,
+            UserData.instance.userInfo.profileImage,
+            UserData.instance.userInfo.designation,
+            UserData.instance.userInfo.companyName,
+            "",
+            UserData.instance.userInfo.countryName,
+            UserData.instance.userInfo.hearAboutUs,
+            UserData.instance.userInfo.referralName,
+            UserData.instance.userInfo.slotId,
+            UserData.instance.userInfo.productIds,
+            UserData.instance.userInfo.emailVerified,
+          );
+          final prefs = await SharedPreferences.getInstance();
+          final userJson = jsonEncode(userData);
+          prefs.setString('UserInfo', userJson);
+          UserData.instance.userInfo = userData;
+        }
       } else {
         if (progress != null) {
           progress.dismiss();
