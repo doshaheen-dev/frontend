@@ -64,15 +64,15 @@ class _FundDetailState extends State<FundDetail> {
                           onPressed: () => {Navigator.pop(context)},
                         ),
                       ),
-                      Image(
+                      Center(
+                          child: Image(
                         image: _likedFunds.fundLogo != ""
                             ? NetworkImage(_likedFunds.fundLogo)
                             : AssetImage("assets/images/dummy/investment1.png"),
-                        width: MediaQuery.of(context).size.width,
-                        height: 100,
-                        fit: BoxFit.fill,
-                      ),
-
+                        // width: MediaQuery.of(context).size.width,
+                        height: 250,
+                        fit: BoxFit.fitHeight,
+                      )),
                       SizedBox(
                         height: 5,
                       ),
@@ -106,18 +106,6 @@ class _FundDetailState extends State<FundDetail> {
                                             Theme.of(context).primaryColor))
                                   ],
                                 )),
-                            // Expanded(
-                            //     flex: 1,
-                            //     child: Column(
-                            //       children: [
-                            //         Text(
-                            //           _likedFunds.minimumInvestment,
-                            //           style: textBlackNormal16(),
-                            //         ),
-                            //         Text("Min Per Investor",
-                            //             style: textNormal16(kDarkOrange))
-                            //       ],
-                            //   ))
                           ],
                         ),
                       ),

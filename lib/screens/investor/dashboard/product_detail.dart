@@ -80,13 +80,16 @@ class _ProductDetailState extends State<ProductDetail> {
                           onPressed: () => {Navigator.pop(context)},
                         ),
                       ),
-                      Image(
-                        image: _recommendation.fundLogo != ""
-                            ? NetworkImage(_recommendation.fundLogo)
-                            : AssetImage("assets/images/dummy/investment1.png"),
-                        height: 250,
-                        width: MediaQuery.of(context).size.width,
-                        fit: BoxFit.fill,
+                      Center(
+                        child: Image(
+                          image: _recommendation.fundLogo != ""
+                              ? NetworkImage(_recommendation.fundLogo)
+                              : AssetImage(
+                                  "assets/images/dummy/investment1.png"),
+                          height: 250,
+                          // width: MediaQuery.of(context).size.width,
+                          fit: BoxFit.fitHeight,
+                        ),
                       ),
 
                       SizedBox(
@@ -191,9 +194,6 @@ class _ProductDetailState extends State<ProductDetail> {
                                             )
                                           ],
                                         )),
-                                      SizedBox(
-                                        height: 10.0,
-                                      ),
                                       Row(
                                         children: [
                                           Expanded(

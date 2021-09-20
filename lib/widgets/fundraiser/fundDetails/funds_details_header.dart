@@ -45,7 +45,7 @@ class _FundsDetailHeaderState extends State<FundsDetailHeader> {
               widget.likedFunds.fundLogo,
               height: 250,
               width: double.infinity,
-              fit: BoxFit.fill,
+              fit: BoxFit.fitHeight,
               loadingBuilder: (context, child, loadingProgress) {
                 if (loadingProgress == null) return child;
 
