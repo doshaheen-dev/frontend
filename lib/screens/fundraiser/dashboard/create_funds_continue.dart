@@ -445,7 +445,16 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
   }
 
   Future<void> _selectFile(BuildContext context, int kycDocId) async {
-    FilePickerResult result = await FilePicker.platform.pickFiles();
+    FilePickerResult result;
+    if (kycDocId == 0) {
+      result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'jpeg', 'png'],
+      );
+    } else {
+      result = await FilePicker.platform.pickFiles();
+    }
+
     if (result != null) {
       String fileName = result.files.single.name;
       File file = File(result.files.single.path);
