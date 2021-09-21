@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:acc/models/authentication/verify_phone_signin.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CodeUtils {
@@ -10,8 +9,7 @@ class CodeUtils {
       .hasMatch(input);
 
   static bool isPhone(String input) =>
-      RegExp(r'^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$')
-          .hasMatch(input);
+      RegExp(r'(^(?:[+0]9)?$)').hasMatch(input);
 
   static Future<bool> syncUserPreferencesWithData(UserData data) async {
     final prefs = await SharedPreferences.getInstance();

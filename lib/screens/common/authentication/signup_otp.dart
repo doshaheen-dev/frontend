@@ -9,6 +9,7 @@ import 'package:acc/services/OtpService.dart';
 import 'package:acc/utilites/app_strings.dart';
 import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utilites/text_style.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
@@ -20,8 +21,11 @@ import 'package:ps_code_checking/ps_code_checking.dart';
 
 class SignUpOTP extends StatefulWidget {
   final String _userType;
-  SignUpOTP({Key key, String userType})
+  final List<Countries> _countriesList;
+
+  SignUpOTP({Key key, String userType, List<Countries> countryList})
       : _userType = userType,
+        _countriesList = countryList,
         super(key: key);
 
   @override
@@ -32,17 +36,21 @@ class _SignUpOTPState extends State<SignUpOTP> {
   bool visible = false;
   EdgeInsets margin;
   String _userType;
-  var selectedCountry;
-  List<Countries> countryList = <Countries>[
-    const Countries("India", "IN", 91, 10),
-    const Countries("Singapore", "SG", 65, 12),
-    const Countries("United States", "US", 1, 10),
-  ];
+  Countries selectedCountry;
+  List<Countries> countryList = [];
+  Map<String, dynamic> selectedCountryItem;
+
+  // <Countries>[
+  //   const Countries("India", "IN", 91, 10),
+  //   const Countries("Singapore", "SG", 65, 12),
+  //   const Countries("United States", "US", 1, 10),
+  // ];
 
   @override
   void initState() {
     _userType = widget._userType;
-    selectedCountry = countryList[0];
+    countryList = widget._countriesList;
+    //selectedCountry = countryList[0];
     super.initState();
   }
 
@@ -210,8 +218,15 @@ class _SignUpOTPState extends State<SignUpOTP> {
             child: Container(
               margin: const EdgeInsets.only(
                   top: 5.0, left: 25.0, bottom: 20, right: 5.0),
+              width: MediaQuery.of(context).size.width,
+              height: 80,
               decoration: customDecoration(),
-              child: _buildCodeDropDown(),
+              child: _buildCodeDropDown(countryList
+                  .map((info) => {
+                        'text': info.name,
+                        'value': info.dialCode,
+                      })
+                  .toList()),
             )),
         Expanded(
           flex: 2,
@@ -223,6 +238,50 @@ class _SignUpOTPState extends State<SignUpOTP> {
         ),
       ],
     );
+  }
+
+  Widget _buildCodeDropDown(List<Map<String, dynamic>> list) {
+    return Padding(
+        padding: EdgeInsets.only(left: 10.0, right: 5.0),
+        child: DropdownSearch<Map<String, dynamic>>(
+          mode: Mode.BOTTOM_SHEET,
+          showSearchBox: true,
+          emptyBuilder: (ctx, search) => Center(
+            child: Text('No Data Found',
+                style: TextStyle(
+                    decoration: TextDecoration.none,
+                    fontFamily: FontFamilyMontserrat.bold,
+                    fontSize: 26,
+                    color: Colors.black)),
+          ),
+          showSelectedItem: false,
+          items: list,
+          itemAsString: (Map<String, dynamic> country) =>
+              "+${country['value']} ${country['text']} ",
+          hint: "",
+          selectedItem: selectedCountryItem,
+          // label: selectedCountry != "" ? selectedCountry : 91,
+          onChanged: (map) {
+            setState(() {
+              final index = countryList
+                  .indexWhere((element) => element.name == map['text']);
+              if (index >= 0) {
+                selectedCountry = countryList[index];
+                print('Using indexWhere: ${countryList[index].maxLength}');
+              }
+              selectedCountryItem = map;
+            });
+          },
+          dropdownSearchDecoration: InputDecoration(
+            border: InputBorder.none,
+            labelText: selectedCountryItem == null ? 'Code' : 'Country Code',
+            labelStyle: textNormal14(Colors.grey[600]),
+            enabledBorder: UnderlineInputBorder(
+                borderRadius: BorderRadius.all(const Radius.circular(10.0)),
+                borderSide: BorderSide(color: Colors.transparent)),
+          ),
+          maxHeight: 500,
+        ));
   }
 
   Container _createCaptcha(BuildContext context) {
@@ -346,38 +405,6 @@ class _SignUpOTPState extends State<SignUpOTP> {
     );
   }
 
-  Widget _buildCodeDropDown() {
-    return Padding(
-        padding: EdgeInsets.only(left: 10.0, right: 5.0),
-        child: DropdownButtonFormField<Countries>(
-          decoration: InputDecoration(
-              labelText: 'Country Code',
-              labelStyle: new TextStyle(color: Colors.grey[600]),
-              enabledBorder: UnderlineInputBorder(
-                  borderRadius: BorderRadius.all(const Radius.circular(10.0)),
-                  borderSide: BorderSide(color: Colors.transparent))),
-          value: selectedCountry,
-          onChanged: (Countries countries) {
-            setState(() {
-              selectedCountry = countries;
-            });
-          },
-          items: countryList.map((Countries countries) {
-            return DropdownMenuItem<Countries>(
-              value: countries,
-              child: Row(
-                children: <Widget>[
-                  Text(
-                    "+${countries.dialCode}",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ],
-              ),
-            );
-          }).toList(),
-        ));
-  }
-
   TextField inputTextField() {
     return TextField(
       controller: textConroller,
@@ -409,7 +436,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
           fontFamily: FontFamilyMontserrat.name),
       controller: controller,
       decoration: new InputDecoration(
-        contentPadding: EdgeInsets.all(15.0),
+        contentPadding: EdgeInsets.all(22.0),
         labelText: text,
         labelStyle: new TextStyle(color: Colors.grey[600]),
         border: InputBorder.none,

@@ -1,8 +1,11 @@
+import 'package:acc/models/country/country.dart';
+import 'package:acc/services/country_service.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/common/authentication/signup_otp.dart';
 import 'package:acc/utilites/app_colors.dart';
+import 'package:acc/models/local_countries.dart' as localCountry;
 
 class UserType extends StatefulWidget {
   @override
@@ -12,6 +15,13 @@ class UserType extends StatefulWidget {
 class _UserTypeState extends State<UserType> {
   bool pressAttention = true;
   bool fundRaiserClick = true;
+  List<localCountry.Countries> countryList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getAllCountries();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,9 +177,10 @@ class _UserTypeState extends State<UserType> {
   }
 
   void openSignUp(String userType) {
+    print(countryList.length);
     Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) {
-          return SignUpOTP(userType: userType);
+          return SignUpOTP(userType: userType, countryList: countryList);
         },
         transitionDuration: Duration(milliseconds: 2000),
         transitionsBuilder: (context, animation, anotherAnimation, child) {
@@ -181,5 +192,24 @@ class _UserTypeState extends State<UserType> {
             child: child,
           );
         }));
+  }
+
+  Future<void> getAllCountries() async {
+    final Country extractedData = await CountryService.fetchCountries();
+    if (extractedData.type == "success") {
+      if (extractedData.data.options.length != 0) {
+        countryList.clear();
+        for (int i = 0; i < extractedData.data.options.length; i++) {
+          var value = extractedData.data.options[i];
+          countryList.add(localCountry.Countries(
+              value.countryName,
+              value.countryAbbr,
+              int.parse(
+                  value.countryPhCode.replaceAll(new RegExp(r'[^0-9]'), '')),
+              value.maxLength));
+        }
+        // OptionsData.instance.countryInfo.add(countryList);
+      }
+    }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:acc/models/local_countries.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable(nullable: false)
@@ -67,37 +68,56 @@ class CountryData {
   }
 }
 
+@JsonSerializable(nullable: false, explicitToJson: true)
 class OptionsData {
-  final int countryCode;
-  final String countryPhCode;
-  final String countryName;
-  final String currencyCode;
-  final String countryAbbr;
+  int countryCode;
+  String countryPhCode;
+  String countryName;
+  String currencyCode;
+  String countryAbbr;
+  int maxLength;
 
-  OptionsData(
-    this.countryCode,
-    this.countryPhCode,
-    this.countryName,
-    this.currencyCode,
-    this.countryAbbr,
-  );
+  OptionsData._privateConstructor();
+
+  static final OptionsData _instance = OptionsData._privateConstructor();
+
+  static OptionsData get instance => _instance;
+
+  OptionsData get countryInfo => OptionsData(
+      this.countryCode,
+      this.countryPhCode,
+      this.countryName,
+      this.currencyCode,
+      this.countryAbbr,
+      this.maxLength);
+
+  set countryInfo(OptionsData info) {
+    this.countryCode = info.countryCode;
+    this.countryPhCode = info.countryPhCode;
+    this.countryName = info.countryName;
+    this.currencyCode = info.currencyCode;
+    this.maxLength = info.maxLength;
+  }
+
+  OptionsData(this.countryCode, this.countryPhCode, this.countryName,
+      this.currencyCode, this.countryAbbr, this.maxLength);
 
   factory OptionsData.fromMap(Map<String, dynamic> json) {
     return OptionsData(
-      json['country_code'],
-      json['country_ph_code'],
-      json['country_name'],
-      json['currency_code'],
-      json['country_abbr'],
-    );
+        json['country_code'],
+        json['country_ph_code'],
+        json['country_name'],
+        json['currency_code'],
+        json['country_abbr'],
+        json['country_ph_max_no_length']);
   }
   factory OptionsData.fromJson(Map<String, dynamic> json) {
     return OptionsData(
-      json['country_code'],
-      json['country_ph_code'],
-      json['country_name'],
-      json['currency_code'],
-      json['country_abbr'],
-    );
+        json['country_code'],
+        json['country_ph_code'],
+        json['country_name'],
+        json['currency_code'],
+        json['country_abbr'],
+        json['country_ph_max_no_length']);
   }
 }
