@@ -17,11 +17,8 @@ class Countries with ChangeNotifier {
       return;
     }
     extractedData.data.options.forEach((option) {
-      loadedCountries.add(CountryInfo(
-        option.countryCode,
-        option.countryName,
-        option.countryAbbr,
-      ));
+      loadedCountries.add(CountryInfo(option.countryCode, option.countryName,
+          option.countryAbbr, option.countryPhCode));
     });
 
     _countries = loadedCountries.toList();
@@ -38,6 +35,7 @@ class CountryInfo {
   final int id;
   final String name;
   final String abbreviation;
+  final String phoneCode;
 
-  CountryInfo(this.id, this.name, this.abbreviation);
+  CountryInfo(this.id, this.name, this.abbreviation, this.phoneCode);
 }

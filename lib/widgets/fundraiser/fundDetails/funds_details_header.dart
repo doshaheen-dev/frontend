@@ -57,8 +57,12 @@ class _FundsDetailHeaderState extends State<FundsDetailHeader> {
                             : null));
                 // You can use LinearProgressIndicator or CircularProgressIndicator instead
               },
-              errorBuilder: (context, error, stackTrace) =>
-                  Image.asset("assets/images/dummy/investment1.png"),
+              errorBuilder: (context, error, stackTrace) => Image.asset(
+                "assets/images/dummy/investment1.png",
+                height: 250,
+                width: double.infinity,
+                fit: BoxFit.fitHeight,
+              ),
             ),
             SizedBox(
               height: 5,
