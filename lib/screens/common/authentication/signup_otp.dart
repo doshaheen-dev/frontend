@@ -40,16 +40,19 @@ class _SignUpOTPState extends State<SignUpOTP> {
   List<Countries> countryList = [];
   Map<String, dynamic> selectedCountryItem;
 
-  // <Countries>[
-  //   const Countries("India", "IN", 91, 10),
-  //   const Countries("Singapore", "SG", 65, 12),
-  //   const Countries("United States", "US", 1, 10),
-  // ];
-
   @override
   void initState() {
     _userType = widget._userType;
-    countryList = widget._countriesList;
+    if (widget._countriesList.isEmpty) {
+      countryList = <Countries>[
+        const Countries("India", "IN", 91, 10),
+        const Countries("Singapore", "SG", 65, 12),
+        const Countries("United States", "US", 1, 10),
+      ];
+    } else {
+      countryList = widget._countriesList;
+    }
+
     //selectedCountry = countryList[0];
     super.initState();
   }
@@ -216,8 +219,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
         Expanded(
             flex: 1,
             child: Container(
-              margin: const EdgeInsets.only(
-                  top: 5.0, left: 25.0, bottom: 20, right: 5.0),
+              margin: const EdgeInsets.only(top: 5.0, left: 25.0, bottom: 20),
               width: MediaQuery.of(context).size.width,
               height: 80,
               decoration: customDecoration(),
@@ -228,6 +230,9 @@ class _SignUpOTPState extends State<SignUpOTP> {
                       })
                   .toList()),
             )),
+        SizedBox(
+          width: 10,
+        ),
         Expanded(
           flex: 2,
           child: Container(

@@ -1,6 +1,7 @@
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/signup_request_preferences.dart';
 import 'package:acc/models/investor/hearaboutus.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/investor/investment_limit.dart';
@@ -243,16 +244,23 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image(
-                image: this.hearAboutUsList[_index].imageUrl != null
-                    ? NetworkImage(
-                        "http://${this.hearAboutUsList[_index].imageUrl}")
-                    : AssetImage("assets/images/UserProfile.png"),
-
+              CachedNetworkImage(
+                height: 100.0,
                 width: 100,
-                height: 100,
-                // fit: BoxFit.cover,
+                imageUrl: "http://${this.hearAboutUsList[_index].imageUrl}",
+                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
+              // Image(
+              //   image: this.hearAboutUsList[_index].imageUrl != null
+              //       ?
+              //       NetworkImage(
+              //           "http://${this.hearAboutUsList[_index].imageUrl}")
+              //       : AssetImage("assets/images/UserProfile.png"),
+
+              //   width: 100,
+              //   height: 100,
+              //   // fit: BoxFit.cover,
+              // ),
               SizedBox(
                 height: 10.0,
               ),

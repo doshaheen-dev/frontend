@@ -42,16 +42,11 @@ class _InvestorProfileState extends State<InvestorProfile> {
   String address = "";
   String mobileNumber = "";
   String savedcountryName = "";
-  var selectedCountry;
 
   String savedAddress;
   String _verificationId = "";
   String _emailVerificationId = "";
-  List<Countries> countryList = <Countries>[
-    const Countries("India", "IN", 91, 10),
-    const Countries("Singapore", "SG", 65, 12),
-    const Countries("United States", "US", 1, 10),
-  ];
+
   var progress;
   var _isInit = true;
   static bool isDataChanged = false;
@@ -68,6 +63,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
 
   AddressUpdate addressUpdate;
   var changedAddress;
+  Countries selectedCountry;
 
   Future<void> _fetchCountries(BuildContext context) async {
     await Provider.of<countryProvider.Countries>(context, listen: false)
@@ -76,12 +72,14 @@ class _InvestorProfileState extends State<InvestorProfile> {
 
   @override
   void initState() {
-    super.initState();
+    _countries = _fetchCountries(context);
     mobileUpdate = MobileUpdate(this.mobileNumber, this.selectedCountry,
         this.changedMobileVerificationId, this.callback);
     emailUpdateCallback = EmailUpdate(this.emailIdCallbackValue,
         this.changedEmailVerificationId, this.emailCallback);
     addressUpdate = AddressUpdate(this.changedAddress, this.addressCallback);
+
+    super.initState();
   }
 
   @override
@@ -96,9 +94,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
     if (_isInit) {
       isDataChanged = false;
       setUserInformation();
-      _countries = _fetchCountries(context);
     }
-
     _isInit = false;
     super.didChangeDependencies();
   }
@@ -247,7 +243,6 @@ class _InvestorProfileState extends State<InvestorProfile> {
   }
 
   void setUserInformation() {
-    print(CryptUtils.encryption(UserData.instance.userInfo.emailId));
     _firstNameController.text = (UserData.instance.userInfo.firstName == null ||
             UserData.instance.userInfo.firstName == 'null')
         ? ''
@@ -263,40 +258,8 @@ class _InvestorProfileState extends State<InvestorProfile> {
         ? ''
         : UserData.instance.userInfo.emailId ?? '';
 
-    String countryCodeLength;
-    if (UserData.instance.userInfo.mobileNo.length == 13 ||
-        UserData.instance.userInfo.mobileNo.length == 15) {
-      //IN and SG
-      countryCodeLength = UserData.instance.userInfo.mobileNo.substring(1, 3);
-    } else if (UserData.instance.userInfo.mobileNo.length == 12) {
-      // US
-      countryCodeLength = UserData.instance.userInfo.mobileNo.substring(1, 2);
-    }
-    String mobileNo;
-    if (UserData.instance.userInfo.mobileNo.length == 13 ||
-        UserData.instance.userInfo.mobileNo.length == 15) {
-      //IN and SG
-      mobileNo = UserData.instance.userInfo.mobileNo
-          .substring(3, UserData.instance.userInfo.mobileNo.length);
-    } else if (UserData.instance.userInfo.mobileNo.length == 12) {
-      // US
-      mobileNo = UserData.instance.userInfo.mobileNo
-          .substring(2, UserData.instance.userInfo.mobileNo.length);
-    }
-
-    for (var i = 0; i < countryList.length; i++) {
-      if (countryCodeLength == countryList[i].dialCode.toString()) {
-        selectedCountry = countryList[i];
-      }
-    }
-    _mobileController.text = (UserData.instance.userInfo.mobileNo == null ||
-            UserData.instance.userInfo.mobileNo == 'null')
-        ? ''
-        : mobileNo ?? '';
-
     _addressController.text = UserData.instance.userInfo.address;
     savedAddress = UserData.instance.userInfo.address;
-    //_countryController.text = UserData.instance.userInfo.countryName;
     savedcountryName = UserData.instance.userInfo.countryName;
     countryCode = UserData.instance.userInfo.countryName;
     countryName = UserData.instance.userInfo.countryName;

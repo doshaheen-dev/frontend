@@ -44,16 +44,9 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
   var _companyEmailController = TextEditingController();
   var _mobileController = TextEditingController();
   var _countryController = TextEditingController();
-  var selectedCountry;
 
-  var newSelectedCountry;
   String _verificationId = "";
   String _emailVerificationId = "";
-  List<Countries> countryList = <Countries>[
-    const Countries("India", "IN", 91, 10),
-    const Countries("Singapore", "SG", 65, 12),
-    const Countries("United States", "US", 1, 10),
-  ];
 
   //Future _countries;
   var _isInit = true;
@@ -66,6 +59,8 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
   var changedSelectedCountry;
   var changedPhoneNumber;
   var changedMobileVerificationId;
+
+  Countries selectedCountry;
 
   @override
   void initState() {
@@ -164,37 +159,6 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                                                           _phoneNumber,
                                                           _verificationId,
                                                           _emailVerificationId);
-
-                                                      // if (_phoneNumber !=
-                                                      //         UserData
-                                                      //             .instance
-                                                      //             .userInfo
-                                                      //             .mobileNo ||
-                                                      //     _companyEmailController
-                                                      //             .text
-                                                      //             .toString()
-                                                      //             .trim() !=
-                                                      //         UserData
-                                                      //             .instance
-                                                      //             .userInfo
-                                                      //             .emailId) {
-                                                      //   progress =
-                                                      //       ProgressHUD.of(
-                                                      //           context);
-                                                      //   progress?.showWithText(
-                                                      //       'Updating Profile...');
-                                                      //   submitDetails(
-                                                      //       _companyEmailController
-                                                      //           .text
-                                                      //           .trim(),
-                                                      //       _phoneNumber,
-                                                      //       _verificationId,
-                                                      //       _emailVerificationId);
-
-                                                      //   return;
-                                                      // }
-                                                      // showSnackBar(context,
-                                                      //     "Please enter any new data for updation.");
                                                     },
                                               style: ElevatedButton.styleFrom(
                                                 padding: EdgeInsets.all(0.0),
@@ -274,8 +238,6 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
   }
 
   void setUserInformation() {
-    print(
-        "User id:- ${CryptUtils.encryption(UserData.instance.userInfo.emailId)}");
     _firstNameController.text = (UserData.instance.userInfo.firstName == null ||
             UserData.instance.userInfo.firstName == 'null')
         ? ''
@@ -291,37 +253,6 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                 UserData.instance.userInfo.emailId == 'null')
             ? ''
             : UserData.instance.userInfo.emailId ?? '';
-
-    String countryCode;
-    if (UserData.instance.userInfo.mobileNo.length == 13 ||
-        UserData.instance.userInfo.mobileNo.length == 15) {
-      //IN and SG
-      countryCode = UserData.instance.userInfo.mobileNo.substring(1, 3);
-    } else if (UserData.instance.userInfo.mobileNo.length == 12) {
-      // US
-      countryCode = UserData.instance.userInfo.mobileNo.substring(1, 2);
-    }
-    String mobileNo;
-    if (UserData.instance.userInfo.mobileNo.length == 13 ||
-        UserData.instance.userInfo.mobileNo.length == 15) {
-      //IN and SG
-      mobileNo = UserData.instance.userInfo.mobileNo
-          .substring(3, UserData.instance.userInfo.mobileNo.length);
-    } else if (UserData.instance.userInfo.mobileNo.length == 12) {
-      // US
-      mobileNo = UserData.instance.userInfo.mobileNo
-          .substring(2, UserData.instance.userInfo.mobileNo.length);
-    }
-
-    for (var i = 0; i < countryList.length; i++) {
-      if (countryCode == countryList[i].dialCode.toString()) {
-        selectedCountry = countryList[i];
-      }
-    }
-    _mobileController.text = (UserData.instance.userInfo.mobileNo == null ||
-            UserData.instance.userInfo.mobileNo == 'null')
-        ? ''
-        : mobileNo ?? '';
 
     _countryController.text = UserData.instance.userInfo.countryName;
     _companyNameController.text = UserData.instance.userInfo.companyName;

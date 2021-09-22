@@ -1,15 +1,21 @@
+import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/otp_response.dart';
+import 'package:acc/models/authentication/verify_phone_signin.dart';
+import 'package:acc/models/country/country.dart';
 import 'package:acc/models/default.dart';
 import 'package:acc/models/local_countries.dart';
+import 'package:acc/services/country_service.dart';
 import 'package:acc/services/update_otp_service.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/app_strings.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:acc/models/local_countries.dart' as localCountry;
 
 // ignore: must_be_immutable
 class MobileUpdate extends StatefulWidget {
@@ -27,12 +33,6 @@ class MobileUpdate extends StatefulWidget {
 
 class _MobileUpdateState extends State<MobileUpdate> {
   var selectedCountry;
-  var newSelectedCountry;
-  List<Countries> countryList = <Countries>[
-    const Countries("India", "IN", 91, 10),
-    const Countries("Singapore", "SG", 65, 12),
-    const Countries("United States", "US", 1, 10),
-  ];
   String mobileNumber = "";
   String _verificationId = "";
   String otpText = "";
@@ -43,12 +43,18 @@ class _MobileUpdateState extends State<MobileUpdate> {
   TextEditingController _mobileController = TextEditingController();
   TextEditingController _newMobileController = TextEditingController();
   TextEditingController otpController = new TextEditingController();
+  TextEditingController _countryController = TextEditingController();
+
+  List<localCountry.Countries> newCountryList = [];
+  Map<String, dynamic> selectedCountryItem;
+  Countries updateSelectedCountry;
 
   @override
   void initState() {
+    getAllCountries();
     _mobileController.text = widget.mobileNumber;
-    selectedCountry = widget.selectedCountry;
-
+    updateSelectedCountry = widget.selectedCountry;
+    print("updateSelectedCountry-> ${widget.selectedCountry}");
     super.initState();
   }
 
@@ -62,9 +68,30 @@ class _MobileUpdateState extends State<MobileUpdate> {
             Expanded(
                 flex: 1,
                 child: Container(
-                  decoration: customDecoration(),
-                  child: _buildCodeDropDown(),
-                )),
+                    decoration: customDecoration(),
+                    child: TextField(
+                      enabled: false,
+                      style: textBlackNormal16(),
+                      controller: _countryController,
+                      decoration: new InputDecoration(
+                        suffixIcon: Icon(Icons.arrow_drop_down),
+                        contentPadding: EdgeInsets.all(15.0),
+                        labelText: updateSelectedCountry == null
+                            ? "Code"
+                            : "Country Code",
+                        labelStyle: new TextStyle(color: Colors.grey[600]),
+                        border: InputBorder.none,
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Colors.transparent, width: 2.0),
+                          borderRadius: BorderRadius.all(
+                            const Radius.circular(10.0),
+                          ),
+                        ),
+                      ),
+                    )
+                    //_buildCodeDropDown(),
+                    )),
             Expanded(
                 flex: 2,
                 child: Container(
@@ -119,37 +146,12 @@ class _MobileUpdateState extends State<MobileUpdate> {
         ));
   }
 
-  Widget _buildCodeDropDown() {
-    return Padding(
-        padding: EdgeInsets.only(left: 10.0, right: 5.0),
-        child: DropdownButtonFormField<Countries>(
-          decoration: InputDecoration(
-              labelText: 'Country Code',
-              labelStyle: textNormal14(Colors.grey[600]),
-              enabledBorder: UnderlineInputBorder(
-                  borderRadius: BorderRadius.all(const Radius.circular(10.0)),
-                  borderSide: BorderSide(color: Colors.transparent))),
-          value: selectedCountry,
-          items: countryList.map((Countries countries) {
-            return DropdownMenuItem<Countries>(
-              value: countries,
-              child: Row(
-                children: <Widget>[
-                  Text("+${countries.dialCode}",
-                      style: textNormal14(Colors.black)),
-                ],
-              ),
-            );
-          }).toList(),
-        ));
-  }
-
   final GlobalKey<ScaffoldState> _modelScaffoldKey = GlobalKey<ScaffoldState>();
 
   Future<void> showUpdationView() async {
-    newSelectedCountry = selectedCountry;
     _newMobileController = TextEditingController();
     otpController = new TextEditingController();
+    selectedCountryItem = null;
 
     showModalBottomSheet(
         isDismissible: false,
@@ -171,30 +173,8 @@ class _MobileUpdateState extends State<MobileUpdate> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(children: [
-                                Text(
-                                  "Update Your Mobile Number",
-                                  textAlign: TextAlign.start,
-                                  style: textBold16(headingBlack),
-                                ),
-                                Spacer(),
-                                InkWell(
-                                    onTap: () {
-                                      _newMobileController.clear();
-                                      otpController.clear();
-
-                                      setState(() {
-                                        isOtpReceived = false;
-                                      });
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text(
-                                      "Close",
-                                      style: textNormal16(headingBlack),
-                                    ))
-                              ]),
+                            Container(
+                              child: setHeader(),
                             ),
                             Container(
                               margin: EdgeInsets.only(
@@ -212,7 +192,8 @@ class _MobileUpdateState extends State<MobileUpdate> {
                                       onPressed: () {
                                         FocusScope.of(context)
                                             .requestFocus(FocusNode());
-                                        if (newSelectedCountry == null) {
+
+                                        if (updateSelectedCountry == null) {
                                           _modelScaffoldKey.currentState
                                               .showSnackBar(SnackBar(
                                                   duration:
@@ -233,14 +214,14 @@ class _MobileUpdateState extends State<MobileUpdate> {
                                           return;
                                         }
 
-                                        if (newSelectedCountry.maxLength !=
+                                        if (updateSelectedCountry.maxLength !=
                                             _newMobileController.text.length) {
                                           _modelScaffoldKey.currentState
                                               .showSnackBar(SnackBar(
                                                   duration:
                                                       Duration(seconds: 1),
                                                   content: Text(
-                                                      "Phone number should be of ${newSelectedCountry.maxLength} digits.")));
+                                                      "Phone number should be of ${updateSelectedCountry.maxLength} digits.")));
 
                                           return;
                                         }
@@ -250,7 +231,7 @@ class _MobileUpdateState extends State<MobileUpdate> {
                                         otpController = TextEditingController();
                                         _getOtp(
                                             _newMobileController.text,
-                                            newSelectedCountry,
+                                            updateSelectedCountry,
                                             setState,
                                             "mobile_no");
                                       },
@@ -353,7 +334,7 @@ class _MobileUpdateState extends State<MobileUpdate> {
                                                             _getOtp(
                                                                 _newMobileController
                                                                     .text,
-                                                                newSelectedCountry,
+                                                                updateSelectedCountry,
                                                                 setState,
                                                                 "mobile_no");
                                                           })
@@ -427,10 +408,17 @@ class _MobileUpdateState extends State<MobileUpdate> {
         Expanded(
             flex: 1,
             child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: 80,
               decoration: customDecoration(),
-              child: _buildBottomSheetCodeDropDown(setState),
+              child: _countryCodeDropDown(newCountryList
+                  .map((info) => {
+                        'text': info.name,
+                        'value': info.dialCode,
+                      })
+                  .toList()),
             )),
-        SizedBox(width: 30.0),
+        SizedBox(width: 10.0),
         Expanded(
             flex: 2,
             child: Container(
@@ -440,7 +428,7 @@ class _MobileUpdateState extends State<MobileUpdate> {
                 onChanged: (value) => newMobileNo = value,
                 controller: _newMobileController,
                 decoration: new InputDecoration(
-                  contentPadding: EdgeInsets.all(15.0),
+                  contentPadding: EdgeInsets.all(20.0),
                   labelText: "Mobile No.",
                   labelStyle: new TextStyle(color: Colors.grey[600]),
                   border: InputBorder.none,
@@ -462,36 +450,48 @@ class _MobileUpdateState extends State<MobileUpdate> {
     );
   }
 
-  Widget _buildBottomSheetCodeDropDown(StateSetter setState) {
+  Widget _countryCodeDropDown(List<Map<String, dynamic>> list) {
     return Padding(
         padding: EdgeInsets.only(left: 10.0, right: 5.0),
-        child: DropdownButtonFormField<Countries>(
-          decoration: InputDecoration(
-              labelText: 'Country Code',
-              labelStyle: new TextStyle(color: Colors.grey[600]),
-              enabledBorder: UnderlineInputBorder(
-                  borderRadius: BorderRadius.all(const Radius.circular(10.0)),
-                  borderSide: BorderSide(color: Colors.transparent))),
-          value: newSelectedCountry,
-          onChanged: (Countries countries) {
+        child: DropdownSearch<Map<String, dynamic>>(
+          mode: Mode.BOTTOM_SHEET,
+          showSearchBox: true,
+          emptyBuilder: (ctx, search) => Center(
+            child: Text('No Data Found',
+                style: TextStyle(
+                    decoration: TextDecoration.none,
+                    fontFamily: FontFamilyMontserrat.bold,
+                    fontSize: 26,
+                    color: Colors.black)),
+          ),
+          showSelectedItem: false,
+          items: list,
+          itemAsString: (Map<String, dynamic> country) =>
+              "+${country['value']} ${country['text']} ",
+          hint: "",
+          selectedItem: selectedCountryItem,
+          onChanged: (map) {
             setState(() {
-              isOtpReceived = false;
-              newSelectedCountry = countries;
+              final index = newCountryList
+                  .indexWhere((element) => element.name == map['text']);
+              if (index >= 0) {
+                updateSelectedCountry = newCountryList[index];
+                print('Using indexWhere: ${newCountryList[index].maxLength}');
+              } else {
+                print('Using indexWhere');
+              }
+              selectedCountryItem = map;
             });
           },
-          items: countryList.map((Countries countries) {
-            return DropdownMenuItem<Countries>(
-              value: countries,
-              child: Row(
-                children: <Widget>[
-                  Text(
-                    "+${countries.dialCode}",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ],
-              ),
-            );
-          }).toList(),
+          dropdownSearchDecoration: InputDecoration(
+            border: InputBorder.none,
+            labelText: selectedCountryItem == null ? 'Code' : 'Country Code',
+            labelStyle: textNormal14(Colors.grey[600]),
+            enabledBorder: UnderlineInputBorder(
+                borderRadius: BorderRadius.all(const Radius.circular(10.0)),
+                borderSide: BorderSide(color: Colors.transparent)),
+          ),
+          maxHeight: 500,
         ));
   }
 
@@ -541,8 +541,11 @@ class _MobileUpdateState extends State<MobileUpdate> {
           isOtpReceived = false;
         });
         _mobileController.text = phoneNumber;
-        selectedCountry = newSelectedCountry;
-        this.widget.callback(phoneNumber, selectedCountry, verificationId);
+        _countryController.text =
+            "+${updateSelectedCountry.dialCode.toString()}";
+        this
+            .widget
+            .callback(phoneNumber, updateSelectedCountry, verificationId);
         _modelScaffoldKey.currentState.showSnackBar(SnackBar(
             duration: Duration(seconds: 1),
             content: Text(updateProfileOtpService.message)));
@@ -555,5 +558,74 @@ class _MobileUpdateState extends State<MobileUpdate> {
       verificationId = "";
       showSnackBar(context, updateProfileOtpService.message);
     }
+  }
+
+  Future<void> getAllCountries() async {
+    final Country extractedData = await CountryService.fetchCountries();
+    if (extractedData.type == "success") {
+      if (extractedData.data.options.length != 0) {
+        newCountryList.clear();
+        for (int i = 0; i < extractedData.data.options.length; i++) {
+          var value = extractedData.data.options[i];
+          newCountryList.add(localCountry.Countries(
+              value.countryName,
+              value.countryAbbr,
+              int.parse(
+                  value.countryPhCode.replaceAll(new RegExp(r'[^0-9]'), '')),
+              value.maxLength));
+        }
+        if (newCountryList.isEmpty) {
+          newCountryList = <Countries>[
+            const Countries("India", "IN", 91, 10),
+            const Countries("Singapore", "SG", 65, 12),
+            const Countries("United States", "US", 1, 10),
+          ];
+        }
+
+        var subString = UserData.instance.userInfo.mobileNo.substring(0, 5);
+        for (var i = 0; i < newCountryList.length; i++) {
+          if (subString.contains("+${newCountryList[i].dialCode}")) {
+            selectedCountry = newCountryList[i];
+
+            _countryController.text = "+${selectedCountry.dialCode.toString()}";
+            int length = _countryController.text.toString().length;
+            String result =
+                UserData.instance.userInfo.mobileNo.substring(0, length);
+            print(result);
+            _mobileController.text =
+                UserData.instance.userInfo.mobileNo.replaceAll(result, "");
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  Widget setHeader() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(children: [
+        Text(
+          "Update Your Mobile Number",
+          textAlign: TextAlign.start,
+          style: textBold16(headingBlack),
+        ),
+        Spacer(),
+        InkWell(
+            onTap: () {
+              _newMobileController.clear();
+              otpController.clear();
+
+              setState(() {
+                isOtpReceived = false;
+              });
+              Navigator.pop(context);
+            },
+            child: Text(
+              "Close",
+              style: textNormal16(headingBlack),
+            ))
+      ]),
+    );
   }
 }

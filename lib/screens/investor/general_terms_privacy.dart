@@ -5,6 +5,7 @@ import 'package:acc/models/authentication/signup_request_preferences.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/screens/common/webview_container.dart';
 import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
+import 'package:acc/services/http_service.dart';
 import 'package:acc/services/signup_service.dart';
 import 'package:acc/utilites/app_strings.dart';
 import 'package:flutter/gestures.dart';
@@ -27,11 +28,11 @@ class GeneralTermsPrivacy extends StatefulWidget {
 class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
   var progress;
 
-  String tempUrl =
-      "http://ec2-65-2-69-222.ap-south-1.compute.amazonaws.com:3000/terms_and_conditions";
+  String tempUrl = "${ApiServices.baseUrlEndpoint}/terms_and_conditions";
 
   @override
   Widget build(BuildContext context) {
+    print("tempUrl- $tempUrl");
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 

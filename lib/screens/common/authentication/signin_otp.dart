@@ -101,7 +101,16 @@ class _SignInOTPState extends State<SignInOTP> {
   @override
   void initState() {
     print("Signin -> ${widget._countriesList.length}");
-    countryList = widget._countriesList;
+    if (widget._countriesList.isEmpty) {
+      countryList = <Countries>[
+        const Countries("India", "IN", 91, 10),
+        const Countries("Singapore", "SG", 65, 12),
+        const Countries("United States", "US", 1, 10),
+      ];
+    } else {
+      countryList = widget._countriesList;
+    }
+
     // _fetchAllCountries(context);
     //  selectedCountry = countryList[0];
     super.initState();
@@ -273,8 +282,7 @@ class _SignInOTPState extends State<SignInOTP> {
           child: Expanded(
               flex: 1,
               child: Container(
-                margin: const EdgeInsets.only(
-                    top: 5.0, left: 25.0, bottom: 20, right: 5.0),
+                margin: const EdgeInsets.only(top: 5.0, left: 25.0, bottom: 20),
                 width: MediaQuery.of(context).size.width,
                 height: 80,
                 decoration: customDecoration(),
@@ -292,6 +300,12 @@ class _SignInOTPState extends State<SignInOTP> {
             width: 20,
           ),
         ),
+        Visibility(
+          visible: _isDropdownVisible,
+          child: SizedBox(
+            width: 10,
+          ),
+        ),
         Expanded(
           flex: 2,
           child: Container(
@@ -303,160 +317,6 @@ class _SignInOTPState extends State<SignInOTP> {
       ],
     );
   }
-  // Widget _createMobileFields() {
-  //   return Row(
-  //     crossAxisAlignment: CrossAxisAlignment.center,
-  //     children: [
-  //       Visibility(
-  //         visible: _isDropdownVisible,
-  //         child: Flexible(
-  //             child:
-  //                 // Container(
-  //                 //   margin: const EdgeInsets.only(
-  //                 //       top: 5.0, left: 25.0, bottom: 20, right: 5.0),
-  //                 //   decoration: customDecoration(),
-  //                 //   child: _buildCodeDropDown(),
-  //                 // )
-
-  //                 // InkWell(
-  //                 //     highlightColor: Colors.transparent,
-  //                 //     splashColor: Colors.transparent,
-  //                 //     onTap: () {
-  //                 //       openInvestmentList();
-  //                 //     },
-  //                 //     child: Container(
-  //                 //       margin: const EdgeInsets.only(
-  //                 //           top: 5.0, left: 25.0, bottom: 20, right: 5.0),
-  //                 //       decoration: customDecoration(),
-  //                 //       child: Column(
-  //                 //         children: [
-  //                 //           Visibility(
-  //                 //               visible: !showLabel,
-  //                 //               child: Container(
-  //                 //                 margin: EdgeInsets.only(top: 5),
-  //                 //                 child: Text(
-  //                 //                   "Country Code",
-  //                 //                   style: textNormal12(Colors.grey[600]),
-  //                 //                 ),
-  //                 //               )),
-  //                 //           Row(
-  //                 //             children: [
-  //                 //               Visibility(
-  //                 //                 visible: showLabel,
-  //                 //                 child: Container(
-  //                 //                   child: Padding(
-  //                 //                     padding: EdgeInsets.only(
-  //                 //                         left: 10.0,
-  //                 //                         right: 10.0,
-  //                 //                         top: 25.0,
-  //                 //                         bottom: 25.0),
-  //                 //                     child: Text("Code",
-  //                 //                         style: textNormal14(Colors.grey[600])),
-  //                 //                   ),
-  //                 //                 ),
-  //                 //               ),
-  //                 //               Visibility(
-  //                 //                   visible: !showLabel,
-  //                 //                   child: Container(
-  //                 //                       child: Padding(
-  //                 //                     padding: EdgeInsets.only(
-  //                 //                       left: 10.0,
-  //                 //                       right: 10.0,
-  //                 //                     ),
-  //                 //                     child: selectedCountryItem != null
-  //                 //                         ? Align(
-  //                 //                             alignment: Alignment.center,
-  //                 //                             child: Text(
-  //                 //                               selectedCountryItem.phoneCode
-  //                 //                                   .toString(),
-  //                 //                               style: textNormal14(Colors.black),
-  //                 //                             ),
-  //                 //                           )
-  //                 //                         : Text(
-  //                 //                             "Country Code",
-  //                 //                             style:
-  //                 //                                 textNormal14(Colors.grey[600]),
-  //                 //                           ),
-  //                 //                   ))),
-  //                 //               Spacer(),
-  //                 //               IconButton(
-  //                 //                   onPressed: () {
-  //                 //                     openInvestmentList();
-  //                 //                   },
-  //                 //                   splashColor: Colors.transparent,
-  //                 //                   highlightColor: Colors.transparent,
-  //                 //                   icon: Icon(Icons.arrow_drop_down))
-  //                 //             ],
-  //                 //           )
-  //                 //         ],
-  //                 //       ),
-  //                 //     )),
-  //                 Container(
-  //           margin: const EdgeInsets.only(top: 5.0, bottom: 20, left: 25.0),
-  //           width: MediaQuery.of(context).size.width,
-  //           height: 80,
-  //           decoration: customDecoration(),
-  //           child: Padding(
-  //             padding: const EdgeInsets.symmetric(horizontal: 10.0),
-  //             child: _buildCodeDropDown(countryList
-  //                 .map((info) => {
-  //                       'text': info.code,
-  //                       'value': info.dialCode,
-  //                       'value1': info.name
-  //                     })
-  //                 .toList()),
-  //           ),
-  //           // FutureBuilder(
-  //           //     future: _countries,
-  //           //     builder: (ctx, dataSnapshot) {
-  //           //       if (dataSnapshot.connectionState ==
-  //           //           ConnectionState.waiting) {
-  //           //         return Center(
-  //           //             child: CircularProgressIndicator(
-  //           //           color: Theme.of(context).primaryColor,
-  //           //         ));
-  //           //       } else {
-  //           //         if (dataSnapshot.error != null) {
-  //           //           return Center(child: Text("An error occurred!"));
-  //           //         } else {
-  //           //           return Consumer<countryProvider.Countries>(
-  //           //             builder: (ctx, countryData, child) => Padding(
-  //           //               padding:
-  //           //                   const EdgeInsets.symmetric(horizontal: 8.0),
-  //           //               child: _buildCodeDropDown(countryData.countries
-  //           //                   .map((info) => {
-  //           //                         'text': info.abbreviation,
-  //           //                         'value': info.phoneCode,
-  //           //                       })
-  //           //                   .toList()),
-  //           //             ),
-  //           //           );
-  //           //         }
-  //           //       }
-  //           //     }),
-  //         )),
-  //       ),
-  //       Visibility(
-  //           visible: _isDropdownVisible,
-  //           child: Container(
-  //             width: 10,
-  //           )),
-  //       Visibility(
-  //           visible: !_isDropdownVisible,
-  //           child: Container(
-  //             width: 20,
-  //           )),
-  //       Expanded(
-  //         flex: 2,
-  //         child: Container(
-  //           margin: const EdgeInsets.only(top: 5.0, bottom: 20, right: 25.0),
-  //           decoration: customDecoration(),
-  //           child: inputTextField(mobileEmailLabel, phoneController),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
 
   TextEditingController searchController = new TextEditingController();
   List<countryProvider.CountryInfo> tempList = [];
@@ -836,7 +696,7 @@ class _SignInOTPState extends State<SignInOTP> {
         style: textBlackNormal14(),
         controller: _controller,
         decoration: new InputDecoration(
-            contentPadding: EdgeInsets.all(22.0),
+            contentPadding: EdgeInsets.all(23.0),
             labelText: text,
             labelStyle: textNormal14(Colors.grey[600]),
             border: InputBorder.none,
