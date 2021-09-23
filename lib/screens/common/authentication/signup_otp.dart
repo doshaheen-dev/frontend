@@ -51,6 +51,16 @@ class _SignUpOTPState extends State<SignUpOTP> {
       ];
     } else {
       countryList = widget._countriesList;
+      for (var i = 0; i < countryList.length; i++) {
+        if (countryList[i].name == "India") {
+          selectedCountry = countryList[i];
+          Map<String, dynamic> tempMap = {
+            'text': countryList[i].name,
+            'value': countryList[i].dialCode,
+          };
+          selectedCountryItem = tempMap;
+        }
+      }
     }
 
     //selectedCountry = countryList[0];
