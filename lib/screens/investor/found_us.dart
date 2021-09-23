@@ -249,7 +249,6 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                   image: AssetImage("assets/images/investor/social_media.png"),
                   width: 100,
                   height: 100,
-                  // fit: BoxFit.cover,
                 ),
 
               if (this.hearAboutUsList[_index].name == "Internet Browsing")
@@ -258,7 +257,6 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                       "assets/images/investor/internet_browsing.png"),
                   width: 100,
                   height: 100,
-                  // fit: BoxFit.cover,
                 ),
 
               if (this.hearAboutUsList[_index].name == "Referral")
@@ -266,7 +264,6 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                   image: AssetImage("assets/images/investor/referral.png"),
                   width: 100,
                   height: 100,
-                  // fit: BoxFit.cover,
                 ),
 
               if (this.hearAboutUsList[_index].name == "Internet Search")
@@ -275,15 +272,15 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                       AssetImage("assets/images/investor/internet_search.png"),
                   width: 100,
                   height: 100,
-                  // fit: BoxFit.cover,
                 ),
 
               // CachedNetworkImage(
               //   height: 100.0,
               //   width: 100,
-              //   imageUrl: "http://${this.hearAboutUsList[_index].imageUrl}",
+              //   imageUrl: this.hearAboutUsList[_index].imageUrl,
               //   errorWidget: (context, url, error) => Icon(Icons.error),
               // ),
+
               // Image(
               //   image: this.hearAboutUsList[_index].imageUrl != null
               //       ?

@@ -51,6 +51,8 @@ class _SignUpOTPState extends State<SignUpOTP> {
       ];
     } else {
       countryList = widget._countriesList;
+    }
+    if (countryList.isNotEmpty) {
       for (var i = 0; i < countryList.length; i++) {
         if (countryList[i].name == "India") {
           selectedCountry = countryList[i];
@@ -63,7 +65,6 @@ class _SignUpOTPState extends State<SignUpOTP> {
       }
     }
 
-    //selectedCountry = countryList[0];
     super.initState();
   }
 
