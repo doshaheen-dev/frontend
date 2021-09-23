@@ -99,6 +99,7 @@ class OtpService {
 
     var _body =
         '{"mobile_no": "$phoneNumber", "verificationId" : "$verificationId", "smsCode" : "$otpCode"}';
+
     final response = await post(url, headers: headers, body: _body);
     final responseBody = response.body;
     Map valueMap = jsonDecode(responseBody);

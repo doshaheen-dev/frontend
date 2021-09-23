@@ -244,12 +244,46 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CachedNetworkImage(
-                height: 100.0,
-                width: 100,
-                imageUrl: "http://${this.hearAboutUsList[_index].imageUrl}",
-                errorWidget: (context, url, error) => Icon(Icons.error),
-              ),
+              if (this.hearAboutUsList[_index].name == "Social Media")
+                Image(
+                  image: AssetImage("assets/images/investor/social_media.png"),
+                  width: 100,
+                  height: 100,
+                  // fit: BoxFit.cover,
+                ),
+
+              if (this.hearAboutUsList[_index].name == "Internet Browsing")
+                Image(
+                  image: AssetImage(
+                      "assets/images/investor/internet_browsing.png"),
+                  width: 100,
+                  height: 100,
+                  // fit: BoxFit.cover,
+                ),
+
+              if (this.hearAboutUsList[_index].name == "Referral")
+                Image(
+                  image: AssetImage("assets/images/investor/referral.png"),
+                  width: 100,
+                  height: 100,
+                  // fit: BoxFit.cover,
+                ),
+
+              if (this.hearAboutUsList[_index].name == "Internet Search")
+                Image(
+                  image:
+                      AssetImage("assets/images/investor/internet_search.png"),
+                  width: 100,
+                  height: 100,
+                  // fit: BoxFit.cover,
+                ),
+
+              // CachedNetworkImage(
+              //   height: 100.0,
+              //   width: 100,
+              //   imageUrl: "http://${this.hearAboutUsList[_index].imageUrl}",
+              //   errorWidget: (context, url, error) => Icon(Icons.error),
+              // ),
               // Image(
               //   image: this.hearAboutUsList[_index].imageUrl != null
               //       ?

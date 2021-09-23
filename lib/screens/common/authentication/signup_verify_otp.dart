@@ -240,6 +240,7 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
     print(verificationId);
     SignUpInvestor verificationIdSignIn = await OtpService.getVerifySignUpOtp(
         phoneNumber, verificationId, otpCode);
+
     if (verificationIdSignIn.status == 200) {
       progress?.showWithText(successOTP);
       final requestModelInstance = InvestorSignupRequestModel.instance;

@@ -208,8 +208,6 @@ class _SignInOTPState extends State<SignInOTP> {
                                                     "email");
                                               } else if (!CodeUtils.isPhone(
                                                   phoneController.text)) {
-                                                print(
-                                                    "selectedCountry- ${selectedCountry.name}\n maxLength = ${selectedCountry.maxLength}");
                                                 if (selectedCountry == null) {
                                                   showSnackBar(context,
                                                       errorCountryCode);
@@ -619,40 +617,6 @@ class _SignInOTPState extends State<SignInOTP> {
           maxHeight: 500,
         ));
   }
-
-  // Widget _buildCodeDropDown() {
-  //   return Padding(
-  //       padding: EdgeInsets.only(left: 10.0, right: 5.0),
-  //       child: DropdownButtonFormField<Countries>(
-  //         decoration: InputDecoration(
-  //             labelText: 'Country Code',
-  //             labelStyle: new TextStyle(color: Colors.grey[600]),
-  //             enabledBorder: UnderlineInputBorder(
-  //                 borderRadius: BorderRadius.all(const Radius.circular(10.0)),
-  //                 borderSide: BorderSide(color: Colors.transparent))),
-  //         value: selectedCountry,
-  //         onChanged: (Countries countries) {
-  //           setState(() {
-  //             print("selectedItemValue3 => ${countries.maxLength}");
-
-  //             selectedCountry = countries;
-  //           });
-  //         },
-  //         items: countryList.map((Countries countries) {
-  //           return DropdownMenuItem<Countries>(
-  //             value: countries,
-  //             child: Row(
-  //               children: <Widget>[
-  //                 Text(
-  //                   "+${countries.dialCode}",
-  //                   style: TextStyle(color: Colors.black),
-  //                 ),
-  //               ],
-  //             ),
-  //           );
-  //         }).toList(),
-  //       ));
-  // }
 
   TextField otpTextField() {
     return TextField(
