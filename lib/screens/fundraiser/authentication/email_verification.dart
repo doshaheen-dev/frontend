@@ -36,8 +36,10 @@ class _EmailVerificationState extends State<EmailVerification> {
   @override
   Widget build(BuildContext context) {
     return ProgressHUD(
-      child: Builder(
-        builder: (context) => Scaffold(
+        child: Builder(
+      builder: (context) => MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: Scaffold(
           key: _emailScaffoldKey,
           appBar: AppBar(
             toolbarHeight: 0,
@@ -286,7 +288,7 @@ class _EmailVerificationState extends State<EmailVerification> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   void openOnboarding() {

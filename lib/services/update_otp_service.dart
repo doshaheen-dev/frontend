@@ -35,10 +35,8 @@ class UpdateProfileOtpService {
     final _body =
         '{"verificationId": "$verificationId", "smsCode": "$smsCode"}';
     // make POST request
-    print(_body);
     final response = await post(url, headers: headers, body: _body);
     final responseBody = response.body;
-    print(responseBody);
     Map valueMap = jsonDecode(responseBody);
     return Default.from(valueMap);
   }

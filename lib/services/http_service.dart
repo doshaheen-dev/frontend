@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 
 abstract class ApiServices {
   static String get baseUrl {
-    return "$baseUrlEndpoint/api/";
+    return "$baseUrlEndpoint/api";
   }
 
   static String get baseUrlEndpoint {
