@@ -509,8 +509,12 @@ class _InvestorProfileState extends State<InvestorProfile> {
       String _verificationId,
       String _emailVerificationId,
       BuildContext context) async {
-    String _phoneNumber =
-        "+${selectedCountry.dialCode}" + _mobileNo.toString().trim();
+    String _phoneNumber = "";
+
+    if (selectedCountry != null) {
+      _phoneNumber =
+          "+${selectedCountry.dialCode}" + _mobileNo.toString().trim();
+    }
 
     progress = ProgressHUD.of(context);
     progress?.showWithText('Updating Profile...');
@@ -534,7 +538,8 @@ class _InvestorProfileState extends State<InvestorProfile> {
       requestMap["email_verificationId"] = _emailVerificationId;
     }
 
-    if (_phoneNumber != UserData.instance.userInfo.mobileNo) {
+    if (_phoneNumber.isNotEmpty &&
+        _phoneNumber != UserData.instance.userInfo.mobileNo) {
       isSignInRequired = true;
       requestMap["mobile_no"] = CryptUtils.encryption(_phoneNumber);
       requestMap["mobile_verificationId"] = _verificationId;

@@ -142,12 +142,16 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                                                       FocusScope.of(context)
                                                           .requestFocus(
                                                               FocusNode());
-                                                      String _phoneNumber =
-                                                          "+${selectedCountry.dialCode}" +
-                                                              _mobileController
-                                                                  .text
-                                                                  .toString()
-                                                                  .trim();
+                                                      String _phoneNumber = "";
+                                                      if (selectedCountry !=
+                                                          null) {
+                                                        _phoneNumber =
+                                                            "+${selectedCountry.dialCode}" +
+                                                                _mobileController
+                                                                    .text
+                                                                    .toString()
+                                                                    .trim();
+                                                      }
                                                       progress = ProgressHUD.of(
                                                           context);
                                                       progress?.showWithText(
@@ -445,7 +449,8 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
       requestMap["email_verificationId"] = _emailVerificationId;
     }
 
-    if (_phoneNumber != UserData.instance.userInfo.mobileNo) {
+    if (_phoneNumber.isNotEmpty &&
+        _phoneNumber != UserData.instance.userInfo.mobileNo) {
       isSignInRequired = true;
       requestMap["mobile_no"] = CryptUtils.encryption(_phoneNumber);
       requestMap["mobile_verificationId"] = _verificationId;
