@@ -321,9 +321,12 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                                           "Please enter the website link.");
                                       return;
                                     }
-                                    bool _validURL =
-                                        Uri.parse(_websiteController.text)
-                                            .isAbsolute;
+                                    var urlPattern =
+                                        r"(http|https)://[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?";
+                                    var urlExp = new RegExp(urlPattern,
+                                        caseSensitive: false);
+                                    bool _validURL = urlExp
+                                        .hasMatch(_websiteController.text);
                                     if (!_validURL) {
                                       showSnackBar(context,
                                           "Please enter a valid website link.");
