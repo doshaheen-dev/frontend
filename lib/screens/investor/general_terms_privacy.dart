@@ -8,6 +8,7 @@ import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
 import 'package:acc/services/http_service.dart';
 import 'package:acc/services/signup_service.dart';
 import 'package:acc/utilites/app_strings.dart';
+import 'package:acc/utilites/text_style.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -165,9 +166,15 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                height: 20,
-                              ),
+                              Container(
+                                  margin: const EdgeInsets.only(
+                                      top: 5.0,
+                                      left: 25.0,
+                                      bottom: 10,
+                                      right: 25.0),
+                                  child: Text(
+                                      "By clicking on Submit, you agree to Amicorp Terms of Use and Privacy Policy",
+                                      style: textBold14(Colors.black))),
 
                               //NEXT BUTTON
                               Container(

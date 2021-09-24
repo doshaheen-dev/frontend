@@ -26,7 +26,10 @@ class _DocumentCellState extends State<DocumentCell> {
     return InkWell(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
-      onTap: () => widget.selectFile(context, widget.kycDoc.kycId),
+      onTap: () => {
+        FocusScope.of(context).requestFocus(FocusNode()),
+        widget.selectFile(context, widget.kycDoc.kycId)
+      },
       child: Row(
         children: [
           Expanded(
