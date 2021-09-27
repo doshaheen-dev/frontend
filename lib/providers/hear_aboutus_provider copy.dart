@@ -3,34 +3,28 @@ import 'package:acc/services/InvestmentInfoService.dart';
 import 'package:flutter/foundation.dart';
 
 class HearAboutUsProvider with ChangeNotifier {
-  List<Options> _cities = [];
+  List<Options> _foundUs = [];
 
   List<Options> get data {
-    return [..._cities];
+    return [..._foundUs];
   }
 
   Future<void> fetchAppPlatforms() async {
     clear();
-    final List<Options> loadedCities = [];
+    final List<Options> loadedFoundUs = [];
     final HearAboutUs extractedData =
         await InvestmentInfoService.hearAboutUsInfo();
     if (extractedData == null) {
       return;
     }
-    loadedCities.addAll(extractedData.data.options);
-    // extractedData.data.options.forEach((option) {
-    //   loadedCities.add(HearAboutUs(
-    //     option.cityId,
-    //     option.cityName,
-    //   ));
-    // });
+    loadedFoundUs.addAll(extractedData.data.options);
 
-    _cities = loadedCities.toList();
+    _foundUs = loadedFoundUs.toList();
     notifyListeners();
   }
 
   void clear() {
-    _cities = [];
+    _foundUs = [];
     notifyListeners();
   }
 }
