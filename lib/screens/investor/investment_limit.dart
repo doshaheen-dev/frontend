@@ -90,20 +90,26 @@ class _InvestmentLimitState extends State<InvestmentLimit> {
                         return Center(child: Text("An error occurred!"));
                       } else {
                         return Consumer<slotProvider.FundSlots>(
-                            builder: (ctx, slotData, child) => GridView.count(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 20.0,
-                                mainAxisSpacing: 30.0,
-                                shrinkWrap: true,
-                                childAspectRatio:
-                                    (MediaQuery.of(context).size.width /
-                                        2 /
-                                        65),
-                                children: List.generate(
-                                    slotData.slotLineItems.length, (index) {
-                                  return _createCell(
-                                      slotData.slotLineItems[index]);
-                                })));
+                            builder: (ctx, slotData, child) =>
+                                MediaQuery.removePadding(
+                                  removeTop: true,
+                                  context: context,
+                                  child: GridView.count(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 20.0,
+                                      mainAxisSpacing: 30.0,
+                                      shrinkWrap: true,
+                                      childAspectRatio:
+                                          (MediaQuery.of(context).size.width /
+                                              2 /
+                                              65),
+                                      children: List.generate(
+                                          slotData.slotLineItems.length,
+                                          (index) {
+                                        return _createCell(
+                                            slotData.slotLineItems[index]);
+                                      })),
+                                ));
                       }
                     }
                   }),

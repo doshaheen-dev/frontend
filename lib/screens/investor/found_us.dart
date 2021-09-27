@@ -1,12 +1,14 @@
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/signup_request_preferences.dart';
 import 'package:acc/models/investor/hearaboutus.dart';
+import 'package:acc/providers/hear_aboutus_provider%20copy.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/investor/investment_limit.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/ui_widgets.dart';
+import 'package:provider/provider.dart';
 
 class InvestorSearchInfo extends StatefulWidget {
   final HearAboutUs _hearAboutUs;
@@ -26,6 +28,12 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
   List<Options> hearAboutUsList = [];
   String firstname = "";
   final firstNameController = TextEditingController();
+  Future _fundSlots;
+
+  // Future<void> fetchFoundUs() async {
+  //   final provider = Provider.of<HearAboutUsProvider>(context, listen: false);
+  //   provider.fetchAppPlatforms();
+  // }
 
   void showNameField() {
     setState(() {
@@ -47,14 +55,21 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
     });
   }
 
+  // var _isInit = true;
+  // @override
+  // void didChangeDependencies() {
+  //   if (_isInit) {
+  //     setState(() {});
+  //     _fundSlots = fetchFoundUs();
+  //   }
+  //   _isInit = false;
+  //   super.didChangeDependencies();
+  // }
+
   @override
   void initState() {
     super.initState();
-    // print("Data:- ${widget._hearAboutUs}");
-    // print("Options:- ${widget._hearAboutUs.data.options.length}");
-
     hearAboutUsList.addAll(widget._hearAboutUs.data.options);
-    print("Size: ${this.hearAboutUsList.length}");
   }
 
   @override
@@ -102,18 +117,47 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                         height: 10,
                       ),
                       Container(
-                        margin: const EdgeInsets.only(
-                            top: 30.0, left: 25.0, right: 25.0),
-                        child: GridView.count(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 10.0,
-                            mainAxisSpacing: 10.0,
-                            shrinkWrap: true,
-                            children:
-                                List.generate(hearAboutUsList.length, (index) {
-                              return _createCell(index);
-                            })),
-                      ),
+                          margin: const EdgeInsets.only(
+                              top: 30.0, left: 25.0, right: 25.0),
+                          // child: FutureBuilder(
+                          //     future: _fundSlots,
+                          //     builder: (ctx, dataSnapshot) {
+                          //       if (dataSnapshot.connectionState ==
+                          //           ConnectionState.waiting) {
+                          //         return Center(
+                          //             child: CircularProgressIndicator(
+                          //           color: Theme.of(context).primaryColor,
+                          //         ));
+                          //       } else {
+                          //         if (dataSnapshot.error != null) {
+                          //           return Center(
+                          //               child: Text("An error occurred!"));
+                          //         } else {
+                          //           return Consumer<HearAboutUsProvider>(
+                          //               builder: (ctx, slotData, child) =>
+                          //                   GridView.count(
+                          //                       crossAxisCount: 2,
+                          //                       crossAxisSpacing: 10.0,
+                          //                       mainAxisSpacing: 10.0,
+                          //                       shrinkWrap: true,
+                          //                       children: List.generate(
+                          //                           slotData.data.length,
+                          //                           (index) {
+                          //                         return _createCell(
+                          //                             slotData.data[index]);
+                          //                       })));
+                          //         }
+                          //       }
+                          //     })),
+                          child: GridView.count(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10.0,
+                              mainAxisSpacing: 10.0,
+                              shrinkWrap: true,
+                              children: List.generate(hearAboutUsList.length,
+                                  (index) {
+                                return _createCell(index);
+                              }))),
                       Visibility(
                         visible: _isNameVisible,
                         child: Column(
@@ -216,6 +260,58 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
     );
   }
 
+  // InkWell _createCell(Options citi) {
+  //   return InkWell(
+  //     highlightColor: Colors.transparent,
+  //     borderRadius: BorderRadius.circular(40),
+  //     onTap: () {
+  //       print(citi.name);
+  //       infoItemList = [];
+  //       infoItemList.add(citi.name);
+  //       setState(() {
+  //         showNameField();
+  //         showNextButton();
+  //       });
+  //     },
+  //     child: Container(
+  //       width: 200,
+  //       height: 200,
+  //       decoration: BoxDecoration(
+  //         color: infoItemList.contains(citi.name)
+  //             ? Theme.of(context).primaryColor
+  //             : unselectedGray,
+  //         borderRadius: BorderRadius.all(
+  //           const Radius.circular(15.0),
+  //         ),
+  //       ),
+  //       child: Center(
+  //         child: Column(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: [
+  //             CachedNetworkImage(
+  //               imageUrl: citi.imageUrl,
+  //               progressIndicatorBuilder: (context, url, downloadProgress) =>
+  //                   CircularProgressIndicator(value: downloadProgress.progress),
+  //               errorWidget: (context, url, error) => Icon(Icons.error),
+  //             ),
+  //             SizedBox(
+  //               height: 10.0,
+  //             ),
+  //             Text(citi.name,
+  //                 style: TextStyle(
+  //                     color: infoItemList.contains(citi.name)
+  //                         ? Colors.white
+  //                         : Colors.black,
+  //                     fontWeight: FontWeight.normal,
+  //                     fontSize: 16.0,
+  //                     fontFamily: FontFamilyMontserrat.name))
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
   InkWell _createCell(int _index) {
     return InkWell(
       highlightColor: Colors.transparent,
@@ -244,54 +340,18 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (this.hearAboutUsList[_index].name == "Social Media")
-                Image(
-                  image: AssetImage("assets/images/investor/social_media.png"),
-                  width: 100,
-                  height: 100,
-                ),
-
-              if (this.hearAboutUsList[_index].name == "Internet Browsing")
-                Image(
-                  image: AssetImage(
-                      "assets/images/investor/internet_browsing.png"),
-                  width: 100,
-                  height: 100,
-                ),
-
-              if (this.hearAboutUsList[_index].name == "Referral")
-                Image(
-                  image: AssetImage("assets/images/investor/referral.png"),
-                  width: 100,
-                  height: 100,
-                ),
-
-              if (this.hearAboutUsList[_index].name == "Internet Search")
-                Image(
-                  image:
-                      AssetImage("assets/images/investor/internet_search.png"),
-                  width: 100,
-                  height: 100,
-                ),
-
-              // CachedNetworkImage(
-              //   height: 100.0,
-              //   width: 100,
-              //   imageUrl: this.hearAboutUsList[_index].imageUrl,
-              //   errorWidget: (context, url, error) => Icon(Icons.error),
-              // ),
-
-              // Image(
-              //   image: this.hearAboutUsList[_index].imageUrl != null
-              //       ?
-              //       NetworkImage(
-              //           "http://${this.hearAboutUsList[_index].imageUrl}")
-              //       : AssetImage("assets/images/UserProfile.png"),
-
-              //   width: 100,
-              //   height: 100,
-              //   // fit: BoxFit.cover,
-              // ),
+              CachedNetworkImage(
+                height: 100.0,
+                width: 100,
+                placeholder: (context, string) => SizedBox(
+                    height: 100,
+                    width: 100,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    )),
+                imageUrl: this.hearAboutUsList[_index].imageUrl,
+                errorWidget: (context, url, error) => Icon(Icons.error),
+              ),
               SizedBox(
                 height: 10.0,
               ),
