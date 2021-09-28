@@ -1,7 +1,7 @@
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/signup_request_preferences.dart';
 import 'package:acc/models/investor/hearaboutus.dart';
-import 'package:acc/providers/hear_aboutus_provider%20copy.dart';
+import 'package:acc/providers/hear_aboutus_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

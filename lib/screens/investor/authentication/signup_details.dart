@@ -5,6 +5,7 @@ import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/signup_request_basicinfo.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/services/signup_service.dart';
+import 'package:acc/utilites/text_style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -533,7 +534,7 @@ class _SignUpDetailsState extends State<SignUpDetails> {
     userInfo.User signedUpUser =
         await SignUpService.uploadBasicUserDetails(requestModelInstance);
     progress.dismiss();
-    showSnackBar(context, signedUpUser.message);
+
     if (signedUpUser.type == 'success') {
       requestModelInstance.clear();
 
@@ -562,10 +563,39 @@ class _SignUpDetailsState extends State<SignUpDetails> {
       final userJson = jsonEncode(userData);
       prefs.setString('UserInfo', userJson);
       UserData.instance.userInfo = userData;
-      // print('${userData.firstName}');
-      // print('Ins:${UserData.instance.userInfo.firstName}');
-      openWelcomeInvestor();
+      _openDialog(context, signedUpUser.message);
     }
+  }
+
+  _openDialog(BuildContext context, String message) {
+    // set up the buttons
+    Widget positiveButton = TextButton(
+        onPressed: () async {
+          openWelcomeInvestor();
+        },
+        child: Text(
+          "Ok",
+          textScaleFactor: 1.0,
+          style: textNormal16(Theme.of(context).primaryColor),
+        ));
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: Text(message,
+          textScaleFactor: 1.0, style: textNormal18(headingBlack)),
+      actions: [
+        positiveButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   void openWelcomeInvestor() {

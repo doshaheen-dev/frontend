@@ -100,11 +100,6 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
 
     getUserInfo();
-
-    // Timer(
-    //     Duration(seconds: 3),
-    //     () => Navigator.pushReplacement(
-    //         context, MaterialPageRoute(builder: (context) => OnBoarding())));
   }
 
   // Get store data and redirect to view.

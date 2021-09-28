@@ -73,6 +73,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
+                        margin: EdgeInsets.only(top: 15.0),
                         child: IconButton(
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
