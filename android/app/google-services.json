@@ -1,42 +1,41 @@
 {
   "project_info": {
-    "project_number": "955568098911",
-    "project_id": "portfoliomanagement-7d9f3",
-    "storage_bucket": "portfoliomanagement-7d9f3.appspot.com"
+    "project_number": "257378514008",
+    "project_id": "amicorp-connect",
+    "storage_bucket": "amicorp-connect.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:955568098911:android:e5a66ff4f055fd562cd5ea",
+        "mobilesdk_app_id": "1:257378514008:android:7209de0fa0ee690471062d",
         "android_client_info": {
-          "package_name": "com.doshaheen.portfoliomanagement"
+          "package_name": "com.amicorp.acc"
         }
       },
       "oauth_client": [
         {
-          "client_id": "955568098911-uq0lp66acq3tpopkhapjmlpd35l4jb6c.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.doshaheen.portfoliomanagement",
-            "certificate_hash": "a50efadd38997eb70d99bc22e729a20786a9eb7d"
-          }
-        },
-        {
-          "client_id": "955568098911-fjbv9ku16n2e53ccekarl71a7s5h1j23.apps.googleusercontent.com",
+          "client_id": "257378514008-gc803t0jrt8u7asie629tih9ubid9tpn.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD3x5tEBz41s-e7V226pAYvZarvqW4XPOQ"
+          "current_key": "AIzaSyAZbKht8vYbopZMq__cE8ZtdeqQrD8cXFU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "955568098911-fjbv9ku16n2e53ccekarl71a7s5h1j23.apps.googleusercontent.com",
+              "client_id": "257378514008-gc803t0jrt8u7asie629tih9ubid9tpn.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "257378514008-eclfdj3o2g86t0tfbk6q0363h31vmdc3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.amicorp.acc"
+              }
             }
           ]
         }

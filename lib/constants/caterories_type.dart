@@ -1,4 +1,4 @@
-import 'package:portfolio_management/models/categories_model.dart';
+import 'package:acc/models/categories_model.dart';
 
 class CateroriesType {
   static List<CategoriesModel> raiseCapital = [

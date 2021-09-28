@@ -1,6 +1,6 @@
 {
-    "name": "portfolio_management",
-    "short_name": "portfolio_management",
+    "name": "acc",
+    "short_name": "acc",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

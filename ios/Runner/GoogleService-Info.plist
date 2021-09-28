@@ -3,23 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>955568098911-3lse8gdebe8cdf0qbu5ktgb9jms72g24.apps.googleusercontent.com</string>
+	<string>257378514008-eclfdj3o2g86t0tfbk6q0363h31vmdc3.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.955568098911-3lse8gdebe8cdf0qbu5ktgb9jms72g24</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>955568098911-eb0limrat0pv73oh4q07usenmur0kieq.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.257378514008-eclfdj3o2g86t0tfbk6q0363h31vmdc3</string>
 	<key>API_KEY</key>
-	<string>AIzaSyB3D_j130JzPKQ_sL21ib6UNp5JrXlgcMM</string>
+	<string>AIzaSyBhZ_8dpDWIVSVo3CHQzz_OONndyqraAJc</string>
 	<key>GCM_SENDER_ID</key>
-	<string>955568098911</string>
+	<string>257378514008</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.doshaheen.portfoliomanagement</string>
+	<string>com.amicorp.acc</string>
 	<key>PROJECT_ID</key>
-	<string>portfoliomanagement-7d9f3</string>
+	<string>amicorp-connect</string>
 	<key>STORAGE_BUCKET</key>
-	<string>portfoliomanagement-7d9f3.appspot.com</string>
+	<string>amicorp-connect.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:955568098911:ios:87a5d9707d10f6a72cd5ea</string>
+	<string>1:257378514008:ios:79fd5bfc9a4783cf71062d</string>
 </dict>
 </plist>

@@ -1,4 +1,4 @@
-# portfolio_management
+# Amicorp Capital Connect
 
 A new Flutter project.
 

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:portfolio_management/models/categories_model.dart';
+import 'package:acc/models/categories_model.dart';
 
 class Categories extends StatefulWidget {
   final String type;
@@ -43,7 +43,7 @@ class _CategoriesState extends State<Categories> {
               listImages[index].image,
               height: 80,
               width: 50,
-              fit: BoxFit.fitWidth,        
+              fit: BoxFit.fitWidth,
             ),
           ),
 

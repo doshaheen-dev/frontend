@@ -1,67 +1,69 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
-import 'dart:async';
 
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-// import 'package:provider/provider.dart';
-// import 'package:flutter/material.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-class AuthenticationService {
+class Authentication {
   final FirebaseAuth firebaseAuth;
   final GoogleSignIn googleSignIn = GoogleSignIn();
-  AuthenticationService(this.firebaseAuth);
+  Authentication(this.firebaseAuth);
 
   /// Changed to idTokenChanges as it updates depending on more cases.
   Stream<User> get authStateChanges => firebaseAuth.idTokenChanges();
 
-  /// Firebase Email/password sign-in
-  Future<String> signIn({String email, String password}) async {
-    try {
-      await firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: password);
-      return "Signed in";
-    } on FirebaseAuthException catch (e) {
-      return e.message;
-    }
+  static Future<FirebaseApp> initializeFirebase() async {
+    FirebaseApp firebaseApp = await Firebase.initializeApp();
+    return firebaseApp;
   }
 
-  Future<dynamic> signUpWithEmailAndPassword(
-      {String email, String password}) async {
-    try {
-      final result = await firebaseAuth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      return result;
-    } on FirebaseAuthException catch (e) {
-      return e.message;
-    }
-  }
+  //GOOGLE SIGN IN
+  static Future<User> signInWithGoogle({BuildContext context}) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User user;
 
-  /// Firebase Google sign-in
-  Future<String> signInWithGoogle() async {
-    try {
-      print("google sign in service 1");
-      final GoogleSignInAccount googleSignInAccount =
-          await googleSignIn.signIn();
-      print("google sign in service 2");
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+
+    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+
+    if (googleSignInAccount != null) {
       final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount.authentication;
-      print("google sign in service 3");
+
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
-      print("google sign in service 4");
-      final googleCredential =
-          await firebaseAuth.signInWithCredential(credential);
-      print("google sign in userinfo: ${googleCredential.additionalUserInfo}");
-      return "Signed in";
-    } catch (e) {
-      return e.message;
+
+      try {
+        final UserCredential userCredential =
+            await auth.signInWithCredential(credential);
+
+        user = userCredential.user;
+        // print("Successful $user ");
+      } on FirebaseAuthException catch (e) {
+        print(e.message);
+        print(e.code);
+
+        if (e.code == 'account-exists-with-different-credential') {
+          print("Error1 ${e.message} ");
+        } else if (e.code == 'invalid-credential') {
+          print("Error2 ${e.message} ");
+          print(e.credential);
+        }
+      } catch (e) {
+        print(e.toString());
+        print("Catch ${e.toString()} ");
+        // handle the error here
+      }
     }
+    return user;
   }
 
   /// Generates a cryptographically secure random nonce, to be included in a
@@ -81,6 +83,8 @@ class AuthenticationService {
     return digest.toString();
   }
 
+  // APPLE SIGN IN
+  // ignore: missing_return
   Future<User> signInWithApple() async {
     // To prevent replay attacks with the credential returned from Apple, we
     // include a nonce in the credential request. When signing in in with
@@ -109,23 +113,21 @@ class AuthenticationService {
       final authResult =
           await firebaseAuth.signInWithCredential(oauthCredential);
 
-      final displayName =
-          '${appleCredential.givenName} ${appleCredential.familyName}';
-      final userEmail = '${appleCredential.email}';
+      final displayName = '${authResult.user.displayName}';
+      final userEmail = '${authResult.user.email}';
       print("Name: $displayName");
       print("Email: $userEmail");
 
+      final User firebaseUser = authResult.user;
       final prefs = await SharedPreferences.getInstance();
       if (displayName != null) {
         prefs.setString("displayName", displayName);
+        await firebaseUser.updateProfile(displayName: displayName);
       }
       if (userEmail != null) {
         prefs.setString("userEmail", userEmail);
+        await firebaseUser.updateEmail(userEmail);
       }
-
-      final User firebaseUser = authResult.user;
-      await firebaseUser.updateProfile(displayName: displayName);
-      await firebaseUser.updateEmail(userEmail);
 
       return firebaseUser;
     } catch (exception) {
@@ -133,26 +135,61 @@ class AuthenticationService {
     }
   }
 
-  /// Firebase Apple sign in
-  // Future<String> signInWithApple({String email, String password}) async {
-  //   try {
-  //     // User user = await FirebaseAuthOAuth()
-  //     //     .openSignInFlow("apple.com", ["email"], {"locale": "en"});
+  // Apple sign for Android
+  Future<User> appleAuthenticationAndroid() async {
+    try {
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        webAuthenticationOptions: WebAuthenticationOptions(
+          clientId: 'com.amicorp.accservice',
+          redirectUri: Uri.parse(
+            'https://cold-verdant-dracorex.glitch.me/callbacks/sign_in_with_apple',
+          ),
+          // redirectUri: Uri.parse(
+          //   'https://amicorp-connect.firebaseapp.com/__/auth/handler',
+          // ),
+        ),
+      );
 
-  //     // print(user);
-  //     // firebaseAuth.signInWithPopup(provider);
+      final oAuthCredential = OAuthProvider('apple.com').credential(
+        idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
+      );
 
-  //     final OAuthProvider provider = OAuthProvider("apple.com");
-  //     provider.addScope("email");
-  //     provider.addScope("name");
-  //     provider.setCustomParameters({"local": "en"});
-  //     firebaseAuth.signInWithPopup(provider);
-  //   } catch (e) {
-  //     return e.message;
-  //   }
-  // }
+// Use the OAuthCredential to sign in to Firebase.
+      final authResult =
+          await FirebaseAuth.instance.signInWithCredential(oAuthCredential);
 
-  Future<void> signOut() async {
-    await firebaseAuth.signOut();
+      // print("Apple Android:- $authResult");
+
+      final displayName = '${authResult.user.displayName}';
+      final userEmail = '${authResult.user.email}';
+      // print("Name: $displayName");
+      // print("Email: $userEmail");
+
+      final User firebaseUser = authResult.user;
+      final prefs = await SharedPreferences.getInstance();
+      if (displayName != null) {
+        prefs.setString("displayName", displayName);
+        await firebaseUser.updateProfile(displayName: displayName);
+      }
+      if (userEmail != null) {
+        prefs.setString("userEmail", userEmail);
+        await firebaseUser.updateEmail(userEmail);
+      }
+
+      return firebaseUser;
+    } catch (exception) {
+      print(exception);
+    }
+  }
+
+  static Future<void> signOut() async {
+    print("logged out");
+    await FirebaseAuth.instance.signOut();
+    await GoogleSignIn().signOut();
   }
 }
