@@ -564,6 +564,8 @@ class _SignUpDetailsState extends State<SignUpDetails> {
       prefs.setString('UserInfo', userJson);
       UserData.instance.userInfo = userData;
       _openDialog(context, signedUpUser.message);
+    } else {
+      showSnackBar(context, signedUpUser.message);
     }
   }
 

@@ -67,8 +67,7 @@ class _ProductDetailState extends State<ProductDetail> {
             builder: (context) => SafeArea(
                 child: SingleChildScrollView(
               child: Container(
-                margin:
-                    const EdgeInsets.only(top: 40.0, left: 15.0, right: 15.0),
+                margin: const EdgeInsets.only(left: 15.0, right: 15.0),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -267,6 +266,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         height: 10,
                       ),
                       Container(
+                        margin: EdgeInsets.only(bottom: 10.0),
                         child: Row(
                           children: [
                             Expanded(

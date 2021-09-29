@@ -33,7 +33,7 @@ class _FundsDetailHeaderState extends State<FundsDetailHeader> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: EdgeInsets.only(top: 10, left: 10),
+              margin: EdgeInsets.only(top: 20, left: 10),
               child: IconButton(
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,

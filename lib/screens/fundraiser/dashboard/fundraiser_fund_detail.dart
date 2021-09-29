@@ -109,6 +109,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
                         ),
 
                         Container(
+                          margin: EdgeInsets.only(bottom: 10.0, top: 10.0),
                           child: Row(
                             children: [
                               Expanded(

@@ -92,6 +92,7 @@ class _FundDetailState extends State<FundDetail> {
                         height: 10,
                       ),
                       Container(
+                        margin: EdgeInsets.only(bottom: 10.0),
                         child: Row(
                           children: [
                             Expanded(
