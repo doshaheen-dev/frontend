@@ -7,12 +7,12 @@ import 'package:acc/screens/investor/dashboard/product_detail.dart';
 import 'package:acc/services/investor_home_service.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
+import 'package:acc/widgets/app_progressbar.dart';
 import 'package:acc/widgets/exception_indicators/empty_list_indicator.dart';
 import 'package:acc/widgets/exception_indicators/error_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/utilites/app_colors.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/investor_home_provider.dart' as investorProvider;
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -194,7 +194,7 @@ class _InvestorHomeState extends State<InvestorHome>
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
         child: Scaffold(
             backgroundColor: Colors.white,
-            body: ProgressHUD(
+            body: AppProgressBar(
               child: Builder(
                 builder: (context) => SingleChildScrollView(
                   child: Container(
@@ -502,7 +502,7 @@ class _InvestorHomeState extends State<InvestorHome>
           setState(() {
             _recPagingController.itemList.removeAt(arrIndex);
 
-            progress = ProgressHUD.of(_context);
+            progress = AppProgressBar.of(_context);
             progress?.showWithText('Updating your preference...');
           });
           switch (orientation) {

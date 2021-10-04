@@ -11,12 +11,12 @@ import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 import 'package:acc/utils/class_navigation.dart';
 import 'package:acc/utils/crypt_utils.dart';
+import 'package:acc/widgets/app_progressbar.dart';
 import 'package:acc/widgets/update_bottomsheet/email_update.dart';
 import 'package:acc/widgets/update_bottomsheet/mobile_update.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FundraiserProfile extends StatefulWidget {
@@ -110,7 +110,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
         child: Scaffold(
           backgroundColor: Colors.white,
-          body: ProgressHUD(
+          body: AppProgressBar(
             child: Builder(
                 builder: (context) => SingleChildScrollView(
                       child: Container(
@@ -152,8 +152,9 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                                                                     .toString()
                                                                     .trim();
                                                       }
-                                                      progress = ProgressHUD.of(
-                                                          context);
+                                                      progress =
+                                                          AppProgressBar.of(
+                                                              context);
                                                       progress?.showWithText(
                                                           'Updating Profile...');
                                                       submitDetails(

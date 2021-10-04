@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/screens/common/onboarding.dart';
 import 'package:acc/utilites/text_style.dart';
+import 'package:acc/widgets/app_progressbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,6 @@ import 'package:acc/services/AuthenticationService.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 
 class QuickSignUp extends StatefulWidget {
   @override
@@ -38,7 +38,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
             ),
             bottomNavigationBar: BottomAppBar(),
             backgroundColor: Color(0xffffffff),
-            body: ProgressHUD(
+            body: AppProgressBar(
               child: Builder(
                 builder: (context) => SafeArea(
                   child: SingleChildScrollView(
@@ -205,7 +205,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
     return InkWell(
       borderRadius: BorderRadius.circular(40),
       onTap: () async {
-        progress = ProgressHUD.of(context);
+        progress = AppProgressBar.of(context);
         progress?.showWithText('Loading...');
 
         if (type == "Apple") {
