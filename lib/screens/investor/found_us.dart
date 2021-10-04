@@ -1,14 +1,12 @@
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/signup_request_preferences.dart';
 import 'package:acc/models/investor/hearaboutus.dart';
-import 'package:acc/providers/hear_aboutus_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/investor/investment_limit.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/ui_widgets.dart';
-import 'package:provider/provider.dart';
 
 class InvestorSearchInfo extends StatefulWidget {
   final HearAboutUs _hearAboutUs;

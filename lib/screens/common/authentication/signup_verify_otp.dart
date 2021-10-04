@@ -4,10 +4,10 @@ import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/screens/fundraiser/authentication/signup_corporate_details.dart';
 import 'package:acc/utilites/app_strings.dart';
 import 'package:acc/utilites/text_style.dart';
+import 'package:acc/widgets/app_progressbar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:acc/screens/investor/authentication/signup_quick.dart';
 import 'package:acc/services/OtpService.dart';
@@ -64,7 +64,7 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
             ),
             bottomNavigationBar: BottomAppBar(),
             backgroundColor: Colors.white,
-            body: ProgressHUD(
+            body: AppProgressBar(
                 child: Builder(
               builder: (context) => SafeArea(
                 child: SingleChildScrollView(
@@ -160,7 +160,7 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                                           recognizer: TapGestureRecognizer()
                                             ..onTap = () {
                                               progress =
-                                                  ProgressHUD.of(context);
+                                                  AppProgressBar.of(context);
                                               progress
                                                   ?.showWithText(sendingOtp);
                                               otpController.clear();
@@ -188,7 +188,7 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                                     FocusScope.of(context)
                                         .requestFocus(FocusNode());
 
-                                    progress = ProgressHUD.of(context);
+                                    progress = AppProgressBar.of(context);
                                     progress?.showWithText(verifyingOtp);
                                     _verifySignUpOTP(otpController.text,
                                         _verificationId, _phoneNumber);

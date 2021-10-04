@@ -9,12 +9,12 @@ import 'package:acc/services/http_service.dart';
 import 'package:acc/services/signup_service.dart';
 import 'package:acc/utilites/app_strings.dart';
 import 'package:acc/utilites/text_style.dart';
+import 'package:acc/widgets/app_progressbar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/ui_widgets.dart';
@@ -47,7 +47,7 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
             ),
             bottomNavigationBar: BottomAppBar(),
             backgroundColor: Colors.white,
-            body: ProgressHUD(
+            body: AppProgressBar(
               child: Builder(
                   builder: (context) => SafeArea(
                           child: SingleChildScrollView(
@@ -187,7 +187,7 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                                       borderRadius: BorderRadius.circular(40),
                                       onTap: () async {
                                         // on click
-                                        progress = ProgressHUD.of(context);
+                                        progress = AppProgressBar.of(context);
                                         progress?.showWithText(
                                             'Uploading Preferences...');
                                         final requestModelInstance =

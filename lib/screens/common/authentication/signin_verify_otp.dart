@@ -4,10 +4,10 @@ import 'package:acc/models/authentication/otp_response.dart';
 import 'package:acc/screens/fundraiser/authentication/email_verification.dart';
 import 'package:acc/screens/investor/dashboard/investor_dashboard.dart';
 import 'package:acc/screens/investor/welcome.dart';
+import 'package:acc/widgets/app_progressbar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/screens/fundraiser/dashboard/fundraiser_dashboard.dart';
@@ -72,7 +72,7 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
             ),
             bottomNavigationBar: BottomAppBar(),
             backgroundColor: Colors.white,
-            body: ProgressHUD(
+            body: AppProgressBar(
               child: Builder(
                   builder: (context) => SafeArea(
                           child: SingleChildScrollView(
@@ -155,7 +155,7 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
                                                       TapGestureRecognizer()
                                                         ..onTap = () {
                                                           progress =
-                                                              ProgressHUD.of(
+                                                              AppProgressBar.of(
                                                                   context);
                                                           progress
                                                               ?.showWithText(
@@ -215,7 +215,7 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
   }
 
   void signIn(BuildContext context) {
-    progress = ProgressHUD.of(context);
+    progress = AppProgressBar.of(context);
     progress?.showWithText(verifyingOtp);
 
     verifyPhoneUser("", _phoneNumber, _otpType,
@@ -297,6 +297,11 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
         token, phoneNumber, verificationId, smsCode, otpType);
     progress.dismiss();
 
+    if (verifyPhoneNumber == null) {
+      progress.dismiss();
+      showSnackBar(context, "Please check your credentials");
+      return;
+    }
     if (verifyPhoneNumber.type == "success") {
       saveUserInfo(verifyPhoneNumber.data);
       openHome(verifyPhoneNumber.data);

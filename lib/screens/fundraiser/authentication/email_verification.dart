@@ -9,9 +9,9 @@ import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 import 'package:acc/utils/code_utils.dart';
 import 'package:acc/utils/crypt_utils.dart';
+import 'package:acc/widgets/app_progressbar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,7 +36,7 @@ class _EmailVerificationState extends State<EmailVerification> {
 
   @override
   Widget build(BuildContext context) {
-    return ProgressHUD(
+    return AppProgressBar(
         child: Builder(
       builder: (context) => MediaQuery(
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
@@ -136,11 +136,8 @@ class _EmailVerificationState extends State<EmailVerification> {
                                 return;
                               }
 
-                              //  progress = ProgressHUD.of(context);
-                              // progress?.showWithText(sendingOtp);
-
                               emailOtpController = TextEditingController();
-                              progress = ProgressHUD.of(context);
+                              progress = AppProgressBar.of(context);
                               progress?.showWithText('Sending OTP...');
                               _getOtp(_newEmailController.text, "", setState,
                                   "email_id");
@@ -236,7 +233,7 @@ class _EmailVerificationState extends State<EmailVerification> {
                                           recognizer: TapGestureRecognizer()
                                             ..onTap = () {
                                               progress =
-                                                  ProgressHUD.of(context);
+                                                  AppProgressBar.of(context);
                                               progress?.showWithText(
                                                   'Sending OTP...');
                                               _getOtp(_newEmailController.text,
@@ -244,24 +241,6 @@ class _EmailVerificationState extends State<EmailVerification> {
                                             })
                                     ]),
                               )),
-                          // Container(
-                          //   margin: EdgeInsets.only(right: 20.0),
-                          //   child: Align(
-                          //     alignment: Alignment.topRight,
-                          //     child: InkWell(
-                          //         child: Text(
-                          //           "Didn't receive the code? Resend OTP",
-                          //           textAlign: TextAlign.end,
-                          //           style: textNormal14(Colors.black),
-                          //         ),
-                          //         onTap: () {
-                          //           progress = ProgressHUD.of(context);
-                          //           progress?.showWithText('Sending OTP...');
-                          //           _getOtp(_newEmailController.text, "",
-                          //               setState, "email_id");
-                          //         }),
-                          //   ),
-                          // ),
                           Container(
                               alignment: Alignment.center,
                               margin:
@@ -276,7 +255,7 @@ class _EmailVerificationState extends State<EmailVerification> {
                                               content: Text(warningOTP)));
                                       return;
                                     }
-                                    progress = ProgressHUD.of(context);
+                                    progress = AppProgressBar.of(context);
                                     progress?.showWithText('Verifying OTP...');
                                     // verify otp for email id
                                     verifyEmailOTP(

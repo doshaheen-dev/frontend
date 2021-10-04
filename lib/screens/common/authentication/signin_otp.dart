@@ -5,10 +5,10 @@ import 'package:acc/models/local_countries.dart';
 import 'package:acc/services/country_service.dart';
 import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utils/code_utils.dart';
+import 'package:acc/widgets/app_progressbar.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:acc/screens/common/authentication/signin_verify_otp.dart';
 import 'package:acc/services/OtpService.dart';
 import 'package:acc/utilites/app_colors.dart';
@@ -38,13 +38,7 @@ class _SignInOTPState extends State<SignInOTP> {
   var progress;
   Map<String, dynamic> selectedCountryItem;
   List<Countries> countryList = [];
-  // <Countries>[
-  //   const Countries("India", "IN", 91, 10),
-  //   const Countries("Singapore", "SG", 65, 12),
-  //   const Countries("United States", "US", 1, 10),
-  // ];
   Future _countries;
-  var _isInit = true;
   bool _isDropdownVisible = true;
 
   bool showLabel = true;
@@ -63,44 +57,8 @@ class _SignInOTPState extends State<SignInOTP> {
     });
   }
 
-  Future<void> _fetchAllCountries(BuildContext context) async {
-    // await Provider.of<countryProvider.Countries>(context, listen: false)
-    //     .fetchAndSetCountries();
-
-    final Country extractedData = await CountryService.fetchCountries();
-    if (extractedData.type == "success") {
-      if (extractedData.data.options.length != 0) {
-        countryList.clear();
-        for (int i = 0; i < extractedData.data.options.length; i++) {
-          var value = extractedData.data.options[i];
-          countryList.add(Countries(
-              value.countryName,
-              value.countryAbbr,
-              int.parse(
-                  value.countryPhCode.replaceAll(new RegExp(r'[^0-9]'), '')),
-              10));
-        }
-        if (countryList.isNotEmpty) {
-          selectedCountry = countryList[0];
-        }
-      }
-    }
-  }
-
-  @override
-  void didChangeDependencies() {
-    if (_isInit) {
-      // _countries = _fetchAllCountries(context);
-      // _fetchAllCountries(context);
-    }
-
-    _isInit = false;
-    super.didChangeDependencies();
-  }
-
   @override
   void initState() {
-    print("Signin -> ${widget._countriesList.length}");
     if (widget._countriesList.isEmpty) {
       countryList = <Countries>[
         const Countries("India", "IN", 91, 10),
@@ -139,7 +97,7 @@ class _SignInOTPState extends State<SignInOTP> {
             ),
             bottomNavigationBar: BottomAppBar(),
             backgroundColor: Colors.white,
-            body: ProgressHUD(
+            body: AppProgressBar(
               child: Builder(
                   builder: (context) => SafeArea(
                         child: SingleChildScrollView(
@@ -206,7 +164,7 @@ class _SignInOTPState extends State<SignInOTP> {
                                               if (CodeUtils.emailValid(
                                                   phoneController.text)) {
                                                 progress =
-                                                    ProgressHUD.of(context);
+                                                    AppProgressBar.of(context);
 
                                                 progress
                                                     ?.showWithText(sendingOtp);
@@ -215,8 +173,12 @@ class _SignInOTPState extends State<SignInOTP> {
                                                     phoneController.text,
                                                     "twilio",
                                                     "email");
-                                              } else if (!CodeUtils.isPhone(
-                                                  phoneController.text)) {
+                                              } else if (double.tryParse(
+                                                          phoneController
+                                                              .text) !=
+                                                      null &&
+                                                  !CodeUtils.isPhone(
+                                                      phoneController.text)) {
                                                 if (selectedCountry == null) {
                                                   showSnackBar(context,
                                                       errorCountryCode);
@@ -233,7 +195,7 @@ class _SignInOTPState extends State<SignInOTP> {
 
                                                 print("mobile");
                                                 progress =
-                                                    ProgressHUD.of(context);
+                                                    AppProgressBar.of(context);
                                                 progress
                                                     ?.showWithText(sendingOtp);
 
@@ -652,7 +614,8 @@ class _SignInOTPState extends State<SignInOTP> {
   TextField inputTextField(text, _controller) {
     return TextField(
         onChanged: (text) {
-          if (CodeUtils.emailValid(text)) {
+          if (text.isNotEmpty && double.tryParse(text) == null) {
+            //CodeUtils.emailValid(text)
             setState(() {
               _isDropdownVisible = false;
             });

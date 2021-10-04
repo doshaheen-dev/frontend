@@ -9,10 +9,10 @@ import 'package:acc/services/OtpService.dart';
 import 'package:acc/utilites/app_strings.dart';
 import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utilites/text_style.dart';
+import 'package:acc/widgets/app_progressbar.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:acc/screens/common/authentication/signup_verify_otp.dart';
 import 'package:acc/utilites/app_colors.dart';
 
@@ -104,7 +104,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
             ),
             bottomNavigationBar: BottomAppBar(),
             backgroundColor: Colors.white,
-            body: ProgressHUD(
+            body: AppProgressBar(
                 child: Builder(
               builder: (context) => SafeArea(
                 child: SingleChildScrollView(
@@ -180,7 +180,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
                                     return;
                                   }
 
-                                  progress = ProgressHUD.of(context);
+                                  progress = AppProgressBar.of(context);
                                   progress?.showWithText(sendingOtp);
                                   _getOtp(phoneController.text);
                                 },
