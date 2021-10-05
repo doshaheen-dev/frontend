@@ -190,8 +190,7 @@ class _OnBoardingState extends State<OnBoarding> {
                         InkWell(
                             borderRadius: BorderRadius.circular(40),
                             onTap: () {
-                              //custom Crashlytics log message
-                              //FirebaseCrashlytics.instance.crash();
+                              
                               // Open  view
                               Navigator.of(context).push(PageRouteBuilder(
                                   pageBuilder:
