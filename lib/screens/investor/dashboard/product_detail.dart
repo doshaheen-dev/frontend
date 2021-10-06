@@ -7,8 +7,8 @@ import 'package:acc/services/investor_home_service.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utilites/text_style.dart';
+import 'package:acc/widgets/app_progressbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 
 class ProductDetail extends StatefulWidget {
   final FundsInfo _recommendation;
@@ -50,7 +50,7 @@ class _ProductDetailState extends State<ProductDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return ProgressHUD(
+    return AppProgressBar(
         child: Builder(
       builder: (context) => MediaQuery(
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
@@ -62,13 +62,12 @@ class _ProductDetailState extends State<ProductDetail> {
           ),
           bottomNavigationBar: _createButtonLayout(context),
           backgroundColor: Colors.white,
-          body: ProgressHUD(
+          body: AppProgressBar(
               child: Builder(
             builder: (context) => SafeArea(
                 child: SingleChildScrollView(
               child: Container(
-                margin:
-                    const EdgeInsets.only(top: 40.0, left: 15.0, right: 15.0),
+                margin: const EdgeInsets.only(left: 15.0, right: 15.0),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -267,6 +266,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         height: 10,
                       ),
                       Container(
+                        margin: EdgeInsets.only(bottom: 10.0),
                         child: Row(
                           children: [
                             Expanded(
@@ -320,7 +320,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     top: 5.0, left: 5.0, bottom: 20, right: 5.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    progress = ProgressHUD.of(context);
+                    progress = AppProgressBar.of(context);
                     progress?.showWithText("Please wait");
                     respondRecommendation(_recommendation.fundTxnId, 0);
                   },
@@ -350,7 +350,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       top: 5.0, left: 5.0, bottom: 20, right: 5.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      progress = ProgressHUD.of(context);
+                      progress = AppProgressBar.of(context);
                       progress?.showWithText("Please wait");
                       respondRecommendation(_recommendation.fundTxnId, 1);
                     },

@@ -11,6 +11,7 @@ import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
+import 'package:acc/widgets/app_progressbar.dart';
 import 'package:acc/widgets/fundraiser/fundDetails/funds_detail_documents.dart';
 import 'package:acc/widgets/fundraiser/fundDetails/funds_detail_overview.dart';
 import 'package:acc/widgets/fundraiser/fundDetails/funds_detail_remarks.dart';
@@ -20,7 +21,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 
 import 'fundraiser_dashboard.dart';
 
@@ -72,7 +72,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
 
     return MediaQuery(
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-        child: ProgressHUD(
+        child: AppProgressBar(
             child: Builder(
           builder: (context) => Scaffold(
             bottomNavigationBar: _createButtonLayout(context),
@@ -109,6 +109,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
                         ),
 
                         Container(
+                          margin: EdgeInsets.only(bottom: 10.0, top: 10.0),
                           child: Row(
                             children: [
                               Expanded(
@@ -174,7 +175,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
                         }
                       }
 
-                      progress = ProgressHUD.of(context);
+                      progress = AppProgressBar.of(context);
                       progress?.showWithText('Submitting Updates...');
                       _performSubmission(context);
                     }
@@ -290,7 +291,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
     String labelText,
     String description,
   ) {
-    return ProgressHUD(
+    return AppProgressBar(
       child: Builder(
         builder: (context) => InkWell(
             splashColor: Colors.transparent,
@@ -394,7 +395,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
 
   Future<void> _uploadFile(
       BuildContext context, int kycDocId, File file, String fileName) async {
-    progress = ProgressHUD.of(context);
+    progress = AppProgressBar.of(context);
     progress?.showWithText('Uploading File...');
     if (file != null) {
       UploadDocument doc =

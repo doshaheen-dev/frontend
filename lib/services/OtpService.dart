@@ -45,7 +45,13 @@ class OtpService {
     final responseBody = response.body;
     print("SigninResp: $responseBody");
     Map valueMap = jsonDecode(responseBody);
-    UserSignIn userDetails = UserSignIn.from(valueMap);
+    UserSignIn userDetails;
+    try {
+      userDetails = UserSignIn.from(valueMap);
+    } catch (e) {
+      //print(("error ----> $e"));
+    }
+
     return userDetails;
   }
 

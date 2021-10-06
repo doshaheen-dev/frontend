@@ -1,6 +1,7 @@
 import 'package:acc/models/country/country.dart';
 import 'package:acc/services/country_service.dart';
 import 'package:acc/utilites/app_strings.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -189,6 +190,7 @@ class _OnBoardingState extends State<OnBoarding> {
                         InkWell(
                             borderRadius: BorderRadius.circular(40),
                             onTap: () {
+                              
                               // Open  view
                               Navigator.of(context).push(PageRouteBuilder(
                                   pageBuilder:

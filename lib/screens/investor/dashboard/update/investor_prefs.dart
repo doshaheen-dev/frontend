@@ -12,12 +12,12 @@ import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 import 'package:acc/utils/class_navigation.dart';
+import 'package:acc/widgets/app_progressbar.dart';
 import 'package:acc/widgets/image_circle.dart';
 import 'package:chips_choice/chips_choice.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'package:acc/providers/fund_slot_provider.dart' as slotProvider;
 import 'package:acc/providers/product_type_provider.dart' as productProvider;
@@ -147,7 +147,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
         child: Scaffold(
             backgroundColor: Colors.white,
-            body: ProgressHUD(
+            body: AppProgressBar(
                 child: Builder(
               builder: (context) => SingleChildScrollView(
                   child: Column(
@@ -290,7 +290,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
                           requestModel.productIds = listIds.join(',');
                         }
 
-                        var progress = ProgressHUD.of(context);
+                        var progress = AppProgressBar.of(context);
                         progress?.showWithText('Updating Preferences...');
                         await submitPreference(progress, context);
 

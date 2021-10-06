@@ -5,14 +5,13 @@ import 'package:acc/models/authentication/signup_request.dart';
 import 'package:acc/models/authentication/signup_response.dart' as response;
 import 'package:acc/services/signup_service.dart';
 import 'package:acc/utils/crypt_utils.dart';
+import 'package:acc/widgets/app_progressbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:acc/screens/common/onboarding.dart';
 import 'package:acc/screens/investor/welcome.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/app_strings.dart';
-import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 import 'package:provider/provider.dart';
@@ -131,7 +130,7 @@ class _CorporateDetailsState extends State<CorporateDetails> {
           ),
           bottomNavigationBar: BottomAppBar(),
           backgroundColor: Colors.white,
-          body: ProgressHUD(
+          body: AppProgressBar(
             child: Builder(
                 builder: (context) => SafeArea(
                       child: SingleChildScrollView(
@@ -371,7 +370,8 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                           }
 
                                           setState(() {
-                                            progress = ProgressHUD.of(context);
+                                            progress =
+                                                AppProgressBar.of(context);
                                             progress?.showWithText(
                                                 'Uploading Details...');
                                             submitDetails(

@@ -11,6 +11,7 @@ import 'package:acc/services/upload_document_service.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 import 'package:acc/utils/date_utils.dart';
+import 'package:acc/widgets/app_progressbar.dart';
 import 'package:acc/widgets/kyc_document_items.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +74,7 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
           ),
           bottomNavigationBar: BottomAppBar(),
           backgroundColor: Colors.white,
-          body: ProgressHUD(
+          body: AppProgressBar(
               child: Builder(
                   builder: (context) => SafeArea(
                         child: SingleChildScrollView(
@@ -307,7 +308,8 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                                                   "Please accept the Terms and Privacy Policy.");
                                               return;
                                             }
-                                            progress = ProgressHUD.of(context);
+                                            progress =
+                                                AppProgressBar.of(context);
                                             progress?.showWithText(
                                                 'Uploading Fund Details...');
                                             FocusScope.of(context)
@@ -373,7 +375,7 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
 
   Future<void> _uploadFile(
       BuildContext context, int kycDocId, File file, String fileName) async {
-    progress = ProgressHUD.of(context);
+    progress = AppProgressBar.of(context);
     progress?.showWithText('Uploading File...');
     try {
       if (file != null) {
@@ -518,53 +520,52 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
     String labelText,
     String description,
   ) {
-    return ProgressHUD(
+    return AppProgressBar(
       child: Builder(
-        builder: (context) => InkWell(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            onTap: () => _selectFile(context, 0),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: unselectedGray,
-                        borderRadius: BorderRadius.all(
-                          const Radius.circular(15.0),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 20),
-                        child: Center(
-                            child: (_uploadedDocuments
-                                        .indexWhere((doc) => doc.id == 0) >=
-                                    0)
-                                ? Text('Uploaded',
-                                    style: textNormal(Colors.green, 14))
-                                : Text(
-                                    labelText,
-                                    style: textNormal(Colors.black, 14),
-                                    textAlign: TextAlign.center,
-                                  )),
-                      ),
+          builder: (context) => Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () => _selectFile(context, 0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: unselectedGray,
+                              borderRadius: BorderRadius.all(
+                                const Radius.circular(15.0),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 20),
+                              child: Center(
+                                  child: (_uploadedDocuments.indexWhere(
+                                              (doc) => doc.id == 0) >=
+                                          0)
+                                      ? Text('Uploaded',
+                                          style: textNormal(Colors.green, 14))
+                                      : Text(
+                                          labelText,
+                                          style: textNormal(Colors.black, 14),
+                                          textAlign: TextAlign.center,
+                                        )),
+                            ),
+                          )),
                     ),
                   ),
-                ),
-                Expanded(
-                    flex: 1,
-                    child: Text(
-                      description,
-                      textAlign: TextAlign.center,
-                      style: textNormal(textGrey, 14),
-                    )),
-              ],
-            )),
-      ),
+                  Expanded(
+                      flex: 1,
+                      child: Text(
+                        description,
+                        textAlign: TextAlign.center,
+                        style: textNormal(textGrey, 14),
+                      )),
+                ],
+              )),
     );
   }
 

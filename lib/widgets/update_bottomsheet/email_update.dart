@@ -184,9 +184,6 @@ class _EmailUpdateState extends State<EmailUpdate> {
                                           return;
                                         }
 
-                                        //  progress = ProgressHUD.of(context);
-                                        // progress?.showWithText(sendingOtp);
-
                                         emailOtpController =
                                             TextEditingController();
 

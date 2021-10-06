@@ -226,8 +226,6 @@ class _MobileUpdateState extends State<MobileUpdate> {
                                           return;
                                         }
 
-                                        //  progress = ProgressHUD.of(context);
-                                        // progress?.showWithText(sendingOtp);
                                         otpController = TextEditingController();
                                         _getOtp(
                                             _newMobileController.text,

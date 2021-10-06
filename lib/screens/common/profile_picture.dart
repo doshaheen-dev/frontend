@@ -6,11 +6,11 @@ import 'package:acc/services/ProfileService.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
 import 'package:acc/utils/code_utils.dart';
+import 'package:acc/widgets/app_progressbar.dart';
 import 'package:acc/widgets/circular_container.dart';
 import 'package:acc/widgets/image_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
 
@@ -46,7 +46,7 @@ class _ProfilePicScreenState extends State<ProfilePicScreen> {
 
     Future<void> _uploadFile(
         BuildContext context, File file, String fileName) async {
-      progress = ProgressHUD.of(context);
+      progress = AppProgressBar.of(context);
       progress?.showWithText('Uploading File...');
       try {
         if (file != null) {
@@ -163,7 +163,7 @@ class _ProfilePicScreenState extends State<ProfilePicScreen> {
     }
 
     Widget _setProfilePic() {
-      return ProgressHUD(
+      return AppProgressBar(
         child: Builder(
           builder: (context) => Center(
             child: GestureDetector(
@@ -212,7 +212,7 @@ class _ProfilePicScreenState extends State<ProfilePicScreen> {
         toolbarHeight: 0,
         elevation: 0.0,
       ),
-      body: ProgressHUD(
+      body: AppProgressBar(
         child: Builder(
           builder: (context) => Stack(
             children: [

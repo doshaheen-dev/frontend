@@ -23,56 +23,56 @@ class DocumentCell extends StatefulWidget {
 class _DocumentCellState extends State<DocumentCell> {
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      onTap: () => {
-        FocusScope.of(context).requestFocus(FocusNode()),
-        widget.selectFile(context, widget.kycDoc.kycId)
-      },
-      child: Row(
-        children: [
-          Expanded(
-            flex: 2,
-            child: Padding(
+    return Row(
+      children: [
+        Expanded(
+          flex: 2,
+          child: Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 0, vertical: 10.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: unselectedGray,
-                  borderRadius: BorderRadius.all(
-                    const Radius.circular(15.0),
+              child: InkWell(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap: () => {
+                  FocusScope.of(context).requestFocus(FocusNode()),
+                  widget.selectFile(context, widget.kycDoc.kycId)
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: unselectedGray,
+                    borderRadius: BorderRadius.all(
+                      const Radius.circular(15.0),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 20),
+                    child: Center(
+                        child: (widget.uploadedDocuments
+                                    .where(
+                                        (doc) => doc.id == widget.kycDoc.kycId)
+                                    .length >
+                                0)
+                            ? Text('Uploaded',
+                                textAlign: TextAlign.center,
+                                softWrap: true,
+                                style: textNormal(Colors.green, 14))
+                            : Text('Upload ${widget.kycDoc.kycDocName}',
+                                textAlign: TextAlign.center,
+                                softWrap: true,
+                                style: textNormal(Colors.black, 14))),
                   ),
                 ),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                  child: Center(
-                      child: (widget.uploadedDocuments
-                                  .where((doc) => doc.id == widget.kycDoc.kycId)
-                                  .length >
-                              0)
-                          ? Text('Uploaded',
-                              textAlign: TextAlign.center,
-                              softWrap: true,
-                              style: textNormal(Colors.green, 14))
-                          : Text('Upload ${widget.kycDoc.kycDocName}',
-                              textAlign: TextAlign.center,
-                              softWrap: true,
-                              style: textNormal(Colors.black, 14))),
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-              flex: 1,
-              child: Text(
-                widget.kycDoc.kycDocDesc,
-                style: textNormal(textGrey, 14),
-                textAlign: TextAlign.right,
               )),
-        ],
-      ),
+        ),
+        Expanded(
+            flex: 1,
+            child: Text(
+              widget.kycDoc.kycDocDesc,
+              style: textNormal(textGrey, 14),
+              textAlign: TextAlign.right,
+            )),
+      ],
     );
   }
 }

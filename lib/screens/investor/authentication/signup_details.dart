@@ -6,10 +6,10 @@ import 'package:acc/models/authentication/signup_request_basicinfo.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/services/signup_service.dart';
 import 'package:acc/utilites/text_style.dart';
+import 'package:acc/widgets/app_progressbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:acc/screens/investor/welcome.dart';
 import 'package:acc/services/AuthenticationService.dart';
 import 'package:acc/utilites/app_colors.dart';
@@ -220,7 +220,7 @@ class _SignUpDetailsState extends State<SignUpDetails> {
           ),
           bottomNavigationBar: BottomAppBar(),
           backgroundColor: Colors.white,
-          body: ProgressHUD(
+          body: AppProgressBar(
             child: Builder(
                 builder: (context) => SafeArea(
                         child: SingleChildScrollView(
@@ -415,7 +415,7 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                                           }
                                           FocusScope.of(context)
                                               .requestFocus(FocusNode());
-                                          progress = ProgressHUD.of(context);
+                                          progress = AppProgressBar.of(context);
                                           progress?.showWithText(
                                               'Uploading Details...');
                                           submitDetails(
@@ -564,6 +564,8 @@ class _SignUpDetailsState extends State<SignUpDetails> {
       prefs.setString('UserInfo', userJson);
       UserData.instance.userInfo = userData;
       _openDialog(context, signedUpUser.message);
+    } else {
+      showSnackBar(context, signedUpUser.message);
     }
   }
 
