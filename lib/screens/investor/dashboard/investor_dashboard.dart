@@ -22,13 +22,6 @@ class InvestorDashboard extends StatefulWidget {
 
 class _InvestorDashboardState extends State<InvestorDashboard> {
   int bottomSelectedIndex = 0;
-  UserData _userData;
-
-  @override
-  void initState() {
-    _userData = widget.userData;
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

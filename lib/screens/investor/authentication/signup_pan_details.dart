@@ -65,7 +65,6 @@ class _SignUpPanDetailsState extends State<SignUpPanDetails> {
                             fontFamily: FontFamilyMontserrat.name),
                       ),
                     ),
-
                     SizedBox(
                       height: 30,
                     ),

@@ -99,12 +99,6 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
               'text': result.data.options[i].range,
               'value': result.data.options[i].range
             };
-
-            // if (selectedItem.isNotEmpty) {
-            //   activateUpdate(true);
-            // } else {
-            //   activateUpdate(false);
-            // }
             break;
           }
         }
@@ -124,11 +118,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
                 var limit = result.data.options[i];
                 localItemList.add(productProvider.InvestmentLimitItem(limit.id,
                     limit.name, limit.desc, limit.placementFee, false, false));
-                // if (infoItemList.isNotEmpty) {
-                //   activateUpdate(true);
-                // } else {
-                //   activateUpdate(false);
-                // }
+
                 break;
               }
             }
@@ -283,7 +273,6 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
                             }
                           }
                         }
-
                         if (listIds.isNotEmpty) {
                           final requestModel =
                               InvestorSignupPreferences.instance;
@@ -293,7 +282,6 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
                         var progress = AppProgressBar.of(context);
                         progress?.showWithText('Updating Preferences...');
                         await submitPreference(progress, context);
-
                         return;
                       },
                 style: ElevatedButton.styleFrom(
@@ -453,7 +441,6 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
   }
 
   // ------------------------------------------------------------------//
-
   BoxDecoration customDecoration() {
     return BoxDecoration(
       color: Colors.transparent,
@@ -552,12 +539,6 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
   }
 
   _createItemCell(productProvider.InvestmentLimitItem item) {
-    // for (var i = 0; i < infoItemList.length; i++) {
-    //   if (item.name == infoItemList[i]) {
-    //     item.isCheck = true;
-    //     _checkOption(item);
-    //   }
-    // }
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -566,20 +547,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
           splashColor: Colors.transparent,
           onTap: () {
             setState(() {
-              //   item.isCheck = !item.isCheck;
-
-              if (infoItemList.contains(item.name)) {
-                infoItemList.remove(item.name);
-                _uncheckOption(item);
-              } else {
-                infoItemList.add(item.name);
-                _checkOption(item);
-              }
-              if (infoItemList.isNotEmpty) {
-                activateUpdate(true);
-              } else {
-                activateUpdate(false);
-              }
+              itemSelection(infoItemList, item);
             });
           },
           child: Container(
@@ -602,20 +570,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
                         child: IconButton(
                           onPressed: () {
                             setState(() {
-                              //      item.isCheck = !item.isCheck;
-
-                              if (infoItemList.contains(item.name)) {
-                                infoItemList.remove(item.name);
-                                _uncheckOption(item);
-                              } else {
-                                infoItemList.add(item.name);
-                                _checkOption(item);
-                              }
-                              if (infoItemList.isNotEmpty) {
-                                activateUpdate(true);
-                              } else {
-                                activateUpdate(false);
-                              }
+                              itemSelection(infoItemList, item);
                             });
                           },
                           splashColor: Colors.transparent,
@@ -790,5 +745,21 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
         return alert;
       },
     );
+  }
+
+  void itemSelection(
+      List<String> infoItemList, productProvider.InvestmentLimitItem item) {
+    if (infoItemList.contains(item.name)) {
+      infoItemList.remove(item.name);
+      _uncheckOption(item);
+    } else {
+      infoItemList.add(item.name);
+      _checkOption(item);
+    }
+    if (infoItemList.isNotEmpty) {
+      activateUpdate(true);
+    } else {
+      activateUpdate(false);
+    }
   }
 }

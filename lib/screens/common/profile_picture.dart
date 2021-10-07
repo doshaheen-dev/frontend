@@ -35,7 +35,6 @@ class _ProfilePicScreenState extends State<ProfilePicScreen> {
   @override
   void initState() {
     _imageUrl = widget.imageUrl;
-    print('ImageURL: $_imageUrl');
     super.initState();
   }
 
@@ -137,28 +136,25 @@ class _ProfilePicScreenState extends State<ProfilePicScreen> {
           context: context,
           builder: (BuildContext bc) {
             return SafeArea(
-              child: Container(
-                child: new Wrap(
-                  children: <Widget>[
-                    new ListTile(
-                        leading: new Icon(Icons.photo_library),
-                        title: new Text('Photo Library'),
-                        onTap: () {
-                          _imgFromSource(context, ImageSource.gallery);
-                          Navigator.of(context).pop();
-                        }),
-                    new ListTile(
-                      leading: new Icon(Icons.photo_camera),
-                      title: new Text('Camera'),
-                      onTap: () {
-                        _imgFromSource(context, ImageSource.camera);
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            );
+                child: Container(
+              child: new Wrap(children: <Widget>[
+                new ListTile(
+                    leading: new Icon(Icons.photo_library),
+                    title: new Text('Photo Library'),
+                    onTap: () {
+                      _imgFromSource(context, ImageSource.gallery);
+                      Navigator.of(context).pop();
+                    }),
+                new ListTile(
+                  leading: new Icon(Icons.photo_camera),
+                  title: new Text('Camera'),
+                  onTap: () {
+                    _imgFromSource(context, ImageSource.camera);
+                    Navigator.of(context).pop();
+                  },
+                )
+              ]),
+            ));
           });
     }
 

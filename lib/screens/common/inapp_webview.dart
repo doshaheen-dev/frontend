@@ -1,8 +1,6 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:acc/models/fund/fund_documents.dart';
-import 'package:acc/screens/common/webview_container.dart';
 import 'package:acc/screens/fundraiser/dashboard/pdf_viewer.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/text_style.dart';
@@ -113,19 +111,14 @@ class _InAppWebViewContainerState extends State<InAppWebViewContainer> {
                                 InkWell(
                                   onTap: () {
                                     String url = widget.url.fundKycDocPath;
-                                    print(url);
                                     if (widget.url.fundKycDocPath
                                         .contains("pdf")) {
                                       // open pdf viewer
                                       openPdfViewer(context, url);
                                     } else {
-                                      // if (widget.url.fundKycDocPath.contains("ppt")) {
-                                      //   download file
-
                                       if (Platform.isIOS) {
                                         String docUrl =
                                             widget.url.fundKycDocPath;
-                                        print("docUrl:- $docUrl");
                                         url = docUrl;
                                         _launched = _launchInBrowser(url);
                                       } else {
@@ -133,7 +126,6 @@ class _InAppWebViewContainerState extends State<InAppWebViewContainer> {
                                             "http://docs.google.com/viewer?url=";
                                         String docUrl = googleLink +
                                             widget.url.fundKycDocPath;
-                                        print("docUrl:- $docUrl");
                                         url = docUrl;
                                         _launched = _launchInBrowser(url);
                                       }
@@ -174,21 +166,4 @@ class _InAppWebViewContainerState extends State<InAppWebViewContainer> {
       return const Text('');
     }
   }
-
-  // void openUrl(String documentsData) {
-  //   Navigator.of(context).push(PageRouteBuilder(
-  //       pageBuilder: (context, animation, anotherAnimation) {
-  //         return WebViewContainer(documentsData);
-  //       },
-  //       transitionDuration: Duration(milliseconds: 2000),
-  //       transitionsBuilder: (context, animation, anotherAnimation, child) {
-  //         animation = CurvedAnimation(
-  //             curve: Curves.fastLinearToSlowEaseIn, parent: animation);
-  //         return SlideTransition(
-  //           position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-  //               .animate(animation),
-  //           child: child,
-  //         );
-  //       }));
-  // }
 }

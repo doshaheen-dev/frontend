@@ -91,7 +91,6 @@ class _InvestorHomeState extends State<InvestorHome>
         });
       });
     } catch (error) {
-      // print("RefreshErr: ${error.toString()}");
       _recPagingController.error = error;
     }
   }
@@ -117,7 +116,6 @@ class _InvestorHomeState extends State<InvestorHome>
         });
       });
     } catch (error) {
-      //print("RefreshErr: ${error.toString()}");
       _intFundsPagingController.error = error;
     }
   }
@@ -176,11 +174,6 @@ class _InvestorHomeState extends State<InvestorHome>
     recommendationInfo.then((result) {
       setState(() {
         totalItems = result.data.totalCount;
-        // if (totalItems == 0) {
-        //   displayRecommendations(false);
-        // } else {
-        //   displayRecommendations(true);
-        // }
       });
     });
   }
@@ -209,11 +202,6 @@ class _InvestorHomeState extends State<InvestorHome>
                               visible: isFundsPresent,
                               child: fundsUI(),
                             ),
-
-                            // Visibility(
-                            //     visible:
-                            //         !isFundsPresent && !isRecommendationPresent,
-                            //     child: EmptyListIndicator())
                           ])),
                 ),
               ),
@@ -409,7 +397,6 @@ class _InvestorHomeState extends State<InvestorHome>
           removeTop: true,
           child: PagedListView<int, investorProvider.FundsInfo>.separated(
             pagingController: _recPagingController,
-            // scrollDirection: Axis.vertical,
             builderDelegate:
                 PagedChildBuilderDelegate<investorProvider.FundsInfo>(
               animateTransitions: true,
@@ -429,7 +416,6 @@ class _InvestorHomeState extends State<InvestorHome>
                 width: (MediaQuery.of(context).size.width - 40),
                 child: AnimatedContainer(
                   curve: Curves.decelerate,
-                  // vsync: this,
                   duration: const Duration(seconds: 1),
                   child: Stack(
                     children: [
@@ -488,11 +474,7 @@ class _InvestorHomeState extends State<InvestorHome>
       swipeUpdateCallback: (DragUpdateDetails details, Alignment align) {
         /// Get swiping card's alignment
         if (align.x < 0) {
-          // print(
-          //     "Card is LEFT swiping:- $arrIndex, List index: ${recommended.fundTxnId}");
-        } else if (align.x > 0) {
-          // print("Card is RIGHT swiping");
-        }
+        } else if (align.x > 0) {}
       },
       swipeCompleteCallback: (CardSwipeOrientation orientation, int index) {
         currentItemIndex = arrIndex;
@@ -523,7 +505,6 @@ class _InvestorHomeState extends State<InvestorHome>
       BuildContext context, int index, investorProvider.FundsInfo recommended) {
     return GestureDetector(
         onTap: () => {
-              //print("Name:- ${recommended.fundName}"),
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -556,9 +537,6 @@ class _InvestorHomeState extends State<InvestorHome>
                           child: CachedNetworkImage(
                             height: 200.0,
                             imageUrl: recommended.fundLogo,
-                            //fit: BoxFit.cover,
-                            // placeholder: (context, url) =>
-                            //     CircularProgressIndicator(),
                             errorWidget: (context, url, error) =>
                                 Icon(Icons.error),
                           ),

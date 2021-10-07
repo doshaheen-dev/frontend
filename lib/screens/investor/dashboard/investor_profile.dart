@@ -551,7 +551,6 @@ class _InvestorProfileState extends State<InvestorProfile> {
       if (updateResponse.status == 200) {
         progress.dismiss();
         savedAddress = _address;
-        //_openDialog(context, updateResponse.message);
         if (isSignInRequired) {
           _openDialog(context, updateResponse.message);
         } else {

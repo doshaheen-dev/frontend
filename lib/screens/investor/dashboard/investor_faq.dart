@@ -35,7 +35,6 @@ class _InvestorFaqState extends State<InvestorFaq> {
                       launch(action.url);
                       return NavigationDecision.prevent; // Prevent opening url
                     } else if (action.url.contains('youtube.com')) {
-                      print('Trying to open Youtube');
                       return NavigationDecision.navigate; // Allow opening url
                     } else {
                       return NavigationDecision.navigate; // Default decision

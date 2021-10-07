@@ -22,7 +22,6 @@ class FundService {
     final response = await http.post(url, headers: headers, body: jsonBody);
     final responseBody = response.body;
     Map valueMap = jsonDecode(responseBody);
-    print('AddFund Resp: $valueMap');
     AddFundResponse fundTxnDetails = AddFundResponse.from(valueMap);
     return fundTxnDetails;
   }
@@ -38,7 +37,6 @@ class FundService {
     final url = Uri.parse(
         '${ApiServices.baseUrl}/fund?pageNo=$pageNo&pageSize=$pageSize');
     final response = await http.get(url, headers: headers);
-    // print('resp: ${response.body}');
     Map valueMap = jsonDecode(response.body);
     Fund funds = Fund.from(valueMap);
     return funds;
@@ -54,10 +52,8 @@ class FundService {
       "authorization": "Bearer ${UserData.instance.userInfo.token}",
     };
     final jsonBody = jsonEncode(request);
-    print('ReqBody: $jsonBody');
     final response = await http.put(url, headers: headers, body: jsonBody);
     final responseBody = response.body;
-    print('ResBody: $responseBody');
     Map valueMap = jsonDecode(responseBody);
     AddFundResponse fundTxnDetails = AddFundResponse.from(valueMap);
     return fundTxnDetails;

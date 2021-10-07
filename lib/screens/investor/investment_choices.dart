@@ -151,7 +151,6 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                                     types.forEach((item) {
                                       listIds.add(item.id);
                                     });
-                                    // print('Checked Count: ${types.length}');
                                     print(listIds);
                                     if (listIds.isNotEmpty) {
                                       final requestModelInstance =
@@ -218,7 +217,6 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                         value: item.isCheck,
                         onChanged: (bool value) {
                           setState(() {
-                            //infoItemList = [];
                             item.isCheck = value;
 
                             if (!item.isCheck) {
@@ -228,8 +226,6 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                               infoItemList.add(item.name);
                               _checkOption(item);
                             }
-                            print(item.isCheck);
-                            print(infoItemList.length);
                             setState(() {
                               showToast();
                             });

@@ -47,8 +47,6 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
 
   String _verificationId = "";
   String _emailVerificationId = "";
-
-  //Future _countries;
   var _isInit = true;
   bool isDataChanged = false;
   EmailUpdate emailUpdateCallback;
@@ -138,7 +136,6 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                                                   ? null
                                                   : () {
                                                       // on click
-
                                                       FocusScope.of(context)
                                                           .requestFocus(
                                                               FocusNode());

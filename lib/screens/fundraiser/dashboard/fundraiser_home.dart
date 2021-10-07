@@ -116,15 +116,12 @@ class _FundraiserHomeState extends State<FundraiserHome> {
         Visibility(
             visible: _fundsAvailable,
             child: RefreshIndicator(
-                onRefresh: () => Future.sync(() => {
-                      // pageNo = 0,
-                      _pagingController.refresh()
-                    }),
+                onRefresh: () =>
+                    Future.sync(() => {_pagingController.refresh()}),
                 child: MediaQuery.removePadding(
                   context: context,
                   removeTop: true,
                   child: PagedListView<int, SubmittedFunds>.separated(
-                    //    physics: NeverScrollableScrollPhysics(),
                     pagingController: _pagingController,
                     builderDelegate: PagedChildBuilderDelegate<SubmittedFunds>(
                       animateTransitions: true,
@@ -304,7 +301,6 @@ class _FundraiserHomeState extends State<FundraiserHome> {
         ),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Row(
-
               // Replace with a Row for horizontal icon + text
               children: <Widget>[
                 Icon(Icons.circle, color: Colors.green, size: 15.0),
@@ -313,9 +309,6 @@ class _FundraiserHomeState extends State<FundraiserHome> {
                 ),
                 Text("Listed", style: textNormal14(HexColor("#2B2B2B")))
               ]),
-          // SizedBox(
-          //   width: 10,
-          // ),
           Row(
               // Replace with a Row for horizontal icon + text
               children: <Widget>[
@@ -325,7 +318,6 @@ class _FundraiserHomeState extends State<FundraiserHome> {
                 ),
                 Text("Under Scrutiny", style: textNormal14(HexColor("#2B2B2B")))
               ]),
-
           Row(
             children: <Widget>[
               Icon(

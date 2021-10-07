@@ -129,17 +129,13 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                               cursorColor: Colors.black,
                               enableActiveFill: false,
                               keyboardType: TextInputType.number,
-                              onCompleted: (v) {
-                                print("Completed " + v);
-                              },
+                              onCompleted: (v) {},
                               onChanged: (value) {
-                                print(value);
                                 setState(() {
                                   currentText = value;
                                 });
                               },
                               beforeTextPaste: (text) {
-                                print("Allowing to paste $text");
                                 return false;
                               },
                             ),
@@ -223,7 +219,6 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
   }
 
   Future<void> _getOtp() async {
-    print(_phoneNumber);
     VerificationIdSignIn verificationIdSignIn =
         await OtpService.getSignUpOtp(_phoneNumber);
     if (verificationIdSignIn.status == 200) {
@@ -237,7 +232,6 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
 
   Future<void> _verifySignUpOTP(
       String otpCode, String verificationId, String phoneNumber) async {
-    print(verificationId);
     SignUpInvestor verificationIdSignIn = await OtpService.getVerifySignUpOtp(
         phoneNumber, verificationId, otpCode);
 

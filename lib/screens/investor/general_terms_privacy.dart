@@ -33,7 +33,6 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
 
   @override
   Widget build(BuildContext context) {
-    print("tempUrl- $tempUrl");
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
@@ -199,7 +198,6 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                                         progress.dismiss();
                                         if (signedUpUser.type == 'success') {
                                           requestModelInstance.clear();
-                                          // print("Firstn: ${signedUpUser.data.firstName}");
                                           UserData userData = UserData(
                                             UserData.instance.userInfo.token,
                                             signedUpUser.data.firstName,
@@ -224,9 +222,6 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                                           final userJson = jsonEncode(userData);
                                           prefs.setString('UserInfo', userJson);
                                           UserData.instance.userInfo = userData;
-                                          // print('${userData.firstName}');
-                                          // print(
-                                          //     'Ins:${UserData.instance.userInfo.firstName}');
 
                                           openDashboard();
                                         } else {

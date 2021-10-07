@@ -31,17 +31,17 @@ class _QuickSignUpState extends State<QuickSignUp> {
         child: MediaQuery(
           data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
           child: Scaffold(
-            appBar: AppBar(
-              toolbarHeight: 0,
-              elevation: 0.0,
+              appBar: AppBar(
+                toolbarHeight: 0,
+                elevation: 0.0,
+                backgroundColor: Color(0xffffffff),
+              ),
+              bottomNavigationBar: BottomAppBar(),
               backgroundColor: Color(0xffffffff),
-            ),
-            bottomNavigationBar: BottomAppBar(),
-            backgroundColor: Color(0xffffffff),
-            body: AppProgressBar(
-              child: Builder(
-                builder: (context) => SafeArea(
-                  child: SingleChildScrollView(
+              body: AppProgressBar(
+                child: Builder(
+                  builder: (context) => SafeArea(
+                      child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -112,41 +112,37 @@ class _QuickSignUpState extends State<QuickSignUp> {
 
                             //SIGN UP BUTTON
                             Container(
-                              margin: const EdgeInsets.only(
-                                  top: 5.0,
-                                  left: 40.0,
-                                  bottom: 20,
-                                  right: 40.0),
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(40),
-                                onTap: () {
-                                  // on sign up click
-                                  openSignUpDetails(null);
-                                },
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 60,
-                                  decoration: appColorButton(context),
-                                  child: Center(
-                                      child: Text(
-                                    "Register",
-                                    style: TextStyle(
-                                        fontSize: 18.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                  )),
-                                ),
-                              ),
-                            ),
+                                margin: const EdgeInsets.only(
+                                    top: 5.0,
+                                    left: 40.0,
+                                    bottom: 20,
+                                    right: 40.0),
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(40),
+                                  onTap: () {
+                                    // on sign up click
+                                    openSignUpDetails(null);
+                                  },
+                                  child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 60,
+                                      decoration: appColorButton(context),
+                                      child: Center(
+                                          child: Text(
+                                        "Register",
+                                        style: TextStyle(
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white),
+                                      ))),
+                                )),
                           ],
-                        ),
+                        )
                       ],
                     ),
-                  ),
+                  )),
                 ),
-              ),
-            ),
-          ),
+              )),
         ));
   }
 
@@ -244,7 +240,6 @@ class _QuickSignUpState extends State<QuickSignUp> {
   Future<void> signInGoogle() async {
     User user = await Authentication.signInWithGoogle(context: context);
     checkUserAndNavigate(user);
-    print("Google => $user");
   }
 
   void checkUserAndNavigate(User user) {
@@ -271,7 +266,6 @@ class _QuickSignUpState extends State<QuickSignUp> {
       return "assets/images/connect_apple.png";
     } else if (type == "Google") {
       return "assets/images/connect_google.png";
-      //return "assets/images/social_media/google.png";
     }
   }
 

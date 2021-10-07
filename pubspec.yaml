@@ -41,8 +41,6 @@ dependencies:
   pin_code_fields: ^7.2.0
   # Captcha
   ps_code_checking: ^0.0.3
-  # Progress Indicator
-  flutter_progress_hud: ^2.0.0
   encrypt: ^5.0.0
   json_annotation: ^3.1.0
   image_picker: ^0.8.1+3

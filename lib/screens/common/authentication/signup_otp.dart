@@ -107,8 +107,8 @@ class _SignUpOTPState extends State<SignUpOTP> {
             body: AppProgressBar(
                 child: Builder(
               builder: (context) => SafeArea(
-                child: SingleChildScrollView(
-                  child: Column(
+                  child: SingleChildScrollView(
+                child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
@@ -215,11 +215,9 @@ class _SignUpOTPState extends State<SignUpOTP> {
                                 style: textNormal16(textGrey)),
                           ),
                         ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                      )
+                    ]),
+              )),
             ))));
   }
 
@@ -276,7 +274,6 @@ class _SignUpOTPState extends State<SignUpOTP> {
               "+${country['value']} ${country['text']} ",
           hint: "",
           selectedItem: selectedCountryItem,
-          // label: selectedCountry != "" ? selectedCountry : 91,
           onChanged: (map) {
             setState(() {
               final index = countryList
@@ -473,7 +470,6 @@ class _SignUpOTPState extends State<SignUpOTP> {
   Future<void> _getOtp(String phoneNumber) async {
     String _phoneNumber =
         "+${selectedCountry.dialCode}" + phoneNumber.toString().trim();
-    print(_phoneNumber);
     VerificationIdSignIn verificationIdSignIn =
         await OtpService.getSignUpOtp(_phoneNumber);
     if (verificationIdSignIn.status == 200) {
