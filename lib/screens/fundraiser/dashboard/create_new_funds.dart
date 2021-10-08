@@ -293,10 +293,10 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                                         _existingFundsController.text.trim()) >
                                     2100000000 ||
                                 int.parse(
-                                        _existingFundsController.text.trim()) <=
-                                    0) {
+                                        _existingFundsController.text.trim()) <
+                                    100000) {
                               showSnackBar(context,
-                                  "Please enter existing fund value between 0 and 2100000000");
+                                  "Please enter existing fund value equal to or more than 100000 and less than 2100000000");
                               return;
                             }
 
@@ -307,10 +307,10 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                             }
                             if (int.parse(_newFundsController.text.trim()) >
                                     2100000000 ||
-                                int.parse(_newFundsController.text.trim()) <=
-                                    0) {
+                                int.parse(_newFundsController.text.trim()) <
+                                    100000) {
                               showSnackBar(context,
-                                  "Please enter new fund value between 0 and 2100000000");
+                                  "Please enter new fund value equal to or more than 100000 and less than 2100000000");
                               return;
                             }
                             if (_websiteController.text.isEmpty) {

@@ -11,7 +11,6 @@ class InvestorHomeService {
   // Fetch Recommendations
   static Future<Recommendations> fetchRecommendation(
       String token, int pageNo, num pageSize) async {
-    //print("fetchRecommendation pageNo:- ${pageNo}");
     final url = Uri.parse(
         '${ApiServices.baseUrl}/fund/recommendation?pageNo=$pageNo&pageSize=$pageSize');
     final headers = {
@@ -21,7 +20,6 @@ class InvestorHomeService {
 
     final response = await http.get(url, headers: headers);
     Map valueMap = jsonDecode(response.body);
-    //print("R Page: $pageNo, \nRes: ${response.body}");
     Recommendations recommendations = Recommendations.from(valueMap);
     return recommendations;
   }
@@ -36,13 +34,10 @@ class InvestorHomeService {
     };
     final _body =
         '{"fund_txn_id": "$fundTxnId", "user_interested": "$userInterested"}';
-    print("valueMap: $_body");
     final response = await http.post(url, headers: headers, body: _body);
     Map valueMap = jsonDecode(response.body);
-    print("valueMap: $valueMap");
     RespondRecommendation recommendations =
         RespondRecommendation.from(valueMap);
-    print("recommendations: $recommendations");
     return recommendations;
   }
 

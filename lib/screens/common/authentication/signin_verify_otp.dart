@@ -53,8 +53,6 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
     _verificationId = widget._verificationId;
     _phoneNumber = widget._phoneNumber;
     _otpType = widget._otpType;
-    print("_phoneNumber= $_phoneNumber, _otpType-$_otpType");
-
     super.initState();
   }
 
@@ -76,141 +74,142 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
               child: Builder(
                   builder: (context) => SafeArea(
                           child: SingleChildScrollView(
-                              child: Column(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                child: IconButton(
+                                  icon: Icon(Icons.arrow_back, size: 30),
+                                  onPressed: () => {Navigator.pop(context)},
+                                ),
+                              ),
+                              Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                            Container(
-                              child: IconButton(
-                                icon: Icon(Icons.arrow_back, size: 30),
-                                onPressed: () => {Navigator.pop(context)},
-                              ),
-                            ),
-                            Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Container(
-                                    margin: const EdgeInsets.only(
-                                        top: 10.0, left: 25.0),
-                                    child: Text(otpLabel,
-                                        style: textBold26(headingBlack)),
-                                  ),
-                                  Container(
-                                    margin: const EdgeInsets.only(
-                                        top: 5.0, left: 25.0, right: 25.0),
-                                    child: Text(otpSentTo,
-                                        style: textNormal16(textGrey)),
-                                  ),
-                                  SizedBox(
-                                    height: 25,
-                                  ),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    margin: const EdgeInsets.only(
-                                        top: 5.0, left: 40.0, right: 40.0),
-                                    child: PinCodeTextField(
-                                      controller: otpController,
-                                      appContext: context,
-                                      pastedTextStyle: textNormal16(textGrey),
-                                      length: 6,
-                                      animationType: AnimationType.none,
-                                      pinTheme: PinTheme(
-                                        shape: PinCodeFieldShape.underline,
-                                        selectedColor: Colors.grey,
-                                        inactiveColor: Colors.grey,
-                                        activeColor:
-                                            Theme.of(context).primaryColor,
-                                        activeFillColor:
-                                            Theme.of(context).primaryColor,
-                                      ),
-                                      cursorColor: Colors.black,
-                                      enableActiveFill: false,
-                                      keyboardType: TextInputType.number,
-                                      onCompleted: (v) {},
-                                      onChanged: (value) {
-                                        setState(() {
-                                          currentText = value;
-                                        });
-                                      },
-                                      beforeTextPaste: (text) {
-                                        return false;
-                                      },
-                                    ),
-                                  ),
-
-                                  Container(
-                                      margin: EdgeInsets.only(right: 20.0),
-                                      alignment: Alignment.topRight,
-                                      child: RichText(
-                                        textAlign: TextAlign.center,
-                                        text: TextSpan(
-                                            text: "Didn't receive the code? ",
-                                            style: textNormal14(Colors.black),
-                                            children: [
-                                              TextSpan(
-                                                  text: 'Resend OTP',
-                                                  style: textNormal14(
-                                                      Theme.of(context)
-                                                          .primaryColor),
-                                                  recognizer:
-                                                      TapGestureRecognizer()
-                                                        ..onTap = () {
-                                                          progress =
-                                                              AppProgressBar.of(
-                                                                  context);
-                                                          progress
-                                                              ?.showWithText(
-                                                                  sendingOtp);
-                                                          otpController.clear();
-                                                          sendOTPServer();
-                                                        })
-                                            ]),
-                                      )),
-
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  //Verify BUTTON
-                                  Container(
+                                    Container(
                                       margin: const EdgeInsets.only(
-                                          top: 5.0,
-                                          left: 25.0,
-                                          bottom: 20,
-                                          right: 25.0),
-                                      child: ElevatedButton(
-                                          onPressed: () {
-                                            if (otpController.text.isEmpty) {
-                                              showSnackBar(context, warningOTP);
-                                              return;
-                                            }
-                                            FocusScope.of(context)
-                                                .requestFocus(FocusNode());
-                                            signIn(context);
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                              padding: EdgeInsets.all(0.0),
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          18))),
-                                          child: Ink(
-                                              decoration: BoxDecoration(
-                                                  gradient: LinearGradient(
-                                                      colors: [
+                                          top: 10.0, left: 25.0),
+                                      child: Text(otpLabel,
+                                          style: textBold26(headingBlack)),
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                          top: 5.0, left: 25.0, right: 25.0),
+                                      child: Text(otpSentTo,
+                                          style: textNormal16(textGrey)),
+                                    ),
+                                    SizedBox(
+                                      height: 25,
+                                    ),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      margin: const EdgeInsets.only(
+                                          top: 5.0, left: 40.0, right: 40.0),
+                                      child: PinCodeTextField(
+                                        controller: otpController,
+                                        appContext: context,
+                                        pastedTextStyle: textNormal16(textGrey),
+                                        length: 6,
+                                        animationType: AnimationType.none,
+                                        pinTheme: PinTheme(
+                                          shape: PinCodeFieldShape.underline,
+                                          selectedColor: Colors.grey,
+                                          inactiveColor: Colors.grey,
+                                          activeColor:
+                                              Theme.of(context).primaryColor,
+                                          activeFillColor:
+                                              Theme.of(context).primaryColor,
+                                        ),
+                                        cursorColor: Colors.black,
+                                        enableActiveFill: false,
+                                        keyboardType: TextInputType.number,
+                                        onCompleted: (v) {},
+                                        onChanged: (value) {
+                                          setState(() {
+                                            currentText = value;
+                                          });
+                                        },
+                                        beforeTextPaste: (text) {
+                                          return false;
+                                        },
+                                      ),
+                                    ),
+
+                                    Container(
+                                        margin: EdgeInsets.only(right: 20.0),
+                                        alignment: Alignment.topRight,
+                                        child: RichText(
+                                          textAlign: TextAlign.center,
+                                          text: TextSpan(
+                                              text: "Didn't receive the code? ",
+                                              style: textNormal14(Colors.black),
+                                              children: [
+                                                TextSpan(
+                                                    text: 'Resend OTP',
+                                                    style: textNormal14(
                                                         Theme.of(context)
-                                                            .primaryColor,
-                                                        Theme.of(context)
-                                                            .primaryColor
-                                                      ]),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          15)),
-                                              child: Container(
-                                                  width: MediaQuery.of(context).size.width,
-                                                  height: 60,
-                                                  alignment: Alignment.center,
-                                                  child: Text(verifyOtp, style: textWhiteBold18())))))
-                                ])
-                          ])))),
+                                                            .primaryColor),
+                                                    recognizer:
+                                                        TapGestureRecognizer()
+                                                          ..onTap = () {
+                                                            progress =
+                                                                AppProgressBar
+                                                                    .of(context);
+                                                            progress
+                                                                ?.showWithText(
+                                                                    sendingOtp);
+                                                            otpController
+                                                                .clear();
+                                                            sendOTPServer();
+                                                          })
+                                              ]),
+                                        )),
+
+                                    SizedBox(
+                                      height: 30,
+                                    ),
+                                    //Verify BUTTON
+                                    Container(
+                                        margin: const EdgeInsets.only(
+                                            top: 5.0,
+                                            left: 25.0,
+                                            bottom: 20,
+                                            right: 25.0),
+                                        child: ElevatedButton(
+                                            onPressed: () {
+                                              if (otpController.text.isEmpty) {
+                                                showSnackBar(
+                                                    context, warningOTP);
+                                                return;
+                                              }
+                                              FocusScope.of(context)
+                                                  .requestFocus(FocusNode());
+                                              signIn(context);
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                                padding: EdgeInsets.all(0.0),
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(
+                                                        18))),
+                                            child: Ink(
+                                                decoration: BoxDecoration(
+                                                    gradient: LinearGradient(colors: [
+                                                      Theme.of(context)
+                                                          .primaryColor,
+                                                      Theme.of(context)
+                                                          .primaryColor
+                                                    ]),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15)),
+                                                child: Container(
+                                                    width: MediaQuery.of(context).size.width,
+                                                    height: 60,
+                                                    alignment: Alignment.center,
+                                                    child: Text(verifyOtp, style: textWhiteBold18())))))
+                                  ])
+                            ]),
+                      ))),
             )));
   }
 
@@ -276,8 +275,6 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
   }
 
   Future<void> sendOTPServer() async {
-    print("osType => $_otpType");
-
     Future.delayed(Duration(seconds: 2), () async {
       VerificationIdSignIn verificationIdSignIn =
           await OtpService.getVerificationFromTwillio(
@@ -315,8 +312,6 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
     final userJson = jsonEncode(data);
     prefs.setString('UserInfo', userJson);
     UserData.instance.userInfo = data;
-    print("SIGN IN : ${UserData.instance.userInfo.firstName}");
-    print("SIGN IN : ${data.firstName}");
   }
 
   _openDialog(BuildContext context, String message) {

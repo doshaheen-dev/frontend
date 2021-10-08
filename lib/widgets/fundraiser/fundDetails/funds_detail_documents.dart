@@ -55,7 +55,6 @@ class _FundsUploadedDocumentState extends State<FundsUploadedDocument> {
       setState(() {
         if (documentList.isEmpty) {
           _isDcoumentEmpty = true;
-          //showSnackBar(context, "No documents uploaded yet.");
         } else {
           _isDcoumentEmpty = false;
           _isFundDcoumentVisible = true;

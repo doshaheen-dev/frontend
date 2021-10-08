@@ -114,7 +114,6 @@ class _AppProgressBarState extends State<AppProgressBar>
         Visibility(
           visible: _barrierVisible,
           child: ModalBarrier(
-            // dismissible: false,
             color: widget.barrierColor,
           ),
         ),

@@ -18,14 +18,10 @@ class SignUpService {
     final headers = {"Content-type": "application/json"};
     final jsonBody = jsonEncode(request);
 
-    print('URL: $url');
-    print("Body:$jsonBody");
-
     final response = await http.post(url, headers: headers, body: jsonBody);
     // this API passes back the id of the user after updating the details
     final responseBody = response.body;
     Map valueMap = jsonDecode(responseBody);
-    print('Signup Resp: $valueMap');
     User userDetails = User.from(valueMap);
     return userDetails;
   }
@@ -38,14 +34,10 @@ class SignUpService {
     final headers = {"Content-type": "application/json"};
     final jsonBody = jsonEncode(request);
 
-    print('URL: $url');
-    print("Body:$jsonBody");
-
     final response = await http.post(url, headers: headers, body: jsonBody);
     // this API passes back the id of the user after updating the details
     final responseBody = response.body;
     Map valueMap = jsonDecode(responseBody);
-    print('Signup Resp: $valueMap');
     User userDetails = User.from(valueMap);
     return userDetails;
   }
@@ -61,14 +53,11 @@ class SignUpService {
     };
     final jsonBody = jsonEncode(request);
 
-    print('URL: $url');
-    print("Body:$jsonBody");
-
     final response = await http.post(url, headers: headers, body: jsonBody);
     // this API passes back the id of the user after updating the details
     final responseBody = response.body;
     Map valueMap = jsonDecode(responseBody);
-    print('Signup Resp: $valueMap');
+
     User userDetails = User.from(valueMap);
     return userDetails;
   }

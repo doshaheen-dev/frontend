@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/models/profile/profile_image.dart';
-import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'package:acc/models/profile/basic_details.dart';
 import 'package:acc/services/http_service.dart';
@@ -36,9 +35,6 @@ class ProfileService {
     };
     final jsonBody = jsonEncode(_body);
 
-    print('URL: $url');
-    print("Body:$jsonBody");
-
     // make PUT request
     final response = await http.put(url, headers: headers, body: jsonBody);
     // this API passes back the id of the user after updating the details
@@ -53,7 +49,7 @@ class ProfileService {
       File file, String fileName) async {
     // set up POST request arguments
     final url = Uri.parse("${ApiServices.baseUrl}/user/user-profile");
-    // print('URL: $url');
+
     var request = http.MultipartRequest('POST', url);
     request.headers["authorization"] =
         "Bearer ${UserData.instance.userInfo.token}";
@@ -62,7 +58,7 @@ class ProfileService {
         filename: fileName));
     final response = await request.send();
     final responseBody = await response.stream.bytesToString();
-    // print('ProfPicResp: $responseBody');
+
     Map valueMap = jsonDecode(responseBody);
     UploadProfileImage imgResponse = UploadProfileImage.from(valueMap);
     return imgResponse;

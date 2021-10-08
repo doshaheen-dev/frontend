@@ -1,7 +1,6 @@
 import 'package:acc/models/country/country.dart';
 import 'package:acc/services/country_service.dart';
 import 'package:acc/utilites/app_strings.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +78,6 @@ class _OnBoardingState extends State<OnBoarding> {
             padding: EdgeInsets.all(25.0),
             child: Text(
               onBoardingScreen1,
-              //  textScaleFactor: 1.0,
               textAlign: TextAlign.center,
               style: textWhiteBold20(),
             ))
@@ -100,7 +98,6 @@ class _OnBoardingState extends State<OnBoarding> {
             padding: EdgeInsets.all(25.0),
             child: Text(
               onBoardingScreen2,
-              //  textScaleFactor: 1.0,
               textAlign: TextAlign.center,
               style: textWhiteBold20(),
             ))
@@ -121,7 +118,6 @@ class _OnBoardingState extends State<OnBoarding> {
             padding: EdgeInsets.all(25.0),
             child: Text(
               onBoardingScreen3,
-              //   textScaleFactor: 1.0,
               textAlign: TextAlign.center,
               style: textWhiteBold20(),
             ))
@@ -190,7 +186,6 @@ class _OnBoardingState extends State<OnBoarding> {
                         InkWell(
                             borderRadius: BorderRadius.circular(40),
                             onTap: () {
-                              
                               // Open  view
                               Navigator.of(context).push(PageRouteBuilder(
                                   pageBuilder:
@@ -221,7 +216,6 @@ class _OnBoardingState extends State<OnBoarding> {
                                 child: Center(
                                     child: Text(
                                   "Join our community",
-                                  //  textScaleFactor: 1.0,
                                   style: textWhiteBold18(),
                                 )))),
                         Container(

@@ -3,6 +3,7 @@ import 'package:acc/screens/common/onboarding.dart';
 import 'package:acc/services/InvestmentInfoService.dart';
 import 'package:acc/utilites/app_strings.dart';
 import 'package:acc/utilites/text_style.dart';
+import 'package:acc/utils/class_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/investor/found_us.dart';
@@ -158,7 +159,7 @@ class _WelcomeInvestorState extends State<WelcomeInvestor> {
             actions: <Widget>[
               TextButton(
                   onPressed: () {
-                    openOnboarding();
+                    Navigation.openOnBoarding(context);
                   },
                   child: Text(
                     "Yes",
@@ -177,24 +178,5 @@ class _WelcomeInvestorState extends State<WelcomeInvestor> {
           ),
         ) ??
         false;
-  }
-
-  void openOnboarding() {
-    Navigator.of(context).pushAndRemoveUntil(
-        PageRouteBuilder(
-            pageBuilder: (context, animation, anotherAnimation) {
-              return OnBoarding();
-            },
-            transitionDuration: Duration(milliseconds: 2000),
-            transitionsBuilder: (context, animation, anotherAnimation, child) {
-              animation = CurvedAnimation(
-                  curve: Curves.fastLinearToSlowEaseIn, parent: animation);
-              return SlideTransition(
-                position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-                    .animate(animation),
-                child: child,
-              );
-            }),
-        (Route<dynamic> route) => false);
   }
 }

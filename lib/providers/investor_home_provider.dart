@@ -44,7 +44,7 @@ class InvestorHome with ChangeNotifier {
     }
 
     recommended = loadedRecommendations.toList();
-    print("Size: ${recommended.length}");
+
     notifyListeners();
   }
 

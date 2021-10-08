@@ -26,17 +26,10 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
   List<Options> hearAboutUsList = [];
   String firstname = "";
   final firstNameController = TextEditingController();
-  Future _fundSlots;
-
-  // Future<void> fetchFoundUs() async {
-  //   final provider = Provider.of<HearAboutUsProvider>(context, listen: false);
-  //   provider.fetchAppPlatforms();
-  // }
 
   void showNameField() {
     setState(() {
       _isNameVisible = false;
-      //print("infoItemList => $infoItemList");
       if (infoItemList.contains("Referral")) {
         _isNameVisible = true;
       }
@@ -46,23 +39,11 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
   void showNextButton() {
     setState(() {
       _isNextVisible = true;
-      // print("infoItemList => $infoItemList");
       if (infoItemList == null) {
         _isNextVisible = false;
       }
     });
   }
-
-  // var _isInit = true;
-  // @override
-  // void didChangeDependencies() {
-  //   if (_isInit) {
-  //     setState(() {});
-  //     _fundSlots = fetchFoundUs();
-  //   }
-  //   _isInit = false;
-  //   super.didChangeDependencies();
-  // }
 
   @override
   void initState() {
@@ -117,36 +98,6 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                       Container(
                           margin: const EdgeInsets.only(
                               top: 30.0, left: 25.0, right: 25.0),
-                          // child: FutureBuilder(
-                          //     future: _fundSlots,
-                          //     builder: (ctx, dataSnapshot) {
-                          //       if (dataSnapshot.connectionState ==
-                          //           ConnectionState.waiting) {
-                          //         return Center(
-                          //             child: CircularProgressIndicator(
-                          //           color: Theme.of(context).primaryColor,
-                          //         ));
-                          //       } else {
-                          //         if (dataSnapshot.error != null) {
-                          //           return Center(
-                          //               child: Text("An error occurred!"));
-                          //         } else {
-                          //           return Consumer<HearAboutUsProvider>(
-                          //               builder: (ctx, slotData, child) =>
-                          //                   GridView.count(
-                          //                       crossAxisCount: 2,
-                          //                       crossAxisSpacing: 10.0,
-                          //                       mainAxisSpacing: 10.0,
-                          //                       shrinkWrap: true,
-                          //                       children: List.generate(
-                          //                           slotData.data.length,
-                          //                           (index) {
-                          //                         return _createCell(
-                          //                             slotData.data[index]);
-                          //                       })));
-                          //         }
-                          //       }
-                          //     })),
                           child: GridView.count(
                               crossAxisCount: 2,
                               crossAxisSpacing: 10.0,
@@ -257,58 +208,6 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
       ),
     );
   }
-
-  // InkWell _createCell(Options citi) {
-  //   return InkWell(
-  //     highlightColor: Colors.transparent,
-  //     borderRadius: BorderRadius.circular(40),
-  //     onTap: () {
-  //       print(citi.name);
-  //       infoItemList = [];
-  //       infoItemList.add(citi.name);
-  //       setState(() {
-  //         showNameField();
-  //         showNextButton();
-  //       });
-  //     },
-  //     child: Container(
-  //       width: 200,
-  //       height: 200,
-  //       decoration: BoxDecoration(
-  //         color: infoItemList.contains(citi.name)
-  //             ? Theme.of(context).primaryColor
-  //             : unselectedGray,
-  //         borderRadius: BorderRadius.all(
-  //           const Radius.circular(15.0),
-  //         ),
-  //       ),
-  //       child: Center(
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             CachedNetworkImage(
-  //               imageUrl: citi.imageUrl,
-  //               progressIndicatorBuilder: (context, url, downloadProgress) =>
-  //                   CircularProgressIndicator(value: downloadProgress.progress),
-  //               errorWidget: (context, url, error) => Icon(Icons.error),
-  //             ),
-  //             SizedBox(
-  //               height: 10.0,
-  //             ),
-  //             Text(citi.name,
-  //                 style: TextStyle(
-  //                     color: infoItemList.contains(citi.name)
-  //                         ? Colors.white
-  //                         : Colors.black,
-  //                     fontWeight: FontWeight.normal,
-  //                     fontSize: 16.0,
-  //                     fontFamily: FontFamilyMontserrat.name))
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   InkWell _createCell(int _index) {
     return InkWell(

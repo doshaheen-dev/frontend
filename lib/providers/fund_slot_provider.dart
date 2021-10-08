@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:acc/models/fundslot/fundslot.dart';
 import 'package:flutter/foundation.dart';
 import '../services/fund_slot_service.dart';

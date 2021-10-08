@@ -22,7 +22,6 @@ final otpLabel = "Enter Your OTP";
 final otpMobileLabel = "Enter the OTP sent to your mobile";
 final otpSentTo = "Enter the OTP sent to your mobile/email";
 final warningOTP = "Please enter OTP sent to your mobile number.";
-// final error = "Something went wrong";
 final addNewFunds = "Add New Funds";
 final welcomeInvestor = "Welcome to Amicorp Capital Connect";
 final welcomeInvestorBody =

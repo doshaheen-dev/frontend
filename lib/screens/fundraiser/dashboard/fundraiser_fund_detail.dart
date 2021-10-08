@@ -125,18 +125,6 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
                                               Theme.of(context).primaryColor))
                                     ],
                                   )),
-                              // Expanded(
-                              //     flex: 1,
-                              //     child: Column(
-                              //       children: [
-                              //         Text(
-                              //           _likedFunds.minimumInvestment,
-                              //           style: textBlackNormal16(),
-                              //         ),
-                              //         Text("Min Per Investor",
-                              //             style: textNormal16(kDarkOrange))
-                              //       ],
-                              //     ))
                             ],
                           ),
                         ),
@@ -167,10 +155,10 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
                       if (_newFundValueController.text.isNotEmpty) {
                         if (int.parse(_newFundValueController.text.trim()) >
                                 2100000000 ||
-                            int.parse(_newFundValueController.text.trim()) <=
-                                0) {
+                            int.parse(_newFundValueController.text.trim()) <
+                                100000) {
                           showSnackBar(context,
-                              "Please enter new fund value between 0 and 2100000000");
+                              "Please enter new fund value equal to or more than 100000 and less than 2100000000");
                           return;
                         }
                       }
@@ -342,8 +330,6 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
   Future<void> _selectFile(BuildContext context, int kycDocId) async {
     FilePickerResult result = await FilePicker.platform.pickFiles();
     if (result != null) {
-      // print('Path: ${result.files.single.path}');
-      // print('Name: ${result.files.single.name}');
       String fileName = result.files.single.name;
       File file = File(result.files.single.path);
       _openDialogToUploadFile(context, kycDocId, file, fileName);
@@ -445,7 +431,6 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
           requestModelInstance, _likedFunds.fundTxnId);
       progress.dismiss();
       if (response.type == 'success') {
-        // print("ResubmitSuccess");
         requestModelInstance.clear();
         _navigateToFundHome();
       } else {
@@ -456,8 +441,6 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
         progress.dismiss();
       }
       showSnackBar(context, e.toString());
-      // showSnackBar(context, "${e.toString()}");
-      // print(e.toString());
     }
   }
 

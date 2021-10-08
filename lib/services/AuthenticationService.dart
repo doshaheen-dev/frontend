@@ -46,7 +46,6 @@ class Authentication {
             await auth.signInWithCredential(credential);
 
         user = userCredential.user;
-        // print("Successful $user ");
       } on FirebaseAuthException catch (e) {
         print(e.message);
         print(e.code);
@@ -115,8 +114,6 @@ class Authentication {
 
       final displayName = '${authResult.user.displayName}';
       final userEmail = '${authResult.user.email}';
-      print("Name: $displayName");
-      print("Email: $userEmail");
 
       final User firebaseUser = authResult.user;
       final prefs = await SharedPreferences.getInstance();
@@ -167,8 +164,6 @@ class Authentication {
 
       final displayName = '${authResult.user.displayName}';
       final userEmail = '${authResult.user.email}';
-      // print("Name: $displayName");
-      // print("Email: $userEmail");
 
       final User firebaseUser = authResult.user;
       final prefs = await SharedPreferences.getInstance();

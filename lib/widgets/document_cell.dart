@@ -1,10 +1,8 @@
 import 'package:acc/models/kyc/kyc_documents.dart';
-// import 'package:acc/providers/kyc_docs_provider.dart';
 import 'package:acc/screens/fundraiser/dashboard/create_funds_continue.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
 
 class DocumentCell extends StatefulWidget {
   final List<DocumentInfo> uploadedDocuments;

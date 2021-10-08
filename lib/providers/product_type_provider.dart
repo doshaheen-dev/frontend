@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:acc/models/products/product_type.dart';
 import 'package:flutter/foundation.dart';
 import '../services/product_type_service.dart';

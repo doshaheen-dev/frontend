@@ -17,8 +17,6 @@ class FundDetail extends StatefulWidget {
 }
 
 class _FundDetailState extends State<FundDetail> {
-  // String description =
-  //     "Elite Specia; Exporter & supplier engaged in offering a varied range of quality products; Already exported 26+ containers valued at \$170k+; Imported Kiwis & Apples valued at \$200k+; Strong sales team in the Middle East; Already raised Rs. 5mn";
   FundsInfo _likedFunds;
   bool _isFundOverview = true;
   var _selectedTextColor = Colors.black;
@@ -70,7 +68,6 @@ class _FundDetailState extends State<FundDetail> {
                         image: _likedFunds.fundLogo != ""
                             ? NetworkImage(_likedFunds.fundLogo)
                             : AssetImage("assets/images/dummy/investment1.png"),
-                        // width: MediaQuery.of(context).size.width,
                         height: 250,
                         fit: BoxFit.fitHeight,
                       )),
@@ -286,14 +283,6 @@ class _FundDetailState extends State<FundDetail> {
                       SizedBox(
                         height: 10.0,
                       ),
-                      // Row(
-                      //   children: [
-                      //     Expanded(flex: 1, child: Text("Product Type")),
-                      //     Expanded(
-                      //         flex: 1,
-                      //         child: Text("${_likedFunds.product_name}"))
-                      //   ],
-                      // )
                     ]))),
           )))
     ]);

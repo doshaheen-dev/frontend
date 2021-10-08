@@ -97,7 +97,6 @@ class _FundsDetailHeaderState extends State<FundsDetailHeader> {
                   width: 30,
                 ),
                 Text(
-                  // "Pune",
                   "${widget.likedFunds.fundCityName}, ${widget.likedFunds.fundCountryName}",
                   style: textNormal(HexColor("#404040"), 12.0),
                 )
@@ -106,7 +105,6 @@ class _FundsDetailHeaderState extends State<FundsDetailHeader> {
             Center(
               child: Text(
                 "Minimum Investment : ${widget.likedFunds.minimumInvestment}",
-                // "Minimum Investment : 10000",
                 style: textNormal(HexColor("#404040"), 12.0),
               ),
             ),

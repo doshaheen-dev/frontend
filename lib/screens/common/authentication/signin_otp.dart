@@ -1,8 +1,6 @@
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/otp_response.dart';
-import 'package:acc/models/country/country.dart';
 import 'package:acc/models/local_countries.dart';
-import 'package:acc/services/country_service.dart';
 import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utils/code_utils.dart';
 import 'package:acc/widgets/app_progressbar.dart';
@@ -334,9 +332,7 @@ class _SignInOTPState extends State<SignInOTP> {
                                     decoration: new InputDecoration(
                                         hintText: 'Search',
                                         border: InputBorder.none),
-                                    onChanged: (text) {
-                                      print("SEARCH:- ${text}");
-                                    },
+                                    onChanged: (text) {},
                                   ),
                                 ),
                                 Container(
@@ -370,12 +366,9 @@ class _SignInOTPState extends State<SignInOTP> {
                                                                   .text
                                                                   .toLowerCase()
                                                                   .toString())) {
-                                                    print(
-                                                        "search:- ${data.countries[index].name}");
                                                     tempList.add(
                                                         data.countries[index]);
-                                                    print(
-                                                        "tempList:- ${tempList.length}");
+
                                                     return Container(
                                                         child: _createItemCell(
                                                             data.countries[
@@ -408,7 +401,6 @@ class _SignInOTPState extends State<SignInOTP> {
       padding: const EdgeInsets.all(5.0),
       child: InkWell(
         onTap: () {
-          // selectedCountryItem = countri;
           print(countri.phoneCode);
           showTextLabel(false);
           Navigator.pop(context);
@@ -565,14 +557,12 @@ class _SignInOTPState extends State<SignInOTP> {
               "+${country['value']} ${country['text']} ",
           hint: "",
           selectedItem: selectedCountryItem,
-          // label: selectedCountry != "" ? selectedCountry : 91,
           onChanged: (map) {
             setState(() {
               final index = countryList
                   .indexWhere((element) => element.name == map['text']);
               if (index >= 0) {
                 selectedCountry = countryList[index];
-                print('Using indexWhere: ${countryList[index].maxLength}');
               }
               selectedCountryItem = map;
             });

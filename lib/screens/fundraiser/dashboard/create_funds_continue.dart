@@ -18,7 +18,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:provider/provider.dart';
 
 import 'add_new_funds.dart';
@@ -278,8 +277,7 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                                                         context,
                                                         listen: false)
                                                     .documents;
-                                            print(
-                                                'DocData Len: ${docData.length}');
+
                                             var documentsMsg = '';
                                             docData.reversed.forEach((option) {
                                               if (_uploadedDocuments

@@ -54,7 +54,7 @@ class _MobileUpdateState extends State<MobileUpdate> {
     getAllCountries();
     _mobileController.text = widget.mobileNumber;
     updateSelectedCountry = widget.selectedCountry;
-    print("updateSelectedCountry-> ${widget.selectedCountry}");
+
     super.initState();
   }
 
@@ -295,19 +295,13 @@ class _MobileUpdateState extends State<MobileUpdate> {
                                         cursorColor: Colors.black,
                                         enableActiveFill: false,
                                         keyboardType: TextInputType.number,
-                                        onCompleted: (v) {
-                                          print("Completed " + v);
-                                        },
+                                        onCompleted: (v) {},
                                         onChanged: (value) {
-                                          print(value);
                                           setState(() {
                                             otpText = value;
                                           });
                                         },
                                         beforeTextPaste: (text) {
-                                          print("Allowing to paste $text");
-                                          //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                                          //but you can show anything you want here, like your pop up saying wrong paste format or etc
                                           return false;
                                         },
                                       ),
@@ -474,9 +468,6 @@ class _MobileUpdateState extends State<MobileUpdate> {
                   .indexWhere((element) => element.name == map['text']);
               if (index >= 0) {
                 updateSelectedCountry = newCountryList[index];
-                print('Using indexWhere: ${newCountryList[index].maxLength}');
-              } else {
-                print('Using indexWhere');
               }
               selectedCountryItem = map;
             });
@@ -511,7 +502,6 @@ class _MobileUpdateState extends State<MobileUpdate> {
     String _phoneNumber = text;
     _phoneNumber = "+${newSelectedCountry.dialCode}" + text.toString().trim();
 
-    print(_phoneNumber);
     VerificationIdSignIn verificationIdSignIn =
         await UpdateProfileOtpService.getOtp(_phoneNumber, otpType);
     if (verificationIdSignIn.status == 200) {
@@ -589,7 +579,7 @@ class _MobileUpdateState extends State<MobileUpdate> {
             int length = _countryController.text.toString().length;
             String result =
                 UserData.instance.userInfo.mobileNo.substring(0, length);
-            print(result);
+
             _mobileController.text =
                 UserData.instance.userInfo.mobileNo.replaceAll(result, "");
             break;

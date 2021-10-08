@@ -141,38 +141,37 @@ class _UserTypeState extends State<UserType> {
           });
         },
         child: Container(
-          margin: const EdgeInsets.only(top: 30.0),
-          width: 160,
-          height: 160,
-          decoration: BoxDecoration(
-            color: selectedCategory.contains(fundraiser)
-                ? Theme.of(context).primaryColor
-                : unselectedGray,
-            borderRadius: BorderRadius.all(
-              const Radius.circular(15.0),
+            margin: const EdgeInsets.only(top: 30.0),
+            width: 160,
+            height: 160,
+            decoration: BoxDecoration(
+              color: selectedCategory.contains(fundraiser)
+                  ? Theme.of(context).primaryColor
+                  : unselectedGray,
+              borderRadius: BorderRadius.all(
+                const Radius.circular(15.0),
+              ),
             ),
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/images/fund_raiser.png",
-                  width: 80.0,
-                  height: 80.0,
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                Text("Fundraiser",
-                    style: textNormal16(selectedCategory.contains(fundraiser)
-                        ? Colors.white
-                        : Colors.black))
-              ],
-            ),
-          ),
-        ),
-      ),
+            child: Center(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      "assets/images/fund_raiser.png",
+                      width: 80.0,
+                      height: 80.0,
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Text("Fundraiser",
+                        style: textNormal16(
+                            selectedCategory.contains(fundraiser)
+                                ? Colors.white
+                                : Colors.black))
+                  ]),
+            )),
+      )
     ]);
   }
 
@@ -208,7 +207,6 @@ class _UserTypeState extends State<UserType> {
                   value.countryPhCode.replaceAll(new RegExp(r'[^0-9]'), '')),
               value.maxLength));
         }
-        // OptionsData.instance.countryInfo.add(countryList);
       }
     }
   }
