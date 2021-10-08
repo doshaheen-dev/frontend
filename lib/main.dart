@@ -20,6 +20,7 @@ import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/hex_color.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utils/class_navigation.dart';
+import 'package:acc/utils/crypt_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -102,6 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    print(CryptUtils.decryption("ChZumtEASOQveZjiAfPPLw=="));
 
     getUserInfo();
   }

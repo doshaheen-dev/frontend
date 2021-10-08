@@ -7,6 +7,7 @@ import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/app_strings.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utilites/ui_widgets.dart';
+import 'package:acc/utils/class_navigation.dart';
 import 'package:acc/utils/code_utils.dart';
 import 'package:acc/utils/crypt_utils.dart';
 import 'package:acc/widgets/app_progressbar.dart';
@@ -301,25 +302,6 @@ class _EmailVerificationState extends State<EmailVerification> {
     ));
   }
 
-  void openOnboarding() {
-    Navigator.of(context).pushAndRemoveUntil(
-        PageRouteBuilder(
-            pageBuilder: (context, animation, anotherAnimation) {
-              return OnBoarding();
-            },
-            transitionDuration: Duration(milliseconds: 2000),
-            transitionsBuilder: (context, animation, anotherAnimation, child) {
-              animation = CurvedAnimation(
-                  curve: Curves.fastLinearToSlowEaseIn, parent: animation);
-              return SlideTransition(
-                position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-                    .animate(animation),
-                child: child,
-              );
-            }),
-        (Route<dynamic> route) => false);
-  }
-
   Future<bool> _onBackPressed() {
     return showDialog(
           context: context,
@@ -335,7 +317,7 @@ class _EmailVerificationState extends State<EmailVerification> {
                     setState(() {
                       isEmailOtpReceived = false;
                     });
-                    openOnboarding();
+                    Navigation.openOnBoarding(context);
                   },
                   child: Text(
                     "Yes",
@@ -423,7 +405,7 @@ class _EmailVerificationState extends State<EmailVerification> {
         onPressed: () async {
           final prefs = await SharedPreferences.getInstance();
           prefs.setString('UserInfo', '');
-          openOnboarding();
+          Navigation.openOnBoarding(context);
           setState(() {
             isEmailOtpReceived = false;
           });

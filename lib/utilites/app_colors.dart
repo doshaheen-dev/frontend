@@ -5,7 +5,6 @@ final appAccentColor = HexColor('C45842');
 
 final headingBlack = HexColor('2B2B2B');
 
-final klightGrey = HexColor('313543');
 final kwhiteGrey = HexColor('d8d8d8');
 final statusGrey = HexColor('dbdde3');
 final statusGrey1 = HexColor('eceff7');

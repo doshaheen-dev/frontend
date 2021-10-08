@@ -4,6 +4,7 @@ import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/signup_request.dart';
 import 'package:acc/models/authentication/signup_response.dart' as response;
 import 'package:acc/services/signup_service.dart';
+import 'package:acc/utils/class_navigation.dart';
 import 'package:acc/utils/crypt_utils.dart';
 import 'package:acc/widgets/app_progressbar.dart';
 import 'package:flutter/material.dart';
@@ -365,7 +366,7 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                               .requestFocus(FocusNode());
                                           if (nextButtonText ==
                                               'Back to Home') {
-                                            openOnboarding();
+                                            Navigation.openOnBoarding(context);
                                             return;
                                           }
 
@@ -511,24 +512,5 @@ class _CorporateDetailsState extends State<CorporateDetails> {
             child: child,
           );
         }));
-  }
-
-  void openOnboarding() {
-    Navigator.of(context).pushAndRemoveUntil(
-        PageRouteBuilder(
-            pageBuilder: (context, animation, anotherAnimation) {
-              return OnBoarding();
-            },
-            transitionDuration: Duration(milliseconds: 2000),
-            transitionsBuilder: (context, animation, anotherAnimation, child) {
-              animation = CurvedAnimation(
-                  curve: Curves.fastLinearToSlowEaseIn, parent: animation);
-              return SlideTransition(
-                position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-                    .animate(animation),
-                child: child,
-              );
-            }),
-        (Route<dynamic> route) => false);
   }
 }

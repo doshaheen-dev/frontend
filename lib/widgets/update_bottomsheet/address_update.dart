@@ -167,8 +167,7 @@ class _AddressUpdateState extends State<AddressUpdate> {
                                             _newAddressController.text;
                                         this.widget.callback(
                                             _newAddressController.text.trim());
-                                        // updateAddress(
-                                        //     _newAddressController.text.trim());
+
                                         Future.delayed(
                                             Duration(milliseconds: 2),
                                             () async {

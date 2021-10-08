@@ -114,8 +114,6 @@ class Authentication {
 
       final displayName = '${authResult.user.displayName}';
       final userEmail = '${authResult.user.email}';
-      print("Name: $displayName");
-      print("Email: $userEmail");
 
       final User firebaseUser = authResult.user;
       final prefs = await SharedPreferences.getInstance();

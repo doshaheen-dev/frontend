@@ -11,7 +11,7 @@ class InvestmentInfoService {
     final headers = {"Content-type": "application/json"};
     final response = await http.get(url, headers: headers);
     final responseBody = response.body;
-    print("Response Body: $responseBody");
+
     Map valueMap = jsonDecode(responseBody);
     HearAboutUs hearAboutUs = HearAboutUs.fromJson(valueMap);
 

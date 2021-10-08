@@ -43,7 +43,7 @@ class OtpService {
 
     final response = await post(url, headers: headers, body: _body);
     final responseBody = response.body;
-    print("SigninResp: $responseBody");
+
     Map valueMap = jsonDecode(responseBody);
     UserSignIn userDetails;
     try {
@@ -69,10 +69,10 @@ class OtpService {
     } else {
       _body = '{"email_id": "$phoneNumber"}';
     }
-    print(_body);
+
     final response = await post(url, headers: headers, body: _body);
     final responseBody = response.body;
-    print(responseBody);
+
     Map valueMap = jsonDecode(responseBody);
     VerificationIdSignIn userDetails = VerificationIdSignIn.from(valueMap);
     return userDetails;
@@ -85,10 +85,10 @@ class OtpService {
       "Content-type": "application/json",
     };
     var _body = '{"mobile_no": "$phoneNumber"}';
-    print(_body);
+
     final response = await post(url, headers: headers, body: _body);
     final responseBody = response.body;
-    print(responseBody);
+
     Map valueMap = jsonDecode(responseBody);
     VerificationIdSignIn userDetails = VerificationIdSignIn.from(valueMap);
     return userDetails;

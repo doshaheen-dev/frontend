@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/screens/common/onboarding.dart';
 import 'package:acc/utilites/text_style.dart';
+import 'package:acc/utils/class_navigation.dart';
 import 'package:acc/widgets/app_progressbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
@@ -156,7 +157,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
             actions: <Widget>[
               TextButton(
                   onPressed: () {
-                    openOnboarding();
+                    Navigation.openOnBoarding(context);
                   },
                   child: Text(
                     "Yes",
@@ -175,25 +176,6 @@ class _QuickSignUpState extends State<QuickSignUp> {
           ),
         ) ??
         false;
-  }
-
-  void openOnboarding() {
-    Navigator.of(context).pushAndRemoveUntil(
-        PageRouteBuilder(
-            pageBuilder: (context, animation, anotherAnimation) {
-              return OnBoarding();
-            },
-            transitionDuration: Duration(milliseconds: 2000),
-            transitionsBuilder: (context, animation, anotherAnimation, child) {
-              animation = CurvedAnimation(
-                  curve: Curves.fastLinearToSlowEaseIn, parent: animation);
-              return SlideTransition(
-                position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-                    .animate(animation),
-                child: child,
-              );
-            }),
-        (Route<dynamic> route) => false);
   }
 
   InkWell createButton(BuildContext context, type) {
