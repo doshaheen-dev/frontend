@@ -79,19 +79,22 @@ class _FundraiserHomeState extends State<FundraiserHome> {
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
         child: Scaffold(
           backgroundColor: Colors.white,
-          body: Column(children: [
-            Container(
-              margin: const EdgeInsets.only(left: 25.0, right: 25.0),
-              child: _createHeader(),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              child:
-                  Scrollbar(isAlwaysShown: true, child: addFundsView(context)),
-            ),
-          ]),
+          body: Padding(
+            padding: EdgeInsets.only(bottom: 40),
+            child: Column(children: [
+              Container(
+                margin: const EdgeInsets.only(left: 25.0, right: 25.0),
+                child: _createHeader(),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Expanded(
+                child: Scrollbar(
+                    isAlwaysShown: true, child: addFundsView(context)),
+              ),
+            ]),
+          ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           floatingActionButton: Container(
             child: Visibility(
