@@ -71,7 +71,7 @@ class _OnBoardingState extends State<OnBoarding> {
             height: MediaQuery.of(context).size.height,
             fit: BoxFit.fill,
           ),
-          _addLogo(),
+          AddLogoWidget(),
         ])),
         Container(
             alignment: Alignment.bottomCenter,
@@ -91,7 +91,7 @@ class _OnBoardingState extends State<OnBoarding> {
             height: MediaQuery.of(context).size.height,
             fit: BoxFit.fill,
           ),
-          _addLogo(),
+          AddLogoWidget(),
         ])),
         Container(
             alignment: Alignment.bottomCenter,
@@ -111,7 +111,7 @@ class _OnBoardingState extends State<OnBoarding> {
             height: MediaQuery.of(context).size.height,
             fit: BoxFit.fill,
           ),
-          _addLogo(),
+          AddLogoWidget(),
         ])),
         Container(
             alignment: Alignment.bottomCenter,
@@ -271,7 +271,6 @@ class _OnBoardingState extends State<OnBoarding> {
             child: Text(
               (currentPageValue + 1).toString(),
               textAlign: TextAlign.center,
-              //  textScaleFactor: 1.0,
               style: textBold14(Colors.black),
             ),
           ),
@@ -301,17 +300,6 @@ class _OnBoardingState extends State<OnBoarding> {
     setState(() {});
   }
 
-  Widget _addLogo() {
-    return Container(
-      margin: const EdgeInsets.only(left: 15.0),
-      child: Image.asset(
-        'assets/images/app_logo.png',
-        width: 160,
-        height: 100,
-      ),
-    );
-  }
-
   Future<void> getAllCountries() async {
     final Country extractedData = await CountryService.fetchCountries();
     if (extractedData.type == "success") {
@@ -328,5 +316,19 @@ class _OnBoardingState extends State<OnBoarding> {
         }
       }
     }
+  }
+}
+
+class AddLogoWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(left: 15.0),
+      child: Image.asset(
+        'assets/images/app_logo.png',
+        width: 160,
+        height: 100,
+      ),
+    );
   }
 }

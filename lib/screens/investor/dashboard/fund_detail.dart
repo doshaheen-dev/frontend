@@ -76,7 +76,7 @@ class _FundDetailState extends State<FundDetail> {
                       ),
                       Container(
                         margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                        child: _createFundHeader(),
+                        child: FundHeaderWidget(_likedFunds),
                       ),
 
                       Divider(color: HexColor("#E8E8E8")),
@@ -111,43 +111,6 @@ class _FundDetailState extends State<FundDetail> {
                     ]),
               ),
             )));
-  }
-
-  Widget _createFundHeader() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          _likedFunds.fundName,
-          style: textBold18(headingBlack),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              "assets/images/map.png",
-              height: 30,
-              width: 30,
-            ),
-            Text(
-              "${_likedFunds.city_name}, ${_likedFunds.country_name}",
-              style: textNormal(HexColor("#404040"), 12.0),
-            )
-          ],
-        ),
-        Text(
-          "Minimum Investment : ${_likedFunds.minimumInvestment}",
-          style: textNormal(HexColor("#404040"), 12.0),
-        ),
-        SizedBox(
-          height: 20.0,
-        ),
-        Text(
-          _likedFunds.fund_invstmt_obj,
-          style: textNormal(HexColor("#3A3B3F"), 14.0),
-        )
-      ],
-    );
   }
 
   Widget _createFundBody() {
@@ -286,5 +249,51 @@ class _FundDetailState extends State<FundDetail> {
                     ]))),
           )))
     ]);
+  }
+}
+
+// ignore: must_be_immutable
+class FundHeaderWidget extends StatelessWidget {
+  FundsInfo fundsInfoData;
+  FundHeaderWidget(FundsInfo likedFunds) {
+    this.fundsInfoData = likedFunds;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          fundsInfoData.fundName,
+          style: textBold18(headingBlack),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              "assets/images/map.png",
+              height: 30,
+              width: 30,
+            ),
+            Text(
+              "${fundsInfoData.city_name}, ${fundsInfoData.country_name}",
+              style: textNormal(HexColor("#404040"), 12.0),
+            )
+          ],
+        ),
+        Text(
+          "Minimum Investment : ${fundsInfoData.minimumInvestment}",
+          style: textNormal(HexColor("#404040"), 12.0),
+        ),
+        SizedBox(
+          height: 20.0,
+        ),
+        Text(
+          fundsInfoData.fund_invstmt_obj,
+          style: textNormal(HexColor("#3A3B3F"), 14.0),
+        )
+      ],
+    );
   }
 }
