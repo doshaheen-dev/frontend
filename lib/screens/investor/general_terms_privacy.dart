@@ -230,8 +230,8 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                                         }
                                       },
                                       child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width,
+                                        margin: EdgeInsets.only(
+                                            left: 50.0, right: 50.0),
                                         height: 60,
                                         decoration: appColorButton(context),
                                         child: Center(

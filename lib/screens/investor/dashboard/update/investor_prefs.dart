@@ -553,7 +553,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
           child: Container(
               height: 50.0,
               color: infoItemList.contains(item.name)
-                  ? Theme.of(context).primaryColor
+                  ? Theme.of(context).selectedRowColor
                   : Colors.white,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -562,7 +562,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
                       textAlign: TextAlign.center,
                       style: textNormal18(infoItemList.contains(item.name)
                           ? Colors.white
-                          : headingBlack)),
+                          : Theme.of(context).selectedRowColor)),
                   Spacer(),
                   Visibility(
                       visible: infoItemList.contains(item.name) ? true : false,
@@ -623,51 +623,6 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
       },
       wrapped: true,
     );
-  }
-
-  Widget setChipList() {
-    return ListView.builder(
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (ctx, index) {
-        return Container(
-          child: Container(
-            margin: EdgeInsets.only(left: 5.0, right: 5.0),
-            child: _createChipCell(infoItemList[index]),
-          ),
-        );
-      },
-      itemCount: infoItemList.length,
-      shrinkWrap: true,
-    );
-  }
-
-  _createChipCell(String infoItemName) {
-    return InputChip(
-        label: Text(
-          infoItemName,
-          style: textNormal14(Colors.white),
-        ),
-        backgroundColor: Theme.of(context).primaryColor,
-        deleteIconColor: Colors.white,
-        deleteIcon: Icon(Icons.close),
-        labelPadding: EdgeInsets.all(10.0),
-        avatar: InkWell(
-            onTap: () {},
-            child: Icon(
-              Icons.close,
-              color: Colors.white,
-            )),
-        onPressed: () {
-          setState(() {
-            infoItemList.remove(infoItemName);
-            for (var i = 0; i < localItemList.length; i++) {
-              if (localItemList[i].name == infoItemName) {
-                _uncheckOption(localItemList[i]);
-                break;
-              }
-            }
-          });
-        });
   }
 
   Future<void> submitPreference(progress, BuildContext context) async {

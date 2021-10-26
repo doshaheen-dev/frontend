@@ -227,23 +227,25 @@ class UserData {
   );
 
   set userInfo(UserData info) {
-    this.token = info.token;
-    this.firstName = info.firstName;
-    this.middleName = info.middleName;
-    this.lastName = info.lastName;
-    this.mobileNo = info.mobileNo;
-    this.emailId = info.emailId;
-    this.userType = info.userType;
-    this.profileImage = info.profileImage;
-    this.designation = info.designation;
-    this.companyName = info.companyName;
-    this.address = info.address;
-    this.countryName = info.countryName;
-    this.hearAboutUs = info.hearAboutUs;
-    this.referralName = info.referralName;
-    this.slotId = info.slotId;
-    this.productIds = info.productIds;
-    this.emailVerified = info.emailVerified;
+    if (info != null) {
+      this.token = info.token;
+      this.firstName = info.firstName;
+      this.middleName = info.middleName;
+      this.lastName = info.lastName;
+      this.mobileNo = info.mobileNo;
+      this.emailId = info.emailId;
+      this.userType = info.userType;
+      this.profileImage = info.profileImage;
+      this.designation = info.designation;
+      this.companyName = info.companyName;
+      this.address = info.address;
+      this.countryName = info.countryName;
+      this.hearAboutUs = info.hearAboutUs;
+      this.referralName = info.referralName;
+      this.slotId = info.slotId;
+      this.productIds = info.productIds;
+      this.emailVerified = info.emailVerified;
+    }
   }
 
   Map<String, dynamic> toJson() => {

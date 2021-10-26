@@ -1,5 +1,6 @@
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/signup_request_preferences.dart';
+import 'package:acc/utilites/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/investor/general_terms_privacy.dart';
@@ -114,7 +115,7 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                                 builder: (ctx, prodTypeData, child) =>
                                     ListView.builder(
                                   itemBuilder: (ctx, index) {
-                                    return _buildPlayerModelList(
+                                    return _buildChoicesList(
                                         prodTypeData.types[index]);
                                   },
                                   physics: NeverScrollableScrollPhysics(),
@@ -161,7 +162,8 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                                     openGeneralTermsPrivacy();
                                   },
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width,
+                                    margin: EdgeInsets.only(
+                                        left: 50.0, right: 50.0),
                                     height: 60,
                                     decoration: appColorButton(context),
                                     child: Center(
@@ -190,7 +192,7 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
     });
   }
 
-  Widget _buildPlayerModelList(productProvider.InvestmentLimitItem item) {
+  Widget _buildChoicesList(productProvider.InvestmentLimitItem item) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -200,7 +202,7 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
           margin:
               EdgeInsets.only(right: 25.0, top: 10.0, bottom: 10.0, left: 25.0),
           color: infoItemList.contains(item.name)
-              ? Theme.of(context).primaryColor
+              ? Theme.of(context).selectedRowColor
               : unselectedGray,
           child: Container(
             child: ExpansionTile(
@@ -212,7 +214,7 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                   children: [
                     Checkbox(
                         checkColor: Theme.of(context)
-                            .primaryColor, // color of tick Mark
+                            .selectedRowColor, // color of tick Mark
                         activeColor: Colors.white,
                         value: item.isCheck,
                         onChanged: (bool value) {
@@ -235,16 +237,12 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                         child: Container(
                       alignment: Alignment.center,
                       child: Center(
-                        child: Text(item.name,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: infoItemList.contains(item.name)
-                                    ? Colors.white
-                                    : headingBlack,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 18.0,
-                                fontFamily: FontFamilyMontserrat.name)),
-                      ),
+                          child: Text(item.name,
+                              textAlign: TextAlign.center,
+                              style: textNormal18(
+                                  infoItemList.contains(item.name)
+                                      ? Colors.white
+                                      : Theme.of(context).selectedRowColor))),
                     )),
                   ],
                 ),
@@ -252,16 +250,10 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
               children: <Widget>[
                 ListTile(
                   onLongPress: toggleSelection,
-                  title: Text(
-                    item.description,
-                    style: TextStyle(
-                        color: infoItemList.contains(item.name)
-                            ? Colors.white
-                            : Colors.black,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 16.0,
-                        fontFamily: FontFamilyMontserrat.name),
-                  ),
+                  title: Text(item.description,
+                      style: textNormal16(infoItemList.contains(item.name)
+                          ? Colors.white
+                          : Colors.black)),
                 )
               ],
             ),
@@ -285,11 +277,7 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                             padding: EdgeInsets.all(10.0),
                             child: Text(item.description,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 16.0,
-                                    fontFamily: FontFamilyMontserrat.name)))),
+                                style: textNormal16(Colors.black)))),
                   ],
                 ),
               ),

@@ -37,7 +37,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
   // Pass all uncaught errors to Crashlytics.
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   runApp(MyApp());
 }
 
@@ -86,6 +86,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
           primaryColor: appPrimaryColor,
           accentColor: appAccentColor,
+          selectedRowColor: iconColor,
           fontFamily: FontFamilyMontserrat.name,
         ),
         home: MyHomePage(),
@@ -103,8 +104,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    print(CryptUtils.decryption("ChZumtEASOQveZjiAfPPLw=="));
-
     getUserInfo();
   }
 

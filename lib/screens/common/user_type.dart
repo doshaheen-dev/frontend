@@ -53,18 +53,19 @@ class _UserTypeState extends State<UserType> {
                               margin:
                                   const EdgeInsets.only(top: 80.0, left: 25.0),
                               child: Text(
-                                "I am a",
-                                style: textBold(Colors.black, 26),
+                                "I am".toUpperCase(),
+                                style: textBold(
+                                    Theme.of(context).primaryColor, 26),
                               ),
                             ),
-                            Container(
-                              margin:
-                                  const EdgeInsets.only(top: 5.0, left: 25.0),
-                              child: Text(
-                                "Please choose your appropiate type",
-                                style: textNormal(textGrey, 16.0),
-                              ),
-                            ),
+                            // Container(
+                            //   margin:
+                            //       const EdgeInsets.only(top: 5.0, left: 25.0),
+                            //   child: Text(
+                            //     "Please choose your appropiate type",
+                            //     style: textNormal(textGrey, 16.0),
+                            //   ),
+                            // ),
                             Center(
                               child: header(),
                             )
@@ -97,7 +98,7 @@ class _UserTypeState extends State<UserType> {
           height: 160,
           decoration: BoxDecoration(
             color: selectedCategory.contains(investor)
-                ? Theme.of(context).primaryColor
+                ? Theme.of(context).selectedRowColor
                 : unselectedGray,
             borderRadius: BorderRadius.all(
               const Radius.circular(15.0),
@@ -115,10 +116,14 @@ class _UserTypeState extends State<UserType> {
                 SizedBox(
                   height: 10.0,
                 ),
-                Text("Investor",
-                    style: textNormal16(selectedCategory.contains(investor)
-                        ? Colors.white
-                        : Colors.black))
+                Container(
+                  margin: EdgeInsets.only(left: 15),
+                  alignment: Alignment.bottomLeft,
+                  child: Text("An\nINVESTOR",
+                      style: textBold16(selectedCategory.contains(investor)
+                          ? Colors.white
+                          : Theme.of(context).selectedRowColor)),
+                )
               ],
             ),
           ),
@@ -146,7 +151,7 @@ class _UserTypeState extends State<UserType> {
             height: 160,
             decoration: BoxDecoration(
               color: selectedCategory.contains(fundraiser)
-                  ? Theme.of(context).primaryColor
+                  ? Theme.of(context).selectedRowColor
                   : unselectedGray,
               borderRadius: BorderRadius.all(
                 const Radius.circular(15.0),
@@ -164,11 +169,14 @@ class _UserTypeState extends State<UserType> {
                     SizedBox(
                       height: 10.0,
                     ),
-                    Text("Fundraiser",
-                        style: textNormal16(
-                            selectedCategory.contains(fundraiser)
-                                ? Colors.white
-                                : Colors.black))
+                    Container(
+                        margin: EdgeInsets.only(left: 15),
+                        alignment: Alignment.bottomLeft,
+                        child: Text("A\nFUND RAISER",
+                            style: textBold16(
+                                selectedCategory.contains(fundraiser)
+                                    ? Colors.white
+                                    : Theme.of(context).selectedRowColor)))
                   ]),
             )),
       )

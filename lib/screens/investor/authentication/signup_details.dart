@@ -7,6 +7,7 @@ import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/services/signup_service.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/widgets/app_progressbar.dart';
+import 'package:acc/widgets/update_bottomsheet/mobile_update.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,14 +29,14 @@ import 'package:acc/utils/crypt_utils.dart';
 
 class SignUpDetails extends StatefulWidget {
   final User _user;
-  final String _userAvatar;
+  final String mobileNumber;
 
   const SignUpDetails({
     Key key,
     User user,
-    String userAvatar,
+    String mobileNumber,
   })  : _user = user,
-        _userAvatar = userAvatar,
+        mobileNumber = mobileNumber,
         super(key: key);
 
   @override
@@ -366,6 +367,13 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                                           _setTextFieldDecoration("Address"),
                                     ),
                                   ),
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 20.0, left: 25.0, right: 25.0),
+                                    child: MobileUpdate(widget.mobileNumber,
+                                        null, null, null, false),
+                                  ),
+
                                   SizedBox(
                                     height: 50,
                                   ),

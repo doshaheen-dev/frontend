@@ -16,6 +16,12 @@ import 'package:acc/utilites/ui_widgets.dart';
 import 'package:provider/provider.dart';
 
 class QuickSignUp extends StatefulWidget {
+  final String phoneNumber;
+
+  const QuickSignUp({Key key, String mobileNumber})
+      : phoneNumber = mobileNumber,
+        super(key: key);
+
   @override
   _QuickSignUpState createState() => _QuickSignUpState();
 }
@@ -268,10 +274,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
     try {
       Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (context, animation, anotherAnimation) {
-            return SignUpDetails(
-              user: user,
-              userAvatar: user != null ? user.photoURL : '',
-            );
+            return SignUpDetails(user: user, mobileNumber: widget.phoneNumber);
           },
           transitionDuration: Duration(milliseconds: 2000),
           transitionsBuilder: (context, animation, anotherAnimation, child) {

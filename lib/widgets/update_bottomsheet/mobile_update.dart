@@ -22,10 +22,11 @@ class MobileUpdate extends StatefulWidget {
   String mobileNumber = "";
   var selectedCountry;
   String changedMobileVerificationId;
+  bool showUpdate;
 
   Function(String, dynamic, String) callback;
   MobileUpdate(this.mobileNumber, this.selectedCountry,
-      this.changedMobileVerificationId, this.callback);
+      this.changedMobileVerificationId, this.callback, this.showUpdate);
 
   @override
   _MobileUpdateState createState() => new _MobileUpdateState();
@@ -124,21 +125,24 @@ class _MobileUpdateState extends State<MobileUpdate> {
                           FilteringTextInputFormatter.digitsOnly,
                         ],
                       ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Container(
-                          margin: EdgeInsets.only(right: 10.0, top: 25.0),
-                          child: InkWell(
-                              onTap: () {
-                                // open Bottom sheet
-                                showUpdationView();
-                              },
-                              child: Text(
-                                "Update",
-                                style: textNormal12(Colors.blue),
-                              )),
+                      Visibility(
+                        visible: widget.showUpdate,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Container(
+                            margin: EdgeInsets.only(right: 10.0, top: 25.0),
+                            child: InkWell(
+                                onTap: () {
+                                  // open Bottom sheet
+                                  showUpdationView();
+                                },
+                                child: Text(
+                                  "Update",
+                                  style: textNormal12(Colors.blue),
+                                )),
+                          ),
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ))
@@ -267,7 +271,7 @@ class _MobileUpdateState extends State<MobileUpdate> {
                                         margin: const EdgeInsets.only(
                                             top: 5.0, left: 25.0),
                                         child: Text(
-                                          otpMobileLabel,
+                                          "Please enter the OTP received in your mobile phone.",
                                           style: textNormal16(Colors.black),
                                         )),
                                     Container(
@@ -549,6 +553,7 @@ class _MobileUpdateState extends State<MobileUpdate> {
   }
 
   Future<void> getAllCountries() async {
+    print("Update- ${widget.mobileNumber}");
     final Country extractedData = await CountryService.fetchCountries();
     if (extractedData.type == "success") {
       if (extractedData.data.options.length != 0) {
@@ -570,18 +575,27 @@ class _MobileUpdateState extends State<MobileUpdate> {
           ];
         }
 
-        var subString = UserData.instance.userInfo.mobileNo.substring(0, 5);
+        // var subString = UserData.instance.userInfo.mobileNo != null
+        //     ? UserData.instance.userInfo.mobileNo.substring(0, 5)
+        //     : widget.mobileNumber.substring(0, 5);
+        var subString = widget.mobileNumber.substring(0, 5);
         for (var i = 0; i < newCountryList.length; i++) {
           if (subString.contains("+${newCountryList[i].dialCode}")) {
             selectedCountry = newCountryList[i];
 
             _countryController.text = "+${selectedCountry.dialCode.toString()}";
             int length = _countryController.text.toString().length;
-            String result =
-                UserData.instance.userInfo.mobileNo.substring(0, length);
+            // String result = UserData.instance.userInfo.mobileNo != null
+            //     ? UserData.instance.userInfo.mobileNo.substring(0, length)
+            //     : widget.mobileNumber.substring(0, length);
 
-            _mobileController.text =
-                UserData.instance.userInfo.mobileNo.replaceAll(result, "");
+            String result = widget.mobileNumber.substring(0, length);
+
+            // _mobileController.text = UserData.instance.userInfo.mobileNo != null
+            //     ? UserData.instance.userInfo.mobileNo.replaceAll(result, "")
+            //     : widget.mobileNumber.replaceAll(result, "");
+
+            _mobileController.text = widget.mobileNumber.replaceAll(result, "");
             break;
           }
         }

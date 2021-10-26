@@ -180,7 +180,7 @@ class _EmailVerificationState extends State<EmailVerification> {
                                 margin:
                                     const EdgeInsets.only(top: 5.0, left: 25.0),
                                 child: Text(
-                                  otpMobileLabel,
+                                  "Please enter the OTP received in your mobile phone.",
                                   style: textNormal16(Colors.black),
                                 )),
                             Container(

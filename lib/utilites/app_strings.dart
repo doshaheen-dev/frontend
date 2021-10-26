@@ -18,19 +18,17 @@ final verifyOtp = "Verify OTP";
 final sendingOtp = "Sending OTP...";
 final verifyingOtp = "Verifying OTP...";
 final successOTP = "OTP Sent Successfully...";
-final otpLabel = "Enter Your OTP";
-final otpMobileLabel = "Enter the OTP sent to your mobile";
 final otpSentTo = "Enter the OTP sent to your mobile/email";
 final warningOTP = "Please enter OTP sent to your mobile number.";
 final addNewFunds = "Add New Funds";
-final welcomeInvestor = "Welcome to Amicorp Capital Connect";
+final welcomeInvestor = "Welcome to\nAmicorp\nCapital Connect";
 final welcomeInvestorBody =
-    "To give you the best possible experience we need to find out a bit more about you.\n(This will take less than a minute).";
+    "To give you the best possible\nexperience we need to find out a bit\nmore about you.This will take less than a minute.";
 final correctCaptcha = "Incorrect Captcha";
 final captchaText = "Enter the text as shown in the image";
 final mobileNumber = "Mobile Number";
-final signUpHeader = "Let's start here";
-final signUpSubHeader = "Please enter your mobile number";
+final signUpHeader = "Let's Start Here";
+final signUpSubHeader = "Please register your mobile number.";
 final errorCountryCode = "Please select country code.";
 
 String termsConditions =

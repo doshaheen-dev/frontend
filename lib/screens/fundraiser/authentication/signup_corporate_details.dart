@@ -7,9 +7,9 @@ import 'package:acc/services/signup_service.dart';
 import 'package:acc/utils/class_navigation.dart';
 import 'package:acc/utils/crypt_utils.dart';
 import 'package:acc/widgets/app_progressbar.dart';
+import 'package:acc/widgets/update_bottomsheet/mobile_update.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:acc/screens/common/onboarding.dart';
 import 'package:acc/screens/investor/welcome.dart';
 import 'package:acc/utilites/app_colors.dart';
 import 'package:acc/utilites/app_strings.dart';
@@ -22,6 +22,12 @@ import '../../../utils/code_utils.dart';
 import '../../../providers/country_provider.dart' as countryProvider;
 
 class CorporateDetails extends StatefulWidget {
+  final String phoneNumber;
+
+  const CorporateDetails({Key key, String mobileNumber})
+      : phoneNumber = mobileNumber,
+        super(key: key);
+
   @override
   _CorporateDetailsState createState() => _CorporateDetailsState();
 }
@@ -79,6 +85,7 @@ class _CorporateDetailsState extends State<CorporateDetails> {
 
   @override
   Widget build(BuildContext context) {
+    print("Signup- ${widget.phoneNumber}");
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
@@ -157,16 +164,16 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "Corporate Sign Up",
+                                            "Complete Registration",
                                             style: textBold26(headingBlack),
                                           ),
                                           SizedBox(
                                             height: 5,
                                           ),
-                                          Text(
-                                            "Please fill out your representative details",
-                                            style: textNormal16(textGrey),
-                                          )
+                                          // Text(
+                                          //   "Please fill out your representative details",
+                                          //   style: textNormal16(textGrey),
+                                          // )
                                         ],
                                       )),
                                   SizedBox(
@@ -199,8 +206,8 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                       controller: _lastnameController,
                                       style: textBlackNormal18(),
                                       onChanged: (value) => lastname = value,
-                                      decoration:
-                                          _setTextFieldDecoration("Lastname"),
+                                      decoration: _setTextFieldDecoration(
+                                          "Lastname/Surname"),
                                     ),
                                   ),
                                   Container(
@@ -292,9 +299,16 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                       controller: _companyEmailController,
                                       onChanged: (value) =>
                                           companyEmail = value,
-                                      decoration: _setTextFieldDecoration(
-                                          "Company Email Id"),
+                                      decoration:
+                                          _setTextFieldDecoration("Email ID"),
                                     ),
+                                  ),
+
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 20.0, left: 25.0, right: 25.0),
+                                    child: MobileUpdate(widget.phoneNumber,
+                                        null, null, null, false),
                                   ),
                                   SizedBox(
                                     height: 20,

@@ -126,7 +126,8 @@ class _SignUpOTPState extends State<SignUpOTP> {
                             margin:
                                 const EdgeInsets.only(top: 10.0, left: 25.0),
                             child: Text(signUpHeader,
-                                style: textBold26(headingBlack)),
+                                style:
+                                    textBold26(Theme.of(context).primaryColor)),
                           ),
                           Container(
                             margin: const EdgeInsets.only(top: 5.0, left: 25.0),
@@ -200,7 +201,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
                                     width: MediaQuery.of(context).size.width,
                                     height: 60,
                                     alignment: Alignment.center,
-                                    child: Text(sendOtpSecret,
+                                    child: Text("Send OTP",
                                         style: textWhiteBold18()),
                                   ),
                                 ),
@@ -210,9 +211,12 @@ class _SignUpOTPState extends State<SignUpOTP> {
                             margin: const EdgeInsets.only(
                                 left: 25.0, bottom: 20, right: 25.0),
                             width: MediaQuery.of(context).size.width,
-                            child: Text(
-                                "*You will recieve a one time password(Secret Code) on your mobile.",
-                                style: textNormal16(textGrey)),
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                  "You will be recieving a one time password (OTP) on your mobile phone.",
+                                  style: textNormal16(textGrey)),
+                            ),
                           ),
                         ],
                       )

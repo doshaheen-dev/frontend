@@ -117,7 +117,8 @@ class _SignInOTPState extends State<SignInOTP> {
                                       margin: const EdgeInsets.only(
                                           top: 10.0, left: 25.0),
                                       child: Text(loginHeader,
-                                          style: textBold26(headingBlack)),
+                                          style: textBold26(
+                                              Theme.of(context).primaryColor)),
                                     ),
                                     Container(
                                       margin: const EdgeInsets.only(

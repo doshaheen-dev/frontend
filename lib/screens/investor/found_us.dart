@@ -1,6 +1,8 @@
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/signup_request_preferences.dart';
 import 'package:acc/models/investor/hearaboutus.dart';
+import 'package:acc/utilites/app_strings.dart';
+import 'package:acc/utilites/text_style.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -81,15 +83,13 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
+                        alignment: Alignment.center,
                         margin: const EdgeInsets.only(
                             top: 10.0, left: 25.0, right: 25.0),
                         child: Text(
-                          "How did you find us ?",
-                          style: TextStyle(
-                              color: headingBlack,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 26.0,
-                              fontFamily: FontFamilyMontserrat.name),
+                          "Where did you\nfind us".toUpperCase(),
+                          textAlign: TextAlign.center,
+                          style: textBold26(headingBlack),
                         ),
                       ),
                       SizedBox(
@@ -162,7 +162,9 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                                       openInvestmentLimit();
                                     },
                                     child: Container(
-                                      width: MediaQuery.of(context).size.width,
+                                      margin:
+                                          EdgeInsets.only(left: 50, right: 50),
+                                      //width: MediaQuery.of(context).size.width,
                                       height: 60,
                                       decoration: appColorButton(context),
                                       child: Center(
@@ -227,7 +229,7 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
         height: 200,
         decoration: BoxDecoration(
           color: infoItemList.contains(this.hearAboutUsList[_index].name)
-              ? Theme.of(context).primaryColor
+              ? Theme.of(context).selectedRowColor
               : unselectedGray,
           borderRadius: BorderRadius.all(
             const Radius.circular(15.0),
@@ -253,14 +255,10 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                 height: 10.0,
               ),
               Text(this.hearAboutUsList[_index].name,
-                  style: TextStyle(
-                      color: infoItemList
-                              .contains(this.hearAboutUsList[_index].name)
+                  style: textBold16(
+                      infoItemList.contains(this.hearAboutUsList[_index].name)
                           ? Colors.white
-                          : Colors.black,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 16.0,
-                      fontFamily: FontFamilyMontserrat.name))
+                          : Theme.of(context).selectedRowColor))
             ],
           ),
         ),

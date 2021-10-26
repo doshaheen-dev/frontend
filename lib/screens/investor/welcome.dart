@@ -1,5 +1,4 @@
 import 'package:acc/models/investor/hearaboutus.dart';
-import 'package:acc/screens/common/onboarding.dart';
 import 'package:acc/services/InvestmentInfoService.dart';
 import 'package:acc/utilites/app_strings.dart';
 import 'package:acc/utilites/text_style.dart';
@@ -44,6 +43,9 @@ class _WelcomeInvestorState extends State<WelcomeInvestor> {
                         onPressed: () => {_onBackPressed()},
                       ),
                     ),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -51,21 +53,12 @@ class _WelcomeInvestorState extends State<WelcomeInvestor> {
                             alignment: Alignment.center,
                             margin: const EdgeInsets.only(
                                 top: 10.0, left: 25.0, right: 25.0),
-                            child: Text(welcomeInvestor,
-                                textAlign: TextAlign.center,
-                                style: textBold26(headingBlack)),
+                            child: Text(
+                              welcomeInvestor.toUpperCase(),
+                              textAlign: TextAlign.center,
+                              style: textBold26(headingBlack),
+                            ),
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(
-                                top: 10.0, left: 25.0, right: 25.0),
-                            child: Text(welcomeInvestorBody,
-                                textAlign: TextAlign.center,
-                                style: textNormal16(textGrey)),
-                          ),
-
                           SizedBox(
                             height: 40,
                           ),
@@ -76,13 +69,23 @@ class _WelcomeInvestorState extends State<WelcomeInvestor> {
                           SizedBox(
                             height: 50,
                           ),
+                          Container(
+                            margin: const EdgeInsets.only(
+                                top: 10.0, left: 25.0, right: 25.0),
+                            child: Text(welcomeInvestorBody,
+                                textAlign: TextAlign.center,
+                                style: textNormal16(textGrey)),
+                          ),
+
+                          SizedBox(height: 40),
+
                           //NEXT BUTTON
                           Container(
                               margin: const EdgeInsets.only(
                                   top: 5.0,
-                                  left: 25.0,
+                                  left: 80.0,
                                   bottom: 20,
-                                  right: 25.0),
+                                  right: 80.0),
                               child: InkWell(
                                   borderRadius: BorderRadius.circular(40),
                                   onTap: () {
@@ -94,7 +97,7 @@ class _WelcomeInvestorState extends State<WelcomeInvestor> {
                                     height: 60,
                                     decoration: appColorButton(context),
                                     child: Center(
-                                        child: Text("Let’s Do it",
+                                        child: Text("Continue",
                                             style: textWhiteBold18())),
                                   )))
                         ])

@@ -132,16 +132,21 @@ class _SuccesssFundSubmittedState extends State<SuccesssFundSubmitted> {
                       ),
                     ),
                     Container(
-                        margin: const EdgeInsets.only(top: 50.0),
+                        margin: const EdgeInsets.only(top: 10.0),
                         child: Center(
                           child: Column(
                             children: [
-                              Text('Thank you for submitting your details.',
+                              Text('THANK YOU',
                                   textAlign: TextAlign.center,
                                   style: textBold(headingBlack, 18)),
-                              Text('Our team will review\nand revert soon.',
+                              SizedBox(height: 50),
+                              Text('Thank you for registering with us',
                                   textAlign: TextAlign.center,
-                                  style: textBold(headingBlack, 18))
+                                  style: textBold(headingBlack, 16)),
+                              Text(
+                                  'Our team will review and revert\nback to you at the earliest.',
+                                  textAlign: TextAlign.center,
+                                  style: textBold(headingBlack, 16))
                             ],
                           ),
                         )),

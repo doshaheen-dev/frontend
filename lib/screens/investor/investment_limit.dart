@@ -1,5 +1,6 @@
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/signup_request_preferences.dart';
+import 'package:acc/utilites/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/investor/investment_choices.dart';
@@ -154,26 +155,21 @@ class _InvestmentLimitState extends State<InvestmentLimit> {
         });
       },
       child: Container(
-        width: 10,
-        height: 70,
-        decoration: BoxDecoration(
-          color: infoItemList.contains(item.header)
-              ? Theme.of(context).primaryColor
-              : unselectedGray,
-          borderRadius: BorderRadius.all(
-            const Radius.circular(15.0),
+          width: 10,
+          height: 70,
+          decoration: BoxDecoration(
+            color: infoItemList.contains(item.header)
+                ? Theme.of(context).selectedRowColor
+                : unselectedGray,
+            borderRadius: BorderRadius.all(
+              const Radius.circular(15.0),
+            ),
           ),
-        ),
-        child: Center(
-            child: Text(item.header,
-                style: TextStyle(
-                    color: infoItemList.contains(item.header)
-                        ? Colors.white
-                        : Colors.black,
-                    fontWeight: FontWeight.normal,
-                    fontSize: 12.0,
-                    fontFamily: FontFamilyMontserrat.name))),
-      ),
+          child: Center(
+              child: Text(item.header,
+                  style: textNormal12(infoItemList.contains(item.header)
+                      ? Colors.white
+                      : Theme.of(context).selectedRowColor)))),
     );
   }
 

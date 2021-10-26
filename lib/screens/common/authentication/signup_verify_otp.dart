@@ -83,25 +83,15 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                           Container(
                             margin:
                                 const EdgeInsets.only(top: 10.0, left: 25.0),
-                            child: Text(
-                              otpLabel,
-                              style: TextStyle(
-                                  color: headingBlack,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 26.0,
-                                  fontFamily: FontFamilyMontserrat.name),
-                            ),
+                            child: Text("Enter OTP",
+                                style:
+                                    textBold26(Theme.of(context).primaryColor)),
                           ),
                           Container(
                             margin: const EdgeInsets.only(top: 5.0, left: 25.0),
                             child: Text(
-                              otpMobileLabel,
-                              style: TextStyle(
-                                  color: textGrey,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 16.0,
-                                  fontFamily: FontFamilyMontserrat.name),
-                            ),
+                                "Please enter the OTP received in your mobile phone.",
+                                style: textNormal16(textGrey)),
                           ),
                           SizedBox(
                             height: 25,
@@ -254,7 +244,9 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
     if (_userType == "Investor") {
       Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (context, animation, anotherAnimation) {
-            return QuickSignUp();
+            return QuickSignUp(
+              mobileNumber: _phoneNumber,
+            );
           },
           transitionDuration: Duration(milliseconds: 2000),
           transitionsBuilder: (context, animation, anotherAnimation, child) {
@@ -269,7 +261,9 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
     } else if (_userType == "Fundraiser") {
       Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (context, animation, anotherAnimation) {
-            return CorporateDetails();
+            return CorporateDetails(
+              mobileNumber: _phoneNumber,
+            );
           },
           transitionDuration: Duration(milliseconds: 2000),
           transitionsBuilder: (context, animation, anotherAnimation, child) {
