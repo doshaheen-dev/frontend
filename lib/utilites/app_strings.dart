@@ -5,14 +5,12 @@ final onBoardingScreen3 = "Get matched based on your investment preference";
 
 final corporateVerificationText =
     "We have sent you a verification link  to your email address.  Please click on the link to verify.We will activate your profile once done.";
-final loginHeader = "Login here";
 final loginVia = "You can easily login via mobile number or email address";
 final mobileEmailLabel = "Mobile Number or Email Id";
 final correctEmailMobile = "Please enter mobile number or email.";
 final warningEmailMobile = "Please enter correct mobile number or email";
 final correctMobile = "Please enter mobile number.";
 final warningMobile = "Please enter correct mobile number.";
-final sendOtpSecret = "Send OTP/Secret Code*";
 final sendOtp = "Send OTP";
 final verifyOtp = "Verify OTP";
 final sendingOtp = "Sending OTP...";

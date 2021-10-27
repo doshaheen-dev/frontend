@@ -1,6 +1,7 @@
 import 'package:acc/models/country/country.dart';
 import 'package:acc/services/country_service.dart';
 import 'package:acc/utilites/app_strings.dart';
+import 'package:acc/utilites/hex_color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -42,87 +43,89 @@ class _OnBoardingState extends State<OnBoarding> {
   @override
   Widget build(BuildContext context) {
     scale = MediaQuery.of(context).textScaleFactor;
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.white,
+    ));
+    // if (currentPageValue == 0) {
+    //   statusBarColor = statusGrey;
+    //   SystemChrome.setSystemUIOverlayStyle(
+    //       SystemUiOverlayStyle.dark.copyWith(statusBarColor: statusGrey));
+    // } else if (currentPageValue == 1) {
+    //   statusBarColor = statusGrey1;
+    //   SystemChrome.setSystemUIOverlayStyle(
+    //       SystemUiOverlayStyle.dark.copyWith(statusBarColor: statusGrey1));
+    // } else if (currentPageValue == 2) {
+    //   statusBarColor = statusGrey2;
+    //   SystemChrome.setSystemUIOverlayStyle(
+    //       SystemUiOverlayStyle.dark.copyWith(statusBarColor: statusGrey2));
+    // } else {
+    //   statusBarColor = statusGrey;
+    //   SystemChrome.setSystemUIOverlayStyle(
+    //       SystemUiOverlayStyle.dark.copyWith(statusBarColor: statusGrey));
+    // }
 
-    if (currentPageValue == 0) {
-      statusBarColor = statusGrey;
-      SystemChrome.setSystemUIOverlayStyle(
-          SystemUiOverlayStyle.dark.copyWith(statusBarColor: statusGrey));
-    } else if (currentPageValue == 1) {
-      statusBarColor = statusGrey1;
-      SystemChrome.setSystemUIOverlayStyle(
-          SystemUiOverlayStyle.dark.copyWith(statusBarColor: statusGrey1));
-    } else if (currentPageValue == 2) {
-      statusBarColor = statusGrey2;
-      SystemChrome.setSystemUIOverlayStyle(
-          SystemUiOverlayStyle.dark.copyWith(statusBarColor: statusGrey2));
-    } else {
-      statusBarColor = statusGrey;
-      SystemChrome.setSystemUIOverlayStyle(
-          SystemUiOverlayStyle.dark.copyWith(statusBarColor: statusGrey));
-    }
-
-    final List<Widget> introWidgetsList = <Widget>[
-      Stack(children: [
-        Container(
-            child: Stack(children: [
-          Image.asset(
-            'assets/images/onboarding/onboarding_first.png',
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            fit: BoxFit.fill,
-          ),
-          AddLogoWidget(),
-        ])),
-        Container(
-            alignment: Alignment.bottomCenter,
-            padding: EdgeInsets.all(25.0),
-            child: Text(
-              onBoardingScreen1,
-              textAlign: TextAlign.center,
-              style: textWhiteBold20(),
-            ))
-      ]),
-      Stack(children: [
-        Container(
-            child: Stack(children: [
-          Image.asset(
-            'assets/images/onboarding/onboarding_second.png',
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            fit: BoxFit.fill,
-          ),
-          AddLogoWidget(),
-        ])),
-        Container(
-            alignment: Alignment.bottomCenter,
-            padding: EdgeInsets.all(25.0),
-            child: Text(
-              onBoardingScreen2,
-              textAlign: TextAlign.center,
-              style: textWhiteBold20(),
-            ))
-      ]),
-      Stack(children: [
-        Container(
-            child: Stack(children: [
-          Image.asset(
-            'assets/images/onboarding/onboarding_third.png',
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            fit: BoxFit.fill,
-          ),
-          AddLogoWidget(),
-        ])),
-        Container(
-            alignment: Alignment.bottomCenter,
-            padding: EdgeInsets.all(25.0),
-            child: Text(
-              onBoardingScreen3,
-              textAlign: TextAlign.center,
-              style: textWhiteBold20(),
-            ))
-      ])
-    ];
+    // final List<Widget> introWidgetsList = <Widget>[
+    //   Stack(children: [
+    //     Container(
+    //         child: Stack(children: [
+    //       Image.asset(
+    //         'assets/images/onboarding/onboarding_first.png',
+    //         width: MediaQuery.of(context).size.width,
+    //         height: MediaQuery.of(context).size.height,
+    //         fit: BoxFit.fill,
+    //       ),
+    //       AddLogoWidget(),
+    //     ])),
+    //     Container(
+    //         alignment: Alignment.bottomCenter,
+    //         padding: EdgeInsets.all(25.0),
+    //         child: Text(
+    //           onBoardingScreen1,
+    //           textAlign: TextAlign.center,
+    //           style: textWhiteBold20(),
+    //         ))
+    //   ]),
+    //   Stack(children: [
+    //     Container(
+    //         child: Stack(children: [
+    //       Image.asset(
+    //         'assets/images/onboarding/onboarding_second.png',
+    //         width: MediaQuery.of(context).size.width,
+    //         height: MediaQuery.of(context).size.height,
+    //         fit: BoxFit.fill,
+    //       ),
+    //       AddLogoWidget(),
+    //     ])),
+    //     Container(
+    //         alignment: Alignment.bottomCenter,
+    //         padding: EdgeInsets.all(25.0),
+    //         child: Text(
+    //           onBoardingScreen2,
+    //           textAlign: TextAlign.center,
+    //           style: textWhiteBold20(),
+    //         ))
+    //   ]),
+    //   Stack(children: [
+    //     Container(
+    //         child: Stack(children: [
+    //       Image.asset(
+    //         'assets/images/onboarding/onboarding_third.png',
+    //         width: MediaQuery.of(context).size.width,
+    //         height: MediaQuery.of(context).size.height,
+    //         fit: BoxFit.fill,
+    //       ),
+    //       AddLogoWidget(),
+    //     ])),
+    //     Container(
+    //         alignment: Alignment.bottomCenter,
+    //         padding: EdgeInsets.all(25.0),
+    //         child: Text(
+    //           onBoardingScreen3,
+    //           textAlign: TextAlign.center,
+    //           style: textWhiteBold20(),
+    //         ))
+    //   ])
+    // ];
 
     return MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -137,106 +140,227 @@ class _OnBoardingState extends State<OnBoarding> {
                 ),
                 bottomNavigationBar: BottomAppBar(),
                 body: SafeArea(
-                    child: Column(children: [
-                  // Slider View
-                  Expanded(
-                      child: Container(
-                          child: Stack(
-                              alignment: AlignmentDirectional.bottomCenter,
-                              children: <Widget>[
-                        PageView.builder(
-                            physics: BouncingScrollPhysics(),
-                            itemCount: introWidgetsList.length,
-                            onPageChanged: (int page) {
-                              getChangedPageAndMoveBar(page);
-                            },
-                            controller: controller,
-                            itemBuilder: (context, index) {
-                              return introWidgetsList[index];
-                            }),
-                        Stack(
-                            alignment: AlignmentDirectional.topCenter,
-                            children: <Widget>[
-                              Container(
-                                margin: EdgeInsets.only(top: 5),
-                                child: Divider(color: Colors.white70),
+                    child: Stack(children: <Widget>[
+                  Image.asset(
+                    'assets/images/onboarding/onboarding_second.png',
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    fit: BoxFit.fill,
+                  ),
+                  Column(children: [
+                    // Slider View
+                    Expanded(
+                        child: Container(
+                            child: Stack(
+                                alignment: AlignmentDirectional.bottomCenter,
+                                children: <Widget>[
+                          Stack(
+                            children: [
+                              Column(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    child: AddLogoWidget(),
+                                  ),
+                                  SizedBox(height: 80),
+                                  Container(
+                                      child: Image.asset(
+                                          "assets/images/onboarding/acc_home1.png")),
+                                  SizedBox(height: 30),
+                                  Container(
+                                      child: Image.asset(
+                                          "assets/images/onboarding/acc_home2.png")),
+                                  SizedBox(height: 30),
+                                  Container(
+                                      child: Image.asset(
+                                          "assets/images/onboarding/acc_home3.png")),
+                                  // Container(
+                                  //     width: MediaQuery.of(context).size.width,
+                                  //     alignment: Alignment.centerRight,
+                                  //     color: Theme.of(context)
+                                  //         .accentColor
+                                  //         .withOpacity(0.75),
+                                  //     child: Padding(
+                                  //       padding: EdgeInsets.all(10.0),
+                                  //       child: Row(
+                                  //         children: [
+                                  //           SizedBox(width: 30),
+                                  //           Text(
+                                  //             "1",
+                                  //             style:
+                                  //                 textBold(Colors.white, 50.0),
+                                  //           ),
+                                  //           SizedBox(width: 50),
+                                  //           Container(
+                                  //             child: Text(
+                                  //               "Find an investment\nopportunity that is\nright for you."
+                                  //                   .toUpperCase(),
+                                  //               style:
+                                  //                   textNormal18(Colors.white),
+                                  //             ),
+                                  //           )
+                                  //         ],
+                                  //       ),
+                                  //     )),
+                                  // SizedBox(height: 30),
+                                  // Container(
+                                  //   alignment: Alignment.centerLeft,
+                                  //   color: Theme.of(context)
+                                  //       .accentColor
+                                  //       .withOpacity(0.75),
+                                  //   child: Padding(
+                                  //     padding: EdgeInsets.all(10.0),
+                                  //     child: Row(
+                                  //       children: [
+                                  //         SizedBox(width: 30),
+                                  //         Container(
+                                  //           child: Text(
+                                  //             "Looking for an\nInvestor? We will find\none for you."
+                                  //                 .toUpperCase(),
+                                  //             textAlign: TextAlign.end,
+                                  //             style: textNormal18(Colors.white),
+                                  //           ),
+                                  //         ),
+                                  //         SizedBox(width: 50),
+                                  //         Text(
+                                  //           "2",
+                                  //           style: textBold(Colors.white, 50.0),
+                                  //         ),
+                                  //       ],
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  // SizedBox(height: 30),
+                                  // Container(
+                                  //   alignment: Alignment.centerRight,
+                                  //   color: Theme.of(context)
+                                  //       .accentColor
+                                  //       .withOpacity(0.75),
+                                  //   child: Padding(
+                                  //     padding: EdgeInsets.all(10.0),
+                                  //     child: Row(
+                                  //       children: [
+                                  //         SizedBox(width: 30),
+                                  //         Text(
+                                  //           "3",
+                                  //           style: textBold(Colors.white, 50.0),
+                                  //         ),
+                                  //         SizedBox(width: 50),
+                                  //         Container(
+                                  //           child: Text(
+                                  //             "Get Matched Based On\nYour investment\npreferences"
+                                  //                 .toUpperCase(),
+                                  //             style: textNormal18(Colors.white),
+                                  //           ),
+                                  //         )
+                                  //       ],
+                                  //     ),
+                                  //   ),
+                                  // )
+                                ],
                               ),
-                              Container(
-                                  margin: EdgeInsets.only(bottom: 100),
-                                  child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        for (int i = 0;
-                                            i < introWidgetsList.length;
-                                            i++)
-                                          if (i == currentPageValue) ...[
-                                            circleBar(true, i)
-                                          ] else
-                                            circleBar(false, i),
-                                      ]))
-                            ])
-                      ]))),
-                  // Bottom view
-                  Container(
-                      color: kDarkGrey,
-                      height: 150,
-                      child: Column(children: [
-                        InkWell(
-                            borderRadius: BorderRadius.circular(40),
-                            onTap: () {
-                              // Open  view
-                              Navigator.of(context).push(PageRouteBuilder(
-                                  pageBuilder:
-                                      (context, animation, anotherAnimation) {
-                                    return UserType();
-                                  },
-                                  transitionDuration:
-                                      Duration(milliseconds: 2000),
-                                  transitionsBuilder: (context, animation,
-                                      anotherAnimation, child) {
-                                    animation = CurvedAnimation(
-                                        curve: Curves.fastLinearToSlowEaseIn,
-                                        parent: animation);
-                                    return SlideTransition(
-                                      position: Tween(
-                                              begin: Offset(1.0, 0.0),
-                                              end: Offset(0.0, 0.0))
-                                          .animate(animation),
-                                      child: child,
-                                    );
-                                  }));
-                            },
-                            child: Container(
-                                margin: const EdgeInsets.only(
-                                    top: 20.0, left: 25.0, right: 25.0),
-                                height: 60,
-                                decoration: appColorButton(context),
-                                child: Center(
-                                    child: Text(
-                                  "Join our community",
-                                  style: textWhiteBold18(),
-                                )))),
-                        Container(
-                            margin: const EdgeInsets.only(top: 20.0),
-                            alignment: Alignment.center,
-                            child: RichText(
-                                textAlign: TextAlign.center,
-                                text: TextSpan(
-                                    text: "Already a member? ",
-                                    style: textNormal16(textDarkOrange),
-                                    children: [
-                                      TextSpan(
-                                          text: 'Sign In',
-                                          style: textNormal16(
-                                              Theme.of(context).primaryColor),
-                                          recognizer: TapGestureRecognizer()
-                                            ..onTap = () {
-                                              openSignIn(context);
-                                            })
-                                    ])))
-                      ]))
+                            ],
+                          )
+                          // PageView.builder(
+                          //     physics: BouncingScrollPhysics(),
+                          //     itemCount: introWidgetsList.length,
+                          //     onPageChanged: (int page) {
+                          //       getChangedPageAndMoveBar(page);
+                          //     },
+                          //     controller: controller,
+                          //     itemBuilder: (context, index) {
+                          //       return introWidgetsList[index];
+                          //     }),
+                          // Stack(
+                          //     alignment: AlignmentDirectional.topCenter,
+                          //     children: <Widget>[
+                          //       Container(
+                          //         margin: EdgeInsets.only(top: 5),
+                          //         child: Divider(color: Colors.white70),
+                          //       ),
+                          //       Container(
+                          //           margin: EdgeInsets.only(bottom: 100),
+                          //           child: Row(
+                          //               mainAxisSize: MainAxisSize.min,
+                          //               mainAxisAlignment:
+                          //                   MainAxisAlignment.center,
+                          //               children: <Widget>[
+                          //                 for (int i = 0;
+                          //                     i < introWidgetsList.length;
+                          //                     i++)
+                          //                   if (i == currentPageValue) ...[
+                          //                     circleBar(true, i)
+                          //                   ] else
+                          //                     circleBar(false, i),
+                          //               ]))
+                          //     ])
+                        ]))),
+                    Divider(
+                      color: Colors.white,
+                      thickness: 1.0,
+                    ),
+                    // Bottom view
+                    Container(
+                        // color: kDarkGrey,
+                        height: 200,
+                        child: Column(children: [
+                          InkWell(
+                              borderRadius: BorderRadius.circular(40),
+                              onTap: () {
+                                // Open  view
+                                Navigator.of(context).push(PageRouteBuilder(
+                                    pageBuilder:
+                                        (context, animation, anotherAnimation) {
+                                      return UserType();
+                                    },
+                                    transitionDuration:
+                                        Duration(milliseconds: 2000),
+                                    transitionsBuilder: (context, animation,
+                                        anotherAnimation, child) {
+                                      animation = CurvedAnimation(
+                                          curve: Curves.fastLinearToSlowEaseIn,
+                                          parent: animation);
+                                      return SlideTransition(
+                                        position: Tween(
+                                                begin: Offset(1.0, 0.0),
+                                                end: Offset(0.0, 0.0))
+                                            .animate(animation),
+                                        child: child,
+                                      );
+                                    }));
+                              },
+                              child: Container(
+                                  margin: const EdgeInsets.only(
+                                      top: 20.0, left: 25.0, right: 25.0),
+                                  height: 60,
+                                  decoration: appColorButton(context),
+                                  child: Center(
+                                      child: Text(
+                                    "Join our community",
+                                    style: textWhiteBold18(),
+                                  )))),
+                          Container(
+                              margin: const EdgeInsets.only(top: 20.0),
+                              alignment: Alignment.center,
+                              child: Text(
+                                "Already a member? ",
+                                style: textNormal16(Colors.white),
+                              )),
+                          Container(
+                            margin:
+                                const EdgeInsets.only(bottom: 20.0, top: 10.0),
+                            child: InkWell(
+                              onTap: () {
+                                openSignIn(context);
+                              },
+                              child: Text(
+                                'Sign-In',
+                                style: textBold18(Colors.white),
+                              ),
+                            ),
+                          )
+                        ]))
+                  ])
                 ])))));
   }
 

@@ -47,7 +47,7 @@ class _CorporateDetailsState extends State<CorporateDetails> {
   var _companyNameController = TextEditingController();
   var _companyEmailController = TextEditingController();
   bool _displayConfirmationText = false;
-  String nextButtonText = "Submit for Verification";
+  String nextButtonText = "Submit";
 
   Future _countries;
   var _isInit = true;
@@ -147,7 +147,8 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                               children: <Widget>[
                             Container(
                               child: IconButton(
-                                icon: Icon(Icons.arrow_back, size: 30),
+                                icon: Icon(Icons.arrow_back_ios,
+                                    size: 30, color: backButtonColor),
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
@@ -165,7 +166,8 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                         children: [
                                           Text(
                                             "Complete Registration",
-                                            style: textBold26(headingBlack),
+                                            style: textBold26(Theme.of(context)
+                                                .selectedRowColor),
                                           ),
                                           SizedBox(
                                             height: 5,
@@ -330,9 +332,9 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                   Container(
                                       margin: const EdgeInsets.only(
                                           top: 5.0,
-                                          left: 25.0,
+                                          left: 40.0,
                                           bottom: 20,
-                                          right: 25.0),
+                                          right: 40.0),
                                       child: ElevatedButton(
                                         onPressed: () {
                                           // on click

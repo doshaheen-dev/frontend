@@ -98,7 +98,8 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                 children: <Widget>[
                   Container(
                     child: IconButton(
-                      icon: Icon(Icons.arrow_back, size: 30),
+                      icon: Icon(Icons.arrow_back_ios,
+                          size: 30, color: backButtonColor),
                       onPressed: () {
                         Authentication.signOut();
                         Navigator.pop(context);
@@ -178,6 +179,9 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                                           cornerRadius: 20.0,
                                           activeFgColor: Colors.white,
                                           initialLabelIndex: selectedIndex,
+                                          activeBgColor: [
+                                            Theme.of(context).selectedRowColor
+                                          ],
                                           inactiveBgColor: unselectedGray,
                                           inactiveFgColor: Colors.black,
                                           totalSwitches: 2,

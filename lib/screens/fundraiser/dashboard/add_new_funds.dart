@@ -51,7 +51,8 @@ class _AddNewFundsState extends State<AddNewFunds> {
                         children: <Widget>[
                   Container(
                     child: IconButton(
-                      icon: Icon(Icons.arrow_back, size: 30),
+                      icon: Icon(Icons.arrow_back_ios,
+                          size: 30, color: backButtonColor),
                       onPressed: () => {Navigator.pop(context)},
                     ),
                   ),
@@ -133,7 +134,7 @@ class _AddNewFundsState extends State<AddNewFunds> {
         height: 50,
         decoration: BoxDecoration(
           color: selectedIndex == index
-              ? Theme.of(context).primaryColor
+              ? Theme.of(context).selectedRowColor
               : unselectedGray,
           borderRadius: BorderRadius.all(
             const Radius.circular(15.0),
@@ -143,7 +144,10 @@ class _AddNewFundsState extends State<AddNewFunds> {
             child: Text(item.name,
                 textAlign: TextAlign.start,
                 style: textNormal(
-                    selectedIndex == index ? Colors.white : Colors.black, 17))),
+                    selectedIndex == index
+                        ? Colors.white
+                        : Theme.of(context).selectedRowColor,
+                    17))),
       ),
     );
   }

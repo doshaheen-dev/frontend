@@ -38,18 +38,21 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
                 children: [
                   Container(
                       margin: const EdgeInsets.only(
-                          top: 60.0, left: 25.0, right: 25.0),
+                          top: 60.0, left: 25.0, right: 25.0, bottom: 5.0),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Expanded(
                             child: UserData.instance.userInfo.firstName != null
                                 ? Text(
                                     'Hello ${UserData.instance.userInfo.firstName}',
-                                    style: textBold26(headingBlack),
+                                    style: textBold26(
+                                        Theme.of(context).accentColor),
                                   )
                                 : Text(
                                     'Hello Fundraiser',
-                                    style: textBold26(headingBlack),
+                                    style: textBold26(
+                                        Theme.of(context).accentColor),
                                   ),
                           ),
                           GestureDetector(

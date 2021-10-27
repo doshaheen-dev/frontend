@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:acc/utilites/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -45,7 +46,8 @@ class _WebViewContainerState extends State<WebViewContainer> {
               child: Row(
                 children: [
                   IconButton(
-                    icon: Icon(Icons.arrow_back, size: 30),
+                    icon: Icon(Icons.arrow_back_ios,
+                        size: 30, color: backButtonColor),
                     onPressed: () => {Navigator.pop(context)},
                   ),
                 ],

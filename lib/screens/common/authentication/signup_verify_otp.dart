@@ -1,4 +1,3 @@
-import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/otp_response.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/screens/fundraiser/authentication/signup_corporate_details.dart';
@@ -73,7 +72,8 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                         children: <Widget>[
                       Container(
                         child: IconButton(
-                          icon: Icon(Icons.arrow_back, size: 30),
+                          icon: Icon(Icons.arrow_back_ios,
+                              size: 30, color: backButtonColor),
                           onPressed: () => {Navigator.pop(context)},
                         ),
                       ),
@@ -85,7 +85,7 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                                 const EdgeInsets.only(top: 10.0, left: 25.0),
                             child: Text("Enter OTP",
                                 style:
-                                    textBold26(Theme.of(context).primaryColor)),
+                                    textBold26(Theme.of(context).accentColor)),
                           ),
                           Container(
                             margin: const EdgeInsets.only(top: 5.0, left: 25.0),
@@ -162,9 +162,9 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                           Container(
                               margin: const EdgeInsets.only(
                                   top: 5.0,
-                                  left: 25.0,
+                                  left: 40.0,
                                   bottom: 20,
-                                  right: 25.0),
+                                  right: 40.0),
                               child: ElevatedButton(
                                   onPressed: () {
                                     if (otpController.text.isEmpty) {

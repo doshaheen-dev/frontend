@@ -27,7 +27,8 @@ class _FundsResubmitHeaderState extends State<FundsResubmitHeader> {
               child: IconButton(
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
-                icon: Icon(Icons.arrow_back),
+                icon: Icon(Icons.arrow_back_ios,
+                    size: 30, color: backButtonColor),
                 onPressed: () => {Navigator.pop(context)},
               ),
             ),

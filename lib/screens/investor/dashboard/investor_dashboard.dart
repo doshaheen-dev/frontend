@@ -41,25 +41,24 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                 children: [
                   Container(
                       margin: const EdgeInsets.only(
-                          top: 60.0, left: 25.0, right: 25.0),
+                          top: 50.0, left: 25.0, right: 25.0, bottom: 5.0),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Expanded(
+                          Container(
                             child: (UserData.instance.userInfo.firstName ==
                                         null ||
                                     UserData.instance.userInfo.firstName == '')
-                                ? Text(
-                                    'Hello Investor',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 26.0,
-                                        fontFamily: FontFamilyMontserrat.name),
-                                  )
+                                ? Text('Hello Investor',
+                                    style: textBold26(
+                                        Theme.of(context).accentColor))
                                 : Text(
                                     'Hello ${UserData.instance.userInfo.firstName}',
-                                    style: textBold26(headingBlack),
+                                    style: textBold26(
+                                        Theme.of(context).accentColor),
                                   ),
                           ),
+                          SizedBox(width: 20),
                           GestureDetector(
                             onTap: () {
                               Navigator.of(context)

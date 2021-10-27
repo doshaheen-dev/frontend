@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:acc/constants/font_family.dart';
-import 'package:acc/screens/common/onboarding.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utils/class_navigation.dart';
 import 'package:acc/widgets/app_progressbar.dart';
@@ -54,7 +53,8 @@ class _QuickSignUpState extends State<QuickSignUp> {
                       children: <Widget>[
                         Container(
                           child: IconButton(
-                            icon: Icon(Icons.arrow_back, size: 30),
+                            icon: Icon(Icons.arrow_back_ios,
+                                size: 30, color: backButtonColor),
                             onPressed: () => {_onBackPressed()},
                           ),
                         ),
@@ -64,14 +64,8 @@ class _QuickSignUpState extends State<QuickSignUp> {
                             Container(
                               margin:
                                   const EdgeInsets.only(top: 10.0, left: 25.0),
-                              child: Text(
-                                "Register Your Email",
-                                style: TextStyle(
-                                    color: headingBlack,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 26.0,
-                                    fontFamily: FontFamilyMontserrat.name),
-                              ),
+                              child: Text("Register Your Email",
+                                  style: textBold26(Colors.black)),
                             ),
 
                             SizedBox(

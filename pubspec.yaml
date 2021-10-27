@@ -93,9 +93,10 @@ flutter:
     - assets/images/navigation/
     - assets/images/social_media/
     - assets/images/company_logo/
-    
     - assets/images/dummy/
     - assets/images/UserProfile.png
+    - assets/images/company_logo/
+    - assets/images/user_type/
     - assets/amicorp.json
 
   # An image asset can refer to one or more resolution-specific "variants", see

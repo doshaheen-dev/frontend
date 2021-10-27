@@ -201,7 +201,10 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                                     flex: 1,
                                     child: Container(
                                       margin: const EdgeInsets.only(
-                                          left: 10.0, bottom: 10, right: 25.0),
+                                          top: 5.0,
+                                          left: 10.0,
+                                          bottom: 10,
+                                          right: 25.0),
                                       child: ElevatedButton(
                                           onPressed: () {
                                             openLogoutDialog(context,

@@ -39,7 +39,11 @@ class _WelcomeInvestorState extends State<WelcomeInvestor> {
                           children: <Widget>[
                     Container(
                       child: IconButton(
-                        icon: Icon(Icons.arrow_back, size: 30),
+                        icon: Icon(
+                          Icons.arrow_back_ios,
+                          size: 30,
+                          color: backButtonColor,
+                        ),
                         onPressed: () => {_onBackPressed()},
                       ),
                     ),

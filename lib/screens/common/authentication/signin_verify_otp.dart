@@ -79,7 +79,8 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
                             children: <Widget>[
                               Container(
                                 child: IconButton(
-                                  icon: Icon(Icons.arrow_back, size: 30),
+                                  icon: Icon(Icons.arrow_back_ios,
+                                      size: 30, color: backButtonColor),
                                   onPressed: () => {Navigator.pop(context)},
                                 ),
                               ),
@@ -89,14 +90,15 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
                                     Container(
                                       margin: const EdgeInsets.only(
                                           top: 10.0, left: 25.0),
-                                       child: Text("Enter OTP",
-                                style:
-                                    textBold26(Theme.of(context).primaryColor)),
+                                      child: Text("Enter OTP",
+                                          style: textBold26(
+                                              Theme.of(context).accentColor)),
                                     ),
                                     Container(
                                       margin: const EdgeInsets.only(
                                           top: 5.0, left: 25.0, right: 25.0),
-                                      child: Text(otpSentTo,
+                                      child: Text(
+                                          "Please enter the OTP received in your mobile phone or Email ID.",
                                           style: textNormal16(textGrey)),
                                     ),
                                     SizedBox(
@@ -173,9 +175,9 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
                                     Container(
                                         margin: const EdgeInsets.only(
                                             top: 5.0,
-                                            left: 25.0,
+                                            left: 40.0,
                                             bottom: 20,
-                                            right: 25.0),
+                                            right: 40.0),
                                         child: ElevatedButton(
                                             onPressed: () {
                                               if (otpController.text.isEmpty) {
@@ -223,6 +225,7 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
   }
 
   Future<void> openHome(UserData data) {
+    print("data:- ${data.mobileNo}");
     if (data.userType == "Investor" ||
         data.userType == "investor" ||
         data.userType == "") {

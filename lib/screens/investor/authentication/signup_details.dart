@@ -230,7 +230,8 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                           children: <Widget>[
                             Container(
                               child: IconButton(
-                                icon: Icon(Icons.arrow_back, size: 30),
+                                icon: Icon(Icons.arrow_back_ios,
+                                    size: 30, color: backButtonColor),
                                 onPressed: () {
                                   Authentication.signOut();
                                   Navigator.pop(context);
@@ -243,15 +244,8 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                                   Container(
                                     margin: const EdgeInsets.only(
                                         top: 10.0, left: 25.0),
-                                    child: Text(
-                                      "Personal details here",
-                                      style: TextStyle(
-                                          color: headingBlack,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 26.0,
-                                          fontFamily:
-                                              FontFamilyMontserrat.name),
-                                    ),
+                                    child: Text("Personal details here",
+                                        style: textBold26(Colors.black)),
                                   ),
                                   SizedBox(
                                     height: 30,

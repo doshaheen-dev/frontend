@@ -72,7 +72,8 @@ class _InAppWebViewContainerState extends State<InAppWebViewContainer> {
                         IconButton(
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
-                          icon: Icon(Icons.arrow_back, size: 30),
+                          icon: Icon(Icons.arrow_back_ios,
+                              size: 30, color: backButtonColor),
                           onPressed: () => {Navigator.pop(context)},
                         ),
                       ],

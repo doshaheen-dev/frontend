@@ -208,7 +208,7 @@ class _EmailUpdateState extends State<EmailUpdate> {
                                               height: 45,
                                               alignment: Alignment.center,
                                               child: Text(
-                                                sendOtpSecret,
+                                                "Send OTP",
                                                 style: textWhiteBold16(),
                                               ))))),
                             ),

@@ -75,7 +75,8 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                         children: <Widget>[
                   Container(
                     child: IconButton(
-                      icon: Icon(Icons.arrow_back, size: 30),
+                      icon: Icon(Icons.arrow_back_ios,
+                          size: 30, color: backButtonColor),
                       onPressed: () => {Navigator.pop(context)},
                     ),
                   ),
@@ -85,14 +86,8 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                       Container(
                         margin: const EdgeInsets.only(
                             top: 10.0, left: 25.0, right: 25.0),
-                        child: Text(
-                          "Please click on your Investment Choice(s)",
-                          style: TextStyle(
-                              color: headingBlack,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 26.0,
-                              fontFamily: FontFamilyMontserrat.name),
-                        ),
+                        child: Text("Please click on your Investment Choice(s)",
+                            style: textBold26(Colors.black)),
                       ),
                       SizedBox(
                         height: 10,
@@ -253,7 +248,7 @@ class _InvestmentChoicesState extends State<InvestmentChoices> {
                   title: Text(item.description,
                       style: textNormal16(infoItemList.contains(item.name)
                           ? Colors.white
-                          : Colors.black)),
+                          : Theme.of(context).selectedRowColor)),
                 )
               ],
             ),

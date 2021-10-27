@@ -49,14 +49,8 @@ class _InvestmentLimitState extends State<InvestmentLimit> {
               Widget>[
             Container(
               margin: const EdgeInsets.only(top: 10.0, left: 25.0, right: 25.0),
-              child: Text(
-                "How much are you looking to invest?",
-                style: TextStyle(
-                    color: headingBlack,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 26.0,
-                    fontFamily: FontFamilyMontserrat.name),
-              ),
+              child: Text("How much are you looking to invest?",
+                  style: textBold26(Colors.black)),
             ),
             SizedBox(
               height: 10,

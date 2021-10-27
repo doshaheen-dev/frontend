@@ -255,7 +255,7 @@ class _MobileUpdateState extends State<MobileUpdate> {
                                               height: 45,
                                               alignment: Alignment.center,
                                               child: Text(
-                                                sendOtpSecret,
+                                                "Send OTP",
                                                 style: textWhiteBold16(),
                                               ))))),
                             ),
@@ -553,7 +553,7 @@ class _MobileUpdateState extends State<MobileUpdate> {
   }
 
   Future<void> getAllCountries() async {
-    print("Update- ${widget.mobileNumber}");
+    // print("Update- ${widget.mobileNumber}");
     final Country extractedData = await CountryService.fetchCountries();
     if (extractedData.type == "success") {
       if (extractedData.data.options.length != 0) {

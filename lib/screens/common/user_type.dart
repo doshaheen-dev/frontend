@@ -39,7 +39,8 @@ class _UserTypeState extends State<UserType> {
                 children: <Widget>[
                   Container(
                     child: IconButton(
-                      icon: Icon(Icons.arrow_back, size: 30),
+                      icon: Icon(Icons.arrow_back_ios,
+                          size: 30, color: backButtonColor),
                       onPressed: () => {Navigator.pop(context)},
                     ),
                   ),
@@ -51,11 +52,11 @@ class _UserTypeState extends State<UserType> {
                             Container(
                               color: Colors.white,
                               margin:
-                                  const EdgeInsets.only(top: 80.0, left: 25.0),
+                                  const EdgeInsets.only(top: 20.0, left: 25.0),
                               child: Text(
                                 "I am".toUpperCase(),
-                                style: textBold(
-                                    Theme.of(context).primaryColor, 26),
+                                style:
+                                    textBold(Theme.of(context).accentColor, 26),
                               ),
                             ),
                             // Container(
@@ -83,6 +84,7 @@ class _UserTypeState extends State<UserType> {
     return Column(children: [
       // INVESTOR
       InkWell(
+        splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         borderRadius: BorderRadius.circular(40),
         onTap: () {
@@ -93,41 +95,16 @@ class _UserTypeState extends State<UserType> {
           });
         },
         child: Container(
-          margin: const EdgeInsets.only(top: 50.0),
-          width: 160,
-          height: 160,
-          decoration: BoxDecoration(
-            color: selectedCategory.contains(investor)
-                ? Theme.of(context).selectedRowColor
-                : unselectedGray,
-            borderRadius: BorderRadius.all(
-              const Radius.circular(15.0),
-            ),
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/images/investor_user.png",
-                  width: 80.0,
-                  height: 80.0,
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 15),
-                  alignment: Alignment.bottomLeft,
-                  child: Text("An\nINVESTOR",
-                      style: textBold16(selectedCategory.contains(investor)
-                          ? Colors.white
-                          : Theme.of(context).selectedRowColor)),
-                )
-              ],
-            ),
-          ),
-        ),
+            margin: const EdgeInsets.only(top: 50.0),
+            width: 160,
+            height: 160,
+            child: selectedCategory.contains(investor)
+                ? Image.asset(
+                    "assets/images/user_type/acc_investor_selected.png",
+                  )
+                : Image.asset(
+                    "assets/images/user_type/acc_investor.png",
+                  )),
       ),
 
       SizedBox(
@@ -136,6 +113,7 @@ class _UserTypeState extends State<UserType> {
 
       // FUND RAISER
       InkWell(
+        splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         borderRadius: BorderRadius.circular(40),
         onTap: () {
@@ -149,37 +127,14 @@ class _UserTypeState extends State<UserType> {
             margin: const EdgeInsets.only(top: 30.0),
             width: 160,
             height: 160,
-            decoration: BoxDecoration(
-              color: selectedCategory.contains(fundraiser)
-                  ? Theme.of(context).selectedRowColor
-                  : unselectedGray,
-              borderRadius: BorderRadius.all(
-                const Radius.circular(15.0),
-              ),
-            ),
-            child: Center(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      "assets/images/fund_raiser.png",
-                      width: 80.0,
-                      height: 80.0,
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Container(
-                        margin: EdgeInsets.only(left: 15),
-                        alignment: Alignment.bottomLeft,
-                        child: Text("A\nFUND RAISER",
-                            style: textBold16(
-                                selectedCategory.contains(fundraiser)
-                                    ? Colors.white
-                                    : Theme.of(context).selectedRowColor)))
-                  ]),
-            )),
-      )
+            child: selectedCategory.contains(fundraiser)
+                ? Image.asset(
+                    "assets/images/user_type/acc_fundraiser_selected.png",
+                  )
+                : Image.asset(
+                    "assets/images/user_type/acc_fundraiser.png",
+                  )),
+      ),
     ]);
   }
 

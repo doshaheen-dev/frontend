@@ -106,7 +106,8 @@ class _SignInOTPState extends State<SignInOTP> {
                                 width: 60,
                                 height: 60,
                                 child: IconButton(
-                                  icon: Icon(Icons.arrow_back, size: 30),
+                                  icon: Icon(Icons.arrow_back_ios,
+                                      size: 30, color: backButtonColor),
                                   onPressed: () => {Navigator.pop(context)},
                                 ),
                               ),
@@ -116,9 +117,9 @@ class _SignInOTPState extends State<SignInOTP> {
                                     Container(
                                       margin: const EdgeInsets.only(
                                           top: 10.0, left: 25.0),
-                                      child: Text(loginHeader,
+                                      child: Text("Login here",
                                           style: textBold26(
-                                              Theme.of(context).primaryColor)),
+                                              Theme.of(context).accentColor)),
                                     ),
                                     Container(
                                       margin: const EdgeInsets.only(
@@ -137,9 +138,9 @@ class _SignInOTPState extends State<SignInOTP> {
                                     Container(
                                         margin: const EdgeInsets.only(
                                             top: 5.0,
-                                            left: 25.0,
+                                            left: 40.0,
                                             bottom: 20,
-                                            right: 25.0),
+                                            right: 40.0),
                                         child: ElevatedButton(
                                             onPressed: () {
                                               FocusScope.of(context)

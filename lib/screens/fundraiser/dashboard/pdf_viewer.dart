@@ -1,3 +1,4 @@
+import 'package:acc/utilites/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 
@@ -34,7 +35,8 @@ class _AppPDFViewerState extends State<AppPDFViewer> {
                 appBar: AppBar(
                   elevation: 0.0,
                   leading: IconButton(
-                    icon: Icon(Icons.arrow_back),
+                    icon: Icon(Icons.arrow_back_ios,
+                        size: 30, color: backButtonColor),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
