@@ -1,7 +1,6 @@
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/signup_request_preferences.dart';
 import 'package:acc/models/investor/hearaboutus.dart';
-import 'package:acc/utilites/app_strings.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +24,8 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
   bool _isNameVisible = false;
   bool _isNextVisible = false;
   List<String> infoItemList = [];
-  List<Options> hearAboutUsList = [];
+  //List<Options> hearAboutUsList = [];
+  List<TempFoundUsOptions> tempHearAboutUsList = [];
   String firstname = "";
   final firstNameController = TextEditingController();
 
@@ -49,12 +49,15 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
 
   @override
   void initState() {
+    // tempHearAboutUsList = createFoundUsList();
     super.initState();
-    hearAboutUsList.addAll(widget._hearAboutUs.data.options);
+    // hearAboutUsList.addAll(widget._hearAboutUs.data.options);
   }
 
   @override
   Widget build(BuildContext context) {
+    tempHearAboutUsList = createFoundUsList();
+
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
@@ -104,8 +107,8 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                               crossAxisSpacing: 10.0,
                               mainAxisSpacing: 10.0,
                               shrinkWrap: true,
-                              children: List.generate(hearAboutUsList.length,
-                                  (index) {
+                              children: List.generate(
+                                  tempHearAboutUsList.length, (index) {
                                 return _createCell(index);
                               }))),
                       Visibility(
@@ -214,12 +217,12 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
 
   InkWell _createCell(int _index) {
     return InkWell(
+      splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
-      borderRadius: BorderRadius.circular(40),
       onTap: () {
-        print(this.hearAboutUsList[_index].name);
+        print(this.tempHearAboutUsList[_index].name);
         infoItemList = [];
-        infoItemList.add(this.hearAboutUsList[_index].name);
+        infoItemList.add(this.tempHearAboutUsList[_index].name);
         setState(() {
           showNameField();
           showNextButton();
@@ -228,41 +231,61 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
       child: Container(
         width: 200,
         height: 200,
-        decoration: BoxDecoration(
-          color: infoItemList.contains(this.hearAboutUsList[_index].name)
-              ? Theme.of(context).selectedRowColor
-              : unselectedGray,
-          borderRadius: BorderRadius.all(
-            const Radius.circular(15.0),
-          ),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CachedNetworkImage(
-                height: 100.0,
-                width: 100,
-                placeholder: (context, string) => SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    )),
-                imageUrl: this.hearAboutUsList[_index].imageUrl,
-                errorWidget: (context, url, error) => Icon(Icons.error),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              Text(this.hearAboutUsList[_index].name,
-                  style: textBold16(
-                      infoItemList.contains(this.hearAboutUsList[_index].name)
-                          ? Colors.white
-                          : Theme.of(context).selectedRowColor))
-            ],
-          ),
-        ),
+        child: Container(
+            child: infoItemList.contains(this.tempHearAboutUsList[_index].name)
+                ? Image.asset(
+                    this.tempHearAboutUsList[_index].selectedImage,
+                  )
+                : Image.asset(
+                    this.tempHearAboutUsList[_index].imageUrl,
+                  )),
+        // decoration: BoxDecoration(
+        //   color: infoItemList.contains(this.tempHearAboutUsList[_index].name)
+        //       ? Theme.of(context).selectedRowColor
+        //       : unselectedGray,
+        //   borderRadius: BorderRadius.all(
+        //     const Radius.circular(15.0),
+        //   ),
+        // ),
+        // child: Center(
+        //   child: Column(
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     children: [
+        //       Container(
+        //           child: infoItemList
+        //                   .contains(this.tempHearAboutUsList[_index].name)
+        //               ? Image.asset(
+        //                   this.tempHearAboutUsList[_index].selectedImage,
+        //                 )
+        //               : Image.asset(
+        //                   this.tempHearAboutUsList[_index].imageUrl,
+        //                 )),
+        //       // CachedNetworkImage(
+        //       //   height: 100.0,
+        //       //   width: 100,
+        //       //   placeholder: (context, string) => SizedBox(
+        //       //       height: 100,
+        //       //       width: 100,
+        //       //       child: Center(
+        //       //         child: CircularProgressIndicator(),
+        //       //       )),
+        //       //   imageUrl:
+        //       //       infoItemList.contains(this.tempHearAboutUsList[_index].name)
+        //       //           ? this.tempHearAboutUsList[_index].selectedImage
+        //       //           : this.tempHearAboutUsList[_index].imageUrl,
+        //       //   errorWidget: (context, url, error) => Icon(Icons.error),
+        //       // ),
+        //       // SizedBox(
+        //       //   height: 10.0,
+        //       // ),
+        //       // Text(this.tempHearAboutUsList[_index].name,
+        //       //     style: textBold16(infoItemList
+        //       //             .contains(this.tempHearAboutUsList[_index].name)
+        //       //         ? Colors.white
+        //       //         : Theme.of(context).selectedRowColor))
+        //     ],
+        //   ),
+        // ),
       ),
     );
   }
@@ -299,5 +322,28 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
             child: child,
           );
         }));
+  }
+
+  createFoundUsList() {
+    List<TempFoundUsOptions> originalList = [
+      TempFoundUsOptions(
+          "Referral",
+          "assets/images/investor/found_us/acc_referal.png",
+          "assets/images/investor/found_us/acc_referal_selected.png"),
+      TempFoundUsOptions(
+          "Internet Browsing",
+          "assets/images/investor/found_us/acc_inet_browsing.png",
+          "assets/images/investor/found_us/acc_inet_browsing_selected.png"),
+      TempFoundUsOptions(
+          "Social Media",
+          "assets/images/investor/found_us/acc_soc_media.png",
+          "assets/images/investor/found_us/acc_soc_media_selected.png"),
+      TempFoundUsOptions(
+          "Direct Search",
+          "assets/images/investor/found_us/acc_search.png",
+          "assets/images/investor/found_us/acc_search_selected.png")
+    ];
+
+    return originalList;
   }
 }

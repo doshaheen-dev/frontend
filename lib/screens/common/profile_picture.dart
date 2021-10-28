@@ -31,6 +31,7 @@ class _ProfilePicScreenState extends State<ProfilePicScreen> {
   final double imageHeight = 100;
   var progress;
   var _imageUrl;
+  Color statusBarColor;
 
   @override
   void initState() {
@@ -40,6 +41,7 @@ class _ProfilePicScreenState extends State<ProfilePicScreen> {
 
   @override
   Widget build(BuildContext context) {
+    statusBarColor = Colors.white;
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Colors.white));
 
@@ -207,7 +209,9 @@ class _ProfilePicScreenState extends State<ProfilePicScreen> {
       appBar: AppBar(
         toolbarHeight: 0,
         elevation: 0.0,
+        backgroundColor: (statusBarColor),
       ),
+      bottomNavigationBar: BottomAppBar(),
       body: AppProgressBar(
         child: Builder(
           builder: (context) => Stack(

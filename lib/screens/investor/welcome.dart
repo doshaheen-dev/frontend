@@ -68,7 +68,7 @@ class _WelcomeInvestorState extends State<WelcomeInvestor> {
                           ),
                           Center(
                             child: Image.asset(
-                                'assets/images/investor/welcome_experience.png'),
+                                'assets/images/investor/success_investor.png'),
                           ),
                           SizedBox(
                             height: 50,

@@ -69,3 +69,15 @@ class Options {
     return data;
   }
 }
+
+class TempFoundUsOptions {
+  String name;
+  String imageUrl;
+  String selectedImage;
+
+  TempFoundUsOptions(String name, String imageUrl, String selectedImage) {
+    this.name = name;
+    this.imageUrl = imageUrl;
+    this.selectedImage = selectedImage;
+  }
+}
