@@ -42,7 +42,7 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Expanded(
+                          Container(
                             child: UserData.instance.userInfo.firstName != null
                                 ? Text(
                                     'Hello ${UserData.instance.userInfo.firstName}',
@@ -55,6 +55,7 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
                                         Theme.of(context).accentColor),
                                   ),
                           ),
+                          SizedBox(width: 20),
                           GestureDetector(
                             onTap: () {
                               Navigator.of(context)
@@ -89,21 +90,18 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
                               width: 70,
                               child: CircleAvatar(
                                 radius: bRadius,
-                                backgroundColor: Theme.of(context).primaryColor,
+                                backgroundColor: Theme.of(context).accentColor,
                                 child:
                                     (UserData.instance.userInfo.profileImage ==
                                                 null ||
                                             UserData.instance.userInfo
                                                     .profileImage ==
                                                 '')
-                                        ? ImageCircle(
-                                            borderRadius: bRadius,
-                                            image: Image.asset(
-                                              'assets/images/UserProfile.png',
-                                              width: iHeight,
-                                              height: iHeight,
-                                              fit: BoxFit.fill,
-                                            ),
+                                        ? Image.asset(
+                                            'assets/images/UserProfile.png',
+                                            height: 70,
+                                            width: 70,
+                                            fit: BoxFit.fitHeight,
                                           )
                                         : ImageCircle(
                                             borderRadius: bRadius,
@@ -145,7 +143,7 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
       BottomNavigationBarItem(
         icon: Image.asset(
           'assets/images/dashboard/nav_home.png',
-          height: 80.0,
+          height: 60.0,
         ),
         tooltip: "Home",
         label: "Home",
@@ -153,14 +151,14 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
       BottomNavigationBarItem(
         icon: Image.asset(
           'assets/images/dashboard/nav_faq.png',
-          height: 80.0,
+          width: 60.0,
         ),
         tooltip: "FAQ",
         label: "FAQ",
       ),
       BottomNavigationBarItem(
         icon: Image.asset('assets/images/dashboard/nav_profile.png',
-            height: 80.0),
+            height: 60.0),
         tooltip: "Profile",
         label: "Profile",
       ),

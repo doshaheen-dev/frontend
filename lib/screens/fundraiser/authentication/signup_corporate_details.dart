@@ -166,8 +166,8 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                         children: [
                                           Text(
                                             "Complete Registration",
-                                            style: textBold26(Theme.of(context)
-                                                .selectedRowColor),
+                                            style: textBold26(
+                                                Theme.of(context).accentColor),
                                           ),
                                           SizedBox(
                                             height: 5,

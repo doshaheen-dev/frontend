@@ -65,7 +65,8 @@ class _QuickSignUpState extends State<QuickSignUp> {
                               margin:
                                   const EdgeInsets.only(top: 10.0, left: 25.0),
                               child: Text("Register Your Email",
-                                  style: textBold26(Colors.black)),
+                                  style: textBold26(
+                                      Theme.of(context).accentColor)),
                             ),
 
                             SizedBox(

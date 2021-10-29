@@ -24,7 +24,7 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
   bool _isNameVisible = false;
   bool _isNextVisible = false;
   List<String> infoItemList = [];
-  //List<Options> hearAboutUsList = [];
+  List<Options> hearAboutUsList = [];
   List<TempFoundUsOptions> tempHearAboutUsList = [];
   String firstname = "";
   final firstNameController = TextEditingController();
@@ -51,7 +51,7 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
   void initState() {
     // tempHearAboutUsList = createFoundUsList();
     super.initState();
-    // hearAboutUsList.addAll(widget._hearAboutUs.data.options);
+    hearAboutUsList.addAll(widget._hearAboutUs.data.options);
   }
 
   @override
@@ -107,8 +107,8 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                               crossAxisSpacing: 10.0,
                               mainAxisSpacing: 10.0,
                               shrinkWrap: true,
-                              children: List.generate(
-                                  tempHearAboutUsList.length, (index) {
+                              children: List.generate(hearAboutUsList.length,
+                                  (index) {
                                 return _createCell(index);
                               }))),
                       Visibility(
@@ -153,6 +153,15 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                                     borderRadius: BorderRadius.circular(40),
                                     onTap: () {
                                       // on click
+                                      if (infoItemList.contains("Referral") &&
+                                          _isNameVisible == true) {
+                                        if (firstNameController.text.isEmpty) {
+                                          showSnackBar(context,
+                                              "Please Enter Referral Name");
+                                          return;
+                                        }
+                                      }
+
                                       final requestModelInstance =
                                           InvestorSignupPreferences.instance;
                                       if (infoItemList.isNotEmpty) {
@@ -220,9 +229,9 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () {
-        print(this.tempHearAboutUsList[_index].name);
+        print(this.hearAboutUsList[_index].name);
         infoItemList = [];
-        infoItemList.add(this.tempHearAboutUsList[_index].name);
+        infoItemList.add(this.hearAboutUsList[_index].name);
         setState(() {
           showNameField();
           showNextButton();
@@ -231,61 +240,51 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
       child: Container(
         width: 200,
         height: 200,
-        child: Container(
-            child: infoItemList.contains(this.tempHearAboutUsList[_index].name)
-                ? Image.asset(
-                    this.tempHearAboutUsList[_index].selectedImage,
-                  )
-                : Image.asset(
-                    this.tempHearAboutUsList[_index].imageUrl,
-                  )),
+        // child: Container(
+        //     child: infoItemList.contains(this.tempHearAboutUsList[_index].name)
+        //         ? Image.asset(
+        //             this.tempHearAboutUsList[_index].selectedImage,
+        //           )
+        //         : Image.asset(
+        //             this.tempHearAboutUsList[_index].imageUrl,
+        //           )),
+
         // decoration: BoxDecoration(
-        //   color: infoItemList.contains(this.tempHearAboutUsList[_index].name)
+        //   color: infoItemList.contains(this.hearAboutUsList[_index].name)
         //       ? Theme.of(context).selectedRowColor
         //       : unselectedGray,
         //   borderRadius: BorderRadius.all(
         //     const Radius.circular(15.0),
         //   ),
         // ),
-        // child: Center(
-        //   child: Column(
-        //     mainAxisAlignment: MainAxisAlignment.center,
-        //     children: [
-        //       Container(
-        //           child: infoItemList
-        //                   .contains(this.tempHearAboutUsList[_index].name)
-        //               ? Image.asset(
-        //                   this.tempHearAboutUsList[_index].selectedImage,
-        //                 )
-        //               : Image.asset(
-        //                   this.tempHearAboutUsList[_index].imageUrl,
-        //                 )),
-        //       // CachedNetworkImage(
-        //       //   height: 100.0,
-        //       //   width: 100,
-        //       //   placeholder: (context, string) => SizedBox(
-        //       //       height: 100,
-        //       //       width: 100,
-        //       //       child: Center(
-        //       //         child: CircularProgressIndicator(),
-        //       //       )),
-        //       //   imageUrl:
-        //       //       infoItemList.contains(this.tempHearAboutUsList[_index].name)
-        //       //           ? this.tempHearAboutUsList[_index].selectedImage
-        //       //           : this.tempHearAboutUsList[_index].imageUrl,
-        //       //   errorWidget: (context, url, error) => Icon(Icons.error),
-        //       // ),
-        //       // SizedBox(
-        //       //   height: 10.0,
-        //       // ),
-        //       // Text(this.tempHearAboutUsList[_index].name,
-        //       //     style: textBold16(infoItemList
-        //       //             .contains(this.tempHearAboutUsList[_index].name)
-        //       //         ? Colors.white
-        //       //         : Theme.of(context).selectedRowColor))
-        //     ],
-        //   ),
-        // ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CachedNetworkImage(
+                placeholder: (context, string) => SizedBox(
+                    height: 100,
+                    width: 100,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    )),
+                imageUrl:
+                    infoItemList.contains(this.hearAboutUsList[_index].name)
+                        ? this.hearAboutUsList[_index].imageUrlSelected
+                        : this.hearAboutUsList[_index].imageUrl,
+                errorWidget: (context, url, error) => Icon(Icons.error),
+              ),
+              // SizedBox(
+              //   height: 10.0,
+              // ),
+              // Text(this.hearAboutUsList[_index].name,
+              //     style: textBold16(
+              //         infoItemList.contains(this.hearAboutUsList[_index].name)
+              //             ? Colors.white
+              //             : Theme.of(context).selectedRowColor))
+            ],
+          ),
+        ),
       ),
     );
   }

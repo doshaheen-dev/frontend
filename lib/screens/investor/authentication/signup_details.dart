@@ -245,7 +245,8 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                                     margin: const EdgeInsets.only(
                                         top: 10.0, left: 25.0),
                                     child: Text("Personal details here",
-                                        style: textBold26(Colors.black)),
+                                        style: textBold26(
+                                            Theme.of(context).accentColor)),
                                   ),
                                   SizedBox(
                                     height: 30,

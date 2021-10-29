@@ -86,11 +86,11 @@ class _OnBoardingState extends State<OnBoarding> {
                                       Container(
                                           child: Image.asset(
                                               "assets/images/onboarding/acc_home1.png")),
-                                      SizedBox(height: 30),
+                                      SizedBox(height: 20),
                                       Container(
                                           child: Image.asset(
                                               "assets/images/onboarding/acc_home2.png")),
-                                      SizedBox(height: 30),
+                                      SizedBox(height: 20),
                                       Container(
                                           child: Image.asset(
                                               "assets/images/onboarding/acc_home3.png")),
@@ -99,86 +99,76 @@ class _OnBoardingState extends State<OnBoarding> {
                                 ],
                               )
                             ]))),
-                    Expanded(
-                        flex: 1,
-                        child: Column(
-                          children: [
-                            Divider(
-                              color: Colors.white,
-                              thickness: 1.0,
-                            ),
-                            // Bottom view
-                            Container(
-                                // color: kDarkGrey,
-                                height: 200,
-                                child: Column(children: [
-                                  InkWell(
-                                      borderRadius: BorderRadius.circular(40),
-                                      onTap: () {
-                                        // Open  view
-                                        Navigator.of(context).push(
-                                            PageRouteBuilder(
-                                                pageBuilder: (context,
-                                                    animation,
-                                                    anotherAnimation) {
-                                                  return UserType();
-                                                },
-                                                transitionDuration: Duration(
-                                                    milliseconds: 2000),
-                                                transitionsBuilder: (context,
-                                                    animation,
-                                                    anotherAnimation,
-                                                    child) {
-                                                  animation = CurvedAnimation(
-                                                      curve: Curves
-                                                          .fastLinearToSlowEaseIn,
-                                                      parent: animation);
-                                                  return SlideTransition(
-                                                    position: Tween(
-                                                            begin: Offset(
-                                                                1.0, 0.0),
-                                                            end: Offset(
-                                                                0.0, 0.0))
-                                                        .animate(animation),
-                                                    child: child,
-                                                  );
-                                                }));
-                                      },
-                                      child: Container(
-                                          margin: const EdgeInsets.only(
-                                              top: 20.0,
-                                              left: 25.0,
-                                              right: 25.0),
-                                          height: 60,
-                                          decoration: appColorButton(context),
-                                          child: Center(
-                                              child: Text(
-                                            "Join our community",
-                                            style: textWhiteBold18(),
-                                          )))),
-                                  Container(
-                                      margin: const EdgeInsets.only(top: 20.0),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        "Already a member? ",
-                                        style: textNormal16(Colors.white),
-                                      )),
-                                  Container(
-                                    margin: const EdgeInsets.only(
-                                        bottom: 20.0, top: 10.0),
-                                    child: InkWell(
-                                      onTap: () {
-                                        openSignIn(context);
-                                      },
-                                      child: Text(
-                                        'Sign-In',
-                                        style: textBold18(Colors.white),
-                                      ),
-                                    ),
-                                  )
-                                ]))
-                          ],
-                        ))
+                    Column(
+                      children: [
+                        Divider(
+                          color: Colors.white,
+                          thickness: 1.0,
+                        ),
+                        // Bottom view
+                        Container(
+                            // color: kDarkGrey,
+                            height: 200,
+                            child: Column(children: [
+                              InkWell(
+                                  borderRadius: BorderRadius.circular(40),
+                                  onTap: () {
+                                    // Open  view
+                                    Navigator.of(context).push(PageRouteBuilder(
+                                        pageBuilder: (context, animation,
+                                            anotherAnimation) {
+                                          return UserType();
+                                        },
+                                        transitionDuration:
+                                            Duration(milliseconds: 2000),
+                                        transitionsBuilder: (context, animation,
+                                            anotherAnimation, child) {
+                                          animation = CurvedAnimation(
+                                              curve:
+                                                  Curves.fastLinearToSlowEaseIn,
+                                              parent: animation);
+                                          return SlideTransition(
+                                            position: Tween(
+                                                    begin: Offset(1.0, 0.0),
+                                                    end: Offset(0.0, 0.0))
+                                                .animate(animation),
+                                            child: child,
+                                          );
+                                        }));
+                                  },
+                                  child: Container(
+                                      margin: const EdgeInsets.only(
+                                          top: 20.0, left: 25.0, right: 25.0),
+                                      height: 60,
+                                      decoration: appColorButton(context),
+                                      child: Center(
+                                          child: Text(
+                                        "Join our community",
+                                        style: textWhiteBold18(),
+                                      )))),
+                              Container(
+                                  margin: const EdgeInsets.only(top: 20.0),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Already a member? ",
+                                    style: textNormal16(Colors.white),
+                                  )),
+                              Container(
+                                margin: const EdgeInsets.only(
+                                    bottom: 20.0, top: 10.0),
+                                child: InkWell(
+                                  onTap: () {
+                                    openSignIn(context);
+                                  },
+                                  child: Text(
+                                    'Sign-In',
+                                    style: textBold18(Colors.white),
+                                  ),
+                                ),
+                              )
+                            ]))
+                      ],
+                    )
                   ])
                 ])))));
   }
