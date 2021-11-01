@@ -106,16 +106,50 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                                 margin: const EdgeInsets.only(
                                     left: 25.0, right: 25.0),
                                 child: MediaQuery.removePadding(
-                                    context: context,
-                                    child: GridView.count(
-                                        crossAxisCount: 2,
-                                        crossAxisSpacing: 0.0,
-                                        mainAxisSpacing: 0.0,
-                                        shrinkWrap: true,
-                                        children: List.generate(
-                                            hearAboutUsList.length, (index) {
-                                          return _createCell(index);
-                                        })))),
+                                  removeBottom: true,
+                                  context: context,
+                                  child:
+                                      // GridView.builder(
+                                      //   shrinkWrap: true,
+                                      //   gridDelegate:
+                                      //       SliverGridDelegateWithFixedCrossAxisCount(
+                                      //     crossAxisCount: 2,
+                                      //     childAspectRatio:
+                                      //         (cardWidth / cardHeight),
+                                      //     // childAspectRatio: MediaQuery.of(context)
+                                      //     //         .size
+                                      //     //         .width /
+                                      //     //     (MediaQuery.of(context).size.height /
+                                      //     //         2),
+                                      //     mainAxisSpacing: 0.0,
+                                      //     crossAxisSpacing: 0.0,
+                                      //   ),
+                                      //   itemCount: hearAboutUsList.length,
+                                      //   itemBuilder: (context, index) {
+                                      //     return _createCell(index);
+                                      //   },
+                                      // ),
+                                      GridView.count(
+                                          //   padding: EdgeInsets.zero,
+                                          crossAxisCount: 2,
+                                          mainAxisSpacing: 1.0,
+                                          crossAxisSpacing: 1.0,
+                                          // childAspectRatio:
+                                          //     MediaQuery.of(context)
+                                          //             .size
+                                          //             .width /
+                                          //         ((MediaQuery.of(context)
+                                          //                     .size
+                                          //                     .height -
+                                          //                 36) /
+                                          //             2.1),
+                                          shrinkWrap: true,
+                                          children: List.generate(
+                                              hearAboutUsList.length, (index) {
+                                            return _createCell(index);
+                                          })),
+                                )),
+                            SizedBox(height: 25),
                             Visibility(
                               visible: _isNameVisible,
                               child: Column(
@@ -234,27 +268,17 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
           showNextButton();
         });
       },
-      child: Container(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CachedNetworkImage(
-                placeholder: (context, string) => SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    )),
-                imageUrl:
-                    infoItemList.contains(this.hearAboutUsList[_index].name)
-                        ? this.hearAboutUsList[_index].imageUrlSelected
-                        : this.hearAboutUsList[_index].imageUrl,
-                errorWidget: (context, url, error) => Icon(Icons.error),
-              ),
-            ],
-          ),
-        ),
+      child: CachedNetworkImage(
+        placeholder: (context, string) => SizedBox(
+            height: 50,
+            width: 50,
+            child: Center(
+              child: CircularProgressIndicator(),
+            )),
+        imageUrl: infoItemList.contains(this.hearAboutUsList[_index].name)
+            ? this.hearAboutUsList[_index].imageUrlSelected
+            : this.hearAboutUsList[_index].imageUrl,
+        errorWidget: (context, url, error) => Icon(Icons.error),
       ),
     );
   }

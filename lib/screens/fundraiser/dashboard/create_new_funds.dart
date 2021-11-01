@@ -106,11 +106,14 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                       },
                     ),
                   ),
+                  SizedBox(
+                    height: 40,
+                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                        margin: const EdgeInsets.only(top: 10.0, left: 25.0),
+                        margin: const EdgeInsets.only(left: 25.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -126,7 +129,7 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                         ),
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 15,
                       ),
                       Container(
                         margin: const EdgeInsets.only(

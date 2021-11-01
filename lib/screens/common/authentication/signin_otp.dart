@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/otp_response.dart';
 import 'package:acc/models/local_countries.dart';
@@ -85,6 +87,9 @@ class _SignInOTPState extends State<SignInOTP> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
+    if (Platform.isAndroid) {
+      SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    }
     return MediaQuery(
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
         child: Scaffold(

@@ -87,6 +87,9 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
                           onPressed: () => {Navigator.pop(context)},
                         ),
                       ),
+                      SizedBox(
+                        height: 40,
+                      ),
                       Container(
                         margin: const EdgeInsets.only(left: 25.0, right: 25.0),
                         child: Column(

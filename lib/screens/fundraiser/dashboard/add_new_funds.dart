@@ -56,18 +56,21 @@ class _AddNewFundsState extends State<AddNewFunds> {
                       onPressed: () => {Navigator.pop(context)},
                     ),
                   ),
+                  SizedBox(
+                    height: 40,
+                  ),
                   Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Container(
-                          margin: const EdgeInsets.only(
-                              top: 10.0, left: 25.0, right: 25.0),
+                          margin:
+                              const EdgeInsets.only(left: 25.0, right: 25.0),
                           child: Text("Choose your Product",
                               style: textBold(headingBlack, 20.0)),
                         ),
                         Container(
                           margin: const EdgeInsets.only(
-                              top: 10.0, left: 25.0, right: 25.0),
+                              top: 5.0, left: 25.0, right: 25.0),
                           child: Text(
                               "Select the products you want to raise funds for.",
                               style: textNormal(textGrey, 17.0)),
@@ -76,8 +79,8 @@ class _AddNewFundsState extends State<AddNewFunds> {
                           height: 10,
                         ),
                         Container(
-                            margin: const EdgeInsets.only(
-                                top: 10.0, left: 25.0, right: 25.0),
+                            margin:
+                                const EdgeInsets.only(left: 25.0, right: 25.0),
                             child: FutureBuilder(
                                 future: _futureFundSlots,
                                 builder: (ctx, dataSnapshot) {

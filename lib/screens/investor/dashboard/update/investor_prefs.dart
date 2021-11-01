@@ -155,41 +155,47 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          margin: EdgeInsets.only(top: 30.0, left: 10.0),
-          child: IconButton(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            icon: Icon(Icons.arrow_back_ios, size: 30, color: backButtonColor),
-            onPressed: () => {Navigator.pop(context)},
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              margin: EdgeInsets.only(top: 40.0, left: 10.0),
+              child: IconButton(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                icon: Icon(Icons.arrow_back_ios,
+                    size: 30, color: backButtonColor),
+                onPressed: () => {Navigator.pop(context)},
+              ),
+            ),
+            Spacer(),
+            Container(
+              margin: EdgeInsets.only(top: 40.0),
+              child: (UserData.instance.userInfo.firstName == null ||
+                      UserData.instance.userInfo.firstName == '')
+                  ? Text('Hello Investor',
+                      style: textBold26(Theme.of(context).accentColor))
+                  : Text(
+                      'Hello ${UserData.instance.userInfo.firstName}',
+                      style: textBold26(Theme.of(context).accentColor),
+                    ),
+            ),
+            SizedBox(width: 10),
+            Container(
+              margin: EdgeInsets.only(top: 40.0, right: 20),
+              child: openProfilePicture(context),
+            )
+          ],
         ),
         Container(
           margin: EdgeInsets.only(
+            top: 30.0,
             right: 25.0,
             left: 25.0,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    child: (UserData.instance.userInfo.firstName == null ||
-                            UserData.instance.userInfo.firstName == '')
-                        ? Text('Hello Investor',
-                            style: textBold26(Theme.of(context).accentColor))
-                        : Text(
-                            'Hello ${UserData.instance.userInfo.firstName}',
-                            style: textBold26(Theme.of(context).accentColor),
-                          ),
-                  ),
-                  SizedBox(width: 10),
-                  openProfilePicture(context),
-                ],
-              ),
-              SizedBox(height: 10.0),
               Text(
                 "You can edit your preferences here",
                 style: textNormal18(headingBlack),
