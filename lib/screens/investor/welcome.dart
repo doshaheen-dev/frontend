@@ -48,17 +48,18 @@ class _WelcomeInvestorState extends State<WelcomeInvestor> {
                       ),
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 40,
                     ),
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Container(
                             alignment: Alignment.center,
-                            margin: const EdgeInsets.only(
-                                top: 10.0, left: 25.0, right: 25.0),
+                            margin:
+                                const EdgeInsets.only(left: 25.0, right: 25.0),
                             child: Text(
-                              welcomeInvestor.toUpperCase(),
+                              "Welcome to\nAmicorp\nCapital Connect"
+                                  .toUpperCase(),
                               textAlign: TextAlign.center,
                               style: textBold26(headingBlack),
                             ),
@@ -76,7 +77,8 @@ class _WelcomeInvestorState extends State<WelcomeInvestor> {
                           Container(
                             margin: const EdgeInsets.only(
                                 top: 10.0, left: 25.0, right: 25.0),
-                            child: Text(welcomeInvestorBody,
+                            child: Text(
+                                "To give you the best possible\nexperience we need to find out a bit\nmore about you.This will take less than a minute.",
                                 textAlign: TextAlign.center,
                                 style: textNormal16(textGrey)),
                           ),

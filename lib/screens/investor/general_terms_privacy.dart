@@ -60,12 +60,15 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                               onPressed: () => {Navigator.pop(context)},
                             ),
                           ),
+                          SizedBox(
+                            height: 40,
+                          ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Container(
                                 margin: const EdgeInsets.only(
-                                    top: 10.0, left: 25.0, right: 25.0),
+                                    left: 25.0, right: 25.0),
                                 child: Text(
                                   "Please accept our T&C, Privacy policy below",
                                   style: TextStyle(

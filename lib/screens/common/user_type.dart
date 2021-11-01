@@ -44,6 +44,9 @@ class _UserTypeState extends State<UserType> {
                       onPressed: () => {Navigator.pop(context)},
                     ),
                   ),
+                  SizedBox(
+                    height: 40,
+                  ),
                   Material(
                       color: Colors.white,
                       child: Column(
@@ -51,12 +54,11 @@ class _UserTypeState extends State<UserType> {
                           children: <Widget>[
                             Container(
                               color: Colors.white,
-                              margin:
-                                  const EdgeInsets.only(top: 20.0, left: 25.0),
+                              margin: const EdgeInsets.only(left: 25.0),
                               child: Text(
                                 "I am".toUpperCase(),
                                 style:
-                                    textBold(Theme.of(context).accentColor, 26),
+                                    textBold(Theme.of(context).accentColor, 30),
                               ),
                             ),
                             // Container(
@@ -95,9 +97,9 @@ class _UserTypeState extends State<UserType> {
           });
         },
         child: Container(
-            margin: const EdgeInsets.only(top: 50.0),
-            width: 160,
-            height: 160,
+            margin: const EdgeInsets.only(top: 50.0, left: 30.0, right: 30.0),
+            // width: 160,
+            // height: 160,
             child: selectedCategory.contains(investor)
                 ? Image.asset(
                     "assets/images/user_type/acc_investor_selected.png",
@@ -124,9 +126,9 @@ class _UserTypeState extends State<UserType> {
           });
         },
         child: Container(
-            margin: const EdgeInsets.only(top: 30.0),
-            width: 160,
-            height: 160,
+            margin: const EdgeInsets.only(top: 10.0, left: 35.0, right: 35.0),
+            // width: 160,
+            // height: 160,
             child: selectedCategory.contains(fundraiser)
                 ? Image.asset(
                     "assets/images/user_type/acc_fundraiser_selected.png",

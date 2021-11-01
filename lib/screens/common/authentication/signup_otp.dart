@@ -116,12 +116,14 @@ class _SignUpOTPState extends State<SignUpOTP> {
                             size: 30, color: backButtonColor),
                         onPressed: () => {Navigator.of(context).maybePop()},
                       ),
+                      SizedBox(
+                        height: 40,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Container(
-                            margin:
-                                const EdgeInsets.only(top: 10.0, left: 25.0),
+                            margin: const EdgeInsets.only(left: 25.0),
                             child: Text(signUpHeader,
                                 style:
                                     textBold26(Theme.of(context).accentColor)),

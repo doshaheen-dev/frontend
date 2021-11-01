@@ -77,12 +77,14 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                           onPressed: () => {Navigator.pop(context)},
                         ),
                       ),
+                      SizedBox(
+                        height: 40,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Container(
-                            margin:
-                                const EdgeInsets.only(top: 10.0, left: 25.0),
+                            margin: const EdgeInsets.only(left: 25.0),
                             child: Text("Enter OTP",
                                 style:
                                     textBold26(Theme.of(context).accentColor)),
@@ -94,12 +96,12 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                                 style: textNormal16(textGrey)),
                           ),
                           SizedBox(
-                            height: 25,
+                            height: 10,
                           ),
                           Container(
                             width: MediaQuery.of(context).size.width,
                             margin: const EdgeInsets.only(
-                                top: 5.0, left: 40.0, bottom: 20, right: 40.0),
+                                top: 5.0, left: 40.0, right: 40.0),
                             child: PinCodeTextField(
                               controller: otpController,
                               appContext: context,

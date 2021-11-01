@@ -238,26 +238,25 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                                 },
                               ),
                             ),
+                            SizedBox(
+                              height: 40.0,
+                            ),
                             Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Container(
-                                    margin: const EdgeInsets.only(
-                                        top: 10.0, left: 25.0),
+                                    margin: const EdgeInsets.only(left: 25.0),
                                     child: Text("Personal details here",
                                         style: textBold26(
                                             Theme.of(context).accentColor)),
                                   ),
                                   SizedBox(
-                                    height: 30,
+                                    height: 20,
                                   ),
 
                                   Container(
                                     margin: const EdgeInsets.only(
-                                        top: 5.0,
-                                        left: 25.0,
-                                        bottom: 20,
-                                        right: 25.0),
+                                        left: 25.0, bottom: 20, right: 25.0),
                                     decoration: customDecoration(),
                                     child: TextField(
                                       style: _setTextFieldStyle(),
@@ -351,7 +350,7 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                                     margin: const EdgeInsets.only(
                                         top: 5.0,
                                         left: 25.0,
-                                        bottom: 20,
+                                        bottom: 20.0,
                                         right: 25.0),
                                     decoration: customDecoration(),
                                     child: TextField(
@@ -364,21 +363,19 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                                   ),
                                   Container(
                                     margin: const EdgeInsets.only(
-                                        top: 20.0, left: 25.0, right: 25.0),
+                                        top: 5.0, left: 25.0, right: 25.0),
                                     child: MobileUpdate(widget.mobileNumber,
                                         null, null, null, false),
                                   ),
 
                                   SizedBox(
-                                    height: 50,
+                                    height: 20,
                                   ),
                                   //NEXT BUTTON
                                   Container(
+                                      alignment: Alignment.centerRight,
                                       margin: const EdgeInsets.only(
-                                          top: 5.0,
-                                          left: 25.0,
-                                          bottom: 20,
-                                          right: 25.0),
+                                          top: 5.0, bottom: 20, right: 25.0),
                                       child: InkWell(
                                         borderRadius: BorderRadius.circular(40),
                                         onTap: () {
@@ -430,9 +427,11 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                                           );
                                         },
                                         child: Container(
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          height: 60,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              3,
+                                          height: 50,
                                           decoration: appColorButton(context),
                                           child: Center(
                                               child: Text(

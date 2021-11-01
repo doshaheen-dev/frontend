@@ -84,12 +84,14 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
                                   onPressed: () => {Navigator.pop(context)},
                                 ),
                               ),
+                              SizedBox(
+                                height: 40,
+                              ),
                               Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Container(
-                                      margin: const EdgeInsets.only(
-                                          top: 10.0, left: 25.0),
+                                      margin: const EdgeInsets.only(left: 25.0),
                                       child: Text("Enter OTP",
                                           style: textBold26(
                                               Theme.of(context).accentColor)),
@@ -151,7 +153,7 @@ class _SignInVerifyOTPState extends State<SignInVerifyOTP> {
                                                     text: 'Resend OTP',
                                                     style: textNormal14(
                                                         Theme.of(context)
-                                                            .primaryColor),
+                                                            .accentColor),
                                                     recognizer:
                                                         TapGestureRecognizer()
                                                           ..onTap = () {

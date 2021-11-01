@@ -83,130 +83,127 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                       onPressed: () => {Navigator.pop(context)},
                     ),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        alignment: Alignment.center,
-                        margin: const EdgeInsets.only(
-                            top: 10.0, left: 25.0, right: 25.0),
-                        child: Text(
-                          "Where did you\nfind us".toUpperCase(),
-                          textAlign: TextAlign.center,
-                          style: textBold26(headingBlack),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                          margin: const EdgeInsets.only(
-                              top: 30.0, left: 25.0, right: 25.0),
-                          child: GridView.count(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 10.0,
-                              mainAxisSpacing: 10.0,
-                              shrinkWrap: true,
-                              children: List.generate(hearAboutUsList.length,
-                                  (index) {
-                                return _createCell(index);
-                              }))),
-                      Visibility(
-                        visible: _isNameVisible,
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(
-                                  top: 5.0,
-                                  left: 25.0,
-                                  bottom: 20,
-                                  right: 25.0),
-                              decoration: customDecoration(),
-                              child: TextField(
-                                style: _setTextFieldStyle(),
-                                controller: firstNameController,
-                                onChanged: (value) => {firstname = value},
-                                decoration: _setTextFieldDecoration(
-                                    "Name of the person who referred you"),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Visibility(
-                          visible: _isNextVisible,
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                  margin: const EdgeInsets.only(
-                                      top: 5.0,
-                                      left: 25.0,
-                                      bottom: 20,
-                                      right: 25.0),
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(40),
-                                    onTap: () {
-                                      // on click
-                                      if (infoItemList.contains("Referral") &&
-                                          _isNameVisible == true) {
-                                        if (firstNameController.text.isEmpty) {
-                                          showSnackBar(context,
-                                              "Please Enter Referral Name");
-                                          return;
-                                        }
-                                      }
-
-                                      final requestModelInstance =
-                                          InvestorSignupPreferences.instance;
-                                      if (infoItemList.isNotEmpty) {
-                                        requestModelInstance.hearAboutUs =
-                                            infoItemList.first;
-                                      }
-                                      if (firstNameController.text.isNotEmpty) {
-                                        requestModelInstance.referralName =
-                                            firstNameController.text.trim();
-                                      }
-                                      openInvestmentLimit();
-                                    },
-                                    child: Container(
-                                      margin:
-                                          EdgeInsets.only(left: 50, right: 50),
-                                      //width: MediaQuery.of(context).size.width,
-                                      height: 60,
-                                      decoration: appColorButton(context),
-                                      child: Center(
-                                          child: Text(
-                                        "Next",
-                                        style: TextStyle(
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white),
-                                      )),
-                                    ),
-                                  )),
-                            ],
-                          ))
-                    ],
+                  SizedBox(
+                    height: 40,
                   ),
+                  Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "Where did you\nfind us".toUpperCase(),
+                      textAlign: TextAlign.center,
+                      style: textBold26(headingBlack),
+                    ),
+                  ),
+                  Container(
+                      height: MediaQuery.of(context).size.height,
+                      //color: Colors.amber,
+                      child: Column(
+                          // crossAxisAlignment: CrossAxisAlignment.center,
+                          // mainAxisSize: MainAxisSize.max,
+                          // mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                                margin: const EdgeInsets.only(
+                                    left: 25.0, right: 25.0),
+                                child: MediaQuery.removePadding(
+                                    context: context,
+                                    child: GridView.count(
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: 0.0,
+                                        mainAxisSpacing: 0.0,
+                                        shrinkWrap: true,
+                                        children: List.generate(
+                                            hearAboutUsList.length, (index) {
+                                          return _createCell(index);
+                                        })))),
+                            Visibility(
+                              visible: _isNameVisible,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        left: 25.0, bottom: 5, right: 25.0),
+                                    decoration: customDecoration(),
+                                    child: TextField(
+                                      style: textNormal18(Colors.black),
+                                      controller: firstNameController,
+                                      onChanged: (value) => {firstname = value},
+                                      decoration: _setTextFieldDecoration(
+                                          "Name of the person who referred you"),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Visibility(
+                                visible: _isNextVisible,
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                        margin: const EdgeInsets.only(
+                                            top: 5.0,
+                                            left: 25.0,
+                                            bottom: 20,
+                                            right: 25.0),
+                                        child: InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(40),
+                                          onTap: () {
+                                            // on click
+                                            if (infoItemList
+                                                    .contains("Referral") &&
+                                                _isNameVisible == true) {
+                                              if (firstNameController
+                                                  .text.isEmpty) {
+                                                showSnackBar(context,
+                                                    "Please Enter Referral Name");
+                                                return;
+                                              }
+                                            }
+
+                                            final requestModelInstance =
+                                                InvestorSignupPreferences
+                                                    .instance;
+                                            if (infoItemList.isNotEmpty) {
+                                              requestModelInstance.hearAboutUs =
+                                                  infoItemList.first;
+                                            }
+                                            if (firstNameController
+                                                .text.isNotEmpty) {
+                                              requestModelInstance
+                                                      .referralName =
+                                                  firstNameController.text
+                                                      .trim();
+                                            }
+                                            openInvestmentLimit();
+                                          },
+                                          child: Container(
+                                            margin: EdgeInsets.only(
+                                                left: 50, right: 50),
+                                            //width: MediaQuery.of(context).size.width,
+                                            height: 60,
+                                            decoration: appColorButton(context),
+                                            child: Center(
+                                                child: Text(
+                                              "Next",
+                                              style: TextStyle(
+                                                  fontSize: 18.0,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white),
+                                            )),
+                                          ),
+                                        )),
+                                  ],
+                                ))
+                          ])),
                 ],
               ),
             ),
           ),
         ));
-  }
-
-  TextStyle _setTextFieldStyle() {
-    return TextStyle(
-        color: Colors.black,
-        fontWeight: FontWeight.normal,
-        fontSize: 18.0,
-        fontFamily: FontFamilyMontserrat.name);
   }
 
   InputDecoration _setTextFieldDecoration(_text) {
@@ -238,33 +235,14 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
         });
       },
       child: Container(
-        width: 200,
-        height: 200,
-        // child: Container(
-        //     child: infoItemList.contains(this.tempHearAboutUsList[_index].name)
-        //         ? Image.asset(
-        //             this.tempHearAboutUsList[_index].selectedImage,
-        //           )
-        //         : Image.asset(
-        //             this.tempHearAboutUsList[_index].imageUrl,
-        //           )),
-
-        // decoration: BoxDecoration(
-        //   color: infoItemList.contains(this.hearAboutUsList[_index].name)
-        //       ? Theme.of(context).selectedRowColor
-        //       : unselectedGray,
-        //   borderRadius: BorderRadius.all(
-        //     const Radius.circular(15.0),
-        //   ),
-        // ),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CachedNetworkImage(
                 placeholder: (context, string) => SizedBox(
-                    height: 100,
-                    width: 100,
+                    height: 50,
+                    width: 50,
                     child: Center(
                       child: CircularProgressIndicator(),
                     )),
@@ -274,14 +252,6 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                         : this.hearAboutUsList[_index].imageUrl,
                 errorWidget: (context, url, error) => Icon(Icons.error),
               ),
-              // SizedBox(
-              //   height: 10.0,
-              // ),
-              // Text(this.hearAboutUsList[_index].name,
-              //     style: textBold16(
-              //         infoItemList.contains(this.hearAboutUsList[_index].name)
-              //             ? Colors.white
-              //             : Theme.of(context).selectedRowColor))
             ],
           ),
         ),

@@ -111,12 +111,14 @@ class _SignInOTPState extends State<SignInOTP> {
                                   onPressed: () => {Navigator.pop(context)},
                                 ),
                               ),
+                              SizedBox(
+                                height: 40,
+                              ),
                               Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Container(
-                                      margin: const EdgeInsets.only(
-                                          top: 10.0, left: 25.0),
+                                      margin: const EdgeInsets.only(left: 25.0),
                                       child: Text("Login here",
                                           style: textBold26(
                                               Theme.of(context).accentColor)),
@@ -235,7 +237,16 @@ class _SignInOTPState extends State<SignInOTP> {
                                                   alignment: Alignment.center,
                                                   child: Text(sendOtp,
                                                       style: textWhiteBold18()),
-                                                ))))
+                                                )))),
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                          left: 25.0, bottom: 20, right: 25.0),
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Text(
+                                          "You will be recieving a\none time password (OTP) on you\n mobile phone.",
+                                          textAlign: TextAlign.center,
+                                          style: textNormal16(textGrey)),
+                                    ),
                                   ]),
                             ])),
                       )),

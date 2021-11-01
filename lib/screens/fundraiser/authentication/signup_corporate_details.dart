@@ -154,12 +154,14 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                 },
                               ),
                             ),
+                            SizedBox(
+                              height: 40,
+                            ),
                             Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Container(
-                                      margin: const EdgeInsets.only(
-                                          top: 10.0, left: 25.0),
+                                      margin: const EdgeInsets.only(left: 25.0),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -169,9 +171,9 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                             style: textBold26(
                                                 Theme.of(context).accentColor),
                                           ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
+                                          // SizedBox(
+                                          //   height: 5,
+                                          // ),
                                           // Text(
                                           //   "Please fill out your representative details",
                                           //   style: textNormal16(textGrey),
@@ -179,15 +181,12 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                         ],
                                       )),
                                   SizedBox(
-                                    height: 30,
+                                    height: 20,
                                   ),
                                   // TEXT FIELDS
                                   Container(
                                     margin: const EdgeInsets.only(
-                                        top: 5.0,
-                                        left: 25.0,
-                                        bottom: 20,
-                                        right: 25.0),
+                                        left: 25.0, bottom: 20, right: 25.0),
                                     decoration: customDecoration(),
                                     child: TextField(
                                       style: textBlackNormal18(),
@@ -330,11 +329,9 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                           ))),
                                   //NEXT BUTTON
                                   Container(
+                                      alignment: Alignment.centerRight,
                                       margin: const EdgeInsets.only(
-                                          top: 5.0,
-                                          left: 40.0,
-                                          bottom: 20,
-                                          right: 40.0),
+                                          top: 5.0, bottom: 20, right: 25.0),
                                       child: ElevatedButton(
                                         onPressed: () {
                                           // on click
@@ -418,9 +415,10 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                                     BorderRadius.circular(15)),
                                             child: Container(
                                                 width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                height: 60,
+                                                        .size
+                                                        .width /
+                                                    3,
+                                                height: 50,
                                                 alignment: Alignment.center,
                                                 child: Text(
                                                   nextButtonText,

@@ -35,6 +35,7 @@ class _OnBoardingState extends State<OnBoarding> {
   }
 
   void _init() async {
+    //SystemChrome.setEnabledSystemUIOverlays([]);
     controller = PageController(initialPage: currentPageValue);
   }
 
@@ -45,6 +46,7 @@ class _OnBoardingState extends State<OnBoarding> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.black.withOpacity(0.99),
     ));
+    //  SystemChrome.setEnabledSystemUIOverlays([]);
 
     return MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -59,118 +61,210 @@ class _OnBoardingState extends State<OnBoarding> {
                 ),
                 bottomNavigationBar: BottomAppBar(),
                 body: SafeArea(
-                    child: Stack(children: <Widget>[
-                  Image.asset(
-                    'assets/images/onboarding/acc_home.png',
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    fit: BoxFit.fill,
-                  ),
-                  Column(children: [
-                    // Slider View
-                    Expanded(
-                        flex: 2,
-                        child: Container(
-                            child: Stack(
-                                alignment: AlignmentDirectional.bottomCenter,
-                                children: <Widget>[
-                              Stack(
-                                children: [
-                                  Column(
-                                    children: [
-                                      Container(
-                                        alignment: Alignment.topLeft,
-                                        child: AddLogoWidget(),
-                                      ),
-                                      SizedBox(height: 20),
-                                      Container(
-                                          child: Image.asset(
-                                              "assets/images/onboarding/acc_home1.png")),
-                                      SizedBox(height: 20),
-                                      Container(
-                                          child: Image.asset(
-                                              "assets/images/onboarding/acc_home2.png")),
-                                      SizedBox(height: 20),
-                                      Container(
-                                          child: Image.asset(
-                                              "assets/images/onboarding/acc_home3.png")),
-                                    ],
-                                  ),
-                                ],
-                              )
-                            ]))),
-                    Column(
-                      children: [
-                        Divider(
-                          color: Colors.white,
-                          thickness: 1.0,
-                        ),
-                        // Bottom view
+                  child: Stack(
+                    children: <Widget>[
+                      Image.asset(
+                        'assets/images/onboarding/acc_home.png',
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        fit: BoxFit.fill,
+                      ),
+                      new Column(children: [
                         Container(
-                            // color: kDarkGrey,
-                            height: 200,
+                          alignment: Alignment.topLeft,
+                          child: AddLogoWidget(),
+                        ),
+                        new Expanded(
+                          flex: 5,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Container(
+                                    child: Image.asset(
+                                        "assets/images/onboarding/acc_home1.png")),
+                                SizedBox(height: 20),
+                                Container(
+                                    child: Image.asset(
+                                        "assets/images/onboarding/acc_home2.png")),
+                                SizedBox(height: 20),
+                                Container(
+                                    child: Image.asset(
+                                        "assets/images/onboarding/acc_home3.png")),
+                                SizedBox(height: 20),
+                              ]),
+                        ),
+                        new Expanded(
+                            flex: 2,
                             child: Column(children: [
-                              InkWell(
-                                  borderRadius: BorderRadius.circular(40),
-                                  onTap: () {
-                                    // Open  view
-                                    Navigator.of(context).push(PageRouteBuilder(
-                                        pageBuilder: (context, animation,
-                                            anotherAnimation) {
-                                          return UserType();
-                                        },
-                                        transitionDuration:
-                                            Duration(milliseconds: 2000),
-                                        transitionsBuilder: (context, animation,
-                                            anotherAnimation, child) {
-                                          animation = CurvedAnimation(
-                                              curve:
-                                                  Curves.fastLinearToSlowEaseIn,
-                                              parent: animation);
-                                          return SlideTransition(
-                                            position: Tween(
-                                                    begin: Offset(1.0, 0.0),
-                                                    end: Offset(0.0, 0.0))
-                                                .animate(animation),
-                                            child: child,
-                                          );
-                                        }));
-                                  },
-                                  child: Container(
-                                      margin: const EdgeInsets.only(
-                                          top: 20.0, left: 25.0, right: 25.0),
-                                      height: 60,
-                                      decoration: appColorButton(context),
-                                      child: Center(
-                                          child: Text(
-                                        "Join our community",
-                                        style: textWhiteBold18(),
-                                      )))),
+                              Divider(
+                                color: Colors.white,
+                                thickness: 3.0,
+                              ),
+                              SizedBox(height: 15),
                               Container(
-                                  margin: const EdgeInsets.only(top: 20.0),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    "Already a member? ",
-                                    style: textNormal16(Colors.white),
-                                  )),
-                              Container(
-                                margin: const EdgeInsets.only(
-                                    bottom: 20.0, top: 10.0),
-                                child: InkWell(
-                                  onTap: () {
-                                    openSignIn(context);
-                                  },
-                                  child: Text(
-                                    'Sign-In',
-                                    style: textBold18(Colors.white),
+                                  // color: kDarkGrey,
+                                  // height: 200,
+                                  child: Column(children: [
+                                InkWell(
+                                    borderRadius: BorderRadius.circular(40),
+                                    onTap: () {
+                                      // Open  view
+                                      Navigator.of(context).push(
+                                          PageRouteBuilder(
+                                              pageBuilder: (context, animation,
+                                                  anotherAnimation) {
+                                                return UserType();
+                                              },
+                                              transitionDuration:
+                                                  Duration(milliseconds: 2000),
+                                              transitionsBuilder: (context,
+                                                  animation,
+                                                  anotherAnimation,
+                                                  child) {
+                                                animation = CurvedAnimation(
+                                                    curve: Curves
+                                                        .fastLinearToSlowEaseIn,
+                                                    parent: animation);
+                                                return SlideTransition(
+                                                  position: Tween(
+                                                          begin:
+                                                              Offset(1.0, 0.0),
+                                                          end: Offset(0.0, 0.0))
+                                                      .animate(animation),
+                                                  child: child,
+                                                );
+                                              }));
+                                    },
+                                    child: Container(
+                                        margin: const EdgeInsets.only(
+                                            top: 10.0, left: 50.0, right: 50.0),
+                                        height: 60,
+                                        decoration: appColorButton(context),
+                                        child: Center(
+                                            child: Text(
+                                          "Join Our Community",
+                                          style: textWhiteBold18(),
+                                        )))),
+                                Container(
+                                    margin: const EdgeInsets.only(top: 10.0),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Already a member? ",
+                                      style: textNormal18(Colors.white),
+                                    )),
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 20.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      openSignIn(context);
+                                    },
+                                    child: Text(
+                                      'Sign-In',
+                                      style: textBold18(Colors.white),
+                                    ),
                                   ),
-                                ),
-                              )
+                                )
+                              ]))
                             ]))
-                      ],
-                    )
-                  ])
-                ])))));
+                      ])
+                    ],
+                  ),
+
+                  // Column(children: [
+                  //   Container(
+                  //     alignment: Alignment.topLeft,
+                  //     child: AddLogoWidget(),
+                  //   ),
+                  //   Column(
+                  //       mainAxisAlignment: MainAxisAlignment.end,
+                  //       crossAxisAlignment: CrossAxisAlignment.end,
+                  //       children: [
+                  //         Container(
+                  //             child: Image.asset(
+                  //                 "assets/images/onboarding/acc_home1.png")),
+                  //         SizedBox(height: 20),
+                  //         Container(
+                  //             child: Image.asset(
+                  //                 "assets/images/onboarding/acc_home2.png")),
+                  //         SizedBox(height: 20),
+                  //         Container(
+                  //             child: Image.asset(
+                  //                 "assets/images/onboarding/acc_home3.png")),
+                  //       ]),
+                  //   Column(
+                  //     children: [
+                  //       Divider(
+                  //         color: Colors.white,
+                  //         thickness: 1.0,
+                  //       ),
+                  //       // Bottom view
+                  //       Container(
+                  //           // color: kDarkGrey,
+                  //           height: 200,
+                  //           child: Column(children: [
+                  //             InkWell(
+                  //                 borderRadius: BorderRadius.circular(40),
+                  //                 onTap: () {
+                  //                   // Open  view
+                  //                   Navigator.of(context).push(PageRouteBuilder(
+                  //                       pageBuilder: (context, animation,
+                  //                           anotherAnimation) {
+                  //                         return UserType();
+                  //                       },
+                  //                       transitionDuration:
+                  //                           Duration(milliseconds: 2000),
+                  //                       transitionsBuilder: (context, animation,
+                  //                           anotherAnimation, child) {
+                  //                         animation = CurvedAnimation(
+                  //                             curve:
+                  //                                 Curves.fastLinearToSlowEaseIn,
+                  //                             parent: animation);
+                  //                         return SlideTransition(
+                  //                           position: Tween(
+                  //                                   begin: Offset(1.0, 0.0),
+                  //                                   end: Offset(0.0, 0.0))
+                  //                               .animate(animation),
+                  //                           child: child,
+                  //                         );
+                  //                       }));
+                  //                 },
+                  //                 child: Container(
+                  //                     margin: const EdgeInsets.only(
+                  //                         top: 20.0, left: 25.0, right: 25.0),
+                  //                     height: 60,
+                  //                     decoration: appColorButton(context),
+                  //                     child: Center(
+                  //                         child: Text(
+                  //                       "Join our community",
+                  //                       style: textWhiteBold18(),
+                  //                     )))),
+                  //             Container(
+                  //                 margin: const EdgeInsets.only(top: 20.0),
+                  //                 alignment: Alignment.center,
+                  //                 child: Text(
+                  //                   "Already a member? ",
+                  //                   style: textNormal16(Colors.white),
+                  //                 )),
+                  //             Container(
+                  //               margin: const EdgeInsets.only(
+                  //                   bottom: 20.0, top: 10.0),
+                  //               child: InkWell(
+                  //                 onTap: () {
+                  //                   openSignIn(context);
+                  //                 },
+                  //                 child: Text(
+                  //                   'Sign-In',
+                  //                   style: textBold18(Colors.white),
+                  //                 ),
+                  //               ),
+                  //             )
+                  //           ]))
+                  //     ],
+                  //   )
+                  // ])
+                ))));
   }
 
   void openSignIn(BuildContext context) {
@@ -256,10 +350,10 @@ class AddLogoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(left: 15.0),
+      margin: const EdgeInsets.only(left: 5.0),
       child: Image.asset(
         'assets/images/acc_logo_white.png',
-        width: 160,
+        width: MediaQuery.of(context).size.width / 2,
         height: 100,
       ),
     );
