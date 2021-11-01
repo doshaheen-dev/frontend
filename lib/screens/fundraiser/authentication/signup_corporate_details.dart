@@ -329,9 +329,12 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                           ))),
                                   //NEXT BUTTON
                                   Container(
-                                      alignment: Alignment.centerRight,
+                                      alignment: Alignment.center,
                                       margin: const EdgeInsets.only(
-                                          top: 5.0, bottom: 20, right: 25.0),
+                                          left: 40,
+                                          top: 5.0,
+                                          bottom: 20,
+                                          right: 40),
                                       child: ElevatedButton(
                                         onPressed: () {
                                           // on click
@@ -415,10 +418,9 @@ class _CorporateDetailsState extends State<CorporateDetails> {
                                                     BorderRadius.circular(15)),
                                             child: Container(
                                                 width: MediaQuery.of(context)
-                                                        .size
-                                                        .width /
-                                                    3,
-                                                height: 50,
+                                                    .size
+                                                    .width,
+                                                height: 60,
                                                 alignment: Alignment.center,
                                                 child: Text(
                                                   nextButtonText,

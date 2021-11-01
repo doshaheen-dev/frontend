@@ -216,7 +216,7 @@ class _InvestorSearchInfoState extends State<InvestorSearchInfo> {
                                           },
                                           child: Container(
                                             margin: EdgeInsets.only(
-                                                left: 50, right: 50),
+                                                left: 40, right: 40),
                                             //width: MediaQuery.of(context).size.width,
                                             height: 60,
                                             decoration: appColorButton(context),

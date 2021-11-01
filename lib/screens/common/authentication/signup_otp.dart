@@ -208,7 +208,7 @@ class _SignUpOTPState extends State<SignUpOTP> {
                                 left: 25.0, bottom: 20, right: 25.0),
                             width: MediaQuery.of(context).size.width,
                             child: Text(
-                                "You will be recieving a\none time password (OTP) on you\n mobile phone.",
+                                "You will be receiving a\none time password (OTP) on your\n mobile phone.",
                                 textAlign: TextAlign.center,
                                 style: textNormal16(textGrey)),
                           ),

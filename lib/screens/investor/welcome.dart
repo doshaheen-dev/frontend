@@ -89,9 +89,9 @@ class _WelcomeInvestorState extends State<WelcomeInvestor> {
                           Container(
                               margin: const EdgeInsets.only(
                                   top: 5.0,
-                                  left: 80.0,
+                                  left: 40.0,
                                   bottom: 20,
-                                  right: 80.0),
+                                  right: 40.0),
                               child: InkWell(
                                   borderRadius: BorderRadius.circular(40),
                                   onTap: () {

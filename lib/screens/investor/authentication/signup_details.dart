@@ -373,9 +373,12 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                                   ),
                                   //NEXT BUTTON
                                   Container(
-                                      alignment: Alignment.centerRight,
+                                      alignment: Alignment.center,
                                       margin: const EdgeInsets.only(
-                                          top: 5.0, bottom: 20, right: 25.0),
+                                          left: 40,
+                                          top: 5.0,
+                                          bottom: 20,
+                                          right: 40),
                                       child: InkWell(
                                         borderRadius: BorderRadius.circular(40),
                                         onTap: () {
@@ -427,11 +430,9 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                                           );
                                         },
                                         child: Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              3,
-                                          height: 50,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          height: 60,
                                           decoration: appColorButton(context),
                                           child: Center(
                                               child: Text(

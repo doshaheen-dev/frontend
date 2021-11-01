@@ -137,22 +137,22 @@ class _SuccesssFundSubmittedState extends State<SuccesssFundSubmitted> {
                         children: [
                           Text('THANK YOU',
                               textAlign: TextAlign.center,
-                              style: textBold(headingBlack, 18)),
+                              style: textBold(headingBlack, 26)),
                           SizedBox(height: 50),
                           Text('Thank you for registering with us',
                               textAlign: TextAlign.center,
-                              style: textBold(headingBlack, 16)),
+                              style: textNormal(textGrey, 16)),
                           Text(
                               'Our team will review and revert\nback to you at the earliest.',
                               textAlign: TextAlign.center,
-                              style: textBold(headingBlack, 16))
+                              style: textNormal(textGrey, 16))
                         ],
                       ),
                     )),
                     //NEXT BUTTON
                     Container(
                       margin: const EdgeInsets.only(
-                          top: 30.0, left: 50.0, right: 50.0),
+                          top: 30.0, left: 40.0, right: 40.0),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(40),
                         onTap: () {

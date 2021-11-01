@@ -224,7 +224,7 @@ class _EmailUpdateState extends State<EmailUpdate> {
                                         margin: const EdgeInsets.only(
                                             top: 5.0, left: 25.0),
                                         child: Text(
-                                          "Please enter the OTP received in your mobile phone.",
+                                          "Please enter the OTP received in your inbox.",
                                           style: textNormal16(Colors.black),
                                         )),
                                     Container(
@@ -271,12 +271,12 @@ class _EmailUpdateState extends State<EmailUpdate> {
                                         child: RichText(
                                           textAlign: TextAlign.center,
                                           text: TextSpan(
-                                              text: "Didn't receive the code? ",
-                                              style: textNormal14(Colors.black),
+                                              text: "Didn't receive the OTP? ",
+                                              style: textNormal16(Colors.black),
                                               children: [
                                                 TextSpan(
                                                     text: 'Resend OTP',
-                                                    style: textNormal14(
+                                                    style: textNormal16(
                                                         Theme.of(context)
                                                             .primaryColor),
                                                     recognizer:

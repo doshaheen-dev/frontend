@@ -307,7 +307,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
                               borderRadius: BorderRadius.circular(10)),
                       child: Container(
                         width: MediaQuery.of(context).size.width,
-                        height: 50,
+                        height: 60,
                         alignment: Alignment.center,
                         child: Text("Update", style: textWhiteBold16()),
                       ),

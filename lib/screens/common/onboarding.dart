@@ -81,6 +81,7 @@ class _OnBoardingState extends State<OnBoarding> {
                       ),
                       child: new Column(children: [
                         Container(
+                          margin: EdgeInsets.only(top: 40),
                           alignment: Alignment.topLeft,
                           child: AddLogoWidget(),
                         ),
