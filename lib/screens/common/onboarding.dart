@@ -81,7 +81,7 @@ class _OnBoardingState extends State<OnBoarding> {
                       ),
                       child: new Column(children: [
                         Container(
-                          margin: EdgeInsets.only(top: 40),
+                          margin: EdgeInsets.only(top: 20),
                           alignment: Alignment.topLeft,
                           child: AddLogoWidget(),
                         ),
@@ -103,7 +103,7 @@ class _OnBoardingState extends State<OnBoarding> {
                                 Container(
                                     child: Image.asset(
                                         "assets/images/onboarding/acc_home3.png")),
-                                SizedBox(height: 40),
+                                SizedBox(height: 30),
                               ]),
                         ),
                         new Expanded(
@@ -150,8 +150,8 @@ class _OnBoardingState extends State<OnBoarding> {
                                     },
                                     child: Container(
                                         margin: const EdgeInsets.only(
-                                            top: 10.0, left: 50.0, right: 50.0),
-                                        height: 60,
+                                            left: 50.0, right: 50.0),
+                                        height: 50,
                                         decoration: appColorButton(context),
                                         child: Center(
                                             child: Text(
@@ -167,7 +167,7 @@ class _OnBoardingState extends State<OnBoarding> {
                                     )),
                                 Container(
                                   margin: const EdgeInsets.only(
-                                      top: 5.0, bottom: 20.0),
+                                      top: 5.0, bottom: 10.0),
                                   child: InkWell(
                                     onTap: () {
                                       openSignIn(context);
@@ -483,7 +483,7 @@ class AddLogoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 15.0, left: 5.0),
+      margin: const EdgeInsets.only(left: 5.0),
       child: Image.asset(
         'assets/images/acc_logo_white.png',
         width: MediaQuery.of(context).size.width / 2,
