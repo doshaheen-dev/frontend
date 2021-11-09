@@ -153,12 +153,12 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
                   onPressed: () {
                     if (_isButtonDisabled) {
                       if (_newFundValueController.text.isNotEmpty) {
-                        if (int.parse(_newFundValueController.text.trim()) >
-                                2100000000 ||
-                            int.parse(_newFundValueController.text.trim()) <
-                                100000) {
+                        if (int.parse(_newFundValueController.text.trim()) <
+                                100000 ||
+                            int.parse(_newFundValueController.text.trim()) >
+                                999999999999999999) {
                           showSnackBar(context,
-                              "Please enter new fund value equal to or more than 100000 and less than 2100000000");
+                              "Please enter new fund value equal to or more than 100000");
                           return;
                         }
                       }
@@ -243,7 +243,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
       keyboardType: TextInputType.number,
       inputFormatters: <TextInputFormatter>[
         FilteringTextInputFormatter.digitsOnly,
-        LengthLimitingTextInputFormatter(10),
+        LengthLimitingTextInputFormatter(18),
       ],
     );
   }
@@ -417,7 +417,7 @@ class _FundraiserFundDetailState extends State<FundraiserFundDetail> {
       String newVal = _newFundValueController.text.trim();
 
       if (newVal != null && newVal != '') {
-        requestModelInstance.fundNewVal = int.parse(newVal);
+        requestModelInstance.fundNewVal = newVal;
       }
       requestModelInstance.fundKycDocuments = null;
       if (_uploadedDocuments.isNotEmpty) {

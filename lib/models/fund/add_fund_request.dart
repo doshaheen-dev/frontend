@@ -19,9 +19,9 @@ class AddFundRequestModel {
   bool fundRegulated;
   String regulatorName;
   String fundInvstmtObj;
-  int fundExistVal;
+  String fundExistVal;
   String fundLogo;
-  int fundNewVal;
+  String fundNewVal;
   String fundWebsite;
   String termsAgreedTimestamp;
   List<DocumentsData> fundKycDocuments;

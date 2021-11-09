@@ -120,7 +120,7 @@ class _AddNewFundsState extends State<AddNewFunds> {
 
   InkWell _createCell(productProvider.InvestmentLimitItem item, int index) {
     return InkWell(
-      focusColor: Colors.transparent,
+      splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       borderRadius: BorderRadius.circular(40),
       onTap: () {
