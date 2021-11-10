@@ -113,8 +113,8 @@ class _EmailUpdateState extends State<EmailUpdate> {
                                 Spacer(),
                                 InkWell(
                                     onTap: () {
-                                      _newEmailController.clear();
-                                      emailOtpController.clear();
+                                      // _newEmailController.clear();
+                                      // emailOtpController.clear();
                                       setState(() {
                                         isEmailOtpReceived = false;
                                       });
@@ -133,7 +133,15 @@ class _EmailUpdateState extends State<EmailUpdate> {
                               width: MediaQuery.of(context).size.width,
                               child: TextField(
                                   style: textBlackNormal16(),
-                                  onChanged: (value) => newEmail = value,
+                                  onChanged: (value) => {
+                                        newEmail = value,
+                                        if (isEmailOtpReceived)
+                                          {
+                                            setState(() {
+                                              isEmailOtpReceived = false;
+                                            })
+                                          },
+                                      },
                                   controller: _newEmailController,
                                   decoration: InputDecoration(
                                       contentPadding: EdgeInsets.all(10.0),
@@ -305,6 +313,25 @@ class _EmailUpdateState extends State<EmailUpdate> {
                                                     .showSnackBar(SnackBar(
                                                         content:
                                                             Text(warningOTP)));
+                                                return;
+                                              }
+
+                                              if (_newEmailController
+                                                  .text.isEmpty) {
+                                                _emailScaffoldKey.currentState
+                                                    .showSnackBar(SnackBar(
+                                                        content: Text(
+                                                            "Please enter your Email Id.")));
+                                                return;
+                                              }
+
+                                              if (!CodeUtils.emailValid(
+                                                  _newEmailController.text
+                                                      .trim())) {
+                                                _emailScaffoldKey.currentState
+                                                    .showSnackBar(SnackBar(
+                                                        content: Text(
+                                                            "Please enter correct Email Id.")));
                                                 return;
                                               }
                                               // verify otp for email id

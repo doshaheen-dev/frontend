@@ -1,6 +1,5 @@
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/otp_response.dart';
-import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/models/country/country.dart';
 import 'package:acc/models/default.dart';
 import 'package:acc/models/local_countries.dart';
@@ -38,7 +37,6 @@ class _MobileUpdateState extends State<MobileUpdate> {
   String _verificationId = "";
   String otpText = "";
   String newMobileNo = "";
-  bool isEmailOtpReceived = false;
   bool isOtpReceived = false;
 
   TextEditingController _mobileController = TextEditingController();
@@ -344,6 +342,24 @@ class _MobileUpdateState extends State<MobileUpdate> {
                                             onPressed: () {
                                               FocusScope.of(context)
                                                   .requestFocus(FocusNode());
+                                              if (_newMobileController
+                                                  .text.isEmpty) {
+                                                _modelScaffoldKey.currentState
+                                                    .showSnackBar(SnackBar(
+                                                        duration: Duration(
+                                                            seconds: 1),
+                                                        content: Text(
+                                                            correctMobile)));
+                                                return;
+                                              }
+
+                                              if (selectedCountry.maxLength !=
+                                                  _newMobileController
+                                                      .text.length) {
+                                                showSnackBar(context,
+                                                    "Phone number should be of ${selectedCountry.maxLength} digits.");
+                                                return;
+                                              }
                                               if (otpController.text.isEmpty) {
                                                 _modelScaffoldKey.currentState
                                                     .showSnackBar(SnackBar(
@@ -421,7 +437,15 @@ class _MobileUpdateState extends State<MobileUpdate> {
               decoration: customDecoration(),
               child: TextField(
                 style: textBlackNormal16(),
-                onChanged: (value) => newMobileNo = value,
+                onChanged: (value) => {
+                  newMobileNo = value,
+                  if (isOtpReceived)
+                    {
+                      setState(() {
+                        isOtpReceived = false;
+                      })
+                    },
+                },
                 controller: _newMobileController,
                 decoration: new InputDecoration(
                   contentPadding: EdgeInsets.all(20.0),
@@ -615,9 +639,9 @@ class _MobileUpdateState extends State<MobileUpdate> {
         Spacer(),
         InkWell(
             onTap: () {
-              _newMobileController.clear();
-              otpController.clear();
-
+              // _newMobileController.dispose();
+              // otpController.dispose();
+              updateSelectedCountry = null;
               setState(() {
                 isOtpReceived = false;
               });
