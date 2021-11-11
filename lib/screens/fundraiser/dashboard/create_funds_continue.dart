@@ -64,8 +64,8 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
         SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xffffffff)));
 
     return MediaQuery(
-        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-        child: Scaffold(
+      data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+      child: Scaffold(
           appBar: AppBar(
             toolbarHeight: 0,
             elevation: 0.0,
@@ -75,290 +75,259 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
           backgroundColor: Colors.white,
           body: AppProgressBar(
               child: Builder(
-                  builder: (context) => SafeArea(
-                        child: SingleChildScrollView(
-                          child: Container(
-                            margin:
-                                const EdgeInsets.only(left: 25.0, right: 25.0),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Container(
-                                    child: IconButton(
-                                      icon: Icon(Icons.arrow_back, size: 30),
-                                      onPressed: () => {Navigator.pop(context)},
-                                    ),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Container(
-                                        margin:
-                                            const EdgeInsets.only(top: 10.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text("Tell us about your fund",
-                                                style:
-                                                    textBold(headingBlack, 20)),
-                                            Text(
-                                                "What is the Minimum Investment from an investor",
-                                                style: textNormal(textGrey, 14))
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        child: FutureBuilder(
-                                          future: _fundSlots,
-                                          builder: (ctx, dataSnapshot) {
-                                            if (dataSnapshot.connectionState ==
-                                                ConnectionState.waiting) {
-                                              return Center(
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                              ));
-                                            } else {
-                                              if (dataSnapshot.error != null) {
-                                                return Center(
-                                                    child: Text(
-                                                        "An error occurred!"));
-                                              } else {
-                                                return Consumer<
-                                                    slotProvider.FundSlots>(
-                                                  builder:
-                                                      (ctx, slotData, child) =>
-                                                          GridView.count(
-                                                    physics:
-                                                        NeverScrollableScrollPhysics(),
-                                                    crossAxisCount: 2,
-                                                    crossAxisSpacing: 10.0,
-                                                    mainAxisSpacing: 10.0,
-                                                    shrinkWrap: true,
-                                                    childAspectRatio:
-                                                        (MediaQuery.of(context)
-                                                                .size
-                                                                .width /
-                                                            2 /
-                                                            65),
-                                                    children: List.generate(
-                                                      slotData
-                                                          .slotLineItems.length,
-                                                      (index) {
-                                                        return _createCell(
-                                                            slotData.slotLineItems[
-                                                                index],
-                                                            index);
-                                                      },
-                                                    ),
-                                                  ),
-                                                );
-                                              }
-                                            }
-                                          },
-                                        ),
-                                      ),
-
-                                      //Fund  General Partner / Managing Partner (GP)
-                                      Container(
-                                        margin: const EdgeInsets.only(
-                                            top: 20.0, bottom: 20),
-                                        decoration: customDecoration(),
-                                        child: inputTextField(
-                                            "Fund  General Partner / Managing Partner (GP)",
-                                            "Please enter general partner here",
-                                            _fundSponsorNameController),
-                                      ),
-                                      KYCDocumentItems(
-                                          _uploadedDocuments, _selectFile),
-
-                                      Container(
-                                        margin: EdgeInsets.only(
-                                            bottom: 10.0, right: 15),
-                                        child: _createDocumentUI(
-                                            context,
-                                            "Upload Fund Brand Image",
-                                            "JPEG, PNG, JPG."),
-                                      ),
-
-                                      Row(
-                                        children: [
-                                          Text(
-                                            "Matchmaker fee for Amicorp",
-                                            style: textNormal(textGrey, 12),
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            "${AddNewFunds.placementFee}%",
-                                            style: textNormal(
-                                                Theme.of(context).primaryColor,
-                                                18),
-                                          )
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Checkbox(
-                                              checkColor: Colors
-                                                  .white, // color of tick Mark
-                                              activeColor: Theme.of(context)
-                                                  .primaryColor,
-                                              value: _isTermsCheck,
-                                              onChanged: (bool value) {
-                                                setState(() {
-                                                  _isTermsCheck = value;
-                                                });
-                                              }),
-                                          Flexible(
-                                            child: RichText(
-                                              textAlign: TextAlign.center,
-                                              text: TextSpan(
-                                                  text:
-                                                      "By signing in, I agree with ",
-                                                  style: textNormal(
-                                                      textLightGrey, 14),
-                                                  children: [
-                                                    TextSpan(
-                                                        text: "Terms of Use ",
-                                                        style: textNormal(
-                                                            Colors.black, 14),
-                                                        recognizer:
-                                                            TapGestureRecognizer()
-                                                              ..onTap = () {}),
-                                                    TextSpan(
-                                                      text: "and ",
-                                                      style: textNormal(
-                                                          textLightGrey, 14),
-                                                    ),
-                                                    TextSpan(
-                                                        text: "Privacy Poicy",
-                                                        style: textNormal(
-                                                            Colors.black, 14),
-                                                        recognizer:
-                                                            TapGestureRecognizer()
-                                                              ..onTap = () {})
-                                                  ]),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      //NEXT BUTTON
-                                      Container(
-                                        margin: const EdgeInsets.only(
-                                          top: 20,
-                                          bottom: 20,
-                                        ),
-                                        child: ElevatedButton(
-                                          onPressed: () async {
-                                            if (slotId <= 0) {
-                                              showSnackBar(context,
-                                                  "Please select minimum investment.");
-                                              return;
-                                            }
-                                            if (_fundSponsorNameController
-                                                .text.isEmpty) {
-                                              showSnackBar(context,
-                                                  "Please enter the partner name.");
-                                              return;
-                                            }
-                                            final docData =
-                                                Provider.of<KYCDocuments>(
-                                                        context,
-                                                        listen: false)
-                                                    .documents;
-
-                                            var documentsMsg = '';
-                                            docData.reversed.forEach((option) {
-                                              if (_uploadedDocuments
-                                                  .indexWhere((doc) =>
-                                                      doc.id == option.kycId)
-                                                  .isNegative) {
-                                                documentsMsg =
-                                                    'Please upload the ${option.kycDocName}';
-                                              }
-                                            });
-                                            if (documentsMsg.isNotEmpty) {
-                                              showSnackBar(
-                                                  context, documentsMsg);
-                                              return;
-                                            }
-                                            if (_uploadedDocuments
-                                                .indexWhere(
-                                                    (doc) => doc.id == 0)
-                                                .isNegative) {
-                                              showSnackBar(context,
-                                                  "Please upload the fund brand image.");
-                                              return;
-                                            }
-                                            if (!_isTermsCheck) {
-                                              showSnackBar(context,
-                                                  "Please accept the Terms and Privacy Policy.");
-                                              return;
-                                            }
-                                            progress =
-                                                AppProgressBar.of(context);
-                                            progress?.showWithText(
-                                                'Uploading Fund Details...');
-                                            FocusScope.of(context)
-                                                .requestFocus(FocusNode());
-                                            final fundLogo = _uploadedDocuments
-                                                .where((doc) => doc.id == 0)
-                                                .first;
-                                            uploadFundTxnDetails(
-                                              _fundSponsorNameController.text
-                                                  .trim(),
-                                              fundLogo.uploadedKey,
-                                              DateUtilsExt
-                                                  .currentDateWithFormat(
-                                                      "yyyy-MM-dd HH:mm:ss"),
-                                            );
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                              padding: EdgeInsets.all(0.0),
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          18))),
-                                          child: Ink(
-                                            decoration: BoxDecoration(
-                                                gradient:
-                                                    LinearGradient(colors: [
-                                                  Theme.of(context)
-                                                      .primaryColor,
-                                                  Theme.of(context).primaryColor
-                                                ]),
-                                                borderRadius:
-                                                    BorderRadius.circular(15)),
-                                            child: Container(
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              height: 60,
-                                              alignment: Alignment.center,
-                                              child: Text("Submit",
-                                                  style: textWhiteBold18()),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ]),
-                          ),
+            builder: (context) => SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        child: IconButton(
+                          icon: Icon(Icons.arrow_back_ios,
+                              size: 30, color: backButtonColor),
+                          onPressed: () => {Navigator.pop(context)},
                         ),
-                      ))),
-        ));
+                      ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 25.0, right: 25.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              margin: const EdgeInsets.only(top: 10.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Tell us about your fund",
+                                      style: textBold(headingBlack, 20)),
+                                  Text(
+                                      "What is the Minimum Investment from an investor",
+                                      style: textNormal(textGrey, 14))
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              child: FutureBuilder(
+                                future: _fundSlots,
+                                builder: (ctx, dataSnapshot) {
+                                  if (dataSnapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return Center(
+                                        child: CircularProgressIndicator(
+                                      color: Theme.of(context).primaryColor,
+                                    ));
+                                  } else {
+                                    if (dataSnapshot.error != null) {
+                                      return Center(
+                                          child: Text("An error occurred!"));
+                                    } else {
+                                      return Consumer<slotProvider.FundSlots>(
+                                        builder: (ctx, slotData, child) =>
+                                            GridView.count(
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          crossAxisCount: 2,
+                                          crossAxisSpacing: 10.0,
+                                          mainAxisSpacing: 10.0,
+                                          shrinkWrap: true,
+                                          childAspectRatio:
+                                              (MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  2 /
+                                                  65),
+                                          children: List.generate(
+                                            slotData.slotLineItems.length,
+                                            (index) {
+                                              return _createCell(
+                                                  slotData.slotLineItems[index],
+                                                  index);
+                                            },
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  }
+                                },
+                              ),
+                            ),
+
+                            //Fund  General Partner / Managing Partner (GP)
+                            Container(
+                              margin:
+                                  const EdgeInsets.only(top: 20.0, bottom: 20),
+                              decoration: customDecoration(),
+                              child: inputTextField(
+                                  "Fund  General Partner / Managing Partner (GP)",
+                                  "Please enter general partner here",
+                                  _fundSponsorNameController),
+                            ),
+                            KYCDocumentItems(_uploadedDocuments, _selectFile),
+
+                            Container(
+                              margin: EdgeInsets.only(bottom: 10.0, right: 15),
+                              child: _createDocumentUI(context,
+                                  "Upload Fund Brand Image", "JPEG, PNG, JPG."),
+                            ),
+
+                            Row(
+                              children: [
+                                Text(
+                                  "Matchmaker fee for Amicorp",
+                                  style: textNormal(textGrey, 12),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "${AddNewFunds.placementFee}%",
+                                  style: textNormal(
+                                      Theme.of(context).primaryColor, 18),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              children: [
+                                Checkbox(
+                                    checkColor:
+                                        Colors.white, // color of tick Mark
+                                    activeColor:
+                                        Theme.of(context).selectedRowColor,
+                                    value: _isTermsCheck,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        _isTermsCheck = value;
+                                      });
+                                    }),
+                                Flexible(
+                                  child: RichText(
+                                    textAlign: TextAlign.center,
+                                    text: TextSpan(
+                                        text: "By signing in, I agree with ",
+                                        style: textNormal(textLightGrey, 14),
+                                        children: [
+                                          TextSpan(
+                                              text: "Terms of Use ",
+                                              style:
+                                                  textNormal(Colors.black, 14),
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () {}),
+                                          TextSpan(
+                                            text: "and ",
+                                            style:
+                                                textNormal(textLightGrey, 14),
+                                          ),
+                                          TextSpan(
+                                              text: "Privacy Poicy",
+                                              style:
+                                                  textNormal(Colors.black, 14),
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () {})
+                                        ]),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            //NEXT BUTTON
+                            Container(
+                              margin: const EdgeInsets.only(
+                                  top: 20, bottom: 40, left: 40.0, right: 40.0),
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  if (slotId <= 0) {
+                                    showSnackBar(context,
+                                        "Please select minimum investment.");
+                                    return;
+                                  }
+                                  if (_fundSponsorNameController.text.isEmpty) {
+                                    showSnackBar(context,
+                                        "Please enter the partner name.");
+                                    return;
+                                  }
+                                  final docData = Provider.of<KYCDocuments>(
+                                          context,
+                                          listen: false)
+                                      .documents;
+
+                                  var documentsMsg = '';
+                                  docData.reversed.forEach((option) {
+                                    if (_uploadedDocuments
+                                        .indexWhere(
+                                            (doc) => doc.id == option.kycId)
+                                        .isNegative) {
+                                      documentsMsg =
+                                          'Please upload the ${option.kycDocName}';
+                                    }
+                                  });
+                                  if (documentsMsg.isNotEmpty) {
+                                    showSnackBar(context, documentsMsg);
+                                    return;
+                                  }
+                                  if (_uploadedDocuments
+                                      .indexWhere((doc) => doc.id == 0)
+                                      .isNegative) {
+                                    showSnackBar(context,
+                                        "Please upload the fund brand image.");
+                                    return;
+                                  }
+                                  if (!_isTermsCheck) {
+                                    showSnackBar(context,
+                                        "Please accept the Terms and Privacy Policy.");
+                                    return;
+                                  }
+                                  progress = AppProgressBar.of(context);
+                                  progress?.showWithText(
+                                      'Uploading Fund Details...');
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
+                                  final fundLogo = _uploadedDocuments
+                                      .where((doc) => doc.id == 0)
+                                      .first;
+                                  uploadFundTxnDetails(
+                                    _fundSponsorNameController.text.trim(),
+                                    fundLogo.uploadedKey,
+                                    DateUtilsExt.currentDateWithFormat(
+                                        "yyyy-MM-dd HH:mm:ss"),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.all(0.0),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18))),
+                                child: Ink(
+                                  decoration: BoxDecoration(
+                                      gradient: LinearGradient(colors: [
+                                        Theme.of(context).primaryColor,
+                                        Theme.of(context).primaryColor
+                                      ]),
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 60,
+                                    alignment: Alignment.center,
+                                    child: Text("Submit",
+                                        style: textWhiteBold18()),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ]),
+              ),
+            ),
+          ))),
+    );
   }
 
   void _updateUploadedDocs(DocumentInfo docInfo) {
@@ -499,7 +468,7 @@ class _CreateFundsContinueState extends State<CreateFundsContinue> {
         height: 30,
         decoration: BoxDecoration(
           color: selectedIndex == index
-              ? Theme.of(context).primaryColor
+              ? Theme.of(context).selectedRowColor
               : unselectedGray,
           borderRadius: BorderRadius.all(
             const Radius.circular(15.0),

@@ -55,16 +55,20 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                         children: <Widget>[
                           Container(
                             child: IconButton(
-                              icon: Icon(Icons.arrow_back, size: 30),
+                              icon: Icon(Icons.arrow_back_ios,
+                                  size: 30, color: backButtonColor),
                               onPressed: () => {Navigator.pop(context)},
                             ),
+                          ),
+                          SizedBox(
+                            height: 40,
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Container(
                                 margin: const EdgeInsets.only(
-                                    top: 10.0, left: 25.0, right: 25.0),
+                                    left: 25.0, right: 25.0),
                                 child: Text(
                                   "Please accept our T&C, Privacy policy below",
                                   style: TextStyle(
@@ -230,8 +234,8 @@ class _GeneralTermsPrivacyState extends State<GeneralTermsPrivacy> {
                                         }
                                       },
                                       child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width,
+                                        margin: EdgeInsets.only(
+                                            left: 50.0, right: 50.0),
                                         height: 60,
                                         decoration: appColorButton(context),
                                         child: Center(

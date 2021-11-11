@@ -39,9 +39,13 @@ class _UserTypeState extends State<UserType> {
                 children: <Widget>[
                   Container(
                     child: IconButton(
-                      icon: Icon(Icons.arrow_back, size: 30),
+                      icon: Icon(Icons.arrow_back_ios,
+                          size: 30, color: backButtonColor),
                       onPressed: () => {Navigator.pop(context)},
                     ),
+                  ),
+                  SizedBox(
+                    height: 40,
                   ),
                   Material(
                       color: Colors.white,
@@ -50,21 +54,21 @@ class _UserTypeState extends State<UserType> {
                           children: <Widget>[
                             Container(
                               color: Colors.white,
-                              margin:
-                                  const EdgeInsets.only(top: 80.0, left: 25.0),
+                              margin: const EdgeInsets.only(left: 25.0),
                               child: Text(
-                                "I am a",
-                                style: textBold(Colors.black, 26),
+                                "I am".toUpperCase(),
+                                style:
+                                    textBold(Theme.of(context).accentColor, 30),
                               ),
                             ),
-                            Container(
-                              margin:
-                                  const EdgeInsets.only(top: 5.0, left: 25.0),
-                              child: Text(
-                                "Please choose your appropiate type",
-                                style: textNormal(textGrey, 16.0),
-                              ),
-                            ),
+                            // Container(
+                            //   margin:
+                            //       const EdgeInsets.only(top: 5.0, left: 25.0),
+                            //   child: Text(
+                            //     "Please choose your appropiate type",
+                            //     style: textNormal(textGrey, 16.0),
+                            //   ),
+                            // ),
                             Center(
                               child: header(),
                             )
@@ -82,6 +86,7 @@ class _UserTypeState extends State<UserType> {
     return Column(children: [
       // INVESTOR
       InkWell(
+        splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         borderRadius: BorderRadius.circular(40),
         onTap: () {
@@ -92,37 +97,16 @@ class _UserTypeState extends State<UserType> {
           });
         },
         child: Container(
-          margin: const EdgeInsets.only(top: 50.0),
-          width: 160,
-          height: 160,
-          decoration: BoxDecoration(
-            color: selectedCategory.contains(investor)
-                ? Theme.of(context).primaryColor
-                : unselectedGray,
-            borderRadius: BorderRadius.all(
-              const Radius.circular(15.0),
-            ),
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/images/investor_user.png",
-                  width: 80.0,
-                  height: 80.0,
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                Text("Investor",
-                    style: textNormal16(selectedCategory.contains(investor)
-                        ? Colors.white
-                        : Colors.black))
-              ],
-            ),
-          ),
-        ),
+            margin: const EdgeInsets.only(top: 50.0, left: 30.0, right: 30.0),
+            // width: 160,
+            // height: 160,
+            child: selectedCategory.contains(investor)
+                ? Image.asset(
+                    "assets/images/user_type/acc_investor_selected.png",
+                  )
+                : Image.asset(
+                    "assets/images/user_type/acc_investor.png",
+                  )),
       ),
 
       SizedBox(
@@ -131,6 +115,7 @@ class _UserTypeState extends State<UserType> {
 
       // FUND RAISER
       InkWell(
+        splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         borderRadius: BorderRadius.circular(40),
         onTap: () {
@@ -141,37 +126,17 @@ class _UserTypeState extends State<UserType> {
           });
         },
         child: Container(
-            margin: const EdgeInsets.only(top: 30.0),
-            width: 160,
-            height: 160,
-            decoration: BoxDecoration(
-              color: selectedCategory.contains(fundraiser)
-                  ? Theme.of(context).primaryColor
-                  : unselectedGray,
-              borderRadius: BorderRadius.all(
-                const Radius.circular(15.0),
-              ),
-            ),
-            child: Center(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      "assets/images/fund_raiser.png",
-                      width: 80.0,
-                      height: 80.0,
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Text("Fundraiser",
-                        style: textNormal16(
-                            selectedCategory.contains(fundraiser)
-                                ? Colors.white
-                                : Colors.black))
-                  ]),
-            )),
-      )
+            margin: const EdgeInsets.only(top: 10.0, left: 35.0, right: 35.0),
+            // width: 160,
+            // height: 160,
+            child: selectedCategory.contains(fundraiser)
+                ? Image.asset(
+                    "assets/images/user_type/acc_fundraiser_selected.png",
+                  )
+                : Image.asset(
+                    "assets/images/user_type/acc_fundraiser.png",
+                  )),
+      ),
     ]);
   }
 

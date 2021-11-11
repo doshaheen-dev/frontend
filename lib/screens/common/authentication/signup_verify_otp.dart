@@ -1,4 +1,3 @@
-import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/otp_response.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/screens/fundraiser/authentication/signup_corporate_details.dart';
@@ -73,43 +72,36 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                         children: <Widget>[
                       Container(
                         child: IconButton(
-                          icon: Icon(Icons.arrow_back, size: 30),
+                          icon: Icon(Icons.arrow_back_ios,
+                              size: 30, color: backButtonColor),
                           onPressed: () => {Navigator.pop(context)},
                         ),
+                      ),
+                      SizedBox(
+                        height: 40,
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Container(
-                            margin:
-                                const EdgeInsets.only(top: 10.0, left: 25.0),
-                            child: Text(
-                              otpLabel,
-                              style: TextStyle(
-                                  color: headingBlack,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 26.0,
-                                  fontFamily: FontFamilyMontserrat.name),
-                            ),
+                            margin: const EdgeInsets.only(left: 25.0),
+                            child: Text("Enter OTP",
+                                style:
+                                    textBold26(Theme.of(context).accentColor)),
                           ),
                           Container(
                             margin: const EdgeInsets.only(top: 5.0, left: 25.0),
                             child: Text(
-                              otpMobileLabel,
-                              style: TextStyle(
-                                  color: textGrey,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 16.0,
-                                  fontFamily: FontFamilyMontserrat.name),
-                            ),
+                                "Please enter the OTP received in your mobile phone.",
+                                style: textNormal16(textGrey)),
                           ),
                           SizedBox(
-                            height: 25,
+                            height: 10,
                           ),
                           Container(
                             width: MediaQuery.of(context).size.width,
                             margin: const EdgeInsets.only(
-                                top: 5.0, left: 40.0, bottom: 20, right: 40.0),
+                                top: 5.0, left: 40.0, right: 40.0),
                             child: PinCodeTextField(
                               controller: otpController,
                               appContext: context,
@@ -146,12 +138,12 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                               child: RichText(
                                 textAlign: TextAlign.center,
                                 text: TextSpan(
-                                    text: "Didn't receive the code? ",
-                                    style: textNormal14(Colors.black),
+                                    text: "Didn't receive the OTP? ",
+                                    style: textNormal16(textGrey),
                                     children: [
                                       TextSpan(
                                           text: 'Resend OTP',
-                                          style: textNormal14(
+                                          style: textNormal16(
                                               Theme.of(context).primaryColor),
                                           recognizer: TapGestureRecognizer()
                                             ..onTap = () {
@@ -172,9 +164,9 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
                           Container(
                               margin: const EdgeInsets.only(
                                   top: 5.0,
-                                  left: 25.0,
+                                  left: 40.0,
                                   bottom: 20,
-                                  right: 25.0),
+                                  right: 40.0),
                               child: ElevatedButton(
                                   onPressed: () {
                                     if (otpController.text.isEmpty) {
@@ -254,7 +246,9 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
     if (_userType == "Investor") {
       Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (context, animation, anotherAnimation) {
-            return QuickSignUp();
+            return QuickSignUp(
+              mobileNumber: _phoneNumber,
+            );
           },
           transitionDuration: Duration(milliseconds: 2000),
           transitionsBuilder: (context, animation, anotherAnimation, child) {
@@ -269,7 +263,9 @@ class _SignUpVerifyOTPState extends State<SignUpVerifyOTP> {
     } else if (_userType == "Fundraiser") {
       Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (context, animation, anotherAnimation) {
-            return CorporateDetails();
+            return CorporateDetails(
+              mobileNumber: _phoneNumber,
+            );
           },
           transitionDuration: Duration(milliseconds: 2000),
           transitionsBuilder: (context, animation, anotherAnimation, child) {

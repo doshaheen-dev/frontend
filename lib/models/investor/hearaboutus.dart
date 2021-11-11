@@ -54,18 +54,33 @@ class Data {
 class Options {
   String name;
   String imageUrl;
+  String imageUrlSelected;
 
-  Options({this.name, this.imageUrl});
+  Options({this.name, this.imageUrl, this.imageUrlSelected});
 
   Options.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     imageUrl = json['image_url'];
+    imageUrlSelected = json['image_url_selected'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
     data['image_url'] = this.imageUrl;
+    data['image_url_selected'] = this.imageUrlSelected;
     return data;
+  }
+}
+
+class TempFoundUsOptions {
+  String name;
+  String imageUrl;
+  String selectedImage;
+
+  TempFoundUsOptions(String name, String imageUrl, String selectedImage) {
+    this.name = name;
+    this.imageUrl = imageUrl;
+    this.selectedImage = selectedImage;
   }
 }

@@ -94,8 +94,8 @@ class OptionsData {
   final int fundRegulated;
   final String fundRegulatorName;
   final String fundInvstmtObj;
-  final int fundExistVal;
-  final int fundNewVal;
+  final String fundExistVal;
+  final String fundNewVal;
   final String fundWebsite;
   final String fundLogo;
   final String fundStatus;

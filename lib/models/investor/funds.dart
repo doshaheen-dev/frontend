@@ -67,8 +67,8 @@ class Option {
   int fundRegulated;
   String fundRegulatorName;
   String fundInvstmtObj;
-  int fundExistVal;
-  int fundNewVal;
+  String fundExistVal;
+  String fundNewVal;
   String fundWebsite;
   String fundLogo;
   String fundStatus;

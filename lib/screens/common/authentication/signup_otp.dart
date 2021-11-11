@@ -111,22 +111,22 @@ class _SignUpOTPState extends State<SignUpOTP> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Container(
-                        width: 60,
-                        height: 60,
-                        child: IconButton(
-                          icon: Icon(Icons.arrow_back, size: 30),
-                          onPressed: () => {Navigator.of(context).maybePop()},
-                        ),
+                      IconButton(
+                        icon: Icon(Icons.arrow_back_ios,
+                            size: 30, color: backButtonColor),
+                        onPressed: () => {Navigator.of(context).maybePop()},
+                      ),
+                      SizedBox(
+                        height: 40,
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Container(
-                            margin:
-                                const EdgeInsets.only(top: 10.0, left: 25.0),
+                            margin: const EdgeInsets.only(left: 25.0),
                             child: Text(signUpHeader,
-                                style: textBold26(headingBlack)),
+                                style:
+                                    textBold26(Theme.of(context).accentColor)),
                           ),
                           Container(
                             margin: const EdgeInsets.only(top: 5.0, left: 25.0),
@@ -148,9 +148,9 @@ class _SignUpOTPState extends State<SignUpOTP> {
                           Container(
                               margin: const EdgeInsets.only(
                                   top: 5.0,
-                                  left: 25.0,
+                                  left: 40.0,
                                   bottom: 20,
-                                  right: 25.0),
+                                  right: 40.0),
                               child: ElevatedButton(
                                 onPressed: () {
                                   FocusScope.of(context)
@@ -191,16 +191,13 @@ class _SignUpOTPState extends State<SignUpOTP> {
                                             BorderRadius.circular(18))),
                                 child: Ink(
                                   decoration: BoxDecoration(
-                                      gradient: LinearGradient(colors: [
-                                        Theme.of(context).primaryColor,
-                                        Theme.of(context).primaryColor
-                                      ]),
+                                      color: Theme.of(context).primaryColor,
                                       borderRadius: BorderRadius.circular(15)),
                                   child: Container(
                                     width: MediaQuery.of(context).size.width,
                                     height: 60,
                                     alignment: Alignment.center,
-                                    child: Text(sendOtpSecret,
+                                    child: Text("Send OTP",
                                         style: textWhiteBold18()),
                                   ),
                                 ),
@@ -211,7 +208,8 @@ class _SignUpOTPState extends State<SignUpOTP> {
                                 left: 25.0, bottom: 20, right: 25.0),
                             width: MediaQuery.of(context).size.width,
                             child: Text(
-                                "*You will recieve a one time password(Secret Code) on your mobile.",
+                                "You will be receiving a\none time password (OTP) on your\n mobile phone.",
+                                textAlign: TextAlign.center,
                                 style: textNormal16(textGrey)),
                           ),
                         ],

@@ -1,5 +1,6 @@
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/signup_request_preferences.dart';
+import 'package:acc/utilites/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:acc/screens/investor/investment_choices.dart';
@@ -40,22 +41,19 @@ class _InvestmentLimitState extends State<InvestmentLimit> {
             Widget>[
           Container(
             child: IconButton(
-              icon: Icon(Icons.arrow_back, size: 30),
+              icon: Icon(Icons.arrow_back_ios, size: 30),
               onPressed: () => {Navigator.pop(context)},
             ),
+          ),
+          SizedBox(
+            height: 40,
           ),
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
               Widget>[
             Container(
-              margin: const EdgeInsets.only(top: 10.0, left: 25.0, right: 25.0),
-              child: Text(
-                "How much are you looking to invest?",
-                style: TextStyle(
-                    color: headingBlack,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 26.0,
-                    fontFamily: FontFamilyMontserrat.name),
-              ),
+              margin: const EdgeInsets.only(left: 25.0, right: 25.0),
+              child: Text("How much are you looking to invest?",
+                  style: textBold26(Colors.black)),
             ),
             SizedBox(
               height: 10,
@@ -154,26 +152,21 @@ class _InvestmentLimitState extends State<InvestmentLimit> {
         });
       },
       child: Container(
-        width: 10,
-        height: 70,
-        decoration: BoxDecoration(
-          color: infoItemList.contains(item.header)
-              ? Theme.of(context).primaryColor
-              : unselectedGray,
-          borderRadius: BorderRadius.all(
-            const Radius.circular(15.0),
+          width: 10,
+          height: 70,
+          decoration: BoxDecoration(
+            color: infoItemList.contains(item.header)
+                ? Theme.of(context).selectedRowColor
+                : unselectedGray,
+            borderRadius: BorderRadius.all(
+              const Radius.circular(15.0),
+            ),
           ),
-        ),
-        child: Center(
-            child: Text(item.header,
-                style: TextStyle(
-                    color: infoItemList.contains(item.header)
-                        ? Colors.white
-                        : Colors.black,
-                    fontWeight: FontWeight.normal,
-                    fontSize: 12.0,
-                    fontFamily: FontFamilyMontserrat.name))),
-      ),
+          child: Center(
+              child: Text(item.header,
+                  style: textNormal12(infoItemList.contains(item.header)
+                      ? Colors.white
+                      : Theme.of(context).selectedRowColor)))),
     );
   }
 

@@ -27,7 +27,8 @@ class _FundsResubmitHeaderState extends State<FundsResubmitHeader> {
               child: IconButton(
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
-                icon: Icon(Icons.arrow_back),
+                icon: Icon(Icons.arrow_back_ios,
+                    size: 30, color: backButtonColor),
                 onPressed: () => {Navigator.pop(context)},
               ),
             ),
@@ -79,18 +80,15 @@ class _FundsResubmitHeaderState extends State<FundsResubmitHeader> {
                         width: 70,
                         child: CircleAvatar(
                           radius: bRadius,
-                          backgroundColor: Theme.of(context).primaryColor,
+                          backgroundColor: Theme.of(context).accentColor,
                           child: (UserData.instance.userInfo.profileImage ==
                                       null ||
                                   UserData.instance.userInfo.profileImage == '')
-                              ? ImageCircle(
-                                  borderRadius: bRadius,
-                                  image: Image.asset(
-                                    'assets/images/UserProfile.png',
-                                    width: iHeight,
-                                    height: iHeight,
-                                    fit: BoxFit.fill,
-                                  ),
+                              ? Image.asset(
+                                  'assets/images/UserProfile.png',
+                                  height: 70,
+                                  width: 70,
+                                  fit: BoxFit.fitHeight,
                                 )
                               : ImageCircle(
                                   borderRadius: bRadius,

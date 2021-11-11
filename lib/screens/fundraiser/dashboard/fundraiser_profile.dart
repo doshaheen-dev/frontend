@@ -64,7 +64,7 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
   void initState() {
     super.initState();
     mobileUpdate = MobileUpdate(this.mobileNumber, this.selectedCountry,
-        this.changedMobileVerificationId, this.callback);
+        this.changedMobileVerificationId, this.callback, true);
     emailUpdateCallback = EmailUpdate(this.emailIdCallbackValue,
         this.changedVerificationId, this.emailCallback);
   }
@@ -201,7 +201,10 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
                                     flex: 1,
                                     child: Container(
                                       margin: const EdgeInsets.only(
-                                          left: 10.0, bottom: 10, right: 25.0),
+                                          top: 5.0,
+                                          left: 10.0,
+                                          bottom: 10,
+                                          right: 25.0),
                                       child: ElevatedButton(
                                           onPressed: () {
                                             openLogoutDialog(context,
@@ -364,8 +367,8 @@ class _FundraiserProfileState extends State<FundraiserProfile> {
       ),
       Container(
         margin: const EdgeInsets.only(top: 5.0, bottom: 10),
-        child: MobileUpdate(_mobileController.text, selectedCountry,
-            _verificationId, mobileUpdate.callback),
+        child: MobileUpdate(UserData.instance.mobileNo, selectedCountry,
+            _verificationId, mobileUpdate.callback, true),
       ),
     ]);
   }

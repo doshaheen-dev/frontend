@@ -7,6 +7,7 @@ import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/services/signup_service.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/widgets/app_progressbar.dart';
+import 'package:acc/widgets/update_bottomsheet/mobile_update.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,14 +29,14 @@ import 'package:acc/utils/crypt_utils.dart';
 
 class SignUpDetails extends StatefulWidget {
   final User _user;
-  final String _userAvatar;
+  final String mobileNumber;
 
   const SignUpDetails({
     Key key,
     User user,
-    String userAvatar,
+    String mobileNumber,
   })  : _user = user,
-        _userAvatar = userAvatar,
+        mobileNumber = mobileNumber,
         super(key: key);
 
   @override
@@ -229,39 +230,33 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                           children: <Widget>[
                             Container(
                               child: IconButton(
-                                icon: Icon(Icons.arrow_back, size: 30),
+                                icon: Icon(Icons.arrow_back_ios,
+                                    size: 30, color: backButtonColor),
                                 onPressed: () {
                                   Authentication.signOut();
                                   Navigator.pop(context);
                                 },
                               ),
                             ),
+                            SizedBox(
+                              height: 40.0,
+                            ),
                             Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Container(
-                                    margin: const EdgeInsets.only(
-                                        top: 10.0, left: 25.0),
-                                    child: Text(
-                                      "Personal details here",
-                                      style: TextStyle(
-                                          color: headingBlack,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 26.0,
-                                          fontFamily:
-                                              FontFamilyMontserrat.name),
-                                    ),
+                                    margin: const EdgeInsets.only(left: 25.0),
+                                    child: Text("Personal details here",
+                                        style: textBold26(
+                                            Theme.of(context).accentColor)),
                                   ),
                                   SizedBox(
-                                    height: 30,
+                                    height: 20,
                                   ),
 
                                   Container(
                                     margin: const EdgeInsets.only(
-                                        top: 5.0,
-                                        left: 25.0,
-                                        bottom: 20,
-                                        right: 25.0),
+                                        left: 25.0, bottom: 20, right: 25.0),
                                     decoration: customDecoration(),
                                     child: TextField(
                                       style: _setTextFieldStyle(),
@@ -355,7 +350,7 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                                     margin: const EdgeInsets.only(
                                         top: 5.0,
                                         left: 25.0,
-                                        bottom: 20,
+                                        bottom: 20.0,
                                         right: 25.0),
                                     decoration: customDecoration(),
                                     child: TextField(
@@ -366,16 +361,24 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                                           _setTextFieldDecoration("Address"),
                                     ),
                                   ),
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 5.0, left: 25.0, right: 25.0),
+                                    child: MobileUpdate(widget.mobileNumber,
+                                        null, null, null, false),
+                                  ),
+
                                   SizedBox(
-                                    height: 50,
+                                    height: 20,
                                   ),
                                   //NEXT BUTTON
                                   Container(
+                                      alignment: Alignment.center,
                                       margin: const EdgeInsets.only(
+                                          left: 40,
                                           top: 5.0,
-                                          left: 25.0,
                                           bottom: 20,
-                                          right: 25.0),
+                                          right: 40),
                                       child: InkWell(
                                         borderRadius: BorderRadius.circular(40),
                                         onTap: () {

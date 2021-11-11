@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:acc/constants/font_family.dart';
-import 'package:acc/screens/common/onboarding.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:acc/utils/class_navigation.dart';
 import 'package:acc/widgets/app_progressbar.dart';
@@ -16,6 +15,12 @@ import 'package:acc/utilites/ui_widgets.dart';
 import 'package:provider/provider.dart';
 
 class QuickSignUp extends StatefulWidget {
+  final String phoneNumber;
+
+  const QuickSignUp({Key key, String mobileNumber})
+      : phoneNumber = mobileNumber,
+        super(key: key);
+
   @override
   _QuickSignUpState createState() => _QuickSignUpState();
 }
@@ -48,9 +53,13 @@ class _QuickSignUpState extends State<QuickSignUp> {
                       children: <Widget>[
                         Container(
                           child: IconButton(
-                            icon: Icon(Icons.arrow_back, size: 30),
+                            icon: Icon(Icons.arrow_back_ios,
+                                size: 30, color: backButtonColor),
                             onPressed: () => {_onBackPressed()},
                           ),
+                        ),
+                        SizedBox(
+                          height: 40,
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,23 +67,15 @@ class _QuickSignUpState extends State<QuickSignUp> {
                             Container(
                               margin:
                                   const EdgeInsets.only(top: 10.0, left: 25.0),
-                              child: Text(
-                                "Register Your Email",
-                                style: TextStyle(
-                                    color: headingBlack,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 26.0,
-                                    fontFamily: FontFamilyMontserrat.name),
-                              ),
+                              child: Text("Register Your Email",
+                                  style: textBold26(
+                                      Theme.of(context).accentColor)),
                             ),
 
-                            SizedBox(
-                              height: 30,
-                            ),
                             // Apple Login
                             Container(
                                 margin: const EdgeInsets.only(
-                                  top: 15.0,
+                                  top: 20.0,
                                   bottom: 5,
                                 ),
                                 child: createButton(context, "Apple")),
@@ -85,27 +86,19 @@ class _QuickSignUpState extends State<QuickSignUp> {
                               ),
                               child: createButton(context, "Google"),
                             ),
+                            SizedBox(
+                              height: 25.0,
+                            ),
                             Center(
-                              child: Text(
-                                "or",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16.0,
-                                    fontFamily: FontFamilyMontserrat.name),
-                              ),
+                              child:
+                                  Text("or", style: textBold16(Colors.black)),
                             ),
                             SizedBox(
-                              height: 20.0,
+                              height: 25.0,
                             ),
                             Center(
-                              child: Text(
-                                "Use your email address to register",
-                                style: TextStyle(
-                                    color: textGrey,
-                                    fontSize: 16.0,
-                                    fontFamily: FontFamilyMontserrat.name),
-                              ),
+                              child: Text("Use your email address to register",
+                                  style: textNormal16(textGrey)),
                             ),
                             SizedBox(
                               height: 10.0,
@@ -114,10 +107,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
                             //SIGN UP BUTTON
                             Container(
                                 margin: const EdgeInsets.only(
-                                    top: 5.0,
-                                    left: 40.0,
-                                    bottom: 20,
-                                    right: 40.0),
+                                    left: 40.0, bottom: 20, right: 40.0),
                                 child: InkWell(
                                   borderRadius: BorderRadius.circular(40),
                                   onTap: () {
@@ -129,13 +119,8 @@ class _QuickSignUpState extends State<QuickSignUp> {
                                       height: 60,
                                       decoration: appColorButton(context),
                                       child: Center(
-                                          child: Text(
-                                        "Register",
-                                        style: TextStyle(
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white),
-                                      ))),
+                                          child: Text("Register",
+                                              style: textWhiteBold18()))),
                                 )),
                           ],
                         )
@@ -268,10 +253,7 @@ class _QuickSignUpState extends State<QuickSignUp> {
     try {
       Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (context, animation, anotherAnimation) {
-            return SignUpDetails(
-              user: user,
-              userAvatar: user != null ? user.photoURL : '',
-            );
+            return SignUpDetails(user: user, mobileNumber: widget.phoneNumber);
           },
           transitionDuration: Duration(milliseconds: 2000),
           transitionsBuilder: (context, animation, anotherAnimation, child) {

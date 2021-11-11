@@ -38,20 +38,24 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
                 children: [
                   Container(
                       margin: const EdgeInsets.only(
-                          top: 60.0, left: 25.0, right: 25.0),
+                          top: 60.0, left: 25.0, right: 25.0, bottom: 5.0),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Expanded(
+                          Container(
                             child: UserData.instance.userInfo.firstName != null
                                 ? Text(
                                     'Hello ${UserData.instance.userInfo.firstName}',
-                                    style: textBold26(headingBlack),
+                                    style: textBold26(
+                                        Theme.of(context).accentColor),
                                   )
                                 : Text(
                                     'Hello Fundraiser',
-                                    style: textBold26(headingBlack),
+                                    style: textBold26(
+                                        Theme.of(context).accentColor),
                                   ),
                           ),
+                          SizedBox(width: 20),
                           GestureDetector(
                             onTap: () {
                               Navigator.of(context)
@@ -86,21 +90,18 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
                               width: 70,
                               child: CircleAvatar(
                                 radius: bRadius,
-                                backgroundColor: Theme.of(context).primaryColor,
+                                backgroundColor: Theme.of(context).accentColor,
                                 child:
                                     (UserData.instance.userInfo.profileImage ==
                                                 null ||
                                             UserData.instance.userInfo
                                                     .profileImage ==
                                                 '')
-                                        ? ImageCircle(
-                                            borderRadius: bRadius,
-                                            image: Image.asset(
-                                              'assets/images/UserProfile.png',
-                                              width: iHeight,
-                                              height: iHeight,
-                                              fit: BoxFit.fill,
-                                            ),
+                                        ? Image.asset(
+                                            'assets/images/UserProfile.png',
+                                            height: 70,
+                                            width: 70,
+                                            fit: BoxFit.fitHeight,
                                           )
                                         : ImageCircle(
                                             borderRadius: bRadius,
@@ -142,7 +143,7 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
       BottomNavigationBarItem(
         icon: Image.asset(
           'assets/images/dashboard/nav_home.png',
-          height: 80.0,
+          height: 60.0,
         ),
         tooltip: "Home",
         label: "Home",
@@ -150,14 +151,14 @@ class _FundraiserDashboardState extends State<FundraiserDashboard> {
       BottomNavigationBarItem(
         icon: Image.asset(
           'assets/images/dashboard/nav_faq.png',
-          height: 80.0,
+          width: 60.0,
         ),
         tooltip: "FAQ",
         label: "FAQ",
       ),
       BottomNavigationBarItem(
         icon: Image.asset('assets/images/dashboard/nav_profile.png',
-            height: 80.0),
+            height: 60.0),
         tooltip: "Profile",
         label: "Profile",
       ),

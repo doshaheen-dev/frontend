@@ -113,8 +113,8 @@ class _EmailUpdateState extends State<EmailUpdate> {
                                 Spacer(),
                                 InkWell(
                                     onTap: () {
-                                      _newEmailController.clear();
-                                      emailOtpController.clear();
+                                      // _newEmailController.clear();
+                                      // emailOtpController.clear();
                                       setState(() {
                                         isEmailOtpReceived = false;
                                       });
@@ -133,7 +133,15 @@ class _EmailUpdateState extends State<EmailUpdate> {
                               width: MediaQuery.of(context).size.width,
                               child: TextField(
                                   style: textBlackNormal16(),
-                                  onChanged: (value) => newEmail = value,
+                                  onChanged: (value) => {
+                                        newEmail = value,
+                                        if (isEmailOtpReceived)
+                                          {
+                                            setState(() {
+                                              isEmailOtpReceived = false;
+                                            })
+                                          },
+                                      },
                                   controller: _newEmailController,
                                   decoration: InputDecoration(
                                       contentPadding: EdgeInsets.all(10.0),
@@ -208,7 +216,7 @@ class _EmailUpdateState extends State<EmailUpdate> {
                                               height: 45,
                                               alignment: Alignment.center,
                                               child: Text(
-                                                sendOtpSecret,
+                                                "Send OTP",
                                                 style: textWhiteBold16(),
                                               ))))),
                             ),
@@ -224,7 +232,7 @@ class _EmailUpdateState extends State<EmailUpdate> {
                                         margin: const EdgeInsets.only(
                                             top: 5.0, left: 25.0),
                                         child: Text(
-                                          otpMobileLabel,
+                                          "Please enter the OTP received in your inbox.",
                                           style: textNormal16(Colors.black),
                                         )),
                                     Container(
@@ -271,12 +279,12 @@ class _EmailUpdateState extends State<EmailUpdate> {
                                         child: RichText(
                                           textAlign: TextAlign.center,
                                           text: TextSpan(
-                                              text: "Didn't receive the code? ",
-                                              style: textNormal14(Colors.black),
+                                              text: "Didn't receive the OTP? ",
+                                              style: textNormal16(Colors.black),
                                               children: [
                                                 TextSpan(
                                                     text: 'Resend OTP',
-                                                    style: textNormal14(
+                                                    style: textNormal16(
                                                         Theme.of(context)
                                                             .primaryColor),
                                                     recognizer:
@@ -305,6 +313,25 @@ class _EmailUpdateState extends State<EmailUpdate> {
                                                     .showSnackBar(SnackBar(
                                                         content:
                                                             Text(warningOTP)));
+                                                return;
+                                              }
+
+                                              if (_newEmailController
+                                                  .text.isEmpty) {
+                                                _emailScaffoldKey.currentState
+                                                    .showSnackBar(SnackBar(
+                                                        content: Text(
+                                                            "Please enter your Email Id.")));
+                                                return;
+                                              }
+
+                                              if (!CodeUtils.emailValid(
+                                                  _newEmailController.text
+                                                      .trim())) {
+                                                _emailScaffoldKey.currentState
+                                                    .showSnackBar(SnackBar(
+                                                        content: Text(
+                                                            "Please enter correct Email Id.")));
                                                 return;
                                               }
                                               // verify otp for email id

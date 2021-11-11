@@ -97,8 +97,8 @@ class InvestorHome with ChangeNotifier {
 class FundsInfo {
   final String fundName;
   final String fundLogo;
-  final int fundExistVal;
-  final int fundNewVal;
+  final String fundExistVal;
+  final String fundNewVal;
   final int fundTxnId;
   final String fundSponsorName;
   final int fundRegulated;

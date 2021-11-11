@@ -155,41 +155,47 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          margin: EdgeInsets.only(top: 30.0, left: 10.0),
-          child: IconButton(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            icon: Icon(Icons.arrow_back),
-            onPressed: () => {Navigator.pop(context)},
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              margin: EdgeInsets.only(top: 40.0, left: 10.0),
+              child: IconButton(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                icon: Icon(Icons.arrow_back_ios,
+                    size: 30, color: backButtonColor),
+                onPressed: () => {Navigator.pop(context)},
+              ),
+            ),
+            Spacer(),
+            Container(
+              margin: EdgeInsets.only(top: 40.0),
+              child: (UserData.instance.userInfo.firstName == null ||
+                      UserData.instance.userInfo.firstName == '')
+                  ? Text('Hello Investor',
+                      style: textBold26(Theme.of(context).accentColor))
+                  : Text(
+                      'Hello ${UserData.instance.userInfo.firstName}',
+                      style: textBold26(Theme.of(context).accentColor),
+                    ),
+            ),
+            SizedBox(width: 10),
+            Container(
+              margin: EdgeInsets.only(top: 40.0, right: 20),
+              child: openProfilePicture(context),
+            )
+          ],
         ),
         Container(
           margin: EdgeInsets.only(
+            top: 30.0,
             right: 25.0,
             left: 25.0,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: (UserData.instance.userInfo.firstName == null ||
-                            UserData.instance.userInfo.firstName == '')
-                        ? Text(
-                            'Hello Investor',
-                            style: textBold26(headingBlack),
-                          )
-                        : Text(
-                            'Hello ${UserData.instance.userInfo.firstName}',
-                            style: textBold26(headingBlack),
-                          ),
-                  ),
-                  openProfilePicture(context),
-                ],
-              ),
-              SizedBox(height: 10.0),
               Text(
                 "You can edit your preferences here",
                 style: textNormal18(headingBlack),
@@ -253,57 +259,60 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
 
               //NEXT BUTTON
               Container(
+                  margin: EdgeInsets.only(top: 10.0, left: 40.0, right: 40.0),
                   child: ElevatedButton(
-                onPressed: !isUpdateActivated
-                    ? null
-                    : () async {
-                        // on click
-                        var listIds = [];
-                        if (localItemList.isEmpty && productsList.isNotEmpty) {
-                          for (int i = 0; i < productsList.length; i++) {
-                            listIds.add(productsList[i]);
-                          }
-                        } else {
-                          for (int i = 0; i < localItemList.length; i++) {
-                            for (int j = 0; j < infoItemList.length; j++) {
-                              if (localItemList[i].name == infoItemList[j]) {
-                                listIds.add(localItemList[i].id);
-                                break;
+                    onPressed: !isUpdateActivated
+                        ? null
+                        : () async {
+                            // on click
+                            var listIds = [];
+                            if (localItemList.isEmpty &&
+                                productsList.isNotEmpty) {
+                              for (int i = 0; i < productsList.length; i++) {
+                                listIds.add(productsList[i]);
+                              }
+                            } else {
+                              for (int i = 0; i < localItemList.length; i++) {
+                                for (int j = 0; j < infoItemList.length; j++) {
+                                  if (localItemList[i].name ==
+                                      infoItemList[j]) {
+                                    listIds.add(localItemList[i].id);
+                                    break;
+                                  }
+                                }
                               }
                             }
-                          }
-                        }
-                        if (listIds.isNotEmpty) {
-                          final requestModel =
-                              InvestorSignupPreferences.instance;
-                          requestModel.productIds = listIds.join(',');
-                        }
+                            if (listIds.isNotEmpty) {
+                              final requestModel =
+                                  InvestorSignupPreferences.instance;
+                              requestModel.productIds = listIds.join(',');
+                            }
 
-                        var progress = AppProgressBar.of(context);
-                        progress?.showWithText('Updating Preferences...');
-                        await submitPreference(progress, context);
-                        return;
-                      },
-                style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(0.0),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14))),
-                child: Ink(
-                  decoration: isUpdateActivated
-                      ? BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(10))
-                      : BoxDecoration(
-                          color: kwhiteGrey,
-                          borderRadius: BorderRadius.circular(10)),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 50,
-                    alignment: Alignment.center,
-                    child: Text("Update", style: textWhiteBold16()),
-                  ),
-                ),
-              ))
+                            var progress = AppProgressBar.of(context);
+                            progress?.showWithText('Updating Preferences...');
+                            await submitPreference(progress, context);
+                            return;
+                          },
+                    style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.all(0.0),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14))),
+                    child: Ink(
+                      decoration: isUpdateActivated
+                          ? BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              borderRadius: BorderRadius.circular(10))
+                          : BoxDecoration(
+                              color: kwhiteGrey,
+                              borderRadius: BorderRadius.circular(10)),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 60,
+                        alignment: Alignment.center,
+                        child: Text("Update", style: textWhiteBold16()),
+                      ),
+                    ),
+                  ))
             ],
           ),
         ),
@@ -342,17 +351,14 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
         width: 70,
         child: CircleAvatar(
           radius: bRadius,
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: Theme.of(context).accentColor,
           child: (UserData.instance.userInfo.profileImage == null ||
                   UserData.instance.userInfo.profileImage == '')
-              ? ImageCircle(
-                  borderRadius: bRadius,
-                  image: Image.asset(
-                    'assets/images/UserProfile.png',
-                    width: iHeight,
-                    height: iHeight,
-                    fit: BoxFit.fill,
-                  ),
+              ? Image.asset(
+                  'assets/images/UserProfile.png',
+                  height: 70,
+                  width: 70,
+                  fit: BoxFit.fitHeight,
                 )
               : ImageCircle(
                   borderRadius: bRadius,
@@ -553,7 +559,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
           child: Container(
               height: 50.0,
               color: infoItemList.contains(item.name)
-                  ? Theme.of(context).primaryColor
+                  ? Theme.of(context).selectedRowColor
                   : Colors.white,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -562,7 +568,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
                       textAlign: TextAlign.center,
                       style: textNormal18(infoItemList.contains(item.name)
                           ? Colors.white
-                          : headingBlack)),
+                          : Theme.of(context).selectedRowColor)),
                   Spacer(),
                   Visibility(
                       visible: infoItemList.contains(item.name) ? true : false,
@@ -614,7 +620,7 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
         label: (i, v) => v,
       ),
       choiceStyle: const C2ChoiceStyle(
-        color: Colors.blue,
+        color: const Color(0XFF179FA1),
         brightness: Brightness.dark,
         showCheckmark: false,
       ),
@@ -623,51 +629,6 @@ class _InvestorPreferencesState extends State<InvestorPreferences> {
       },
       wrapped: true,
     );
-  }
-
-  Widget setChipList() {
-    return ListView.builder(
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (ctx, index) {
-        return Container(
-          child: Container(
-            margin: EdgeInsets.only(left: 5.0, right: 5.0),
-            child: _createChipCell(infoItemList[index]),
-          ),
-        );
-      },
-      itemCount: infoItemList.length,
-      shrinkWrap: true,
-    );
-  }
-
-  _createChipCell(String infoItemName) {
-    return InputChip(
-        label: Text(
-          infoItemName,
-          style: textNormal14(Colors.white),
-        ),
-        backgroundColor: Theme.of(context).primaryColor,
-        deleteIconColor: Colors.white,
-        deleteIcon: Icon(Icons.close),
-        labelPadding: EdgeInsets.all(10.0),
-        avatar: InkWell(
-            onTap: () {},
-            child: Icon(
-              Icons.close,
-              color: Colors.white,
-            )),
-        onPressed: () {
-          setState(() {
-            infoItemList.remove(infoItemName);
-            for (var i = 0; i < localItemList.length; i++) {
-              if (localItemList[i].name == infoItemName) {
-                _uncheckOption(localItemList[i]);
-                break;
-              }
-            }
-          });
-        });
   }
 
   Future<void> submitPreference(progress, BuildContext context) async {

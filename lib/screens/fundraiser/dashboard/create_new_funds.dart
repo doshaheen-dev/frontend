@@ -98,18 +98,22 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                 children: <Widget>[
                   Container(
                     child: IconButton(
-                      icon: Icon(Icons.arrow_back, size: 30),
+                      icon: Icon(Icons.arrow_back_ios,
+                          size: 30, color: backButtonColor),
                       onPressed: () {
                         Authentication.signOut();
                         Navigator.pop(context);
                       },
                     ),
                   ),
+                  SizedBox(
+                    height: 40,
+                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                        margin: const EdgeInsets.only(top: 10.0, left: 25.0),
+                        margin: const EdgeInsets.only(left: 25.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -125,7 +129,7 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                         ),
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 15,
                       ),
                       Container(
                         margin: const EdgeInsets.only(
@@ -178,6 +182,9 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                                           cornerRadius: 20.0,
                                           activeFgColor: Colors.white,
                                           initialLabelIndex: selectedIndex,
+                                          activeBgColor: [
+                                            Theme.of(context).selectedRowColor
+                                          ],
                                           inactiveBgColor: unselectedGray,
                                           inactiveFgColor: Colors.black,
                                           totalSwitches: 2,
@@ -289,14 +296,15 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                                   "Please enter the existing fund value.");
                               return;
                             }
+
                             if (int.parse(
-                                        _existingFundsController.text.trim()) >
-                                    2100000000 ||
-                                int.parse(
                                         _existingFundsController.text.trim()) <
-                                    100000) {
+                                    100000 ||
+                                int.parse(
+                                        _existingFundsController.text.trim()) >
+                                    999999999999999999) {
                               showSnackBar(context,
-                                  "Please enter existing fund value equal to or more than 100000 and less than 2100000000");
+                                  "Please enter existing fund value equal to or more than 100000");
                               return;
                             }
 
@@ -305,12 +313,13 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                                   context, "Please enter the new fund value.");
                               return;
                             }
-                            if (int.parse(_newFundsController.text.trim()) >
-                                    2100000000 ||
-                                int.parse(_newFundsController.text.trim()) <
-                                    100000) {
+
+                            if (int.parse(_newFundsController.text.trim()) <
+                                    100000 ||
+                                int.parse(_newFundsController.text.trim()) >
+                                    999999999999999999) {
                               showSnackBar(context,
-                                  "Please enter new fund value equal to or more than 100000 and less than 2100000000");
+                                  "Please enter new fund value equal to or more than 100000");
                               return;
                             }
                             if (_websiteController.text.isEmpty) {
@@ -343,9 +352,9 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
                             requestModelInstance.fundInvstmtObj =
                                 _objectiveController.text.trim();
                             requestModelInstance.fundExistVal =
-                                int.parse(_existingFundsController.text.trim());
+                                _existingFundsController.text.trim();
                             requestModelInstance.fundNewVal =
-                                int.parse(_newFundsController.text.trim());
+                                _newFundsController.text.trim();
                             requestModelInstance.fundWebsite =
                                 _websiteController.text.trim();
 
@@ -405,7 +414,7 @@ class _CreateNewFundsState extends State<CreateNewFunds> {
         keyboardType: TextInputType.number,
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.digitsOnly,
-          LengthLimitingTextInputFormatter(10),
+          LengthLimitingTextInputFormatter(18),
         ],
         decoration: new InputDecoration(
             contentPadding: EdgeInsets.all(10.0),

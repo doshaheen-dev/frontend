@@ -16,6 +16,7 @@ import 'package:acc/widgets/update_bottomsheet/address_update.dart';
 import 'package:acc/widgets/update_bottomsheet/email_update.dart';
 import 'package:acc/widgets/update_bottomsheet/mobile_update.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -74,7 +75,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
   void initState() {
     _countries = _fetchCountries(context);
     mobileUpdate = MobileUpdate(this.mobileNumber, this.selectedCountry,
-        this.changedMobileVerificationId, this.callback);
+        this.changedMobileVerificationId, this.callback, true);
     emailUpdateCallback = EmailUpdate(this.emailIdCallbackValue,
         this.changedEmailVerificationId, this.emailCallback);
     addressUpdate = AddressUpdate(this.changedAddress, this.addressCallback);
@@ -271,6 +272,7 @@ class _InvestorProfileState extends State<InvestorProfile> {
         onPressed: () async {
           final prefs = await SharedPreferences.getInstance();
           prefs.setString('UserInfo', '');
+          prefs.clear();
           Navigation.openOnBoarding(context);
         },
         child: Text(
@@ -333,8 +335,8 @@ class _InvestorProfileState extends State<InvestorProfile> {
       ),
       Container(
         margin: const EdgeInsets.only(top: 5.0, bottom: 10),
-        child: MobileUpdate(_mobileController.text, selectedCountry,
-            _verificationId, mobileUpdate.callback),
+        child: MobileUpdate(UserData.instance.mobileNo, selectedCountry,
+            _verificationId, mobileUpdate.callback, true),
       ),
       Container(
         margin: const EdgeInsets.only(

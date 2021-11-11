@@ -51,22 +51,26 @@ class _AddNewFundsState extends State<AddNewFunds> {
                         children: <Widget>[
                   Container(
                     child: IconButton(
-                      icon: Icon(Icons.arrow_back, size: 30),
+                      icon: Icon(Icons.arrow_back_ios,
+                          size: 30, color: backButtonColor),
                       onPressed: () => {Navigator.pop(context)},
                     ),
+                  ),
+                  SizedBox(
+                    height: 40,
                   ),
                   Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Container(
-                          margin: const EdgeInsets.only(
-                              top: 10.0, left: 25.0, right: 25.0),
+                          margin:
+                              const EdgeInsets.only(left: 25.0, right: 25.0),
                           child: Text("Choose your Product",
                               style: textBold(headingBlack, 20.0)),
                         ),
                         Container(
                           margin: const EdgeInsets.only(
-                              top: 10.0, left: 25.0, right: 25.0),
+                              top: 5.0, left: 25.0, right: 25.0),
                           child: Text(
                               "Select the products you want to raise funds for.",
                               style: textNormal(textGrey, 17.0)),
@@ -75,8 +79,8 @@ class _AddNewFundsState extends State<AddNewFunds> {
                           height: 10,
                         ),
                         Container(
-                            margin: const EdgeInsets.only(
-                                top: 10.0, left: 25.0, right: 25.0),
+                            margin:
+                                const EdgeInsets.only(left: 25.0, right: 25.0),
                             child: FutureBuilder(
                                 future: _futureFundSlots,
                                 builder: (ctx, dataSnapshot) {
@@ -116,7 +120,7 @@ class _AddNewFundsState extends State<AddNewFunds> {
 
   InkWell _createCell(productProvider.InvestmentLimitItem item, int index) {
     return InkWell(
-      focusColor: Colors.transparent,
+      splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       borderRadius: BorderRadius.circular(40),
       onTap: () {
@@ -133,7 +137,7 @@ class _AddNewFundsState extends State<AddNewFunds> {
         height: 50,
         decoration: BoxDecoration(
           color: selectedIndex == index
-              ? Theme.of(context).primaryColor
+              ? Theme.of(context).selectedRowColor
               : unselectedGray,
           borderRadius: BorderRadius.all(
             const Radius.circular(15.0),
@@ -143,7 +147,10 @@ class _AddNewFundsState extends State<AddNewFunds> {
             child: Text(item.name,
                 textAlign: TextAlign.start,
                 style: textNormal(
-                    selectedIndex == index ? Colors.white : Colors.black, 17))),
+                    selectedIndex == index
+                        ? Colors.white
+                        : Theme.of(context).selectedRowColor,
+                    17))),
       ),
     );
   }

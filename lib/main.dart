@@ -85,7 +85,10 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           brightness: Brightness.light,
           primaryColor: appPrimaryColor,
-          accentColor: appAccentColor,
+          // accentColor: appAccentColor,
+          accentColor: textColor,
+          selectedRowColor: iconColor,
+
           fontFamily: FontFamilyMontserrat.name,
         ),
         home: MyHomePage(),
@@ -103,8 +106,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    print(CryptUtils.decryption("ChZumtEASOQveZjiAfPPLw=="));
-
     getUserInfo();
   }
 
@@ -118,6 +119,8 @@ class _MyHomePageState extends State<MyHomePage> {
       userMap = jsonDecode(userStr) as Map<String, dynamic>;
       UserData userData = UserData.fromNoDecryptionMap(userMap);
       UserData.instance.userInfo = userData;
+      print(
+          "data:- ${CryptUtils.encryption(UserData.instance.userInfo.mobileNo)}");
       print("Token: ${UserData.instance.userInfo.token}");
 
       if (userData != null) {

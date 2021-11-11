@@ -39,19 +39,23 @@ class _SuccesssFundSubmittedState extends State<SuccesssFundSubmitted> {
                       children: <Widget>[
                     Container(
                         margin: const EdgeInsets.only(
-                            top: 60.0, left: 25.0, right: 25.0),
+                            top: 20.0, left: 25.0, right: 25.0),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Expanded(
+                            Container(
+                              margin: EdgeInsets.only(right: 20.0),
                               child:
                                   UserData.instance.userInfo.firstName != null
                                       ? Text(
                                           'Hello ${UserData.instance.userInfo.firstName}',
-                                          style: textBold26(headingBlack),
+                                          style: textBold26(
+                                              Theme.of(context).accentColor),
                                         )
                                       : Text(
                                           'Hello Fundraiser',
-                                          style: textBold26(headingBlack),
+                                          style: textBold26(
+                                              Theme.of(context).accentColor),
                                         ),
                             ),
                             GestureDetector(
@@ -93,21 +97,18 @@ class _SuccesssFundSubmittedState extends State<SuccesssFundSubmitted> {
                                 child: CircleAvatar(
                                   radius: bRadius,
                                   backgroundColor:
-                                      Theme.of(context).primaryColor,
+                                      Theme.of(context).accentColor,
                                   child: (UserData.instance.userInfo
                                                   .profileImage ==
                                               null ||
                                           UserData.instance.userInfo
                                                   .profileImage ==
                                               '')
-                                      ? ImageCircle(
-                                          borderRadius: bRadius,
-                                          image: Image.asset(
-                                            'assets/images/UserProfile.png',
-                                            width: iHeight,
-                                            height: iHeight,
-                                            fit: BoxFit.fill,
-                                          ),
+                                      ? Image.asset(
+                                          'assets/images/UserProfile.png',
+                                          height: 70,
+                                          width: 70,
+                                          fit: BoxFit.fitHeight,
                                         )
                                       : ImageCircle(
                                           borderRadius: bRadius,
@@ -124,31 +125,34 @@ class _SuccesssFundSubmittedState extends State<SuccesssFundSubmitted> {
                           ],
                         )),
                     Container(
-                      margin: const EdgeInsets.only(top: 80.0),
                       child: Center(
                         child: Image.asset(
-                          'assets/images/investor/thankyou_smiley.png',
+                          'assets/images/fundraiser/success_fundraiser.png',
                         ),
                       ),
                     ),
                     Container(
-                        margin: const EdgeInsets.only(top: 50.0),
                         child: Center(
-                          child: Column(
-                            children: [
-                              Text('Thank you for submitting your details.',
-                                  textAlign: TextAlign.center,
-                                  style: textBold(headingBlack, 18)),
-                              Text('Our team will review\nand revert soon.',
-                                  textAlign: TextAlign.center,
-                                  style: textBold(headingBlack, 18))
-                            ],
-                          ),
-                        )),
+                      child: Column(
+                        children: [
+                          Text('THANK YOU',
+                              textAlign: TextAlign.center,
+                              style: textBold(headingBlack, 26)),
+                          SizedBox(height: 50),
+                          Text('Thank you for registering with us',
+                              textAlign: TextAlign.center,
+                              style: textNormal(textGrey, 16)),
+                          Text(
+                              'Our team will review and revert\nback to you at the earliest.',
+                              textAlign: TextAlign.center,
+                              style: textNormal(textGrey, 16))
+                        ],
+                      ),
+                    )),
                     //NEXT BUTTON
                     Container(
                       margin: const EdgeInsets.only(
-                          top: 30.0, left: 25.0, right: 25.0),
+                          top: 30.0, left: 40.0, right: 40.0),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(40),
                         onTap: () {
@@ -177,7 +181,6 @@ class _SuccesssFundSubmittedState extends State<SuccesssFundSubmitted> {
                               (Route<dynamic> route) => false);
                         },
                         child: Container(
-                          width: MediaQuery.of(context).size.width,
                           height: 60,
                           decoration: appColorButton(context),
                           child: Center(

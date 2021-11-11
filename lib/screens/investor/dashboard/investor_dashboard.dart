@@ -1,4 +1,3 @@
-import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/screens/common/profile_picture.dart';
 import 'package:acc/screens/investor/dashboard/investor_profile.dart';
@@ -41,25 +40,24 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                 children: [
                   Container(
                       margin: const EdgeInsets.only(
-                          top: 60.0, left: 25.0, right: 25.0),
+                          top: 50.0, left: 25.0, right: 25.0, bottom: 5.0),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Expanded(
+                          Container(
                             child: (UserData.instance.userInfo.firstName ==
                                         null ||
                                     UserData.instance.userInfo.firstName == '')
-                                ? Text(
-                                    'Hello Investor',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 26.0,
-                                        fontFamily: FontFamilyMontserrat.name),
-                                  )
+                                ? Text('Hello Investor',
+                                    style: textBold26(
+                                        Theme.of(context).accentColor))
                                 : Text(
                                     'Hello ${UserData.instance.userInfo.firstName}',
-                                    style: textBold26(headingBlack),
+                                    style: textBold26(
+                                        Theme.of(context).accentColor),
                                   ),
                           ),
+                          SizedBox(width: 20),
                           GestureDetector(
                             onTap: () {
                               Navigator.of(context)
@@ -94,31 +92,37 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
                               width: 70,
                               child: CircleAvatar(
                                 radius: bRadius,
-                                backgroundColor: Theme.of(context).primaryColor,
-                                child:
-                                    (UserData.instance.userInfo.profileImage ==
-                                                null ||
-                                            UserData.instance.userInfo
-                                                    .profileImage ==
-                                                '')
-                                        ? ImageCircle(
-                                            borderRadius: bRadius,
-                                            image: Image.asset(
-                                              'assets/images/UserProfile.png',
-                                              width: iHeight,
-                                              height: iHeight,
-                                              fit: BoxFit.fill,
-                                            ),
-                                          )
-                                        : ImageCircle(
-                                            borderRadius: bRadius,
-                                            image: Image.network(
-                                              UserData.instance.userInfo
-                                                  .profileImage,
-                                              width: iHeight,
-                                              height: iHeight,
-                                              fit: BoxFit.fill,
-                                            )),
+                                backgroundColor: Theme.of(context).accentColor,
+                                child: (UserData.instance.userInfo
+                                                .profileImage ==
+                                            null ||
+                                        UserData.instance.userInfo
+                                                .profileImage ==
+                                            '')
+                                    ? Image.asset(
+                                        'assets/images/UserProfile.png',
+                                        height: 70,
+                                        width: 70,
+                                        fit: BoxFit.fitHeight,
+                                      )
+                                    // ImageCircle(
+                                    //     borderRadius: bRadius,
+                                    //     image: Image.asset(
+                                    //       'assets/images/UserProfile.png',
+                                    //       width: iHeight,
+                                    //       height: iHeight,
+                                    //       fit: BoxFit.fill,
+                                    //     ),
+                                    //   )
+                                    : ImageCircle(
+                                        borderRadius: bRadius,
+                                        image: Image.network(
+                                          UserData
+                                              .instance.userInfo.profileImage,
+                                          width: iHeight,
+                                          height: iHeight,
+                                          fit: BoxFit.fill,
+                                        )),
                               ),
                             ),
                           ),
@@ -150,7 +154,7 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
       BottomNavigationBarItem(
         icon: Image.asset(
           'assets/images/dashboard/nav_home.png',
-          height: 80.0,
+          height: 60.0,
         ),
         tooltip: "Home",
         title: Text(
@@ -160,7 +164,7 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
       BottomNavigationBarItem(
         icon: Image.asset(
           'assets/images/dashboard/nav_faq.png',
-          height: 80.0,
+          height: 60.0,
         ),
         tooltip: "Like",
         title: Text(
@@ -170,7 +174,7 @@ class _InvestorDashboardState extends State<InvestorDashboard> {
       BottomNavigationBarItem(
         icon: Image.asset(
           'assets/images/dashboard/nav_profile.png',
-          height: 80.0,
+          height: 60.0,
         ),
         tooltip: "Profile",
         title: Text(

@@ -1,6 +1,5 @@
 import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/otp_response.dart';
-import 'package:acc/models/authentication/verify_phone_signin.dart';
 import 'package:acc/models/country/country.dart';
 import 'package:acc/models/default.dart';
 import 'package:acc/models/local_countries.dart';
@@ -22,10 +21,11 @@ class MobileUpdate extends StatefulWidget {
   String mobileNumber = "";
   var selectedCountry;
   String changedMobileVerificationId;
+  bool showUpdate;
 
   Function(String, dynamic, String) callback;
   MobileUpdate(this.mobileNumber, this.selectedCountry,
-      this.changedMobileVerificationId, this.callback);
+      this.changedMobileVerificationId, this.callback, this.showUpdate);
 
   @override
   _MobileUpdateState createState() => new _MobileUpdateState();
@@ -37,7 +37,6 @@ class _MobileUpdateState extends State<MobileUpdate> {
   String _verificationId = "";
   String otpText = "";
   String newMobileNo = "";
-  bool isEmailOtpReceived = false;
   bool isOtpReceived = false;
 
   TextEditingController _mobileController = TextEditingController();
@@ -124,21 +123,24 @@ class _MobileUpdateState extends State<MobileUpdate> {
                           FilteringTextInputFormatter.digitsOnly,
                         ],
                       ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Container(
-                          margin: EdgeInsets.only(right: 10.0, top: 25.0),
-                          child: InkWell(
-                              onTap: () {
-                                // open Bottom sheet
-                                showUpdationView();
-                              },
-                              child: Text(
-                                "Update",
-                                style: textNormal12(Colors.blue),
-                              )),
+                      Visibility(
+                        visible: widget.showUpdate,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Container(
+                            margin: EdgeInsets.only(right: 10.0, top: 25.0),
+                            child: InkWell(
+                                onTap: () {
+                                  // open Bottom sheet
+                                  showUpdationView();
+                                },
+                                child: Text(
+                                  "Update",
+                                  style: textNormal12(Colors.blue),
+                                )),
+                          ),
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ))
@@ -251,7 +253,7 @@ class _MobileUpdateState extends State<MobileUpdate> {
                                               height: 45,
                                               alignment: Alignment.center,
                                               child: Text(
-                                                sendOtpSecret,
+                                                "Send OTP",
                                                 style: textWhiteBold16(),
                                               ))))),
                             ),
@@ -267,7 +269,7 @@ class _MobileUpdateState extends State<MobileUpdate> {
                                         margin: const EdgeInsets.only(
                                             top: 5.0, left: 25.0),
                                         child: Text(
-                                          otpMobileLabel,
+                                          "Please enter the OTP received in your mobile phone.",
                                           style: textNormal16(Colors.black),
                                         )),
                                     Container(
@@ -312,12 +314,12 @@ class _MobileUpdateState extends State<MobileUpdate> {
                                         child: RichText(
                                           textAlign: TextAlign.center,
                                           text: TextSpan(
-                                              text: "Didn't receive the code? ",
-                                              style: textNormal14(Colors.black),
+                                              text: "Didn't receive the OTP? ",
+                                              style: textNormal16(Colors.black),
                                               children: [
                                                 TextSpan(
                                                     text: 'Resend OTP',
-                                                    style: textNormal14(
+                                                    style: textNormal16(
                                                         Theme.of(context)
                                                             .primaryColor),
                                                     recognizer:
@@ -340,6 +342,24 @@ class _MobileUpdateState extends State<MobileUpdate> {
                                             onPressed: () {
                                               FocusScope.of(context)
                                                   .requestFocus(FocusNode());
+                                              if (_newMobileController
+                                                  .text.isEmpty) {
+                                                _modelScaffoldKey.currentState
+                                                    .showSnackBar(SnackBar(
+                                                        duration: Duration(
+                                                            seconds: 1),
+                                                        content: Text(
+                                                            correctMobile)));
+                                                return;
+                                              }
+
+                                              if (selectedCountry.maxLength !=
+                                                  _newMobileController
+                                                      .text.length) {
+                                                showSnackBar(context,
+                                                    "Phone number should be of ${selectedCountry.maxLength} digits.");
+                                                return;
+                                              }
                                               if (otpController.text.isEmpty) {
                                                 _modelScaffoldKey.currentState
                                                     .showSnackBar(SnackBar(
@@ -417,7 +437,15 @@ class _MobileUpdateState extends State<MobileUpdate> {
               decoration: customDecoration(),
               child: TextField(
                 style: textBlackNormal16(),
-                onChanged: (value) => newMobileNo = value,
+                onChanged: (value) => {
+                  newMobileNo = value,
+                  if (isOtpReceived)
+                    {
+                      setState(() {
+                        isOtpReceived = false;
+                      })
+                    },
+                },
                 controller: _newMobileController,
                 decoration: new InputDecoration(
                   contentPadding: EdgeInsets.all(20.0),
@@ -549,6 +577,7 @@ class _MobileUpdateState extends State<MobileUpdate> {
   }
 
   Future<void> getAllCountries() async {
+    // print("Update- ${widget.mobileNumber}");
     final Country extractedData = await CountryService.fetchCountries();
     if (extractedData.type == "success") {
       if (extractedData.data.options.length != 0) {
@@ -570,18 +599,27 @@ class _MobileUpdateState extends State<MobileUpdate> {
           ];
         }
 
-        var subString = UserData.instance.userInfo.mobileNo.substring(0, 5);
+        // var subString = UserData.instance.userInfo.mobileNo != null
+        //     ? UserData.instance.userInfo.mobileNo.substring(0, 5)
+        //     : widget.mobileNumber.substring(0, 5);
+        var subString = widget.mobileNumber.substring(0, 5);
         for (var i = 0; i < newCountryList.length; i++) {
           if (subString.contains("+${newCountryList[i].dialCode}")) {
             selectedCountry = newCountryList[i];
 
             _countryController.text = "+${selectedCountry.dialCode.toString()}";
             int length = _countryController.text.toString().length;
-            String result =
-                UserData.instance.userInfo.mobileNo.substring(0, length);
+            // String result = UserData.instance.userInfo.mobileNo != null
+            //     ? UserData.instance.userInfo.mobileNo.substring(0, length)
+            //     : widget.mobileNumber.substring(0, length);
 
-            _mobileController.text =
-                UserData.instance.userInfo.mobileNo.replaceAll(result, "");
+            String result = widget.mobileNumber.substring(0, length);
+
+            // _mobileController.text = UserData.instance.userInfo.mobileNo != null
+            //     ? UserData.instance.userInfo.mobileNo.replaceAll(result, "")
+            //     : widget.mobileNumber.replaceAll(result, "");
+
+            _mobileController.text = widget.mobileNumber.replaceAll(result, "");
             break;
           }
         }
@@ -601,9 +639,9 @@ class _MobileUpdateState extends State<MobileUpdate> {
         Spacer(),
         InkWell(
             onTap: () {
-              _newMobileController.clear();
-              otpController.clear();
-
+              // _newMobileController.dispose();
+              // otpController.dispose();
+              updateSelectedCountry = null;
               setState(() {
                 isOtpReceived = false;
               });
