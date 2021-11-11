@@ -41,7 +41,7 @@ class _InvestmentLimitState extends State<InvestmentLimit> {
             Widget>[
           Container(
             child: IconButton(
-              icon: Icon(Icons.arrow_back, size: 30),
+              icon: Icon(Icons.arrow_back_ios, size: 30),
               onPressed: () => {Navigator.pop(context)},
             ),
           ),

@@ -1,4 +1,3 @@
-import 'package:acc/constants/font_family.dart';
 import 'package:acc/models/authentication/signup_request_preferences.dart';
 import 'package:acc/utilites/text_style.dart';
 import 'package:flutter/material.dart';
