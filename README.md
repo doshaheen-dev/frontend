@@ -1,4 +1,4 @@
-# Amicorp Capital Connect
+# Frontend Application
 
 A new Flutter project.
 
